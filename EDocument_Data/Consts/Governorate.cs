@@ -1,0 +1,33 @@
+﻿namespace EDocument_Data.Consts
+{
+    public enum Governorate
+    {
+        Alexandria,
+        Aswan,
+        Asyut,
+        Beheira,
+        BeniSuef,
+        Cairo,
+        Damietta,
+        Dakahlia,
+        Fayoum,
+        Gharbia,
+        Giza,
+        Ismailia,
+        KafrElSheikh,
+        Luxor,
+        Matrouh,
+        Menofia,
+        Minya,
+        Monufia,
+        NorthSinai,
+        PortSaid,
+        Qalyubia,
+        Qena,
+        RedSea,
+        Sharqia,
+        Sohag,
+        SouthSinai,
+        Suez,
+    }
+}

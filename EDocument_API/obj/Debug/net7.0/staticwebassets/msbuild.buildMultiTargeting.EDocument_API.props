@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\EDocument_API.props" />
+</Project>
