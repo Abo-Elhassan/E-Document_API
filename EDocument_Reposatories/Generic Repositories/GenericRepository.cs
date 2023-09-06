@@ -1,10 +1,9 @@
 ﻿using EDocument_Data.Consts.Enums;
+using EDocument_Data.Models.Shared;
 using EDocument_EF;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EDocument_Reposatories.Generic_Reposatories
 {
@@ -126,7 +125,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
 
 
-        public IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null)
+        public IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
@@ -139,6 +138,14 @@ namespace EDocument_Reposatories.Generic_Reposatories
             }
 
             query = query.Where(criteria);
+
+            if (dateFilters != null)
+            {
+                foreach (var filter in dateFilters)
+                {
+                    query = query.Where($"{filter.ColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                }
+            }
 
             if (skip.HasValue && take.HasValue)
             {
@@ -160,8 +167,12 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return query.ToList();
         }
 
-        public IEnumerable<T> FindAll(Dictionary<string, string> filters, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null)
+        public IEnumerable<T> FindAll(Dictionary<string, string> filters, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
+            var ColumnName = "";
+            var ColumnValue = "";
+            var expression = "";
+
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
             if (includes != null)
@@ -176,17 +187,25 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 foreach (var filter in filters)
                 {
-                    var ColumnName = filter.Key;
-                    var ColumnValue = filter.Value;
+                     ColumnName = filter.Key;
+                     ColumnValue = filter.Value;
 
                     var property = typeof(T).GetProperty(ColumnName);
-                    if (property != null && property.PropertyType==typeof(string))
+                    if (property != null)
                     {
-                        query = query.Where($"{ColumnName}.Contains(@0)",ColumnValue);
+                        expression = property.PropertyType == typeof(string) ? $"{ColumnName}.Contains(@0)" : $"{ColumnName}.Equals(@0)";
+                        query = query.Where(expression, ColumnValue);
                     }
                 }
             }
-           
+
+            if (dateFilters != null)
+            {
+                foreach (var filter in dateFilters)
+                {
+                    query = query.Where($"{filter.ColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                }
+            }
 
             if (skip.HasValue && take.HasValue)
             {
@@ -203,10 +222,10 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return query.ToList();
         }
 
-        public IEnumerable<T> FindAll(string filterValue, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null)
+        public IEnumerable<T> FindAll(string filterValue, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
-
-
+            var expression = "";
+            var dynamicFilter = "";
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
             if (includes != null)
@@ -221,15 +240,19 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
             if (!string.IsNullOrEmpty(filterValue))
             {
-
-                string dynamicFilter = string.Join(" OR ", properties
-                    .Where(property => property.PropertyType == typeof(string))
-                .Select(property => $"{property.Name}.Contains(@0)"));
-
+                dynamicFilter = string.Join(" OR ", properties
+                .Select(property => property.PropertyType == typeof(string) ? $"{property}.Contains(@0)" : $"{property}.Equals(@0)"));
                 query = query.Where(dynamicFilter, filterValue);
                
             }
 
+            if (dateFilters != null)
+            {
+                foreach (var filter in dateFilters)
+                {
+                    query = query.Where($"{filter.ColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                }
+            }
 
             if (skip.HasValue && take.HasValue)
             {
@@ -246,7 +269,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return query.ToList();
         }
 
-        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null)
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             IQueryable<T> query = _context.Set<T>();
 
@@ -259,6 +282,14 @@ namespace EDocument_Reposatories.Generic_Reposatories
             }
 
             query = query.Where(criteria);
+
+            if (dateFilters != null)
+            {
+                foreach (var filter in dateFilters)
+                {
+                    query = query.Where($"{filter.ColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                }
+            }
 
             if (skip.HasValue && take.HasValue)
             {
@@ -280,15 +311,109 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return await query.ToListAsync();
         }
 
-        public Task<IEnumerable<T>> FindAllAsync(Dictionary<string, string> filters, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null)
+        public async Task<IEnumerable<T>> FindAllAsync(Dictionary<string, string> filters, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
-            throw new NotImplementedException();
+            var ColumnName = "";
+            var ColumnValue = "";
+            var expression = "";
+
+            IQueryable<T> query = _context.Set<T>().AsNoTracking();
+
+            if (includes != null)
+            {
+                foreach (var item in includes)
+                {
+                    query = query.Include(item);
+                }
+            }
+
+            if (filters != null && filters.Count > 0)
+            {
+                foreach (var filter in filters)
+                {
+                    ColumnName = filter.Key;
+                    ColumnValue = filter.Value;
+
+                    var property = typeof(T).GetProperty(ColumnName);
+                    if (property != null)
+                    {
+                        expression = property.PropertyType == typeof(string) ? $"{ColumnName}.Contains(@0)" : $"{ColumnName}.Equals(@0)";
+                        query = query.Where(expression, ColumnValue);
+                    }
+                }
+            }
+
+            if (dateFilters != null)
+            {
+                foreach (var filter in dateFilters)
+                {
+                    query = query.Where($"{filter.ColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                }
+            }
+
+            if (skip.HasValue && take.HasValue)
+            {
+                query = query.Skip(skip.Value).Take(take.Value);
+            }
+
+            if (orderBy != null && orderByDirection != null)
+            {
+                var sortDirection = orderByDirection == OrderBy.Asc ? OrderBy.Asc : OrderBy.Desc;
+
+                query = query.OrderBy($"{orderBy} {sortDirection}");
+            }
+
+            return await query.ToListAsync();
         }
 
-        public Task<IEnumerable<T>> FindAllAsync(string filterValue, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null)
+        public async Task<IEnumerable<T>> FindAllAsync(string filterValue, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
-            throw new NotImplementedException();
+            var expression = "";
+            var dynamicFilter = "";
+            IQueryable<T> query = _context.Set<T>().AsNoTracking();
+
+            if (includes != null)
+            {
+                foreach (var item in includes)
+                {
+                    query = query.Include(item);
+                }
+            }
+
+            var properties = typeof(T).GetProperties();
+
+            if (!string.IsNullOrEmpty(filterValue))
+            {
+                dynamicFilter = string.Join(" OR ", properties
+                .Select(property => property.PropertyType == typeof(string) ? $"{property}.Contains(@0)" : $"{property}.Equals(@0)"));
+                query = query.Where(dynamicFilter, filterValue);
+
+            }
+
+            if (dateFilters != null)
+            {
+                foreach (var filter in dateFilters)
+                {
+                    query = query.Where($"{filter.ColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                }
+            }
+
+            if (skip.HasValue && take.HasValue)
+            {
+                query = query.Skip(skip.Value).Take(take.Value);
+            }
+
+            if (orderBy != null && orderByDirection != null)
+            {
+                var sortDirection = orderByDirection == OrderBy.Asc ? OrderBy.Asc : OrderBy.Desc;
+
+                query = query.OrderBy($"{orderBy} {sortDirection}");
+            }
+
+            return await query.ToListAsync();
         }
+
+
 
         public int Count()
         {
@@ -309,6 +434,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
         {
             return await _context.Set<T>().CountAsync(criteria);
         }
+
+
 
         public T Add(T entity)
         {
@@ -335,20 +462,26 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return entities;
         }
 
+
+
         public T Update(T entity)
         {
             _context.Set<T>().Update(entity);
             return entity;
         }
 
+
         public void Delete(T entity)
         {
             _context.Set<T>().Remove(entity);
         }
 
+
         public void DeleteRange(IEnumerable<T> entities)
         {
             _context.Set<T>().RemoveRange(entities);
         }
+
+
     }
 }
