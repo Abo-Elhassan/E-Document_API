@@ -13,9 +13,10 @@ namespace EDocument_EF.Configurations
         {
             entity.HasKey(e => new { e.BeneficiaryId, e.RequestId });
 
-            entity.ToTable("DomainAccountRequest");
+            entity.ToTable(nameof(DomainAccountRequest));
 
             entity.Property(e => e.BeneficiaryId)
+            .IsRequired()
             .HasMaxLength(50);
 
             entity.Property(e => e.BeneficiaryDepartment)
@@ -38,9 +39,6 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.BeneficiaryExtention)
             .HasMaxLength(50);
 
-            entity.Property(e => e.RequesterPurpose)
-            .IsRequired();
-
             entity.Property(e => e.LoginName)
             .HasMaxLength(50);
 
@@ -51,10 +49,10 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50);
 
             entity.Property(e => e.CreatedAt)
-            .HasColumnType("datetime");
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.ModifiedAt)
-            .HasColumnType("datetime");
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
             .HasMaxLength(50);
@@ -67,10 +65,6 @@ namespace EDocument_EF.Configurations
             .OnDelete(DeleteBehavior.Restrict)
             .HasConstraintName("FK_DomainAccountRequest_Request");
 
-            entity.HasOne(d => d.Department).WithMany(p => p.DomainAccountRequests)
-            .HasForeignKey(d => d.DepartmentId)
-            .OnDelete(DeleteBehavior.Restrict)
-            .HasConstraintName("FK_DomainAccountRequest_Department");
 
             OnConfigurePartial(entity);
         }

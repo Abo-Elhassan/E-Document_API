@@ -11,7 +11,7 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<Department> entity)
         {
-            entity.ToTable("Department");
+            entity.ToTable(nameof(Department));
 
             entity.Property(e => e.Id)
             .ValueGeneratedNever();
@@ -25,10 +25,10 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50);
 
             entity.Property(e => e.CreatedAt)
-            .HasColumnType("datetime");
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.ModifiedAt)
-            .HasColumnType("datetime");
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
             .HasMaxLength(50);

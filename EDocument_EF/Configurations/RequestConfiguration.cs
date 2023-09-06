@@ -11,22 +11,27 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<Request> entity)
         {
-            entity.ToTable("Request");
+            entity.ToTable(nameof(Request));
 
             entity.Property(e => e.Id)
-            .ValueGeneratedNever();
+            .UseIdentityColumn();
 
             entity.Property(e => e.CreatorId)
+            .IsRequired()
             .HasMaxLength(50);
 
-            entity.Property(e => e.Status)
+
+            entity.Property(e => e.DeclinedBy)
+            .HasMaxLength(200);
+
+            entity.Property(e => e.Status).HasConversion<string>()
             .HasMaxLength(50);
 
             entity.Property(e => e.CreatedAt)
-            .HasColumnType("datetime");
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.ModifiedAt)
-            .HasColumnType("datetime");
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
             .HasMaxLength(50);

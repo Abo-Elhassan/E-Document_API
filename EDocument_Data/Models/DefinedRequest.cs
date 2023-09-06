@@ -12,15 +12,19 @@ public  class DefinedRequest: BaseEntity
 
     public string RequestName { get; set; }
 
-    public bool DeptMgrApprove { get; set; }
+    public string RouteName { get; set; }
 
-    public bool DirectMgrApprove { get; set; }
+    public string IconName { get; set; }
 
-    public int StagesNumber { get; set; }
+    public int ReviewersNumber { get; set; }
+
+    public long DepartmentId { get; set; }
+
+    public virtual Department Department { get; set; }
 
     public virtual ICollection<DefinedRequestReviewer> DefinedRequestReviewers { get; set; } = new HashSet<DefinedRequestReviewer>();
 
-    public virtual ICollection<DefinedRequestRole> DefinedRequestRoles { get; set; } = new HashSet<DefinedRequestRole>();
-
     public virtual ICollection<Request> Requests { get; set; } = new HashSet<Request>();
+
+    public virtual ICollection<Role> Roles { get; set; } = new HashSet<Role>();
 }

@@ -1,0 +1,535 @@
+2023-08-30T16:02:07.0495397+03:00	WARN	[Microsoft.EntityFrameworkCore.Model.Validation]	[Microsoft.EntityFrameworkCore.Model.Validation.CollectionWithoutComparer]	The property 'TravelDeskRequest.RequestTypes' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-08-30T16:02:07.2918510+03:00	WARN	[Microsoft.EntityFrameworkCore.Model.Validation]	[Microsoft.EntityFrameworkCore.Model.Validation.CollectionWithoutComparer]	The property 'TravelDeskRequest.RequestTypes' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-08-30T16:04:07.3892397+03:00	WARN	[Microsoft.EntityFrameworkCore.Model.Validation]	[Microsoft.EntityFrameworkCore.Model.Validation.CollectionWithoutComparer]	The property 'TravelDeskRequest.RequestTypes' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-08-30T16:04:07.5621002+03:00	WARN	[Microsoft.EntityFrameworkCore.Model.Validation]	[Microsoft.EntityFrameworkCore.Model.Validation.CollectionWithoutComparer]	The property 'TravelDeskRequest.RequestTypes' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-08-30T16:04:16.8966892+03:00	WARN	[Microsoft.EntityFrameworkCore.Model.Validation]	[Microsoft.EntityFrameworkCore.Model.Validation.CollectionWithoutComparer]	The property 'TravelDeskRequest.RequestTypes' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-08-30T16:04:17.0727178+03:00	WARN	[Microsoft.EntityFrameworkCore.Model.Validation]	[Microsoft.EntityFrameworkCore.Model.Validation.CollectionWithoutComparer]	The property 'TravelDeskRequest.RequestTypes' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+2023-08-30T16:10:06.8690501+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (336ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [E-Document];
+2023-08-30T16:10:06.9545333+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (81ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [E-Document] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2023-08-30T16:10:06.9702072+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2023-08-30T16:10:07.0183678+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2023-08-30T16:10:07.0191259+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2023-08-30T16:10:07.0312775+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2023-08-30T16:10:07.0353422+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2023-08-30T16:10:07.0469356+03:00	INFO	[Microsoft.EntityFrameworkCore.Migrations]	[Microsoft.EntityFrameworkCore.Migrations.MigrationApplying]	Applying migration '20230830130924_initialMigration'.
+2023-08-30T16:10:07.1234602+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [AspNetRoles] (
+    [Id] nvarchar(450) NOT NULL,
+    [Name] nvarchar(256) NULL,
+    [NormalizedName] nvarchar(256) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetRoles] PRIMARY KEY ([Id])
+);
+2023-08-30T16:10:07.1252348+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [AspNetRoleClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [RoleId] nvarchar(450) NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetRoleClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE
+);
+2023-08-30T16:10:07.1272844+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [ TravelDeskRequest] (
+    [BeneficiaryId] nvarchar(50) NOT NULL,
+    [RequestId] bigint NOT NULL,
+    [RequestTypes] nvarchar(200) NOT NULL,
+    [BeneficiaryNationality] nvarchar(50) NOT NULL,
+    [CostAllocation] real NOT NULL,
+    [Currency] nvarchar(50) NOT NULL,
+    [CheckIn] datetime NOT NULL,
+    [CheckOut] datetime NOT NULL,
+    [MissionAddress] nvarchar(max) NULL,
+    [PaymentMethod] nvarchar(50) NOT NULL,
+    [FlightOrigin] nvarchar(50) NULL,
+    [FlightDestination] nvarchar(50) NULL,
+    [DepartureDate] datetime NOT NULL,
+    [ReturnDate] datetime NOT NULL,
+    [DestinationCountry] nvarchar(50) NULL,
+    [ExpectedTravelTime] datetime NOT NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] varchar(50) NULL,
+    [ModifiedBy] varchar(50) NULL,
+    [BeneficiaryName] nvarchar(200) NOT NULL,
+    [BeneficiaryEmail] nvarchar(50) NULL,
+    [BeneficiaryPostion] nvarchar(200) NULL,
+    [BeneficiaryDepartment] nvarchar(200) NULL,
+    [BeneficiaryPhone] nvarchar(50) NULL,
+    [BeneficiaryExtention] nvarchar(50) NULL,
+    [RequesterPurpose] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_ TravelDeskRequest] PRIMARY KEY ([BeneficiaryId], [RequestId])
+);
+2023-08-30T16:10:07.1287478+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [ApplicationItAdmin] (
+    [ItAdminId] nvarchar(50) NOT NULL,
+    [ApplicationId] bigint NOT NULL,
+    CONSTRAINT [PK_ApplicationItAdmin] PRIMARY KEY ([ItAdminId], [ApplicationId])
+);
+2023-08-30T16:10:07.4527551+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [ApplicationUserRequest] (
+    [BeneficiaryId] nvarchar(50) NOT NULL,
+    [RequestId] bigint NOT NULL,
+    [RequestedApplicationId] bigint NOT NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    [BeneficiaryName] nvarchar(200) NOT NULL,
+    [BeneficiaryEmail] nvarchar(50) NULL,
+    [BeneficiaryPostion] nvarchar(200) NULL,
+    [BeneficiaryDepartment] nvarchar(200) NULL,
+    [BeneficiaryPhone] nvarchar(50) NOT NULL,
+    [BeneficiaryExtention] nvarchar(50) NULL,
+    [RequesterPurpose] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_ApplicationUserRequest] PRIMARY KEY ([BeneficiaryId], [RequestId])
+);
+2023-08-30T16:10:07.4548211+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [ApplicationUserRequestRole] (
+    [RequestId] bigint NOT NULL,
+    [RoleId] bigint NOT NULL,
+    CONSTRAINT [PK_ApplicationUserRequestRole] PRIMARY KEY ([RequestId], [RoleId])
+);
+2023-08-30T16:10:07.9545773+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [AspNetUserLogins] (
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [ProviderKey] nvarchar(450) NOT NULL,
+    [ProviderDisplayName] nvarchar(max) NULL,
+    [UserId] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_AspNetUserLogins] PRIMARY KEY ([LoginProvider], [ProviderKey])
+);
+2023-08-30T16:10:07.9562863+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [AspNetUserRoles] (
+    [UserId] nvarchar(50) NOT NULL,
+    [RoleId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_AspNetUserRoles] PRIMARY KEY ([UserId], [RoleId]),
+    CONSTRAINT [FK_AspNetUserRoles_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE
+);
+2023-08-30T16:10:07.9578783+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [AspNetUserTokens] (
+    [UserId] nvarchar(50) NOT NULL,
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [Name] nvarchar(450) NOT NULL,
+    [Value] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY ([UserId], [LoginProvider], [Name])
+);
+2023-08-30T16:10:07.9594502+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Attachment] (
+    [Id] bigint NOT NULL IDENTITY,
+    [FilePath] nvarchar(max) NOT NULL,
+    [RequestId] bigint NOT NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    CONSTRAINT [PK_Attachment] PRIMARY KEY ([Id])
+);
+2023-08-30T16:10:09.2702433+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [CarRequest] (
+    [BeneficiaryId] nvarchar(50) NOT NULL,
+    [RequestId] bigint NOT NULL,
+    [DepartureAddress] nvarchar(50) NOT NULL,
+    [DestinationAddress] nvarchar(50) NOT NULL,
+    [DepartureDate] datetime NOT NULL,
+    [RetrunDate] datetime NOT NULL,
+    [LuggageDescription] datetime2 NOT NULL,
+    [VehicleType] nvarchar(50) NOT NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    [BeneficiaryName] nvarchar(200) NOT NULL,
+    [BeneficiaryEmail] nvarchar(50) NULL,
+    [BeneficiaryPostion] nvarchar(200) NULL,
+    [BeneficiaryDepartment] nvarchar(200) NULL,
+    [BeneficiaryPhone] nvarchar(50) NOT NULL,
+    [BeneficiaryExtention] nvarchar(50) NULL,
+    [RequesterPurpose] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_CarRequest] PRIMARY KEY ([BeneficiaryId], [RequestId])
+);
+2023-08-30T16:10:09.2727699+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [DefinedRequest] (
+    [Id] bigint NOT NULL IDENTITY,
+    [RequestName] nvarchar(50) NOT NULL,
+    [ReviewersNumber] int NOT NULL,
+    [DepartmentId] bigint NOT NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    CONSTRAINT [PK_DefinedRequest] PRIMARY KEY ([Id])
+);
+2023-08-30T16:10:09.2744155+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [DefinedRequestReviewer] (
+    [DefinedRequestId] bigint NOT NULL,
+    [ReviewerId] nvarchar(50) NOT NULL,
+    [StageName] nvarchar(50) NULL,
+    [StageNumber] int NOT NULL,
+    [ReviewerType] nvarchar(50) NOT NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    CONSTRAINT [PK_DefinedRequestReviewer] PRIMARY KEY ([DefinedRequestId], [ReviewerId]),
+    CONSTRAINT [FK_DefinedRequestReviewer_DefinedRequest] FOREIGN KEY ([DefinedRequestId]) REFERENCES [DefinedRequest] ([Id]) ON DELETE NO ACTION
+);
+2023-08-30T16:10:10.1851931+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [DefinedRequestRole] (
+    [Id] bigint NOT NULL IDENTITY,
+    [RoleName] nvarchar(50) NOT NULL,
+    [RequestedApplicationId] bigint NOT NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    CONSTRAINT [PK_DefinedRequestRole] PRIMARY KEY ([Id])
+);
+2023-08-30T16:10:10.1866356+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Department] (
+    [Id] bigint NOT NULL,
+    [DepartmentName] nvarchar(200) NOT NULL,
+    [ManagerId] nvarchar(50) NOT NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    CONSTRAINT [PK_Department] PRIMARY KEY ([Id])
+);
+2023-08-30T16:10:10.1897376+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [User] (
+    [Id] nvarchar(50) NOT NULL,
+    [UserName] nvarchar(50) NOT NULL,
+    [NormalizedUserName] nvarchar(50) NOT NULL,
+    [Email] nvarchar(200) NULL,
+    [FullName] nvarchar(200) NOT NULL,
+    [Position] nvarchar(200) NOT NULL,
+    [DepartmentId] bigint NOT NULL,
+    [ManagerId] nvarchar(50) NOT NULL,
+    [Company] nvarchar(200) NOT NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    [NormalizedEmail] nvarchar(200) NULL,
+    [PasswordHash] nvarchar(max) NULL,
+    [SecurityStamp] nvarchar(max) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    [PhoneNumber] nvarchar(50) NULL,
+    [LockoutEnd] datetimeoffset NULL,
+    [LockoutEnabled] bit NOT NULL,
+    [AccessFailedCount] int NOT NULL,
+    CONSTRAINT [PK_User] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_User_Department] FOREIGN KEY ([DepartmentId]) REFERENCES [Department] ([Id]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_User_User] FOREIGN KEY ([ManagerId]) REFERENCES [User] ([Id]) ON DELETE NO ACTION
+);
+2023-08-30T16:10:11.2432223+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Request] (
+    [Id] bigint NOT NULL IDENTITY,
+    [CurrentStage] int NULL,
+    [Status] nvarchar(50) NOT NULL,
+    [Remarks] nvarchar(max) NULL,
+    [ReviewerNotes] nvarchar(max) NULL,
+    [CreatorId] nvarchar(50) NULL,
+    [DeclinedBy] nvarchar(200) NULL,
+    [DefinedRequestId] bigint NOT NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    CONSTRAINT [PK_Request] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Request_DefinedRequest] FOREIGN KEY ([DefinedRequestId]) REFERENCES [DefinedRequest] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Request_User] FOREIGN KEY ([CreatorId]) REFERENCES [User] ([Id])
+);
+2023-08-30T16:10:11.2452359+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [RequestedApplication] (
+    [Id] bigint NOT NULL IDENTITY,
+    [ApplicationName] nvarchar(200) NOT NULL,
+    [ApplicationOwnerId] nvarchar(50) NOT NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    CONSTRAINT [PK_RequestedApplication] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RequestedApplication_User] FOREIGN KEY ([ApplicationOwnerId]) REFERENCES [User] ([Id]) ON DELETE NO ACTION
+);
+2023-08-30T16:10:12.3413783+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [UserClaim] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] nvarchar(50) NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_UserClaim] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserClaim_User_UserId] FOREIGN KEY ([UserId]) REFERENCES [User] ([Id]) ON DELETE CASCADE
+);
+2023-08-30T16:10:12.3437721+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [DomainAccountRequest] (
+    [BeneficiaryId] nvarchar(50) NOT NULL,
+    [RequestId] bigint NOT NULL,
+    [DisplayName] nvarchar(50) NULL,
+    [LoginName] nvarchar(50) NULL,
+    [OU] nvarchar(50) NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    [BeneficiaryName] nvarchar(200) NOT NULL,
+    [BeneficiaryEmail] nvarchar(50) NULL,
+    [BeneficiaryPostion] nvarchar(200) NULL,
+    [BeneficiaryDepartment] nvarchar(200) NULL,
+    [BeneficiaryPhone] nvarchar(50) NOT NULL,
+    [BeneficiaryExtention] nvarchar(50) NULL,
+    [RequesterPurpose] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_DomainAccountRequest] PRIMARY KEY ([BeneficiaryId], [RequestId]),
+    CONSTRAINT [FK_DomainAccountRequest_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE NO ACTION
+);
+2023-08-30T16:10:12.9601704+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [PoRequest] (
+    [PoNumber] nvarchar(450) NOT NULL,
+    [PoDescription] nvarchar(450) NULL,
+    [VendorName] nvarchar(450) NULL,
+    [VendorNumber] nvarchar(450) NULL,
+    [InvoiceNumber] nvarchar(450) NULL,
+    [PoAttachmentPath] nvarchar(max) NULL,
+    [InvoiceAttachmentPath] nvarchar(max) NULL,
+    [RequestId] bigint NOT NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    CONSTRAINT [PK_PoRequest] PRIMARY KEY ([PoNumber]),
+    CONSTRAINT [FK_PoRequest_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE NO ACTION
+);
+2023-08-30T16:10:12.9623011+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [RequestReviewer] (
+    [RequestId] bigint NOT NULL,
+    [ReviewerId] nvarchar(50) NOT NULL,
+    [StageName] nvarchar(max) NULL,
+    [StageNumber] int NOT NULL,
+    [ReviewerType] nvarchar(max) NULL,
+    [Status] nvarchar(50) NOT NULL,
+    [ReviewerNotes] nvarchar(max) NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    CONSTRAINT [PK_RequestReviewer] PRIMARY KEY ([RequestId], [ReviewerId]),
+    CONSTRAINT [FK_RequestReviewer_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_RequestReviewer_User] FOREIGN KEY ([ReviewerId]) REFERENCES [User] ([Id]) ON DELETE NO ACTION
+);
+2023-08-30T16:10:13.9568616+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_ TravelDeskRequest_RequestId] ON [ TravelDeskRequest] ([RequestId]);
+2023-08-30T16:10:13.9599819+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_ApplicationItAdmin_ApplicationId] ON [ApplicationItAdmin] ([ApplicationId]);
+2023-08-30T16:10:13.9610245+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_ApplicationUserRequest_RequestedApplicationId] ON [ApplicationUserRequest] ([RequestedApplicationId]);
+2023-08-30T16:10:13.9616755+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_ApplicationUserRequest_RequestId] ON [ApplicationUserRequest] ([RequestId]);
+2023-08-30T16:10:13.9647072+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_ApplicationUserRequestRole_RoleId] ON [ApplicationUserRequestRole] ([RoleId]);
+2023-08-30T16:10:13.9657669+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [AspNetRoleClaims] ([RoleId]);
+2023-08-30T16:10:13.9664015+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [RoleNameIndex] ON [AspNetRoles] ([NormalizedName]) WHERE [NormalizedName] IS NOT NULL;
+2023-08-30T16:10:13.9672381+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_AspNetUserLogins_UserId] ON [AspNetUserLogins] ([UserId]);
+2023-08-30T16:10:13.9676676+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_AspNetUserRoles_RoleId] ON [AspNetUserRoles] ([RoleId]);
+2023-08-30T16:10:13.9689114+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Attachment_RequestId] ON [Attachment] ([RequestId]);
+2023-08-30T16:10:15.0981252+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_CarRequest_RequestId] ON [CarRequest] ([RequestId]);
+2023-08-30T16:10:15.0993407+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_DefinedRequest_DepartmentId] ON [DefinedRequest] ([DepartmentId]);
+2023-08-30T16:10:15.1004623+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_DefinedRequestReviewer_ReviewerId] ON [DefinedRequestReviewer] ([ReviewerId]);
+2023-08-30T16:10:15.1016439+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_DefinedRequestRole_RequestedApplicationId] ON [DefinedRequestRole] ([RequestedApplicationId]);
+2023-08-30T16:10:15.1022186+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Department_ManagerId] ON [Department] ([ManagerId]);
+2023-08-30T16:10:15.1027988+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_DomainAccountRequest_RequestId] ON [DomainAccountRequest] ([RequestId]);
+2023-08-30T16:10:15.1038334+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_PoRequest_InvoiceNumber] ON [PoRequest] ([InvoiceNumber]);
+2023-08-30T16:10:15.1044306+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_PoRequest_PoDescription] ON [PoRequest] ([PoDescription]);
+2023-08-30T16:10:15.1051206+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_PoRequest_RequestId] ON [PoRequest] ([RequestId]);
+2023-08-30T16:10:15.4591177+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_PoRequest_VendorName] ON [PoRequest] ([VendorName]);
+2023-08-30T16:10:15.4601123+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_PoRequest_VendorNumber] ON [PoRequest] ([VendorNumber]);
+2023-08-30T16:10:15.4607866+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Request_CreatorId] ON [Request] ([CreatorId]);
+2023-08-30T16:10:15.4637278+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Request_DefinedRequestId] ON [Request] ([DefinedRequestId]);
+2023-08-30T16:10:15.4649687+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_RequestedApplication_ApplicationOwnerId] ON [RequestedApplication] ([ApplicationOwnerId]);
+2023-08-30T16:10:15.4655028+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_RequestReviewer_ReviewerId] ON [RequestReviewer] ([ReviewerId]);
+2023-08-30T16:10:15.4667650+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [EmailIndex] ON [User] ([NormalizedEmail]);
+2023-08-30T16:10:15.4672649+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_User_DepartmentId] ON [User] ([DepartmentId]);
+2023-08-30T16:10:15.4677306+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_User_ManagerId] ON [User] ([ManagerId]);
+2023-08-30T16:10:15.4682205+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [UserNameIndex] ON [User] ([NormalizedUserName]);
+2023-08-30T16:10:16.2041411+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_UserClaim_UserId] ON [UserClaim] ([UserId]);
+2023-08-30T16:10:16.2091823+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [ TravelDeskRequest] ADD CONSTRAINT [FK_TravelDeskRequest_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE NO ACTION;
+2023-08-30T16:10:16.2101955+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [ApplicationItAdmin] ADD CONSTRAINT [FK_ApplicationItAdmin_RequestedApplication] FOREIGN KEY ([ApplicationId]) REFERENCES [RequestedApplication] ([Id]) ON DELETE NO ACTION;
+2023-08-30T16:10:16.2108068+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [ApplicationItAdmin] ADD CONSTRAINT [FK_ApplicationItAdmin_User] FOREIGN KEY ([ItAdminId]) REFERENCES [User] ([Id]) ON DELETE NO ACTION;
+2023-08-30T16:10:16.2114772+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [ApplicationUserRequest] ADD CONSTRAINT [FK_ApplicationUserRequest_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE NO ACTION;
+2023-08-30T16:10:16.2124438+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [ApplicationUserRequest] ADD CONSTRAINT [FK_ApplicationUserRequest_RequestedApplication] FOREIGN KEY ([RequestedApplicationId]) REFERENCES [RequestedApplication] ([Id]) ON DELETE NO ACTION;
+2023-08-30T16:10:16.2133029+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [ApplicationUserRequestRole] ADD CONSTRAINT [FK_ApplicationUserRequestRole_DefinedApplicationRole] FOREIGN KEY ([RoleId]) REFERENCES [DefinedRequestRole] ([Id]) ON DELETE NO ACTION;
+2023-08-30T16:10:16.9643109+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [ApplicationUserRequestRole] ADD CONSTRAINT [FK_ApplicationUserRequestRole_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE NO ACTION;
+2023-08-30T16:10:16.9652726+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [AspNetUserLogins] ADD CONSTRAINT [FK_AspNetUserLogins_User_UserId] FOREIGN KEY ([UserId]) REFERENCES [User] ([Id]) ON DELETE CASCADE;
+2023-08-30T16:10:16.9663947+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [AspNetUserRoles] ADD CONSTRAINT [FK_AspNetUserRoles_User_UserId] FOREIGN KEY ([UserId]) REFERENCES [User] ([Id]) ON DELETE CASCADE;
+2023-08-30T16:10:16.9678057+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [AspNetUserTokens] ADD CONSTRAINT [FK_AspNetUserTokens_User_UserId] FOREIGN KEY ([UserId]) REFERENCES [User] ([Id]) ON DELETE CASCADE;
+2023-08-30T16:10:16.9685801+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Attachment] ADD CONSTRAINT [FK_Attachment_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE NO ACTION;
+2023-08-30T16:10:16.9691966+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [CarRequest] ADD CONSTRAINT [FK_CarRequest_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE NO ACTION;
+2023-08-30T16:10:16.9699205+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [DefinedRequest] ADD CONSTRAINT [FK_DefinedRequest_Department] FOREIGN KEY ([DepartmentId]) REFERENCES [Department] ([Id]) ON DELETE NO ACTION;
+2023-08-30T16:10:17.3971090+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [DefinedRequestReviewer] ADD CONSTRAINT [FK_DefinedRequestReviewer_User] FOREIGN KEY ([ReviewerId]) REFERENCES [User] ([Id]) ON DELETE NO ACTION;
+2023-08-30T16:10:17.3978234+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [DefinedRequestRole] ADD CONSTRAINT [FK_DefinedApplicationRole_RequestedApplication] FOREIGN KEY ([RequestedApplicationId]) REFERENCES [RequestedApplication] ([Id]) ON DELETE NO ACTION;
+2023-08-30T16:10:17.3985214+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Department] ADD CONSTRAINT [FK_Department_User] FOREIGN KEY ([ManagerId]) REFERENCES [User] ([Id]) ON DELETE NO ACTION;
+2023-08-30T16:10:17.4001221+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230830130924_initialMigration', N'7.0.10');
+2023-08-30T21:12:59.3708322+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (16ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2023-08-30T21:12:59.3922340+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2023-08-30T21:12:59.3944469+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2023-08-30T21:12:59.3955785+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2023-08-30T21:12:59.4095737+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2023-08-30T21:12:59.4224820+03:00	INFO	[Microsoft.EntityFrameworkCore.Migrations]	[Microsoft.EntityFrameworkCore.Migrations.MigrationApplying]	Applying migration '20230830181221_addVoucher'.
+2023-08-30T21:12:59.5336014+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (19ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [User] ADD [LastLogin] datetime NULL;
+2023-08-30T21:12:59.6194510+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (85ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DROP INDEX [IX_PoRequest_VendorNumber] ON [PoRequest];
+DECLARE @var0 sysname;
+SELECT @var0 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[PoRequest]') AND [c].[name] = N'VendorNumber');
+IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [PoRequest] DROP CONSTRAINT [' + @var0 + '];');
+UPDATE [PoRequest] SET [VendorNumber] = N'' WHERE [VendorNumber] IS NULL;
+ALTER TABLE [PoRequest] ALTER COLUMN [VendorNumber] nvarchar(450) NOT NULL;
+ALTER TABLE [PoRequest] ADD DEFAULT N'' FOR [VendorNumber];
+CREATE INDEX [IX_PoRequest_VendorNumber] ON [PoRequest] ([VendorNumber]);
+2023-08-30T21:12:59.6679125+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (48ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DROP INDEX [IX_PoRequest_VendorName] ON [PoRequest];
+DECLARE @var1 sysname;
+SELECT @var1 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[PoRequest]') AND [c].[name] = N'VendorName');
+IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [PoRequest] DROP CONSTRAINT [' + @var1 + '];');
+UPDATE [PoRequest] SET [VendorName] = N'' WHERE [VendorName] IS NULL;
+ALTER TABLE [PoRequest] ALTER COLUMN [VendorName] nvarchar(450) NOT NULL;
+ALTER TABLE [PoRequest] ADD DEFAULT N'' FOR [VendorName];
+CREATE INDEX [IX_PoRequest_VendorName] ON [PoRequest] ([VendorName]);
+2023-08-30T21:12:59.7203609+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (52ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DROP INDEX [IX_PoRequest_PoDescription] ON [PoRequest];
+DECLARE @var2 sysname;
+SELECT @var2 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[PoRequest]') AND [c].[name] = N'PoDescription');
+IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [PoRequest] DROP CONSTRAINT [' + @var2 + '];');
+UPDATE [PoRequest] SET [PoDescription] = N'' WHERE [PoDescription] IS NULL;
+ALTER TABLE [PoRequest] ALTER COLUMN [PoDescription] nvarchar(450) NOT NULL;
+ALTER TABLE [PoRequest] ADD DEFAULT N'' FOR [PoDescription];
+CREATE INDEX [IX_PoRequest_PoDescription] ON [PoRequest] ([PoDescription]);
+2023-08-30T21:13:00.1595250+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (49ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DECLARE @var3 sysname;
+SELECT @var3 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[PoRequest]') AND [c].[name] = N'PoAttachmentPath');
+IF @var3 IS NOT NULL EXEC(N'ALTER TABLE [PoRequest] DROP CONSTRAINT [' + @var3 + '];');
+UPDATE [PoRequest] SET [PoAttachmentPath] = N'' WHERE [PoAttachmentPath] IS NULL;
+ALTER TABLE [PoRequest] ALTER COLUMN [PoAttachmentPath] nvarchar(max) NOT NULL;
+ALTER TABLE [PoRequest] ADD DEFAULT N'' FOR [PoAttachmentPath];
+2023-08-30T21:13:00.2144108+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (55ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DROP INDEX [IX_PoRequest_InvoiceNumber] ON [PoRequest];
+DECLARE @var4 sysname;
+SELECT @var4 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[PoRequest]') AND [c].[name] = N'InvoiceNumber');
+IF @var4 IS NOT NULL EXEC(N'ALTER TABLE [PoRequest] DROP CONSTRAINT [' + @var4 + '];');
+UPDATE [PoRequest] SET [InvoiceNumber] = N'' WHERE [InvoiceNumber] IS NULL;
+ALTER TABLE [PoRequest] ALTER COLUMN [InvoiceNumber] nvarchar(450) NOT NULL;
+ALTER TABLE [PoRequest] ADD DEFAULT N'' FOR [InvoiceNumber];
+CREATE INDEX [IX_PoRequest_InvoiceNumber] ON [PoRequest] ([InvoiceNumber]);
+2023-08-30T21:13:01.3206200+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (50ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DECLARE @var5 sysname;
+SELECT @var5 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[PoRequest]') AND [c].[name] = N'InvoiceAttachmentPath');
+IF @var5 IS NOT NULL EXEC(N'ALTER TABLE [PoRequest] DROP CONSTRAINT [' + @var5 + '];');
+UPDATE [PoRequest] SET [InvoiceAttachmentPath] = N'' WHERE [InvoiceAttachmentPath] IS NULL;
+ALTER TABLE [PoRequest] ALTER COLUMN [InvoiceAttachmentPath] nvarchar(max) NOT NULL;
+ALTER TABLE [PoRequest] ADD DEFAULT N'' FOR [InvoiceAttachmentPath];
+2023-08-30T21:13:01.3335879+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [VoucherRequest] (
+    [BeneficiaryName] nvarchar(450) NOT NULL,
+    [RequestId] bigint NOT NULL,
+    [VendorNumber] nvarchar(max) NULL,
+    [VendorName] nvarchar(max) NULL,
+    [InvoiceDate] date NOT NULL,
+    [Description] nvarchar(max) NULL,
+    [VoucherAmount] real NOT NULL,
+    [VoucherCurrency] nvarchar(max) NOT NULL,
+    [VoucherType] nvarchar(max) NULL,
+    [CreatedAt] datetime NULL,
+    [ModifiedAt] datetime NULL,
+    [CreatedBy] nvarchar(50) NULL,
+    [ModifiedBy] nvarchar(50) NULL,
+    CONSTRAINT [PK_VoucherRequest] PRIMARY KEY ([BeneficiaryName], [RequestId]),
+    CONSTRAINT [FK_VoucherRequest_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE NO ACTION
+);
+2023-08-30T21:13:02.5570427+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_VoucherRequest_RequestId] ON [VoucherRequest] ([RequestId]);
+2023-08-30T21:13:02.5596717+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230830181221_addVoucher', N'7.0.10');

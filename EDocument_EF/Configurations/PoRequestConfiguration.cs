@@ -11,49 +11,53 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<PoRequest> entity)
         {
-            //entity.HasKey(e => new { e.BeneficiaryId, e.RequestId });
+            entity.ToTable(nameof(PoRequest));
 
-            //entity.ToTable("OracleAccessRequest");
+            entity.HasKey(e =>  e.PoNumber); 
 
-            //entity.Property(e => e.BeneficiaryId)
-            //.HasMaxLength(50)
-            //.IsUnicode(false);
-            //entity.Property(e => e.RequestId);
-            //entity.Property(e => e.BeneficiaryDepartment)
-            //.HasMaxLength(200)
-            //.IsUnicode(false);
-            //entity.Property(e => e.BeneficiaryEmail)
-            //.IsRequired()
-            //.HasMaxLength(50)
-            //.IsUnicode(false);
-            //entity.Property(e => e.BeneficiaryExtention);
-            //entity.Property(e => e.BeneficiaryName)
-            //.IsRequired()
-            //.HasMaxLength(200);
-            //entity.Property(e => e.BeneficiaryPostion)
-            //.HasMaxLength(200)
-            //.IsUnicode(false);
+            entity.HasIndex(p => p.PoDescription);
+            entity.HasIndex(p => p.VendorName);
+            entity.HasIndex(p => p.VendorNumber);
+            entity.HasIndex(p => p.InvoiceNumber);
 
-            //entity.Property(e => e.CreatedAt)
-            //.HasColumnType("datetime");
 
-            //entity.Property(e => e.ModifiedAt)
-            //.HasColumnType("datetime");
+            entity.Property(e => e.PoDescription)
+            .IsRequired();
+            
+            entity.Property(e => e.VendorName)
+            .IsRequired();
+            
+            entity.Property(e => e.VendorNumber)
+            .IsRequired();
+            
+            entity.Property(e => e.InvoiceNumber)
+            .IsRequired();
+            
+            
+            entity.Property(e => e.PoAttachmentPath)
+            .IsRequired();
+            
+            entity.Property(e => e.InvoiceAttachmentPath)
+            .IsRequired();
 
-            //entity.Property(e => e.CreatedBy)
-            //.HasMaxLength(50)
-            //.IsUnicode(false);
+            entity.Property(e => e.CreatedAt)
+           .HasColumnType("smalldatetime");
 
-            //entity.Property(e => e.ModifiedBy)
-            //.HasMaxLength(50)
-            //.IsUnicode(false);
+            entity.Property(e => e.ModifiedAt)
+            .HasColumnType("smalldatetime");
 
-            //entity.HasOne(d => d.Request).WithMany(p => p.OracleAccessRequests)
-            //.HasForeignKey(d => d.RequestId)
-            //.OnDelete(DeleteBehavior.Restrict)
-            //.HasConstraintName("FK_OracleAccessRequest_Request");
+            entity.Property(e => e.CreatedBy)
+            .HasMaxLength(50);
 
-           //OnConfigurePartial(entity);
+            entity.Property(e => e.ModifiedBy)
+            .HasMaxLength(50);
+
+            entity.HasOne(d => d.Request).WithMany(p => p.PoRequests)
+            .HasForeignKey(d => d.RequestId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .HasConstraintName("FK_PoRequest_Request");
+
+            OnConfigurePartial(entity);
         }
 
         partial void OnConfigurePartial(EntityTypeBuilder<PoRequest> entity);

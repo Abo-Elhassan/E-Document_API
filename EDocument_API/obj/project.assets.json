@@ -921,6 +921,19 @@
           "lib/netstandard2.0/Mono.TextTemplating.dll": {}
         }
       },
+      "Newtonsoft.Json/13.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "NReco.Logging.File/1.1.6": {
         "type": "package",
         "dependencies": {
@@ -1170,6 +1183,19 @@
         "runtime": {
           "lib/netcoreapp3.0/System.IO.Pipelines.dll": {
             "related": ".xml"
+          }
+        }
+      },
+      "System.Linq.Dynamic.Core/1.3.4": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/System.Linq.Dynamic.Core.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/System.Linq.Dynamic.Core.dll": {
+            "related": ".pdb;.xml"
           }
         }
       },
@@ -1531,7 +1557,9 @@
           "EDocument_Data": "1.0.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "7.0.10",
           "Microsoft.EntityFrameworkCore": "7.0.10",
-          "Microsoft.EntityFrameworkCore.SqlServer": "7.0.10"
+          "Microsoft.EntityFrameworkCore.SqlServer": "7.0.10",
+          "Newtonsoft.Json": "13.0.3",
+          "System.Linq.Dynamic.Core": "1.3.4"
         },
         "compile": {
           "bin/placeholder/EDocument_EF.dll": {}
@@ -2999,6 +3027,36 @@
         "mono.texttemplating.nuspec"
       ]
     },
+    "Newtonsoft.Json/13.0.3": {
+      "sha512": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/net6.0/Newtonsoft.Json.dll",
+        "lib/net6.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.3.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
+      ]
+    },
     "NReco.Logging.File/1.1.6": {
       "sha512": "y/xZbnZJzae1zyYmmhXQFUWIB2f5EfmTIpcvXP5665T3GoKjx5bujC5hIgG/3uhIgE0atL5AAYRODPfI2aVEEw==",
       "type": "package",
@@ -3485,6 +3543,61 @@
         "system.io.pipelines.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "System.Linq.Dynamic.Core/1.3.4": {
+      "sha512": "DP8TYwpdiATI/5AfM3QoETebJhkQBlz5yT4DQdYvgZS7jd/vwLaBWlRvlTnoA5Y886hTQikTJ2u0jp48ierbiA==",
+      "type": "package",
+      "path": "system.linq.dynamic.core/1.3.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/System.Linq.Dynamic.Core.dll",
+        "lib/net35/System.Linq.Dynamic.Core.pdb",
+        "lib/net35/System.Linq.Dynamic.Core.xml",
+        "lib/net40/System.Linq.Dynamic.Core.dll",
+        "lib/net40/System.Linq.Dynamic.Core.pdb",
+        "lib/net40/System.Linq.Dynamic.Core.xml",
+        "lib/net45/System.Linq.Dynamic.Core.dll",
+        "lib/net45/System.Linq.Dynamic.Core.pdb",
+        "lib/net45/System.Linq.Dynamic.Core.xml",
+        "lib/net452/System.Linq.Dynamic.Core.dll",
+        "lib/net452/System.Linq.Dynamic.Core.pdb",
+        "lib/net452/System.Linq.Dynamic.Core.xml",
+        "lib/net46/System.Linq.Dynamic.Core.dll",
+        "lib/net46/System.Linq.Dynamic.Core.pdb",
+        "lib/net46/System.Linq.Dynamic.Core.xml",
+        "lib/net5.0/System.Linq.Dynamic.Core.dll",
+        "lib/net5.0/System.Linq.Dynamic.Core.pdb",
+        "lib/net5.0/System.Linq.Dynamic.Core.xml",
+        "lib/net6.0/System.Linq.Dynamic.Core.dll",
+        "lib/net6.0/System.Linq.Dynamic.Core.pdb",
+        "lib/net6.0/System.Linq.Dynamic.Core.xml",
+        "lib/net7.0/System.Linq.Dynamic.Core.dll",
+        "lib/net7.0/System.Linq.Dynamic.Core.pdb",
+        "lib/net7.0/System.Linq.Dynamic.Core.xml",
+        "lib/netcoreapp2.1/System.Linq.Dynamic.Core.dll",
+        "lib/netcoreapp2.1/System.Linq.Dynamic.Core.pdb",
+        "lib/netcoreapp2.1/System.Linq.Dynamic.Core.xml",
+        "lib/netcoreapp3.1/System.Linq.Dynamic.Core.dll",
+        "lib/netcoreapp3.1/System.Linq.Dynamic.Core.pdb",
+        "lib/netcoreapp3.1/System.Linq.Dynamic.Core.xml",
+        "lib/netstandard1.3/System.Linq.Dynamic.Core.dll",
+        "lib/netstandard1.3/System.Linq.Dynamic.Core.pdb",
+        "lib/netstandard1.3/System.Linq.Dynamic.Core.xml",
+        "lib/netstandard2.0/System.Linq.Dynamic.Core.dll",
+        "lib/netstandard2.0/System.Linq.Dynamic.Core.pdb",
+        "lib/netstandard2.0/System.Linq.Dynamic.Core.xml",
+        "lib/netstandard2.1/System.Linq.Dynamic.Core.dll",
+        "lib/netstandard2.1/System.Linq.Dynamic.Core.pdb",
+        "lib/netstandard2.1/System.Linq.Dynamic.Core.xml",
+        "lib/uap10.0.10240/System.Linq.Dynamic.Core.dll",
+        "lib/uap10.0.10240/System.Linq.Dynamic.Core.pdb",
+        "lib/uap10.0.10240/System.Linq.Dynamic.Core.pri",
+        "lib/uap10.0.10240/System.Linq.Dynamic.Core.xml",
+        "logo.png",
+        "system.linq.dynamic.core.1.3.4.nupkg.sha512",
+        "system.linq.dynamic.core.nuspec"
       ]
     },
     "System.Memory/4.5.4": {
@@ -4531,11 +4644,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_API\\EDocument_API.csproj",
+      "projectUniqueName": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\EDocument_API.csproj",
       "projectName": "EDocument_API",
-      "projectPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_API\\EDocument_API.csproj",
+      "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\EDocument_API.csproj",
       "packagesPath": "C:\\Users\\almuhammad\\.nuget\\packages\\",
-      "outputPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_API\\obj\\",
+      "outputPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\almuhammad\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -4553,11 +4666,11 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj": {
-              "projectPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj"
+            "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj": {
+              "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj"
             },
-            "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj": {
-              "projectPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj"
+            "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj": {
+              "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj"
             }
           }
         }

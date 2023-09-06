@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj": {}
+    "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj": {}
   },
   "projects": {
-    "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj": {
+    "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj",
+        "projectUniqueName": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj",
         "projectName": "EDocument_Data",
-        "projectPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj",
+        "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj",
         "packagesPath": "C:\\Users\\almuhammad\\.nuget\\packages\\",
-        "outputPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Data\\obj\\",
+        "outputPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\almuhammad\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -65,14 +65,14 @@
         }
       }
     },
-    "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj": {
+    "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj",
+        "projectUniqueName": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj",
         "projectName": "EDocument_EF",
-        "projectPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj",
+        "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj",
         "packagesPath": "C:\\Users\\almuhammad\\.nuget\\packages\\",
-        "outputPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_EF\\obj\\",
+        "outputPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_EF\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\almuhammad\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -89,8 +89,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj": {
-                "projectPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj"
+              "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj": {
+                "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj"
               }
             }
           }
@@ -128,6 +128,14 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.10, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
+            "System.Linq.Dynamic.Core": {
+              "target": "Package",
+              "version": "[1.3.4, )"
             }
           },
           "imports": [
@@ -150,14 +158,14 @@
         }
       }
     },
-    "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj": {
+    "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj",
+        "projectUniqueName": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj",
         "projectName": "EDocument_Services",
-        "projectPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj",
+        "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj",
         "packagesPath": "C:\\Users\\almuhammad\\.nuget\\packages\\",
-        "outputPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Services\\obj\\",
+        "outputPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Services\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\almuhammad\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -174,8 +182,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj": {
-                "projectPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj"
+              "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj": {
+                "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj"
               }
             }
           }

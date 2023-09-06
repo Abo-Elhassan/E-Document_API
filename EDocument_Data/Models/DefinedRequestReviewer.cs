@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using EDocument_Data.Consts.Enums;
 using EDocument_Data.Models.Shared;
 
 namespace EDocument_Data.Models;
@@ -17,11 +18,9 @@ public  class DefinedRequestReviewer : BaseEntity
 
     public int StageNumber { get; set; }
 
-    public long RequestedApplicationId { get; set; }
-
-    public virtual RequestedApplication RequestedApplication { get; set; }
+    public ReviewerType ReviewerType { get; set; }
 
     public virtual DefinedRequest DefinedRequest { get; set; }
 
-    public virtual ApplicationUser Reviewer { get; set; }
+    public virtual User Reviewer { get; set; }
 }

@@ -1,8 +1,11 @@
 ﻿using EDocument_API.Helpers;
 using EDocument_Data.Consts;
+using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.User;
 using EDocument_Data.Models;
+using EDocument_EF;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -14,23 +17,25 @@ namespace EDocument_Services.Auth_Service
 {
     public class AuthService : IAuthService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IOptions<JwtSettings> _jwtSettings;
         private readonly ILogger<AuthService> _logger;
 
-        public AuthService(UserManager<ApplicationUser> userManager, IOptions<JwtSettings> jwtSettings, ILogger<AuthService> logger)
+
+        public AuthService(UserManager<User> userManager, IOptions<JwtSettings> jwtSettings, ILogger<AuthService> logger)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
             _logger = logger;
+
         }
 
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
-            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(ApplicationConsts.SecretKey));
+            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(ApplicationConsts.SecretKey ??""));
         }
 
-        private async Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user)
+        private async Task<JwtSecurityToken> CreateJwtToken(User user)
         {
             var userClaims = await _userManager.GetClaimsAsync(user);
 
@@ -58,9 +63,9 @@ namespace EDocument_Services.Auth_Service
         {
             (bool Succeeded, string Message, LoginReadDto? LoginReadDto) response = (false, "", null);
 
-            string adPath = "LDAP://spdc.com"; //Path to your LDAP directory server
-            Authentication adAuth = new Authentication(adPath);
-            if (!adAuth.IsAuthenticated("spdc.com", loginWriteDto.UserName, loginWriteDto.Password))
+             //Path to your LDAP directory server
+            Authentication adAuth = new Authentication(ApplicationConsts.ADPath);
+            if (!adAuth.IsAuthenticated(ApplicationConsts.ADDomain, loginWriteDto.UserName, loginWriteDto.Password))
             {
                 response.Succeeded = false;
                 response.Message = $"Usermame or Password is incorrect";
@@ -134,5 +139,6 @@ namespace EDocument_Services.Auth_Service
                 return response;
             }
         }
+
     }
 }

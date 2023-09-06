@@ -2,6 +2,7 @@
 using EDocument_Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using System;
 using System.Collections.Generic;
 
@@ -13,9 +14,10 @@ namespace EDocument_EF.Configurations
         {
             entity.HasKey(e => new { e.BeneficiaryId, e.RequestId });
 
-            entity.ToTable("CarRequest");
+            entity.ToTable(nameof(CarRequest));
 
             entity.Property(e => e.BeneficiaryId)
+            .IsRequired()
             .HasMaxLength(50);
 
             entity.Property(e => e.BeneficiaryDepartment)
@@ -38,38 +40,34 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.BeneficiaryExtention)
             .HasMaxLength(50);
 
-            entity.Property(e => e.RequesterPurpose)
-            .IsRequired();
-
             entity.Property(e => e.DepartureAddress)
+            .HasConversion<String>()
             .IsRequired()
             .HasMaxLength(50);
 
             entity.Property(e => e.DestinationAddress)
+            .HasConversion<String>()
             .IsRequired()
             .HasMaxLength(50);
 
             entity.Property(e => e.DepartureDate)
-            .IsRequired();
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.RetrunDate)
-            .IsRequired();
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.LuggageDescription)
             .IsRequired();
 
-            entity.Property(e => e.AttachmentPath)
-            .HasMaxLength(500);
-
-            entity.Property(e => e.CarType)
+            entity.Property(e => e.VehicleType).HasConversion<string>()
             .IsRequired()
             .HasMaxLength(50);
 
             entity.Property(e => e.CreatedAt)
-            .HasColumnType("datetime");
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.ModifiedAt)
-            .HasColumnType("datetime");
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
             .HasMaxLength(50);
@@ -84,10 +82,6 @@ namespace EDocument_EF.Configurations
             .OnDelete(DeleteBehavior.Restrict)
             .HasConstraintName("FK_CarRequest_Request");
 
-            entity.HasOne(d => d.Department).WithMany(p => p.CarRequests)
-            .HasForeignKey(d => d.DepartmentId)
-            .OnDelete(DeleteBehavior.Restrict)
-            .HasConstraintName("FK_CarRequest_Department");
 
             OnConfigurePartial(entity);
         }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Reposatories\\EDocument_Reposatories.csproj": {}
+    "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Reposatories\\EDocument_Reposatories.csproj": {}
   },
   "projects": {
-    "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Reposatories\\EDocument_Reposatories.csproj": {
+    "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Reposatories\\EDocument_Reposatories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Reposatories\\EDocument_Reposatories.csproj",
+        "projectUniqueName": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Reposatories\\EDocument_Reposatories.csproj",
         "projectName": "EDocument_Reposatories",
-        "projectPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Reposatories\\EDocument_Reposatories.csproj",
+        "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Reposatories\\EDocument_Reposatories.csproj",
         "packagesPath": "C:\\Users\\almuhammad\\.nuget\\packages\\",
-        "outputPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Reposatories\\obj\\",
+        "outputPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Reposatories\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\almuhammad\\AppData\\Roaming\\NuGet\\NuGet.Config",

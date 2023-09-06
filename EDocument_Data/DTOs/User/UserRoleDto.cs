@@ -1,4 +1,4 @@
-﻿using EDocument_Data.Consts;
+﻿using EDocument_Data.Consts.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

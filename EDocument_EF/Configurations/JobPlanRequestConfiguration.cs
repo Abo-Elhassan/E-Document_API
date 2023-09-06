@@ -12,11 +12,17 @@ namespace EDocument_EF.Configurations
         public void Configure(EntityTypeBuilder<JobPlanRequest> entity)
         {
 
+            entity.ToTable(nameof(JobPlanRequest));
+
+            entity.Property(e => e.Action).HasConversion<string>()
+            .IsRequired()
+            .HasMaxLength(50);
+
             entity.Property(e => e.CreatedAt)
-            .HasColumnType("datetime");
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.ModifiedAt)
-            .HasColumnType("datetime");
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
             .HasMaxLength(50);

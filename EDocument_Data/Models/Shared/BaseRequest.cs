@@ -23,14 +23,10 @@ namespace EDocument_Data.Models.Shared
 
         public string BeneficiaryExtention { get; set; }
 
-        public string RequesterPurpose { get; set; }
-
         public long RequestId { get; set; }
 
         public virtual Request Request { get; set; }
 
-        public long DepartmentId { get; set; }
 
-        public virtual Department Department { get; set; }
     }
 }

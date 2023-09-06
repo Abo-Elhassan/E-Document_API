@@ -22,112 +22,38 @@ namespace EDocument_EF.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EDocument_Data.Models.ApplicationUser", b =>
+            modelBuilder.Entity("ApplicationItAdmin", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("ItAdminId")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Company")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<long>("DepartmentId")
+                    b.Property<long>("ApplicationId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("DepartmentName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.HasKey("ItAdminId", "ApplicationId");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.HasIndex("ApplicationId");
 
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("ManagerId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("ManagerId");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("User", (string)null);
+                    b.ToTable("ApplicationItAdmin", (string)null);
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.BiAccessRequest", b =>
+            modelBuilder.Entity("DefinedRequestRole", b =>
+                {
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long>("DefinedRequestId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("RoleId", "DefinedRequestId");
+
+                    b.HasIndex("DefinedRequestId");
+
+                    b.ToTable("DefinedRequestRole", (string)null);
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.ApplicationUserRequest", b =>
                 {
                     b.Property<string>("BeneficiaryId")
                         .HasMaxLength(50)
@@ -163,33 +89,60 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<long>("DepartmentId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("RequesterPurpose")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("BeneficiaryId", "RequestId");
-
-                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("RequestId");
 
-                    b.ToTable("BiAccessRequest", (string)null);
+                    b.ToTable("ApplicationUserRequest", (string)null);
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.Attachment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("Attachment", (string)null);
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.CarRequest", b =>
@@ -201,10 +154,6 @@ namespace EDocument_EF.Migrations
                     b.Property<long>("RequestId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("AttachmentPath")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<string>("BeneficiaryDepartment")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -231,20 +180,12 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("CarType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<long>("DepartmentId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("DepartureAddress")
                         .IsRequired()
@@ -252,136 +193,95 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("DepartureDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("DestinationAddress")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("LuggageDescription")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("LuggageDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("RequesterPurpose")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("RetrunDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("VehicleType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("BeneficiaryId", "RequestId");
-
-                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("RequestId");
 
                     b.ToTable("CarRequest", (string)null);
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.DefinedRequest", b =>
+            modelBuilder.Entity("EDocument_Data.Models.DefinedApplication", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("ApplicationName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<bool>("DeptMgrApprove")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("DirectMgrApprove")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("RequestName")
+                    b.Property<string>("ApplicationOwnerId")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("StagesNumber")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DefinedRequest", (string)null);
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.DefinedRequestReviewer", b =>
-                {
-                    b.Property<long>("DefinedRequestId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ReviewerId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<long>("RequestedApplicationId")
-                        .HasColumnType("bigint");
+                    b.HasKey("Id");
 
-                    b.Property<string>("StageName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.HasIndex("ApplicationOwnerId");
 
-                    b.Property<int>("StageNumber")
-                        .HasColumnType("int");
-
-                    b.HasKey("DefinedRequestId", "ReviewerId");
-
-                    b.HasIndex("RequestedApplicationId");
-
-                    b.HasIndex("ReviewerId");
-
-                    b.ToTable("DefinedRequestReviewer", (string)null);
+                    b.ToTable("DefinedApplication", (string)null);
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.DefinedRequestRole", b =>
+            modelBuilder.Entity("EDocument_Data.Models.DefinedApplicationRole", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<long>("DefinedRequestId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(50)
@@ -397,11 +297,101 @@ namespace EDocument_EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DefinedRequestId");
-
                     b.HasIndex("RequestedApplicationId");
 
-                    b.ToTable("DefinedRequestRole", (string)null);
+                    b.ToTable("DefinedApplicationRole", (string)null);
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.DefinedRequest", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long>("DepartmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IconName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("RequestName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("ReviewersNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RouteName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("DefinedRequest", (string)null);
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.DefinedRequestReviewer", b =>
+                {
+                    b.Property<long>("DefinedRequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ReviewerId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ReviewerType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("StageName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("StageNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("DefinedRequestId", "ReviewerId");
+
+                    b.HasIndex("ReviewerId");
+
+                    b.ToTable("DefinedRequestReviewer", (string)null);
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Department", b =>
@@ -410,7 +400,7 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
@@ -427,7 +417,7 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(50)
@@ -476,14 +466,11 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<long>("DepartmentId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("DisplayName")
                         .HasMaxLength(50)
@@ -494,7 +481,7 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(50)
@@ -504,156 +491,84 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("RequesterPurpose")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("BeneficiaryId", "RequestId");
-
-                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("RequestId");
 
                     b.ToTable("DomainAccountRequest", (string)null);
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.MenaPayAccessRequest", b =>
+            modelBuilder.Entity("EDocument_Data.Models.PoRequest", b =>
                 {
-                    b.Property<string>("BeneficiaryId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<long>("RequestId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("BeneficiaryDepartment")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("BeneficiaryEmail")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("BeneficiaryPhone")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryPostion")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<string>("PoNumber")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<long>("DepartmentId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("InvoiceAttachmentPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InvoiceNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("RequesterPurpose")
+                    b.Property<string>("PoAttachmentPath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("BeneficiaryId", "RequestId");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("RequestId");
-
-                    b.ToTable("MenaPayAccessRequest", (string)null);
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.OracleFusionAccessRequest", b =>
-                {
-                    b.Property<string>("BeneficiaryId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("PoDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<long>("RequestId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("BeneficiaryDepartment")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("BeneficiaryEmail")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryName")
+                    b.Property<string>("VendorName")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("BeneficiaryPhone")
+                    b.Property<string>("VendorNumber")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("BeneficiaryPostion")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.HasKey("PoNumber");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime");
+                    b.HasIndex("InvoiceNumber");
 
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<long>("DepartmentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("RequesterPurpose")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("BeneficiaryId", "RequestId");
-
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("PoDescription");
 
                     b.HasIndex("RequestId");
 
-                    b.ToTable("OracleFusionAccessRequest", (string)null);
+                    b.HasIndex("VendorName");
+
+                    b.HasIndex("VendorNumber");
+
+                    b.ToTable("PoRequest", (string)null);
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Request", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
@@ -666,23 +581,25 @@ namespace EDocument_EF.Migrations
                     b.Property<int?>("CurrentStage")
                         .HasColumnType("int");
 
+                    b.Property<string>("DeclinedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<long?>("DefinedRequestId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Justification")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Remarks")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReviewerNotes")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Status")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -695,188 +612,88 @@ namespace EDocument_EF.Migrations
                     b.ToTable("Request", (string)null);
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.RequestedApplication", b =>
+            modelBuilder.Entity("EDocument_Data.Models.RequestApplicationRole", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("ApplicationName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ApplicationOwnerId")
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationOwnerId");
-
-                    b.ToTable("RequestedApplication");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.TosAccessRequest", b =>
-                {
-                    b.Property<string>("BeneficiaryId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<long>("RequestId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("BeneficiaryDepartment")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<long>("ApplicationId")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("BeneficiaryEmail")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("BeneficiaryPhone")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryPostion")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<long>("DepartmentId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("RequesterPurpose")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("RequestId", "ApplicationId", "RoleId");
 
-                    b.HasKey("BeneficiaryId", "RequestId");
+                    b.HasIndex("ApplicationId");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("RoleId");
 
-                    b.HasIndex("RequestId");
-
-                    b.ToTable("TosAccessRequest", (string)null);
+                    b.ToTable("RequestApplicationRole", (string)null);
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.TravelDeskRequest", b =>
+            modelBuilder.Entity("EDocument_Data.Models.RequestReviewer", b =>
                 {
-                    b.Property<string>("BeneficiaryId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<long>("RequestId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("AttachmentPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BeneficiaryDepartment")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("BeneficiaryEmail")
+                    b.Property<string>("ReviewerId")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("BeneficiaryNationality")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryPhone")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryPostion")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<float>("CostAllocation")
-                        .HasColumnType("real");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("Currency")
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ReviewerNotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReviewerType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StageNumber")
                         .HasColumnType("int");
 
-                    b.Property<long>("DepartmentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("RequestTypes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RequesterPurpose")
+                    b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("BeneficiaryId", "RequestId");
+                    b.HasKey("RequestId", "ReviewerId");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("ReviewerId");
 
-                    b.HasIndex("RequestId");
-
-                    b.ToTable(" TravelDeskRequest", (string)null);
+                    b.ToTable("RequestReviewer", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("EDocument_Data.Models.Role", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -900,7 +717,319 @@ namespace EDocument_EF.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("Role", "security");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.Section", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long>("DepartmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("HeadId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("SectionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("HeadId")
+                        .IsUnique()
+                        .HasFilter("[HeadId] IS NOT NULL");
+
+                    b.ToTable("Section", (string)null);
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.TravelDeskRequest", b =>
+                {
+                    b.Property<string>("BeneficiaryId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("BeneficiaryDepartment")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("BeneficiaryEmail")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("BeneficiaryExtention")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("BeneficiaryName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("BeneficiaryNationality")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("BeneficiaryPhone")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("BeneficiaryPostion")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("CheckIn")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<DateTime>("CheckOut")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<float>("CostAllocation")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("DepartureDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("DestinationCountry")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("ExpectedTravelTime")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("FlightDestination")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FlightOrigin")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("MissionAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("RequestTypes")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("ReturnDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.HasKey("BeneficiaryId", "RequestId");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("TravelDeskRequest", (string)null);
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Company")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long>("DepartmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("LastLogin")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("ManagerId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<long>("SectionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("ManagerId");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("User", "security");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.VoucherRequest", b =>
+                {
+                    b.Property<string>("BeneficiaryName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("InvoiceDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("VendorName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VendorNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("VoucherAmount")
+                        .HasColumnType("real");
+
+                    b.Property<string>("VoucherCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VoucherType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BeneficiaryName", "RequestId");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("VoucherRequest", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -925,7 +1054,7 @@ namespace EDocument_EF.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("RoleClaims", "security");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -950,7 +1079,7 @@ namespace EDocument_EF.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserClaim", (string)null);
+                    b.ToTable("UserClaims", "security");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -972,7 +1101,7 @@ namespace EDocument_EF.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("UserLogin", "security");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -987,7 +1116,7 @@ namespace EDocument_EF.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("UserRoles", "security");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -1006,91 +1135,69 @@ namespace EDocument_EF.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("UserToken", "security");
                 });
 
-            modelBuilder.Entity("RequestReviewer", b =>
+            modelBuilder.Entity("ApplicationItAdmin", b =>
                 {
-                    b.Property<string>("ReviewerId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<long>("RequestId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("ReviewerId", "RequestId");
-
-                    b.HasIndex("RequestId");
-
-                    b.ToTable("RequestReviewer", (string)null);
-                });
-
-            modelBuilder.Entity("RequestRole", b =>
-                {
-                    b.Property<long>("RoleId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("RequestId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("RoleId", "RequestId");
-
-                    b.HasIndex("RequestId");
-
-                    b.ToTable("RequestRole", (string)null);
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("EDocument_Data.Models.Department", "Department")
-                        .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
+                    b.HasOne("EDocument_Data.Models.DefinedApplication", null)
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("FK_User_Department");
+                        .HasConstraintName("FK_ApplicationItAdmin_DefinedApplication");
 
-                    b.HasOne("EDocument_Data.Models.ApplicationUser", "Manager")
-                        .WithMany("ManagedEmployees")
-                        .HasForeignKey("ManagerId")
+                    b.HasOne("EDocument_Data.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("ItAdminId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("FK_User_User");
-
-                    b.Navigation("Department");
-
-                    b.Navigation("Manager");
+                        .HasConstraintName("FK_ApplicationItAdmin_User");
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.BiAccessRequest", b =>
+            modelBuilder.Entity("DefinedRequestRole", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.Department", "Department")
-                        .WithMany("BiAccessRequests")
-                        .HasForeignKey("DepartmentId")
+                    b.HasOne("EDocument_Data.Models.DefinedRequest", null)
+                        .WithMany()
+                        .HasForeignKey("DefinedRequestId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("FK_BiAccessRequest_Department");
+                        .HasConstraintName("FK_DefinedRequestRole_DefinedRequest");
 
+                    b.HasOne("EDocument_Data.Models.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_DefinedRequestRole_Role");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.ApplicationUserRequest", b =>
+                {
                     b.HasOne("EDocument_Data.Models.Request", "Request")
-                        .WithMany("BiAccessRequests")
+                        .WithMany("ApplicationUserRequests")
                         .HasForeignKey("RequestId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("FK_BiAccessRequest_Request");
+                        .HasConstraintName("FK_ApplicationUserRequest_Request");
 
-                    b.Navigation("Department");
+                    b.Navigation("Request");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.Attachment", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.Request", "Request")
+                        .WithMany("Attachments")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Attachment_Request");
 
                     b.Navigation("Request");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.CarRequest", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.Department", "Department")
-                        .WithMany("CarRequests")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_CarRequest_Department");
-
                     b.HasOne("EDocument_Data.Models.Request", "Request")
                         .WithMany("CarRequests")
                         .HasForeignKey("RequestId")
@@ -1098,9 +1205,43 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_CarRequest_Request");
 
-                    b.Navigation("Department");
-
                     b.Navigation("Request");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.DefinedApplication", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.User", "ApplicationOwner")
+                        .WithMany("OwnedApplications")
+                        .HasForeignKey("ApplicationOwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_DefinedApplication_User");
+
+                    b.Navigation("ApplicationOwner");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.DefinedApplicationRole", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.DefinedApplication", "RequestedApplication")
+                        .WithMany("DefinedApplicationRoles")
+                        .HasForeignKey("RequestedApplicationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_DefinedApplicationRole_RequestedApplication");
+
+                    b.Navigation("RequestedApplication");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.DefinedRequest", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.Department", "Department")
+                        .WithMany("DefinedRequests")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_DefinedRequest_Department");
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.DefinedRequestReviewer", b =>
@@ -1112,14 +1253,7 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_DefinedRequestReviewer_DefinedRequest");
 
-                    b.HasOne("EDocument_Data.Models.RequestedApplication", "RequestedApplication")
-                        .WithMany("DefinedRequestReviewers")
-                        .HasForeignKey("RequestedApplicationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_DefinedRequestReviewer_EmployeeRequestedApplication");
-
-                    b.HasOne("EDocument_Data.Models.ApplicationUser", "Reviewer")
+                    b.HasOne("EDocument_Data.Models.User", "Reviewer")
                         .WithMany("DefinedRequestReviewers")
                         .HasForeignKey("ReviewerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1128,35 +1262,12 @@ namespace EDocument_EF.Migrations
 
                     b.Navigation("DefinedRequest");
 
-                    b.Navigation("RequestedApplication");
-
                     b.Navigation("Reviewer");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.DefinedRequestRole", b =>
-                {
-                    b.HasOne("EDocument_Data.Models.DefinedRequest", "DefinedRequest")
-                        .WithMany("DefinedRequestRoles")
-                        .HasForeignKey("DefinedRequestId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_DefinedRequestRole_DefinedRequest");
-
-                    b.HasOne("EDocument_Data.Models.RequestedApplication", "RequestedApplication")
-                        .WithMany("DefinedRequestRoles")
-                        .HasForeignKey("RequestedApplicationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_DefinedRequestRole_RequestedApplication");
-
-                    b.Navigation("DefinedRequest");
-
-                    b.Navigation("RequestedApplication");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Department", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.ApplicationUser", "Manager")
+                    b.HasOne("EDocument_Data.Models.User", "Manager")
                         .WithMany("ManagedDepartments")
                         .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1168,13 +1279,6 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("EDocument_Data.Models.DomainAccountRequest", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.Department", "Department")
-                        .WithMany("DomainAccountRequests")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_DomainAccountRequest_Department");
-
                     b.HasOne("EDocument_Data.Models.Request", "Request")
                         .WithMany("DomainAccountRequests")
                         .HasForeignKey("RequestId")
@@ -1182,56 +1286,24 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_DomainAccountRequest_Request");
 
-                    b.Navigation("Department");
-
                     b.Navigation("Request");
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.MenaPayAccessRequest", b =>
+            modelBuilder.Entity("EDocument_Data.Models.PoRequest", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.Department", "Department")
-                        .WithMany("MenaPayAccessRequests")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_MenaPayAccessRequest_Department");
-
                     b.HasOne("EDocument_Data.Models.Request", "Request")
-                        .WithMany("MenaPayAccessRequests")
+                        .WithMany("PoRequests")
                         .HasForeignKey("RequestId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("FK_MenaPayAccessRequest_Request");
-
-                    b.Navigation("Department");
-
-                    b.Navigation("Request");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.OracleFusionAccessRequest", b =>
-                {
-                    b.HasOne("EDocument_Data.Models.Department", "Department")
-                        .WithMany("OracleFusionAccessRequests")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_OracleFusionAccessRequest_Department");
-
-                    b.HasOne("EDocument_Data.Models.Request", "Request")
-                        .WithMany("OracleFusionAccessRequests")
-                        .HasForeignKey("RequestId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_OracleFusionAccessRequest_Request");
-
-                    b.Navigation("Department");
+                        .HasConstraintName("FK_PoRequest_Request");
 
                     b.Navigation("Request");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Request", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.ApplicationUser", "Creator")
+                    b.HasOne("EDocument_Data.Models.User", "Creator")
                         .WithMany("CreatedRequests")
                         .HasForeignKey("CreatorId")
                         .HasConstraintName("FK_Request_User");
@@ -1246,45 +1318,79 @@ namespace EDocument_EF.Migrations
                     b.Navigation("DefinedRequest");
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.RequestedApplication", b =>
+            modelBuilder.Entity("EDocument_Data.Models.RequestApplicationRole", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.ApplicationUser", "ApplicationOwner")
-                        .WithMany("RequestedApplications")
-                        .HasForeignKey("ApplicationOwnerId");
-
-                    b.Navigation("ApplicationOwner");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.TosAccessRequest", b =>
-                {
-                    b.HasOne("EDocument_Data.Models.Department", "Department")
-                        .WithMany("TosAccessRequests")
-                        .HasForeignKey("DepartmentId")
+                    b.HasOne("EDocument_Data.Models.DefinedApplication", "Application")
+                        .WithMany("RequestApplicationRoles")
+                        .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("FK_TosAccessRequest_Department");
+                        .HasConstraintName("FK_RequestApplicationRole_DefinedApplication");
 
                     b.HasOne("EDocument_Data.Models.Request", "Request")
-                        .WithMany("TosAccessRequests")
+                        .WithMany("RequestApplicationRoles")
                         .HasForeignKey("RequestId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("FK_TosAccessRequest_Request");
+                        .HasConstraintName("FK_RequestApplicationRole_Request");
+
+                    b.HasOne("EDocument_Data.Models.DefinedApplicationRole", "Role")
+                        .WithMany("RequestApplicationRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_RequestApplicationRole_DefinedApplicationRole");
+
+                    b.Navigation("Application");
+
+                    b.Navigation("Request");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.RequestReviewer", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.Request", "Request")
+                        .WithMany("RequestReviewers")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_RequestReviewer_Request");
+
+                    b.HasOne("EDocument_Data.Models.User", "Reviewer")
+                        .WithMany("RequestReviewers")
+                        .HasForeignKey("ReviewerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_RequestReviewer_User");
+
+                    b.Navigation("Request");
+
+                    b.Navigation("Reviewer");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.Section", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.Department", "Department")
+                        .WithMany("Sections")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Section_Department");
+
+                    b.HasOne("EDocument_Data.Models.User", "Head")
+                        .WithOne("MangedSection")
+                        .HasForeignKey("EDocument_Data.Models.Section", "HeadId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_Section_User");
 
                     b.Navigation("Department");
 
-                    b.Navigation("Request");
+                    b.Navigation("Head");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.TravelDeskRequest", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.Department", "Department")
-                        .WithMany("TravelDeskRequests")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_TravelDeskRequest_Department");
-
                     b.HasOne("EDocument_Data.Models.Request", "Request")
                         .WithMany("TravelDeskRequests")
                         .HasForeignKey("RequestId")
@@ -1292,14 +1398,54 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_TravelDeskRequest_Request");
 
+                    b.Navigation("Request");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.User", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.Department", "Department")
+                        .WithMany("Employees")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_User_Department");
+
+                    b.HasOne("EDocument_Data.Models.User", "Manager")
+                        .WithMany("ManagedEmployees")
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_User_User");
+
+                    b.HasOne("EDocument_Data.Models.Section", "Section")
+                        .WithMany("Employees")
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_User_Section");
+
                     b.Navigation("Department");
+
+                    b.Navigation("Manager");
+
+                    b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.VoucherRequest", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.Request", "Request")
+                        .WithMany("VoucherRequests")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_VoucherRequest_Request");
 
                     b.Navigation("Request");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("EDocument_Data.Models.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1308,7 +1454,7 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.ApplicationUser", null)
+                    b.HasOne("EDocument_Data.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1317,7 +1463,7 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.ApplicationUser", null)
+                    b.HasOne("EDocument_Data.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1326,13 +1472,13 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("EDocument_Data.Models.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EDocument_Data.Models.ApplicationUser", null)
+                    b.HasOne("EDocument_Data.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1341,48 +1487,68 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.ApplicationUser", null)
+                    b.HasOne("EDocument_Data.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RequestReviewer", b =>
+            modelBuilder.Entity("EDocument_Data.Models.DefinedApplication", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.Request", null)
-                        .WithMany()
-                        .HasForeignKey("RequestId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_RequestReviewer_Request");
+                    b.Navigation("DefinedApplicationRoles");
 
-                    b.HasOne("EDocument_Data.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("ReviewerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_RequestReviewer_User");
+                    b.Navigation("RequestApplicationRoles");
                 });
 
-            modelBuilder.Entity("RequestRole", b =>
+            modelBuilder.Entity("EDocument_Data.Models.DefinedApplicationRole", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.Request", null)
-                        .WithMany()
-                        .HasForeignKey("RequestId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_RequestRole_Request");
-
-                    b.HasOne("EDocument_Data.Models.DefinedRequestRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_RequestRole_DefinedRequestRole");
+                    b.Navigation("RequestApplicationRoles");
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.ApplicationUser", b =>
+            modelBuilder.Entity("EDocument_Data.Models.DefinedRequest", b =>
+                {
+                    b.Navigation("DefinedRequestReviewers");
+
+                    b.Navigation("Requests");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.Department", b =>
+                {
+                    b.Navigation("DefinedRequests");
+
+                    b.Navigation("Employees");
+
+                    b.Navigation("Sections");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.Request", b =>
+                {
+                    b.Navigation("ApplicationUserRequests");
+
+                    b.Navigation("Attachments");
+
+                    b.Navigation("CarRequests");
+
+                    b.Navigation("DomainAccountRequests");
+
+                    b.Navigation("PoRequests");
+
+                    b.Navigation("RequestApplicationRoles");
+
+                    b.Navigation("RequestReviewers");
+
+                    b.Navigation("TravelDeskRequests");
+
+                    b.Navigation("VoucherRequests");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.Section", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.User", b =>
                 {
                     b.Navigation("CreatedRequests");
 
@@ -1392,59 +1558,11 @@ namespace EDocument_EF.Migrations
 
                     b.Navigation("ManagedEmployees");
 
-                    b.Navigation("RequestedApplications");
-                });
+                    b.Navigation("MangedSection");
 
-            modelBuilder.Entity("EDocument_Data.Models.DefinedRequest", b =>
-                {
-                    b.Navigation("DefinedRequestReviewers");
+                    b.Navigation("OwnedApplications");
 
-                    b.Navigation("DefinedRequestRoles");
-
-                    b.Navigation("Requests");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.Department", b =>
-                {
-                    b.Navigation("BiAccessRequests");
-
-                    b.Navigation("CarRequests");
-
-                    b.Navigation("DomainAccountRequests");
-
-                    b.Navigation("Employees");
-
-                    b.Navigation("MenaPayAccessRequests");
-
-                    b.Navigation("OracleFusionAccessRequests");
-
-                    b.Navigation("TosAccessRequests");
-
-                    b.Navigation("TravelDeskRequests");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.Request", b =>
-                {
-                    b.Navigation("BiAccessRequests");
-
-                    b.Navigation("CarRequests");
-
-                    b.Navigation("DomainAccountRequests");
-
-                    b.Navigation("MenaPayAccessRequests");
-
-                    b.Navigation("OracleFusionAccessRequests");
-
-                    b.Navigation("TosAccessRequests");
-
-                    b.Navigation("TravelDeskRequests");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.RequestedApplication", b =>
-                {
-                    b.Navigation("DefinedRequestReviewers");
-
-                    b.Navigation("DefinedRequestRoles");
+                    b.Navigation("RequestReviewers");
                 });
 #pragma warning restore 612, 618
         }

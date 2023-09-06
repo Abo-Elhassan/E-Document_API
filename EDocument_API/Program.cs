@@ -1,8 +1,9 @@
 using EDocument_API.Shared;
-
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.InjectServices(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

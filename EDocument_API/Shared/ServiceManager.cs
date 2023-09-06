@@ -1,5 +1,6 @@
 ﻿using EDocument_API.Helpers;
 using EDocument_Data.Consts;
+using EDocument_Data.Consts.Enums;
 using EDocument_Data.Models;
 using EDocument_EF;
 using EDocument_Services.Auth_Service;
@@ -67,7 +68,7 @@ namespace EDocument_API.Shared
 
             #region ASP.Net Identity
 
-            services.AddIdentityCore<ApplicationUser>(options =>
+            services.AddIdentity<User,Role>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 8;

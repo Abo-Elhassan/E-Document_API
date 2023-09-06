@@ -13,7 +13,7 @@ namespace EDocument_EF.Configurations
         {
             entity.HasKey(e => new { e.DefinedRequestId, e.ReviewerId });
 
-            entity.ToTable("DefinedRequestReviewer");
+            entity.ToTable(nameof(DefinedRequestReviewer));
 
 
             entity.Property(e => e.ReviewerId)
@@ -22,11 +22,15 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.StageName)
             .HasMaxLength(50);
 
+            entity.Property(e => e.ReviewerType).HasConversion<string>()
+            .IsRequired()
+            .HasMaxLength(50);
+
             entity.Property(e => e.CreatedAt)
-            .HasColumnType("datetime");
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.ModifiedAt)
-            .HasColumnType("datetime");
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
             .HasMaxLength(50);
@@ -44,10 +48,7 @@ namespace EDocument_EF.Configurations
             .OnDelete(DeleteBehavior.Restrict)
             .HasConstraintName("FK_DefinedRequestReviewer_User");
 
-            entity.HasOne(d => d.RequestedApplication).WithMany(p => p.DefinedRequestReviewers)
-            .HasForeignKey(d => d.RequestedApplicationId)
-            .OnDelete(DeleteBehavior.Restrict)
-            .HasConstraintName("FK_DefinedRequestReviewer_EmployeeRequestedApplication");
+
 
             OnConfigurePartial(entity);
         }

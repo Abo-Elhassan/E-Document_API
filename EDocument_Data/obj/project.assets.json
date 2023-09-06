@@ -773,11 +773,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj",
+      "projectUniqueName": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj",
       "projectName": "EDocument_Data",
-      "projectPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj",
+      "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj",
       "packagesPath": "C:\\Users\\almuhammad\\.nuget\\packages\\",
-      "outputPath": "F:\\Work\\My Projects\\.Net\\EDocument_API\\EDocument_Data\\obj\\",
+      "outputPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Data\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\almuhammad\\AppData\\Roaming\\NuGet\\NuGet.Config",

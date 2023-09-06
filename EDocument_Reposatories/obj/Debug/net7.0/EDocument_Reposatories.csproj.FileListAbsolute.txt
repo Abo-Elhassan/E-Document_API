@@ -10,3 +10,15 @@ F:\Work\My Projects\.Net\EDocument_API\EDocument_Reposatories\obj\Debug\net7.0\E
 F:\Work\My Projects\.Net\EDocument_API\EDocument_Reposatories\obj\Debug\net7.0\refint\EDocument_Reposatories.dll
 F:\Work\My Projects\.Net\EDocument_API\EDocument_Reposatories\obj\Debug\net7.0\EDocument_Reposatories.pdb
 F:\Work\My Projects\.Net\EDocument_API\EDocument_Reposatories\obj\Debug\net7.0\ref\EDocument_Reposatories.dll
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_Reposatories\bin\Debug\net7.0\EDocument_Reposatories.deps.json
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_Reposatories\bin\Debug\net7.0\EDocument_Reposatories.dll
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_Reposatories\bin\Debug\net7.0\EDocument_Reposatories.pdb
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_Reposatories\obj\Debug\net7.0\EDocument_Reposatories.csproj.AssemblyReference.cache
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_Reposatories\obj\Debug\net7.0\EDocument_Reposatories.GeneratedMSBuildEditorConfig.editorconfig
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_Reposatories\obj\Debug\net7.0\EDocument_Reposatories.AssemblyInfoInputs.cache
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_Reposatories\obj\Debug\net7.0\EDocument_Reposatories.AssemblyInfo.cs
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_Reposatories\obj\Debug\net7.0\EDocument_Reposatories.csproj.CoreCompileInputs.cache
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_Reposatories\obj\Debug\net7.0\EDocument_Reposatories.dll
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_Reposatories\obj\Debug\net7.0\refint\EDocument_Reposatories.dll
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_Reposatories\obj\Debug\net7.0\EDocument_Reposatories.pdb
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_Reposatories\obj\Debug\net7.0\ref\EDocument_Reposatories.dll

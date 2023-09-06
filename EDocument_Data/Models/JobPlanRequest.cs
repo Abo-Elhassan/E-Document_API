@@ -1,5 +1,6 @@
 ﻿#nullable disable
 using EDocument_Data.Consts;
+using EDocument_Data.Consts.Enums;
 using EDocument_Data.Models.Shared;
 using System;
 using System.Collections.Generic;

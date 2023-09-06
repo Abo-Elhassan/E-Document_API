@@ -12,19 +12,31 @@ namespace EDocument_EF.Configurations
         public void Configure(EntityTypeBuilder<DefinedRequest> entity)
         {
 
-            entity.ToTable("DefinedRequest");
+            entity.ToTable(nameof(DefinedRequest));
+
             entity.Property(e => e.Id)
-            .ValueGeneratedNever();
+            .UseIdentityColumn();
 
             entity.Property(e => e.RequestName)
             .IsRequired()
             .HasMaxLength(50);
 
+            entity.Property(e => e.RouteName)
+            .IsRequired()
+            .HasMaxLength(50);
+
+            entity.Property(e => e.IconName)
+            .IsRequired()
+            .HasMaxLength(50);
+
+            entity.Property(e => e.ReviewersNumber)
+            .IsRequired();
+
             entity.Property(e => e.CreatedAt)
-            .HasColumnType("datetime");
+           .HasColumnType("smalldatetime");
 
             entity.Property(e => e.ModifiedAt)
-            .HasColumnType("datetime");
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
             .HasMaxLength(50);
@@ -32,6 +44,29 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.ModifiedBy)
             .HasMaxLength(50);
 
+            entity.HasOne(d => d.Department).WithMany(p => p.DefinedRequests)
+            .HasForeignKey(d => d.DepartmentId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .HasConstraintName("FK_DefinedRequest_Department");
+
+            entity.HasMany(d => d.Roles).WithMany(p => p.DefinedRequests)
+            .UsingEntity<Dictionary<string, object>>(
+            "DefinedRequestRole",
+            r => r.HasOne<Role>().WithMany()
+                .HasForeignKey("RoleId")
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("FK_DefinedRequestRole_Role"),
+            l => l.HasOne<DefinedRequest>().WithMany()
+                .HasForeignKey("DefinedRequestId")
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("FK_DefinedRequestRole_DefinedRequest"),
+            j =>
+            {
+                j.HasKey("RoleId", "DefinedRequestId");
+                j.ToTable("DefinedRequestRole");
+                j.IndexerProperty<long>("RoleId");
+                j.IndexerProperty<long>("DefinedRequestId");
+            });
             OnConfigurePartial(entity);
         }
 

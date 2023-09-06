@@ -11,49 +11,35 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<VoucherRequest> entity)
         {
-            //entity.HasKey(e => new { e.RequesterId, e.RequestId });
+            entity.HasKey(e => new { e.BeneficiaryName, e.RequestId });
 
-            //entity.ToTable("OracleAccessRequest");
+            entity.ToTable(nameof(VoucherRequest));
 
-            //entity.Property(e => e.RequesterId)
-            //.HasMaxLength(50)
-            //.IsUnicode(false);
-            //entity.Property(e => e.RequestId);
-            //entity.Property(e => e.RequesterDepartment)
-            //.HasMaxLength(200)
-            //.IsUnicode(false);
-            //entity.Property(e => e.RequesterEmail)
-            //.IsRequired()
-            //.HasMaxLength(50)
-            //.IsUnicode(false);
-            //entity.Property(e => e.RequesterExtention);
-            //entity.Property(e => e.RequesterName)
-            //.IsRequired()
-            //.HasMaxLength(200);
-            //entity.Property(e => e.RequesterPostion)
-            //.HasMaxLength(200)
-            //.IsUnicode(false);
 
-            //entity.Property(e => e.CreatedAt)
-            //.HasColumnType("datetime");
+            entity.Property(e => e.VoucherCurrency)
+            .HasConversion<string>();
 
-            //entity.Property(e => e.ModifiedAt)
-            //.HasColumnType("datetime");
+            entity.Property(e => e.InvoiceDate)
+            .HasColumnType("date");
 
-            //entity.Property(e => e.CreatedBy)
-            //.HasMaxLength(50)
-            //.IsUnicode(false);
+            entity.Property(e => e.CreatedAt)
+            .HasColumnType("smalldatetime");
 
-            //entity.Property(e => e.ModifiedBy)
-            //.HasMaxLength(50)
-            //.IsUnicode(false);
+            entity.Property(e => e.ModifiedAt)
+            .HasColumnType("smalldatetime");
 
-            //entity.HasOne(d => d.Request).WithMany(p => p.OracleAccessRequests)
-            //.HasForeignKey(d => d.RequestId)
-            //.OnDelete(DeleteBehavior.Restrict)
-            //.HasConstraintName("FK_OracleAccessRequest_Request");
+            entity.Property(e => e.CreatedBy)
+            .HasMaxLength(50);
 
-            //OnConfigurePartial(entity);
+            entity.Property(e => e.ModifiedBy)
+            .HasMaxLength(50);
+
+            entity.HasOne(d => d.Request).WithMany(p => p.VoucherRequests)
+            .HasForeignKey(d => d.RequestId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .HasConstraintName("FK_VoucherRequest_Request");
+
+            OnConfigurePartial(entity);
         }
 
         partial void OnConfigurePartial(EntityTypeBuilder<VoucherRequest> entity);
