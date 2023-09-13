@@ -7,7 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Generic Repositories\IRoleRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Application Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Generic Repositories\Role Repository\IRoleRepository.cs" />
   </ItemGroup>
 
   <ItemGroup>

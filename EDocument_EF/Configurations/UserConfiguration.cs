@@ -23,6 +23,7 @@ namespace EDocument_EF.Configurations
             entity.Ignore(e => e.EmailConfirmed);
             entity.Ignore(e => e.PhoneNumberConfirmed);
             entity.Ignore(e => e.TwoFactorEnabled);
+            entity.Ignore(e => e.LockoutEnd);
 
             entity.Property(e => e.UserName)
             .IsRequired()
@@ -45,7 +46,6 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(200);
 
             entity.Property(e => e.ManagerId)
-            .IsRequired()
             .HasMaxLength(50);
 
             entity.Property(e => e.FullName)

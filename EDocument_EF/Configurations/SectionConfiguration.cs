@@ -16,6 +16,7 @@ namespace EDocument_EF.Configurations
             entity.ToTable(nameof(Section));
 
             entity.Property(e => e.HeadId)
+            .IsRequired()
             .HasMaxLength(50);
 
             entity.Property(e => e.CreatedAt)

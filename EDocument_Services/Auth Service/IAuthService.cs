@@ -9,7 +9,7 @@ namespace EDocument_Services.Auth_Service
 {
     public interface IAuthService
     {
-        Task<(bool Succeeded, string Message, LoginReadDto? LoginReadDto)> AuthenticatUsersync(LoginWriteDto loginWriteDto);
+        Task<(bool Succeeded, string Message, LoginReadDto? LoginReadDto)> AuthenticatUserAsync(LoginWriteDto loginWriteDto);
         Task<(bool Succeeded, string Message)> AddRoleAsync(UserRoleDto userRole);
     }
 }

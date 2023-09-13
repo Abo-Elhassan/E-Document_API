@@ -34,6 +34,9 @@
               },
               "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj": {
                 "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj"
+              },
+              "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_UnitOfWork\\EDocument_UnitOfWork.csproj": {
+                "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_UnitOfWork\\EDocument_UnitOfWork.csproj"
               }
             }
           }
@@ -55,6 +58,14 @@
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[7.0.10, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Versioning": {
+              "target": "Package",
+              "version": "[5.1.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer": {
+              "target": "Package",
+              "version": "[5.1.0, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
@@ -266,6 +277,68 @@
         }
       }
     },
+    "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Reposatories\\EDocument_Repositories.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Reposatories\\EDocument_Repositories.csproj",
+        "projectName": "EDocument_Repositories",
+        "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Reposatories\\EDocument_Repositories.csproj",
+        "packagesPath": "C:\\Users\\almuhammad\\.nuget\\packages\\",
+        "outputPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Reposatories\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\almuhammad\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj": {
+                "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Data\\EDocument_Data.csproj"
+              },
+              "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj": {
+                "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -319,6 +392,68 @@
               "version": "[7.0.1, )"
             }
           },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_UnitOfWork\\EDocument_UnitOfWork.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_UnitOfWork\\EDocument_UnitOfWork.csproj",
+        "projectName": "EDocument_UnitOfWork",
+        "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_UnitOfWork\\EDocument_UnitOfWork.csproj",
+        "packagesPath": "C:\\Users\\almuhammad\\.nuget\\packages\\",
+        "outputPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_UnitOfWork\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\almuhammad\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj": {
+                "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_EF\\EDocument_EF.csproj"
+              },
+              "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Reposatories\\EDocument_Repositories.csproj": {
+                "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Reposatories\\EDocument_Repositories.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
           "imports": [
             "net461",
             "net462",

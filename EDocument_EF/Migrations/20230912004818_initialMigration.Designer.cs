@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDocument_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230904132827_initialMigration")]
+    [Migration("20230912004818_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -39,21 +39,6 @@ namespace EDocument_EF.Migrations
                     b.HasIndex("ApplicationId");
 
                     b.ToTable("ApplicationItAdmin", (string)null);
-                });
-
-            modelBuilder.Entity("ApplicationUserRequestRole", b =>
-                {
-                    b.Property<long>("RequestId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ApplicationRoleId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("RequestId", "ApplicationRoleId");
-
-                    b.HasIndex("ApplicationRoleId");
-
-                    b.ToTable("ApplicationUserRequestRole", (string)null);
                 });
 
             modelBuilder.Entity("DefinedRequestRole", b =>
@@ -120,14 +105,9 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<long>("RequestedApplicationId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("BeneficiaryId", "RequestId");
 
                     b.HasIndex("RequestId");
-
-                    b.HasIndex("RequestedApplicationId");
 
                     b.ToTable("ApplicationUserRequest", (string)null);
                 });
@@ -247,6 +227,45 @@ namespace EDocument_EF.Migrations
                     b.HasIndex("RequestId");
 
                     b.ToTable("CarRequest", (string)null);
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.DefinedApplication", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ApplicationName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ApplicationOwnerId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationOwnerId");
+
+                    b.ToTable("DefinedApplication", (string)null);
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.DefinedApplicationRole", b =>
@@ -559,6 +578,7 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CreatorId")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -594,6 +614,40 @@ namespace EDocument_EF.Migrations
                     b.HasIndex("DefinedRequestId");
 
                     b.ToTable("Request", (string)null);
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.RequestApplicationRole", b =>
+                {
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ApplicationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("RequestId", "ApplicationId", "RoleId");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RequestApplicationRole", (string)null);
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.RequestReviewer", b =>
@@ -643,45 +697,6 @@ namespace EDocument_EF.Migrations
                     b.ToTable("RequestReviewer", (string)null);
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.RequestedApplication", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("ApplicationName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ApplicationOwnerId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("smalldatetime");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("smalldatetime");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationOwnerId");
-
-                    b.ToTable("RequestedApplication", (string)null);
-                });
-
             modelBuilder.Entity("EDocument_Data.Models.Role", b =>
                 {
                     b.Property<string>("Id")
@@ -728,6 +743,7 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("HeadId")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -746,8 +762,7 @@ namespace EDocument_EF.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("HeadId")
-                        .IsUnique()
-                        .HasFilter("[HeadId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Section", (string)null);
                 });
@@ -791,10 +806,10 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("CheckIn")
+                    b.Property<DateTime?>("CheckIn")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<DateTime>("CheckOut")
+                    b.Property<DateTime?>("CheckOut")
                         .HasColumnType("smalldatetime");
 
                     b.Property<float>("CostAllocation")
@@ -813,14 +828,14 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("DepartureDate")
+                    b.Property<DateTime?>("DepartureDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("DestinationCountry")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("ExpectedTravelTime")
+                    b.Property<DateTime?>("ExpectedTravelTime")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("FlightDestination")
@@ -843,7 +858,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("PaymentMethod")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -852,7 +866,7 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("ReturnDate")
+                    b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("smalldatetime");
 
                     b.HasKey("BeneficiaryId", "RequestId");
@@ -872,7 +886,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Company")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -887,7 +900,7 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<long>("DepartmentId")
+                    b.Property<long?>("DepartmentId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Email")
@@ -909,7 +922,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("ManagerId")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -937,11 +949,10 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Position")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<long>("SectionId")
+                    b.Property<long?>("SectionId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("SecurityStamp")
@@ -1129,12 +1140,12 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("ApplicationItAdmin", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.RequestedApplication", null)
+                    b.HasOne("EDocument_Data.Models.DefinedApplication", null)
                         .WithMany()
                         .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("FK_ApplicationItAdmin_RequestedApplication");
+                        .HasConstraintName("FK_ApplicationItAdmin_DefinedApplication");
 
                     b.HasOne("EDocument_Data.Models.User", null)
                         .WithMany()
@@ -1142,23 +1153,6 @@ namespace EDocument_EF.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK_ApplicationItAdmin_User");
-                });
-
-            modelBuilder.Entity("ApplicationUserRequestRole", b =>
-                {
-                    b.HasOne("EDocument_Data.Models.DefinedApplicationRole", null)
-                        .WithMany()
-                        .HasForeignKey("ApplicationRoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_ApplicationUserRequestRole_DefinedApplicationRole");
-
-                    b.HasOne("EDocument_Data.Models.Request", null)
-                        .WithMany()
-                        .HasForeignKey("RequestId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_ApplicationUserRequestRole_Request");
                 });
 
             modelBuilder.Entity("DefinedRequestRole", b =>
@@ -1187,16 +1181,7 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_ApplicationUserRequest_Request");
 
-                    b.HasOne("EDocument_Data.Models.RequestedApplication", "RequestedApplication")
-                        .WithMany("ApplicationUserRequests")
-                        .HasForeignKey("RequestedApplicationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_ApplicationUserRequest_RequestedApplication");
-
                     b.Navigation("Request");
-
-                    b.Navigation("RequestedApplication");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Attachment", b =>
@@ -1223,10 +1208,22 @@ namespace EDocument_EF.Migrations
                     b.Navigation("Request");
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.DefinedApplication", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.User", "ApplicationOwner")
+                        .WithMany("OwnedApplications")
+                        .HasForeignKey("ApplicationOwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_DefinedApplication_User");
+
+                    b.Navigation("ApplicationOwner");
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.DefinedApplicationRole", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.RequestedApplication", "RequestedApplication")
-                        .WithMany("DefinedRequestRoles")
+                    b.HasOne("EDocument_Data.Models.DefinedApplication", "RequestedApplication")
+                        .WithMany("DefinedApplicationRoles")
                         .HasForeignKey("RequestedApplicationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
@@ -1309,6 +1306,8 @@ namespace EDocument_EF.Migrations
                     b.HasOne("EDocument_Data.Models.User", "Creator")
                         .WithMany("CreatedRequests")
                         .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK_Request_User");
 
                     b.HasOne("EDocument_Data.Models.DefinedRequest", "DefinedRequest")
@@ -1321,6 +1320,36 @@ namespace EDocument_EF.Migrations
                     b.Navigation("Creator");
 
                     b.Navigation("DefinedRequest");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.RequestApplicationRole", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.DefinedApplication", "Application")
+                        .WithMany("RequestApplicationRoles")
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_RequestApplicationRole_DefinedApplication");
+
+                    b.HasOne("EDocument_Data.Models.Request", "Request")
+                        .WithMany("RequestApplicationRoles")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_RequestApplicationRole_Request");
+
+                    b.HasOne("EDocument_Data.Models.DefinedApplicationRole", "Role")
+                        .WithMany("RequestApplicationRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_RequestApplicationRole_DefinedApplicationRole");
+
+                    b.Navigation("Application");
+
+                    b.Navigation("Request");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.RequestReviewer", b =>
@@ -1344,18 +1373,6 @@ namespace EDocument_EF.Migrations
                     b.Navigation("Reviewer");
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.RequestedApplication", b =>
-                {
-                    b.HasOne("EDocument_Data.Models.User", "ApplicationOwner")
-                        .WithMany("OwnedApplications")
-                        .HasForeignKey("ApplicationOwnerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_RequestedApplication_User");
-
-                    b.Navigation("ApplicationOwner");
-                });
-
             modelBuilder.Entity("EDocument_Data.Models.Section", b =>
                 {
                     b.HasOne("EDocument_Data.Models.Department", "Department")
@@ -1369,6 +1386,7 @@ namespace EDocument_EF.Migrations
                         .WithOne("MangedSection")
                         .HasForeignKey("EDocument_Data.Models.Section", "HeadId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
                         .HasConstraintName("FK_Section_User");
 
                     b.Navigation("Department");
@@ -1394,21 +1412,18 @@ namespace EDocument_EF.Migrations
                         .WithMany("Employees")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
                         .HasConstraintName("FK_User_Department");
 
                     b.HasOne("EDocument_Data.Models.User", "Manager")
                         .WithMany("ManagedEmployees")
                         .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
                         .HasConstraintName("FK_User_User");
 
                     b.HasOne("EDocument_Data.Models.Section", "Section")
                         .WithMany("Employees")
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
                         .HasConstraintName("FK_User_Section");
 
                     b.Navigation("Department");
@@ -1481,6 +1496,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.DefinedApplication", b =>
+                {
+                    b.Navigation("DefinedApplicationRoles");
+
+                    b.Navigation("RequestApplicationRoles");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.DefinedApplicationRole", b =>
+                {
+                    b.Navigation("RequestApplicationRoles");
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.DefinedRequest", b =>
                 {
                     b.Navigation("DefinedRequestReviewers");
@@ -1509,18 +1536,13 @@ namespace EDocument_EF.Migrations
 
                     b.Navigation("PoRequests");
 
+                    b.Navigation("RequestApplicationRoles");
+
                     b.Navigation("RequestReviewers");
 
                     b.Navigation("TravelDeskRequests");
 
                     b.Navigation("VoucherRequests");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.RequestedApplication", b =>
-                {
-                    b.Navigation("ApplicationUserRequests");
-
-                    b.Navigation("DefinedRequestRoles");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Section", b =>

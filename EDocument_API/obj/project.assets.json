@@ -170,6 +170,38 @@
           }
         }
       },
+      "Microsoft.AspNetCore.Mvc.Versioning/5.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer/5.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Versioning": "5.1.0"
+        },
+        "compile": {
+          "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.OpenApi/7.0.9": {
         "type": "package",
         "dependencies": {
@@ -1568,6 +1600,20 @@
           "bin/placeholder/EDocument_EF.dll": {}
         }
       },
+      "EDocument_Repositories/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "EDocument_Data": "1.0.0",
+          "EDocument_EF": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/EDocument_Repositories.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EDocument_Repositories.dll": {}
+        }
+      },
       "EDocument_Services/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
@@ -1582,6 +1628,20 @@
         },
         "runtime": {
           "bin/placeholder/EDocument_Services.dll": {}
+        }
+      },
+      "EDocument_UnitOfWork/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "EDocument_EF": "1.0.0",
+          "EDocument_Repositories": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/EDocument_UnitOfWork.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EDocument_UnitOfWork.dll": {}
         }
       }
     }
@@ -1757,6 +1817,52 @@
         "lib/net7.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.xml",
         "microsoft.aspnetcore.identity.entityframeworkcore.7.0.10.nupkg.sha512",
         "microsoft.aspnetcore.identity.entityframeworkcore.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Mvc.Versioning/5.1.0": {
+      "sha512": "UX8w9BlCiZpr6Ox4YAve1w0CkI1CAovukGNzKd7v0+5pZc8lzuG5tRovucr1RWIKHs0E/Yx8563CN7KzaB3bpw==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.mvc.versioning/5.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "icon.png",
+        "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.dll",
+        "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.pdb",
+        "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.xml",
+        "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.dll",
+        "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.pdb",
+        "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.xml",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.dll",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.pdb",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.xml",
+        "microsoft.aspnetcore.mvc.versioning.5.1.0.nupkg.sha512",
+        "microsoft.aspnetcore.mvc.versioning.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer/5.1.0": {
+      "sha512": "p45pSXCJPbx+p9gFNNQPUC547KpqP5cRJke6aygq/M7UzCrJNmJNqD+65pIpY4muYbINqlgrC47h1oc0WbuP1g==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.mvc.versioning.apiexplorer/5.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "icon.png",
+        "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll",
+        "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.pdb",
+        "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.xml",
+        "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll",
+        "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.pdb",
+        "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.xml",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.pdb",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.xml",
+        "microsoft.aspnetcore.mvc.versioning.apiexplorer.5.1.0.nupkg.sha512",
+        "microsoft.aspnetcore.mvc.versioning.apiexplorer.nuspec"
       ]
     },
     "Microsoft.AspNetCore.OpenApi/7.0.9": {
@@ -4617,10 +4723,20 @@
       "path": "../EDocument_EF/EDocument_EF.csproj",
       "msbuildProject": "../EDocument_EF/EDocument_EF.csproj"
     },
+    "EDocument_Repositories/1.0.0": {
+      "type": "project",
+      "path": "../EDocument_Reposatories/EDocument_Repositories.csproj",
+      "msbuildProject": "../EDocument_Reposatories/EDocument_Repositories.csproj"
+    },
     "EDocument_Services/1.0.0": {
       "type": "project",
       "path": "../EDocument_Services/EDocument_Services.csproj",
       "msbuildProject": "../EDocument_Services/EDocument_Services.csproj"
+    },
+    "EDocument_UnitOfWork/1.0.0": {
+      "type": "project",
+      "path": "../EDocument_UnitOfWork/EDocument_UnitOfWork.csproj",
+      "msbuildProject": "../EDocument_UnitOfWork/EDocument_UnitOfWork.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -4628,7 +4744,10 @@
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 12.0.1",
       "EDocument_EF >= 1.0.0",
       "EDocument_Services >= 1.0.0",
+      "EDocument_UnitOfWork >= 1.0.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 7.0.10",
+      "Microsoft.AspNetCore.Mvc.Versioning >= 5.1.0",
+      "Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer >= 5.1.0",
       "Microsoft.AspNetCore.OpenApi >= 7.0.9",
       "Microsoft.EntityFrameworkCore >= 7.0.10",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.10",
@@ -4671,6 +4790,9 @@
             },
             "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj": {
               "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_Services\\EDocument_Services.csproj"
+            },
+            "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_UnitOfWork\\EDocument_UnitOfWork.csproj": {
+              "projectPath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_UnitOfWork\\EDocument_UnitOfWork.csproj"
             }
           }
         }
@@ -4692,6 +4814,14 @@
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
             "version": "[7.0.10, )"
+          },
+          "Microsoft.AspNetCore.Mvc.Versioning": {
+            "target": "Package",
+            "version": "[5.1.0, )"
+          },
+          "Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer": {
+            "target": "Package",
+            "version": "[5.1.0, )"
           },
           "Microsoft.AspNetCore.OpenApi": {
             "target": "Package",

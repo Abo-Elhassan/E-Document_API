@@ -575,6 +575,7 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CreatorId")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -585,7 +586,7 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<long?>("DefinedRequestId")
+                    b.Property<long>("DefinedRequestId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Justification")
@@ -739,6 +740,7 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("HeadId")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -757,8 +759,7 @@ namespace EDocument_EF.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("HeadId")
-                        .IsUnique()
-                        .HasFilter("[HeadId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Section", (string)null);
                 });
@@ -802,10 +803,10 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("CheckIn")
+                    b.Property<DateTime?>("CheckIn")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<DateTime>("CheckOut")
+                    b.Property<DateTime?>("CheckOut")
                         .HasColumnType("smalldatetime");
 
                     b.Property<float>("CostAllocation")
@@ -824,14 +825,14 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("DepartureDate")
+                    b.Property<DateTime?>("DepartureDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("DestinationCountry")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("ExpectedTravelTime")
+                    b.Property<DateTime?>("ExpectedTravelTime")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("FlightDestination")
@@ -854,7 +855,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("PaymentMethod")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -863,7 +863,7 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("ReturnDate")
+                    b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("smalldatetime");
 
                     b.HasKey("BeneficiaryId", "RequestId");
@@ -883,7 +883,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Company")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -898,7 +897,7 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<long>("DepartmentId")
+                    b.Property<long?>("DepartmentId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Email")
@@ -920,7 +919,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("ManagerId")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -948,11 +946,10 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Position")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<long>("SectionId")
+                    b.Property<long?>("SectionId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("SecurityStamp")
@@ -1306,11 +1303,15 @@ namespace EDocument_EF.Migrations
                     b.HasOne("EDocument_Data.Models.User", "Creator")
                         .WithMany("CreatedRequests")
                         .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK_Request_User");
 
                     b.HasOne("EDocument_Data.Models.DefinedRequest", "DefinedRequest")
                         .WithMany("Requests")
                         .HasForeignKey("DefinedRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK_Request_DefinedRequest");
 
                     b.Navigation("Creator");
@@ -1382,6 +1383,7 @@ namespace EDocument_EF.Migrations
                         .WithOne("MangedSection")
                         .HasForeignKey("EDocument_Data.Models.Section", "HeadId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
                         .HasConstraintName("FK_Section_User");
 
                     b.Navigation("Department");
@@ -1407,21 +1409,18 @@ namespace EDocument_EF.Migrations
                         .WithMany("Employees")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
                         .HasConstraintName("FK_User_Department");
 
                     b.HasOne("EDocument_Data.Models.User", "Manager")
                         .WithMany("ManagedEmployees")
                         .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
                         .HasConstraintName("FK_User_User");
 
                     b.HasOne("EDocument_Data.Models.Section", "Section")
                         .WithMany("Employees")
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
                         .HasConstraintName("FK_User_Section");
 
                     b.Navigation("Department");

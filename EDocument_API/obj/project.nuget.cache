@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "V/uWtAWYgBilagOmENukBB+iade4uSH4PjP1xnocXVd1Xw7wx5aMmR4NGEYf4xOYKDE5mQiejrWDTo1Gp6X++A==",
+  "dgSpecHash": "V3A4fycQe8C2TvuDGcBXss6Be2pLF/xMNeQ7z6mM+uuksoq1hHo9/gM/xo7HV4c2/lhU3qpD3bgVY9/dNjKEtA==",
   "success": true,
   "projectFilePath": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\EDocument_API.csproj",
   "expectedPackageFiles": [
@@ -14,6 +14,8 @@
     "C:\\Users\\almuhammad\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\7.0.10\\microsoft.aspnetcore.cryptography.keyderivation.7.0.10.nupkg.sha512",
     "C:\\Users\\almuhammad\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
     "C:\\Users\\almuhammad\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\7.0.10\\microsoft.aspnetcore.identity.entityframeworkcore.7.0.10.nupkg.sha512",
+    "C:\\Users\\almuhammad\\.nuget\\packages\\microsoft.aspnetcore.mvc.versioning\\5.1.0\\microsoft.aspnetcore.mvc.versioning.5.1.0.nupkg.sha512",
+    "C:\\Users\\almuhammad\\.nuget\\packages\\microsoft.aspnetcore.mvc.versioning.apiexplorer\\5.1.0\\microsoft.aspnetcore.mvc.versioning.apiexplorer.5.1.0.nupkg.sha512",
     "C:\\Users\\almuhammad\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.9\\microsoft.aspnetcore.openapi.7.0.9.nupkg.sha512",
     "C:\\Users\\almuhammad\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\almuhammad\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

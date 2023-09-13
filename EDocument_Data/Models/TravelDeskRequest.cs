@@ -16,16 +16,16 @@ namespace EDocument_Data.Models
         public string BeneficiaryNationality { get; set; }
         public float CostAllocation { get; set; }
         public Currency Currency { get; set; }
-        public DateTime CheckIn { get; set; }
-        public DateTime CheckOut { get; set; }
+        public DateTime? CheckIn { get; set; }
+        public DateTime? CheckOut { get; set; }
         public string MissionAddress { get; set; }
-        public PaymentMethod PaymentMethod { get; set; }
+        public PaymentMethod? PaymentMethod { get; set; }
         public string FlightOrigin { get; set; }
         public string FlightDestination { get; set; }
-        public DateTime DepartureDate { get; set; }
-        public DateTime ReturnDate { get; set; }
+        public DateTime? DepartureDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
         public string DestinationCountry { get; set; }
-        public DateTime ExpectedTravelTime { get; set; }
+        public DateTime? ExpectedTravelTime { get; set; }
 
     }
 }

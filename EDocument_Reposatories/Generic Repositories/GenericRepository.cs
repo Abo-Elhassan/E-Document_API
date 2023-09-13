@@ -125,7 +125,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
 
 
-        public IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
@@ -167,7 +167,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return query.ToList();
         }
 
-        public IEnumerable<T> FindAll(Dictionary<string, string> filters, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual IEnumerable<T> FindAll(Dictionary<string, string> filters, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var ColumnName = "";
             var ColumnValue = "";
@@ -222,7 +222,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return query.ToList();
         }
 
-        public IEnumerable<T> FindAll(string filterValue, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual IEnumerable<T> FindAll(string filterValue, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var expression = "";
             var dynamicFilter = "";
@@ -269,7 +269,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return query.ToList();
         }
 
-        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             IQueryable<T> query = _context.Set<T>();
 
@@ -311,7 +311,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> FindAllAsync(Dictionary<string, string> filters, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<IEnumerable<T>> FindAllAsync(Dictionary<string, string> filters, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var ColumnName = "";
             var ColumnValue = "";
@@ -366,7 +366,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> FindAllAsync(string filterValue, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<IEnumerable<T>> FindAllAsync(string filterValue, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var expression = "";
             var dynamicFilter = "";

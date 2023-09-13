@@ -70,7 +70,6 @@ namespace EDocument_EF.Migrations
                 {
                     BeneficiaryId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     RequestId = table.Column<long>(type: "bigint", nullable: false),
-                    RequestedApplicationId = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -85,18 +84,6 @@ namespace EDocument_EF.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ApplicationUserRequest", x => new { x.BeneficiaryId, x.RequestId });
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ApplicationUserRequestRole",
-                columns: table => new
-                {
-                    RequestId = table.Column<long>(type: "bigint", nullable: false),
-                    ApplicationRoleId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApplicationUserRequestRole", x => new { x.RequestId, x.ApplicationRoleId });
                 });
 
             migrationBuilder.CreateTable(
@@ -146,6 +133,24 @@ namespace EDocument_EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DefinedApplication",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApplicationName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    ApplicationOwnerId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DefinedApplication", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DefinedApplicationRole",
                 columns: table => new
                 {
@@ -161,6 +166,12 @@ namespace EDocument_EF.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DefinedApplicationRole", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DefinedApplicationRole_RequestedApplication",
+                        column: x => x.RequestedApplicationId,
+                        principalTable: "DefinedApplication",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -307,7 +318,7 @@ namespace EDocument_EF.Migrations
                     CurrentStage = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Justification = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatorId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    CreatorId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     DeclinedBy = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     DefinedRequestId = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
@@ -327,6 +338,41 @@ namespace EDocument_EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RequestApplicationRole",
+                columns: table => new
+                {
+                    RequestId = table.Column<long>(type: "bigint", nullable: false),
+                    ApplicationId = table.Column<long>(type: "bigint", nullable: false),
+                    RoleId = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequestApplicationRole", x => new { x.RequestId, x.ApplicationId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_RequestApplicationRole_DefinedApplication",
+                        column: x => x.ApplicationId,
+                        principalTable: "DefinedApplication",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RequestApplicationRole_DefinedApplicationRole",
+                        column: x => x.RoleId,
+                        principalTable: "DefinedApplicationRole",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RequestApplicationRole_Request",
+                        column: x => x.RequestId,
+                        principalTable: "Request",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TravelDeskRequest",
                 columns: table => new
                 {
@@ -336,16 +382,16 @@ namespace EDocument_EF.Migrations
                     BeneficiaryNationality = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CostAllocation = table.Column<float>(type: "real", nullable: false),
                     Currency = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CheckIn = table.Column<DateTime>(type: "smalldatetime", nullable: false),
-                    CheckOut = table.Column<DateTime>(type: "smalldatetime", nullable: false),
+                    CheckIn = table.Column<DateTime>(type: "smalldatetime", nullable: true),
+                    CheckOut = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     MissionAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PaymentMethod = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     FlightOrigin = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     FlightDestination = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DepartureDate = table.Column<DateTime>(type: "smalldatetime", nullable: false),
-                    ReturnDate = table.Column<DateTime>(type: "smalldatetime", nullable: false),
+                    DepartureDate = table.Column<DateTime>(type: "smalldatetime", nullable: true),
+                    ReturnDate = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     DestinationCountry = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    ExpectedTravelTime = table.Column<DateTime>(type: "smalldatetime", nullable: false),
+                    ExpectedTravelTime = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     CreatedBy = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
@@ -398,24 +444,6 @@ namespace EDocument_EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RequestedApplication",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ApplicationName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ApplicationOwnerId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
-                    ModifiedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RequestedApplication", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "RequestReviewer",
                 columns: table => new
                 {
@@ -450,7 +478,7 @@ namespace EDocument_EF.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SectionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DepartmentId = table.Column<long>(type: "bigint", nullable: false),
-                    HeadId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    HeadId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -477,11 +505,11 @@ namespace EDocument_EF.Migrations
                     NormalizedUserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Position = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DepartmentId = table.Column<long>(type: "bigint", nullable: false),
-                    SectionId = table.Column<long>(type: "bigint", nullable: false),
-                    ManagerId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Company = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Position = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    DepartmentId = table.Column<long>(type: "bigint", nullable: true),
+                    SectionId = table.Column<long>(type: "bigint", nullable: true),
+                    ManagerId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Company = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     LastLogin = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
@@ -620,19 +648,9 @@ namespace EDocument_EF.Migrations
                 column: "ApplicationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserRequest_RequestedApplicationId",
-                table: "ApplicationUserRequest",
-                column: "RequestedApplicationId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ApplicationUserRequest_RequestId",
                 table: "ApplicationUserRequest",
                 column: "RequestId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserRequestRole_ApplicationRoleId",
-                table: "ApplicationUserRequestRole",
-                column: "ApplicationRoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Attachment_RequestId",
@@ -643,6 +661,11 @@ namespace EDocument_EF.Migrations
                 name: "IX_CarRequest_RequestId",
                 table: "CarRequest",
                 column: "RequestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DefinedApplication_ApplicationOwnerId",
+                table: "DefinedApplication",
+                column: "ApplicationOwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DefinedApplicationRole_RequestedApplicationId",
@@ -710,9 +733,14 @@ namespace EDocument_EF.Migrations
                 column: "DefinedRequestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RequestedApplication_ApplicationOwnerId",
-                table: "RequestedApplication",
-                column: "ApplicationOwnerId");
+                name: "IX_RequestApplicationRole_ApplicationId",
+                table: "RequestApplicationRole",
+                column: "ApplicationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequestApplicationRole_RoleId",
+                table: "RequestApplicationRole",
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RequestReviewer_ReviewerId",
@@ -742,8 +770,7 @@ namespace EDocument_EF.Migrations
                 name: "IX_Section_HeadId",
                 table: "Section",
                 column: "HeadId",
-                unique: true,
-                filter: "[HeadId] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_TravelDeskRequest_RequestId",
@@ -805,10 +832,10 @@ namespace EDocument_EF.Migrations
                 column: "RequestId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ApplicationItAdmin_RequestedApplication",
+                name: "FK_ApplicationItAdmin_DefinedApplication",
                 table: "ApplicationItAdmin",
                 column: "ApplicationId",
-                principalTable: "RequestedApplication",
+                principalTable: "DefinedApplication",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
@@ -824,30 +851,6 @@ namespace EDocument_EF.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_ApplicationUserRequest_Request",
                 table: "ApplicationUserRequest",
-                column: "RequestId",
-                principalTable: "Request",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_ApplicationUserRequest_RequestedApplication",
-                table: "ApplicationUserRequest",
-                column: "RequestedApplicationId",
-                principalTable: "RequestedApplication",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_ApplicationUserRequestRole_DefinedApplicationRole",
-                table: "ApplicationUserRequestRole",
-                column: "ApplicationRoleId",
-                principalTable: "DefinedApplicationRole",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_ApplicationUserRequestRole_Request",
-                table: "ApplicationUserRequestRole",
                 column: "RequestId",
                 principalTable: "Request",
                 principalColumn: "Id",
@@ -870,10 +873,11 @@ namespace EDocument_EF.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_DefinedApplicationRole_RequestedApplication",
-                table: "DefinedApplicationRole",
-                column: "RequestedApplicationId",
-                principalTable: "RequestedApplication",
+                name: "FK_DefinedApplication_User",
+                table: "DefinedApplication",
+                column: "ApplicationOwnerId",
+                principalSchema: "security",
+                principalTable: "User",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
@@ -925,16 +929,8 @@ namespace EDocument_EF.Migrations
                 column: "CreatorId",
                 principalSchema: "security",
                 principalTable: "User",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_RequestedApplication_User",
-                table: "RequestedApplication",
-                column: "ApplicationOwnerId",
-                principalSchema: "security",
-                principalTable: "User",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_RequestReviewer_User",
@@ -973,9 +969,6 @@ namespace EDocument_EF.Migrations
                 name: "ApplicationUserRequest");
 
             migrationBuilder.DropTable(
-                name: "ApplicationUserRequestRole");
-
-            migrationBuilder.DropTable(
                 name: "Attachment");
 
             migrationBuilder.DropTable(
@@ -992,6 +985,9 @@ namespace EDocument_EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "PoRequest");
+
+            migrationBuilder.DropTable(
+                name: "RequestApplicationRole");
 
             migrationBuilder.DropTable(
                 name: "RequestReviewer");
@@ -1033,7 +1029,7 @@ namespace EDocument_EF.Migrations
                 name: "Request");
 
             migrationBuilder.DropTable(
-                name: "RequestedApplication");
+                name: "DefinedApplication");
 
             migrationBuilder.DropTable(
                 name: "DefinedRequest");

@@ -187,3 +187,9 @@ F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\obj\Debug\net7.0
 F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\obj\Debug\net7.0\EDocument_API.genruntimeconfig.cache
 F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\obj\Debug\net7.0\ref\EDocument_API.dll
 F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0\System.Linq.Dynamic.Core.dll
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0\EDocument_Repositories.dll
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0\EDocument_UnitOfWork.dll
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0\EDocument_UnitOfWork.pdb
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0\EDocument_Repositories.pdb
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.Versioning.dll
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll
