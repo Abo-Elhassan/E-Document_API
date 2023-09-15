@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDocument_Repositories.Generic_Repositories.Role_Repository
+namespace EDocument_Data.Consts.Enums
 {
-    internal class RoleRepository
+    public enum Permission
     {
+        Request,
+        Review,
+        All
     }
 }

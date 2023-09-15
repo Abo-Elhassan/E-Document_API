@@ -18,6 +18,7 @@ namespace EDocument_EF
         public virtual DbSet<DefinedRequest> DefinedRequests => Set<DefinedRequest>();
         public virtual DbSet<DefinedRequestReviewer> DefinedRequestReviewers => Set<DefinedRequestReviewer>();
         public virtual DbSet<DefinedApplicationRole> DefinedApplicationRoles => Set<DefinedApplicationRole>();
+        public virtual DbSet<DefinedRequestRole> DefinedRequestRoles => Set<DefinedRequestRole>();
         public virtual DbSet<Department> Departments => Set<Department>();
         public virtual DbSet<Section> Sections => Set<Section>();
         public virtual DbSet<User> ApplicationUsers => Set<User>();
@@ -44,6 +45,7 @@ namespace EDocument_EF
             builder.ApplyConfiguration(new DefinedRequestConfiguration());
             builder.ApplyConfiguration(new DefinedRequestReviewerConfiguration());
             builder.ApplyConfiguration(new DefinedApplicationRoleConfiguration());
+            builder.ApplyConfiguration(new DefinedRequestRoleConfiguration());
             builder.ApplyConfiguration(new DepartmentConfiguration());
             builder.ApplyConfiguration(new SectionConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());

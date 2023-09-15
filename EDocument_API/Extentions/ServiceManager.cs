@@ -1,22 +1,23 @@
 ﻿using EDocument_API.Extentions;
-using EDocument_API.Responses;
 using EDocument_Data.Consts;
 using EDocument_Data.Consts.Enums;
 using EDocument_Data.Models;
+using EDocument_Data.Models.Shared;
 using EDocument_EF;
 using EDocument_Reposatories.Generic_Reposatories;
 using EDocument_Services.Auth_Service;
 using EDocument_Services.AutoMapper_Service;
-using EDocument_Services.Helpers;
 using EDocument_Services.Mail_Service;
 using EDocument_UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Net;
+using System.Reflection;
 
 namespace EDocument_API.Shared
 {
@@ -45,13 +46,13 @@ namespace EDocument_API.Shared
                 options.Password.RequiredLength = 8;
                 options.User.RequireUniqueEmail = true;
                 options.Lockout.MaxFailedAccessAttempts = 3;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10000);
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
             #endregion ASP.Net Identity
 
-            #region ApiBehavior Configuration 
+            #region ApiBehavior Configuration
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
@@ -66,7 +67,7 @@ namespace EDocument_API.Shared
                 };
             });
 
-            #endregion MyRegion
+            #endregion ApiBehavior Configuration
 
             #region Authentication
 
@@ -90,13 +91,13 @@ namespace EDocument_API.Shared
 
             #region Autorization
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(ApplicationRole.ADMIN.ToString(), policy => policy.RequireClaim(nameof(ApplicationRole), ApplicationRole.ADMIN.ToString()));
-                options.AddPolicy(ApplicationRole.HR.ToString(), policy => policy.RequireClaim(nameof(ApplicationRole), ApplicationRole.HR.ToString()));
-                options.AddPolicy(ApplicationRole.FINANCE.ToString(), policy => policy.RequireClaim(nameof(ApplicationRole), ApplicationRole.FINANCE.ToString()));
-                options.AddPolicy(ApplicationRole.IT.ToString(), policy => policy.RequireClaim(nameof(ApplicationRole), ApplicationRole.IT.ToString()));
-            });
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy(ApplicationRole.ADMIN.ToString(), policy => policy.RequireClaim(nameof(ApplicationRole), ApplicationRole.ADMIN.ToString()));
+            //    options.AddPolicy(ApplicationRole.HR.ToString(), policy => policy.RequireClaim(nameof(ApplicationRole), ApplicationRole.HR.ToString()));
+            //    options.AddPolicy(ApplicationRole.FINANCE.ToString(), policy => policy.RequireClaim(nameof(ApplicationRole), ApplicationRole.FINANCE.ToString()));
+            //    options.AddPolicy(ApplicationRole.IT.ToString(), policy => policy.RequireClaim(nameof(ApplicationRole), ApplicationRole.IT.ToString()));
+            //});
 
             #endregion Autorization
 
@@ -157,7 +158,8 @@ namespace EDocument_API.Shared
 
             #endregion Cors
 
-            #region Versioning 
+            #region Versioning
+
             services.AddApiVersioning(opt =>
             {
                 opt.DefaultApiVersion = new ApiVersion(1, 0);
@@ -174,15 +176,12 @@ namespace EDocument_API.Shared
                 setup.SubstituteApiVersionInUrl = true;
             });
 
-
-
-            #endregion
+            #endregion Versioning
 
             #region Swagger
 
             services.AddSwaggerGen(c =>
             {
-
                 var securitySchema = new OpenApiSecurityScheme
                 {
                     Description = "JWT Auth Bearer Scheme",
@@ -208,11 +207,21 @@ namespace EDocument_API.Shared
                     }
                 };
                 c.AddSecurityRequirement(securityRequirement);
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
             services.ConfigureOptions<ConfigureSwaggerOptions>();
 
             #endregion Swagger
+
+            #region Appsettings Configurations
+
+            services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+            services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
+            #endregion
 
             return services;
         }

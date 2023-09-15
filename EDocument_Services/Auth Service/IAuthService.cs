@@ -1,4 +1,5 @@
 ﻿using EDocument_Data.DTOs.User;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace EDocument_Services.Auth_Service
 {
     public interface IAuthService
     {
-        Task<(bool Succeeded, string Message, LoginReadDto? LoginReadDto)> AuthenticatUserAsync(LoginWriteDto loginWriteDto);
-        Task<(bool Succeeded, string Message)> AddRoleAsync(UserRoleDto userRole);
+        Task<ActionResult> AuthenticatUserAsync(UserWriteDto loginWriteDto);
+        
     }
 }

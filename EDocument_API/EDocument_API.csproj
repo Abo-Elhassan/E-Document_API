@@ -4,6 +4,8 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>c3b525ed-394a-4d6c-bdc4-c5ee20bf85ff</UserSecretsId>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,6 +32,10 @@
     <ProjectReference Include="..\EDocument_EF\EDocument_EF.csproj" />
     <ProjectReference Include="..\EDocument_Services\EDocument_Services.csproj" />
     <ProjectReference Include="..\EDocument_UnitOfWork\EDocument_UnitOfWork.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Responses\" />
   </ItemGroup>
 
 

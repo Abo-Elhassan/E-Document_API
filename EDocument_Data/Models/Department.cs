@@ -11,6 +11,7 @@ public class Department :BaseEntity
     public long Id { get; set; }
 
     public string DepartmentName { get; set; }
+    public string DepartmentIcon { get; set; }
 
     public string ManagerId { get; set; }
 

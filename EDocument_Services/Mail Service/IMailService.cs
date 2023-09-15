@@ -1,4 +1,4 @@
-﻿using EDocument_Services.Helpers;
+﻿using EDocument_Data.Models.Shared;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace EDocument_Services.Mail_Service
 {
     public interface IMailService
     {
-        Task SendMailAsync(MailContent mailContent, IList<IFormFile>? attachments);
+        Task SendMailAsync(MailContent mailContent, IList<IFormFile>? attachments=null);
         string HTMLApprovalMailToString();
     }
 }

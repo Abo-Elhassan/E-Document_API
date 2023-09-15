@@ -8,12 +8,20 @@ namespace EDocument_Data.Consts.Enums
 {
     public enum ApplicationRole
     {
-        ADMIN = 1,
-        HR = 2,
-        FINANCE = 3,
-        PROCURMNET = 4,
-        IT = 5,
-        SECURITY = 6,
-        USER = 7
+        Sys_Admin,
+        HR,
+        Finance,
+        Procurement,
+        IT,
+        Security,
+        Adminstration,
+        Stores,
+        Customer_Service,
+        Operation_BGC,
+        Engineering,
+        Commercial,
+        Info_Fort
+
+
     }
 }

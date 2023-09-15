@@ -1,14 +1,17 @@
-﻿using Azure;
-using EDocument_API.Helpers;
-using EDocument_Data.Consts;
+﻿using EDocument_Data.Consts;
 using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.User;
 using EDocument_Data.Models;
+using EDocument_Data.Models.Shared;
+using EDocument_EF;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text;
@@ -19,13 +22,20 @@ namespace EDocument_Services.Auth_Service
     {
         private readonly UserManager<User> _userManager;
         private readonly IOptions<JwtSettings> _jwtSettings;
-        private readonly ILogger<AuthService> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public AuthService(UserManager<User> userManager, IOptions<JwtSettings> jwtSettings, ILogger<AuthService> logger)
+        public AuthService(UserManager<User> userManager,  IOptions<JwtSettings> jwtSettings, ApplicationDbContext context)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
-            _logger = logger;
+            _context = context;
+        }
+
+        #region Token Creation
+
+        public static SymmetricSecurityKey GetSymmetricSecurityKey()
+        {
+            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(ApplicationConsts.SecretKey ?? ""));
         }
 
         private async Task<JwtSecurityToken> CreateJwtToken(User user)
@@ -55,74 +65,59 @@ namespace EDocument_Services.Auth_Service
             return jwtSecurityToken;
         }
 
-        public async Task<(bool Succeeded, string Message, LoginReadDto? LoginReadDto)> AuthenticatUserAsync(LoginWriteDto loginWriteDto)
-        {
-            (bool Succeeded, string Message, LoginReadDto? LoginReadDto) response = (false, "", null);
+        #endregion Token Creation
 
-            var user = await _userManager.FindByNameAsync(loginWriteDto.UserName);
+        #region Handle Authentication
+
+        public async Task<ActionResult> AuthenticatUserAsync(UserWriteDto loginWriteDto)
+        {
+            var user = await _context.Users
+                            .Include(u => u.Department)
+                            .Include(u => u.Section)
+                            .FirstOrDefaultAsync(u => u.UserName == loginWriteDto.UserName);
 
             if (user is null)
             {
-                response.Succeeded = false;
-                response.Message = $"{loginWriteDto.UserName} Is Not Found as an eDocument User, Please Contact DPWS IT Team";
-                return response;
+                return new NotFoundObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "User not found" });
             }
 
             bool isLockedOut = await _userManager.IsLockedOutAsync(user);
 
             if (isLockedOut)
             {
-                response.Succeeded = false;
-                response.Message = $"{loginWriteDto.UserName} is locked, Please Contact DPWS IT Team";
-                return response;
+                return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"User: ({loginWriteDto.UserName}) is locked, Please Contact DPWS IT Team" });
             }
 
             var result = user.IsEmployee ? AuthenticatEmpolyeeAsync(loginWriteDto, user, isLockedOut).Result : AuthenticatGuestAsync(loginWriteDto, user, isLockedOut).Result;
+            _context.SaveChangesAsync();
 
             return result;
         }
 
-        public static SymmetricSecurityKey GetSymmetricSecurityKey()
+        private async Task<ActionResult> AuthenticatEmpolyeeAsync(UserWriteDto loginWriteDto, User user, bool isLockedOut)
         {
-            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(ApplicationConsts.SecretKey ?? ""));
-        }
-
-        private async Task<(bool Succeeded, string Message, LoginReadDto? LoginReadDto)> AuthenticatEmpolyeeAsync(LoginWriteDto loginWriteDto, User user, bool isLockedOut)
-        {
-            (bool Succeeded, string Message, LoginReadDto? LoginReadDto) response = (false, "", null);
             try
             {
                 //Path to your LDAP directory server
-                Authentication adAuth = new Authentication(ApplicationConsts.ADPath);
-                if (!adAuth.IsAuthenticated(ApplicationConsts.ADDomain, loginWriteDto.UserName, loginWriteDto.Password))
-                {
-                    response.Succeeded = false;
-                    response.Message = $"Usermame or Password is incorrect";
-                    return response;
-                }
+                //Authentication adAuth = new Authentication(ApplicationConsts.ADPath);
+                //if (!adAuth.IsAuthenticated(ApplicationConsts.ADDomain, loginWriteDto.UserName, loginWriteDto.Password))
+                //{
+                //    return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Usermame or Password is incorrect" });
+                //}
                 await _userManager.ResetAccessFailedCountAsync(user);
 
-                var jwtSecurityToken = await CreateJwtToken(user);
                 var userRoles = await _userManager.GetRolesAsync(user);
 
-                if (userRoles is null)
+                if (userRoles.Count == 0)
                 {
-                    response.Succeeded = false;
-                    response.Message = $"{loginWriteDto.UserName} roles not found";
-                    return response;
+                    return new NotFoundObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"{loginWriteDto.UserName} roles not found" });
                 }
-                response.Succeeded = true;
-                response.Message = $"{loginWriteDto.UserName} has been logged in successfully";
-                response.LoginReadDto = new LoginReadDto
-                    (
-                        UserId: user.Id,
-                        UserName: user.NormalizedUserName,
-                        Roles: userRoles.ToList(),
-                        Token: new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                        TokenExpiryDate: jwtSecurityToken.ValidTo
-                );
 
-                return response;
+                var userDetails = await GetUserDetails(user);
+
+                user.LastLogin = DateTime.Now;
+
+                return new OkObjectResult(new ApiResponse<UserReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = userDetails });
             }
             catch (COMException)
             {
@@ -130,98 +125,159 @@ namespace EDocument_Services.Auth_Service
             }
         }
 
-        private async Task<(bool Succeeded, string Message, LoginReadDto? LoginReadDto)> AuthenticatGuestAsync(LoginWriteDto loginWriteDto, User user, bool isLockedOut)
+        private async Task<ActionResult> AuthenticatGuestAsync(UserWriteDto loginWriteDto, User user, bool isLockedOut)
         {
-            (bool Succeeded, string Message, LoginReadDto? LoginReadDto) response = (false, "", null);
-
-           
-            var correctPassword = await _userManager.CheckPasswordAsync(user,loginWriteDto.Password);
+            var correctPassword = await _userManager.CheckPasswordAsync(user, loginWriteDto.Password);
 
             if (!correctPassword)
             {
-                return await HandleWrongLoginAttempt(user,isLockedOut);
+                return await HandleWrongLoginAttempt(user, isLockedOut);
             }
-
-
 
             await _userManager.ResetAccessFailedCountAsync(user);
 
-            var jwtSecurityToken = await CreateJwtToken(user);
             var userRoles = await _userManager.GetRolesAsync(user);
 
-            if (userRoles is null)
+            if (userRoles.Count == 0)
             {
-                response.Succeeded = false;
-                response.Message = $"{loginWriteDto.UserName} roles not found";
-                return response;
+                return new NotFoundObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"{loginWriteDto.UserName} roles not found" });
             }
-            response.Succeeded = true;
-            response.Message = $"{loginWriteDto.UserName} has been logged in successfully";
-            response.LoginReadDto = new LoginReadDto
-                (
-                    UserId: user.Id,
-                    UserName: user.NormalizedUserName,
-                   Roles: userRoles.ToList(),
-                    Token: new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                    TokenExpiryDate: jwtSecurityToken.ValidTo
-            );
 
-            return response;
+            var userDetails = await GetUserDetails(user);
+
+            user.LastLogin = DateTime.Now;
+
+            return new OkObjectResult(new ApiResponse<UserReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = userDetails });
         }
 
-        private async Task<(bool Succeeded, string Message, LoginReadDto? LoginReadDto)> HandleWrongLoginAttempt( User user, bool isLockedOut)
+        private async Task<ActionResult> HandleWrongLoginAttempt(User user, bool isLockedOut)
         {
-            (bool Succeeded, string Message, LoginReadDto? LoginReadDto) response = (false, "", null);
-
             var accessFailedCount = await _userManager.GetAccessFailedCountAsync(user);
-
-            if (accessFailedCount == 2)
-            {
-                await _userManager.SetLockoutEnabledAsync(user, true);
-            }
 
             if (!isLockedOut)
             {
                 await _userManager.AccessFailedAsync(user);
             }
 
-            response.Succeeded = false;
-            response.Message = $"Usermame or Password is incorrect, you have another {3 - (accessFailedCount + 1)}  attempts";
-            return response;
+            if (accessFailedCount == 2)
+            {
+                await _userManager.SetLockoutEnabledAsync(user, true);
+
+                return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"User: ({user.UserName}) is locked, Please Contact DPWS IT Team" });
+            }
+
+            return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Usermame or Password is incorrect, you have another {3 - (accessFailedCount + 1)} attempts" });
         }
-    
-        public async Task<(bool Succeeded, string Message)> AddRoleAsync(UserRoleDto userRole)
+
+
+        private async Task<UserReadDto> GetUserDetails(User user)
         {
-            (bool Succeeded, string Message) response = (false, "");
-            var user = await _userManager.FindByIdAsync(userRole.UserId);
-            if (user is null)
-            {
-                response.Succeeded = false;
-                response.Message = $"{userRole.UserId} Is Not Found as an eDocument User, Please Contact DPWS IT Team";
-                return response;
-            }
+            var jwtSecurityToken = await CreateJwtToken(user);
+            var userRoles = _userManager.GetRolesAsync(user).Result.ToList();
 
-            var userClaims = await _userManager.GetClaimsAsync(user);
-            if (userClaims.Contains(new Claim(nameof(ApplicationRole), userRole.Role.ToString())))
+            var userDetails = new UserReadDto
             {
-                response.Succeeded = false;
-                response.Message = $"{userRole.UserId} already has been granted {userRole.Role} role before";
-                return response;
-            }
-
-            var addRoleResult = await _userManager.AddClaimAsync(user, new Claim(nameof(ApplicationRole), userRole.Role.ToString()));
-            if (addRoleResult.Succeeded)
-            {
-                response.Succeeded = true;
-                response.Message = $"{userRole.UserId} has been granted {userRole.Role} role successfully";
-                return response;
-            }
-            else
-            {
-                response.Succeeded = false;
-                response.Message = $"Granting {userRole.Role} role for {userRole.UserId} has been failed";
-                return response;
-            }
+                UserId = user.Id,
+                UserName = user.UserName,
+                FullName = user.FullName,
+                PhoneNumber = user?.PhoneNumber ?? "",
+                Position = user?.Position ?? "",
+                Department = user?.Department?.DepartmentName ?? "",
+                Section = user?.Section?.SectionName ?? "",
+                Company = user?.Company,
+                IsEmployee = user?.IsEmployee ?? true,
+                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+                TokenExpiryDate = jwtSecurityToken.ValidTo,
+                Roles = userRoles,
+                MenuContents = GetMenuContents(user).Result
+            };
+            return userDetails;
         }
+
+        private async Task<List<MenuContent>> GetMenuContents(User user)
+        {
+            var menuContents = new List<MenuContent>();
+
+            var availableRequests = await _context.DefinedRequestRoles.Include(x => x.Role).Include(y => y.DefinedRequest).ToListAsync();
+            var filteredRequests = availableRequests.Where(d => _userManager.IsInRoleAsync(user, d.Role.Name ?? "").Result)
+                .Select(r => new { r.DefinedRequestId, r.DefinedRequest.RequestName, r.DefinedRequest.RouteName, r.DefinedRequest.DepartmentId, r.Permission }).ToList();
+
+            var departments = _context.Departments.Select(d => new { d.Id, d.DepartmentName, d.DepartmentIcon }).ToList();
+
+            foreach (var department in departments)
+            {
+                foreach (var request in filteredRequests)
+                {
+                    if (department.Id == request.DepartmentId)
+                    {
+                        var menuContent = new MenuContent();
+                        menuContent.Department = department.DepartmentName;
+                        menuContent.Icon = department.DepartmentIcon;
+                        var displayedRequests = new List<DisplayedRequest>();
+
+                        var displayedRequest = new DisplayedRequest();
+                        var requestDdl = new List<RequestDdlContent>();
+
+                        displayedRequest.DefinedRequestId = request.DefinedRequestId;
+                        displayedRequest.DefinedRequestName = request.RequestName;
+
+                        if (request.Permission == Permission.All)
+                        {
+                            requestDdl = new List<RequestDdlContent>
+                            {
+                                new RequestDdlContent
+                                {
+                                    DisplayName = "Inbox",
+                                    RouteName = $"{request.RouteName}Inbox",
+                                },
+                                 new RequestDdlContent
+                                {
+                                    DisplayName = "AssignedToMe",
+                                    RouteName = $"{request.RouteName}AssignedToMe",
+                                }
+                            };
+                        }
+                        else if (request.Permission == Permission.Request)
+                        {
+                            requestDdl = new List<RequestDdlContent>
+                            {
+                                new RequestDdlContent
+                                {
+                                    DisplayName = "Inbox",
+                                    RouteName = $"{request.RouteName}Inbox",
+                                }
+                            };
+                        }
+                        else
+                        {
+                            requestDdl = new List<RequestDdlContent>
+                            {
+                                 new RequestDdlContent
+                                {
+                                    DisplayName = "AssignedToMe",
+                                    RouteName = $"{request.RouteName}AssignedToMe",
+                                }
+                            };
+                        }
+
+                        displayedRequest.RequestDdl = requestDdl;
+
+                        displayedRequests.Add(displayedRequest);
+
+                        menuContent.DisplayedRequests = displayedRequests;
+
+                        menuContents.Add(menuContent);
+                    }
+                }
+            }
+
+            return menuContents;
+        }
+
+
+        #endregion Handle Authentication
+
+
+
     }
 }

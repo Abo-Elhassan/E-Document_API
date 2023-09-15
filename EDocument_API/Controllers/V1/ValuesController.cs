@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.InteropServices;
+using EDocument_Data.Models.Shared;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,29 +28,18 @@ namespace EDocument_API.Controllers.V1
         }
         // GET: api/<ValuesController>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult> Get()
         {
-            (bool Succeeded, string Message, LoginReadDto? LoginReadDto) response = (false, "", null);
-
-            try
-            {
-                //Path to your LDAP directory server
-                Authentication adAuth = new Authentication(ApplicationConsts.ADPath);
-                if (!adAuth.IsAuthenticated(ApplicationConsts.ADDomain, "almuhammad", "#FER#Del10#IT#"))
-                {
-                    response.Succeeded = false;
-                    response.Message = $"Usermame or Password is incorrect";
-                    return BadRequest(response);
-                }
-
-                return Ok(response);
-            }
-            catch (COMException ex)
-            {
-                response.Succeeded = false;
-                response.Message = ex.Message;
-                return BadRequest(response);
-            }
+            var mailContent = new MailContent 
+            { 
+                To="almuhammad@dpwsapps.com",
+                Cc= "almuhammad@dpwsapps.com",
+                Subject="test",
+                Body="test",
+                IsHTMLBody=false
+            };
+            await _mailService.SendMailAsync(mailContent);
+            return Ok();
 
         }
 

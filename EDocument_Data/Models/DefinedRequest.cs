@@ -14,8 +14,6 @@ public  class DefinedRequest: BaseEntity
 
     public string RouteName { get; set; }
 
-    public string IconName { get; set; }
-
     public int ReviewersNumber { get; set; }
 
     public long DepartmentId { get; set; }
@@ -26,5 +24,5 @@ public  class DefinedRequest: BaseEntity
 
     public virtual ICollection<Request> Requests { get; set; } = new HashSet<Request>();
 
-    public virtual ICollection<Role> Roles { get; set; } = new HashSet<Role>();
+    public virtual ICollection<DefinedRequestRole> DefinedRequestRoles { get; set; } = new HashSet<DefinedRequestRole>();
 }

@@ -12,7 +12,7 @@ public partial class User:IdentityUser
 
     public override string NormalizedUserName { get; set; }
 
-    public override string Email => UserName!=null && IsEmployee? $"{UserName}@dpwsapps.com":"";
+    // public override string Email => UserName!=null && IsEmployee? $"{UserName}@dpwsapps.com": Email;
 
     public string FullName { get; set; }
 

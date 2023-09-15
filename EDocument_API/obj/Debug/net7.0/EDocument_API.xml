@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EDocument_API</name>
+    </assembly>
+    <members>
+        <member name="M:EDocument_API.Controllers.V1.UserController.Register(EDocument_Data.DTOs.User.RegisterUserDto)">
+             <summary>
+             Add new user
+             </summary>
+             <param name="registerDto">User informarion</param>
+             <remarks>
+            
+             </remarks>
+             <returns>Nonw</returns>
+        </member>
+        <member name="M:EDocument_API.Extentions.ConfigureSwaggerOptions.Configure(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
+            <summary>
+            Configure each API discovered for Swagger Documentation
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="M:EDocument_API.Extentions.ConfigureSwaggerOptions.Configure(System.String,Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
+            <summary>
+            Configure Swagger Options. Inherited from the Interface
+            </summary>
+            <param name="name"></param>
+            <param name="options"></param>
+        </member>
+        <member name="M:EDocument_API.Extentions.ConfigureSwaggerOptions.CreateVersionInfo(Microsoft.AspNetCore.Mvc.ApiExplorer.ApiVersionDescription)">
+            <summary>
+            Create information about the version of the API
+            </summary>
+            <param name="description"></param>
+            <returns>Information about the API</returns>
+        </member>
+    </members>
+</doc>

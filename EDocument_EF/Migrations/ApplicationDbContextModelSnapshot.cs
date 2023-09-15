@@ -38,21 +38,6 @@ namespace EDocument_EF.Migrations
                     b.ToTable("ApplicationItAdmin", (string)null);
                 });
 
-            modelBuilder.Entity("DefinedRequestRole", b =>
-                {
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<long>("DefinedRequestId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("RoleId", "DefinedRequestId");
-
-                    b.HasIndex("DefinedRequestId");
-
-                    b.ToTable("DefinedRequestRole", (string)null);
-                });
-
             modelBuilder.Entity("EDocument_Data.Models.ApplicationUserRequest", b =>
                 {
                     b.Property<string>("BeneficiaryId")
@@ -320,11 +305,6 @@ namespace EDocument_EF.Migrations
                     b.Property<long>("DepartmentId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("IconName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("smalldatetime");
 
@@ -394,6 +374,40 @@ namespace EDocument_EF.Migrations
                     b.ToTable("DefinedRequestReviewer", (string)null);
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.DefinedRequestRole", b =>
+                {
+                    b.Property<string>("RoleId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long>("DefinedRequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Permission")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RoleId", "DefinedRequestId");
+
+                    b.HasIndex("DefinedRequestId");
+
+                    b.ToTable("DefinedRequestRole", (string)null);
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.Department", b =>
                 {
                     b.Property<long>("Id")
@@ -405,6 +419,9 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DepartmentIcon")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DepartmentName")
                         .IsRequired()
@@ -904,10 +921,16 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsEmployee")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastLogin")
                         .HasColumnType("smalldatetime");
@@ -942,8 +965,12 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Position")
                         .HasMaxLength(200)
@@ -954,6 +981,9 @@ namespace EDocument_EF.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -1152,23 +1182,6 @@ namespace EDocument_EF.Migrations
                         .HasConstraintName("FK_ApplicationItAdmin_User");
                 });
 
-            modelBuilder.Entity("DefinedRequestRole", b =>
-                {
-                    b.HasOne("EDocument_Data.Models.DefinedRequest", null)
-                        .WithMany()
-                        .HasForeignKey("DefinedRequestId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_DefinedRequestRole_DefinedRequest");
-
-                    b.HasOne("EDocument_Data.Models.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_DefinedRequestRole_Role");
-                });
-
             modelBuilder.Entity("EDocument_Data.Models.ApplicationUserRequest", b =>
                 {
                     b.HasOne("EDocument_Data.Models.Request", "Request")
@@ -1260,6 +1273,27 @@ namespace EDocument_EF.Migrations
                     b.Navigation("DefinedRequest");
 
                     b.Navigation("Reviewer");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.DefinedRequestRole", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.DefinedRequest", "DefinedRequest")
+                        .WithMany("DefinedRequestRoles")
+                        .HasForeignKey("DefinedRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_DefinedRequestRole_DefinedRequest");
+
+                    b.HasOne("EDocument_Data.Models.Role", "Role")
+                        .WithMany("DefinedRequestRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_DefinedRequestRole_Role");
+
+                    b.Navigation("DefinedRequest");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Department", b =>
@@ -1509,6 +1543,8 @@ namespace EDocument_EF.Migrations
                 {
                     b.Navigation("DefinedRequestReviewers");
 
+                    b.Navigation("DefinedRequestRoles");
+
                     b.Navigation("Requests");
                 });
 
@@ -1540,6 +1576,11 @@ namespace EDocument_EF.Migrations
                     b.Navigation("TravelDeskRequests");
 
                     b.Navigation("VoucherRequests");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.Role", b =>
+                {
+                    b.Navigation("DefinedRequestRoles");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Section", b =>

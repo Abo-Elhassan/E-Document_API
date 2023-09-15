@@ -20,10 +20,10 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50)
             .ValueGeneratedNever();
 
-            entity.Ignore(e => e.EmailConfirmed);
-            entity.Ignore(e => e.PhoneNumberConfirmed);
-            entity.Ignore(e => e.TwoFactorEnabled);
-            entity.Ignore(e => e.LockoutEnd);
+            //entity.Ignore(e => e.EmailConfirmed);
+            //entity.Ignore(e => e.PhoneNumberConfirmed);
+            //entity.Ignore(e => e.TwoFactorEnabled);
+            //entity.Ignore(e => e.LockoutEnd);
 
             entity.Property(e => e.UserName)
             .IsRequired()
@@ -40,6 +40,7 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(200);
 
             entity.Property(e => e.PhoneNumber)
+            .IsRequired()
             .HasMaxLength(50);
 
             entity.Property(e => e.Company)
@@ -85,8 +86,11 @@ namespace EDocument_EF.Configurations
             .OnDelete(DeleteBehavior.Restrict)
             .HasConstraintName("FK_User_User");
 
+
+
             OnConfigurePartial(entity);
         }
+
 
         partial void OnConfigurePartial(EntityTypeBuilder<User> entity);
     }

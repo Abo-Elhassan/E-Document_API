@@ -1,9 +1,11 @@
-﻿using EDocument_API.Responses;
+﻿
+using EDocument_Data.Models.Shared;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Net;
+using System.Net.Mail;
 using System.Net.Sockets;
 
 namespace EDocument_API.Middlewares
@@ -26,7 +28,7 @@ namespace EDocument_API.Middlewares
             try
             {
                 await _next(context);
-          
+
             }
             catch (ArgumentNullException ex)
             {
@@ -49,6 +51,11 @@ namespace EDocument_API.Middlewares
                 await HandleExceptionAsync(context, ex);
             }
             catch (ValidationException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                await HandleExceptionAsync(context, ex);
+            }
+            catch (SmtpException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 await HandleExceptionAsync(context, ex);
@@ -135,7 +142,7 @@ namespace EDocument_API.Middlewares
                 await context.Response.WriteAsync(new ApiResponse<string>
                 {
                     StatusCode = (int)HttpStatusCode.InternalServerError,
-                    Details = $"{ex.Message} - {ex?.StackTrace?.ToString()}"
+                    Details = $"{ex.Message} - {ex}"
                 }.ToJson());
             }
             else

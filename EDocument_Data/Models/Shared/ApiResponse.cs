@@ -1,27 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
 using System.Net;
 using System.Text.Json;
 
-namespace EDocument_API.Responses
+namespace EDocument_Data.Models.Shared
 {
     public record class ApiResponse<T> where T : class
     {
         public required int StatusCode { get; set; }
-        public  string? Message { get; set; }
+        public string? Message => GetMessage(StatusCode);
         public T? Details { get; set; }
 
         public ApiResponse()
         {
-            
+          
         }
 
-        public ApiResponse(int statusCode,  T details,string? message =null)
-        {
-            StatusCode = statusCode;
-            Message = message ?? GetMessage(statusCode);
-            Details = details;
-        }
-        public  string ToJson()
+        public string ToJson()
         {
             return JsonSerializer.Serialize(this);
         }

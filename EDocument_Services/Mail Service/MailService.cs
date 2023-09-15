@@ -2,7 +2,8 @@
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
-using EDocument_Services.Helpers;
+using EDocument_Data.Consts;
+using EDocument_Data.Models.Shared;
 
 namespace EDocument_Services.Mail_Service
 {
@@ -23,15 +24,12 @@ namespace EDocument_Services.Mail_Service
 
         public async Task SendMailAsync(MailContent mailContent, IList<IFormFile>? attachments = null)
         {
-            var email = new MailMessage
-            {
-                Sender = new MailAddress(_mailSettings.Value.Email),
-                Subject = mailContent.Subject
-            };
+            var email = new MailMessage();
 
-
+            email.From = new MailAddress(_mailSettings.Value.Email);
             email.To.Add(mailContent.To);
             email.CC.Add(mailContent.Cc);
+            email.Subject = mailContent.Subject;
             email.Body = mailContent.Body;
             email.IsBodyHtml = mailContent.IsHTMLBody;
 
@@ -48,7 +46,8 @@ namespace EDocument_Services.Mail_Service
             }
 
             using var smtp = new SmtpClient(host: _mailSettings.Value.Host, port: _mailSettings.Value.Port);
-            smtp.Credentials = new NetworkCredential(_mailSettings.Value.Email, Environment.GetEnvironmentVariable("EP",EnvironmentVariableTarget.Machine));
+            smtp.EnableSsl = true;
+            smtp.Credentials = new NetworkCredential(userName: _mailSettings.Value.Email,password: ApplicationConsts.EmailPassword?.ToString());
             await smtp.SendMailAsync(email);
         }
 

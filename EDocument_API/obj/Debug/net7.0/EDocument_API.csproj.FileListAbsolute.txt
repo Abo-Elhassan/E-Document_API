@@ -193,3 +193,7 @@ F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0
 F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0\EDocument_Repositories.pdb
 F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.Versioning.dll
 F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0\Swashbuckle.AspNetCore.Annotations.dll
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\obj\Debug\net7.0\EDocument_API.xml
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0\EDocument_API.xml
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\bin\Debug\net7.0\Bogus.dll

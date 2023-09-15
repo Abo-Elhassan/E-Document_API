@@ -11,11 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application Repositories\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Generic Repositories\Role Repository\IRoleRepository.cs" />
+    <None Include="Application Repositories\Role Repository\IRoleRepository.cs" />
   </ItemGroup>
 
   <ItemGroup>
