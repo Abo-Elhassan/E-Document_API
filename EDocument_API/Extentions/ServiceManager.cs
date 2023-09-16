@@ -81,25 +81,13 @@ namespace EDocument_API.Shared
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["JWT:Issuer"],
-                    ValidAudience = configuration["JWT:Audience"],
+                    ValidIssuer = configuration["JwtSettings:Issuer"],
+                    ValidAudience = configuration["JwtSettings:Audience"],
                     IssuerSigningKey = AuthService.GetSymmetricSecurityKey()
                 };
             });
 
             #endregion Authentication
-
-            #region Autorization
-
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy(ApplicationRole.ADMIN.ToString(), policy => policy.RequireClaim(nameof(ApplicationRole), ApplicationRole.ADMIN.ToString()));
-            //    options.AddPolicy(ApplicationRole.HR.ToString(), policy => policy.RequireClaim(nameof(ApplicationRole), ApplicationRole.HR.ToString()));
-            //    options.AddPolicy(ApplicationRole.FINANCE.ToString(), policy => policy.RequireClaim(nameof(ApplicationRole), ApplicationRole.FINANCE.ToString()));
-            //    options.AddPolicy(ApplicationRole.IT.ToString(), policy => policy.RequireClaim(nameof(ApplicationRole), ApplicationRole.IT.ToString()));
-            //});
-
-            #endregion Autorization
 
             #region Services
 
@@ -152,7 +140,7 @@ namespace EDocument_API.Shared
             {
                 options.AddPolicy("AllowAll", policy =>
                 {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins(ApplicationConsts.ClientOrigin);
                 });
             });
 
