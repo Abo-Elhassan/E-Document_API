@@ -8,11 +8,30 @@
              <summary>
              Add new user
              </summary>
-             <param name="registerDto">User informarion</param>
+             <param name="registerDto">User Informarion</param>
              <remarks>
             
              </remarks>
-             <returns>Nonw</returns>
+             <returns>success message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.UserController.UnlockUser(System.String)">
+             <summary>
+             Unlock user
+             </summary>
+             <param name="username">Username</param>
+             <remarks>
+            
+             </remarks>
+             <returns>success message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.UserController.GetLockedUsers">
+             <summary>
+             Get locked users
+             </summary>
+             <remarks>
+            
+             </remarks>
+             <returns>List of locked users</returns>
         </member>
         <member name="M:EDocument_API.Extentions.ConfigureSwaggerOptions.Configure(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
             <summary>
