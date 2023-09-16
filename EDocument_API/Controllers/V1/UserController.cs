@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
+using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.User;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
+using EDocument_Data.ViewModels;
 using EDocument_Services.Auth_Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
@@ -18,6 +21,9 @@ namespace EDocument_API.Controllers.V1
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse<string>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ApiResponse<string>))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ApiResponse<string>))]
     public class UserController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
@@ -37,17 +43,15 @@ namespace EDocument_API.Controllers.V1
         /// <summary>
         /// Add new user
         /// </summary>
-        /// <param name="registerDto">User informarion</param>
+        /// <param name="registerDto">User Informarion</param>
         /// <remarks>
         ///
         /// </remarks>
-        /// <returns>Nonw</returns>
+        /// <returns>success message</returns>
 
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<UserReadDto>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse<string>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound,Type=typeof(ApiResponse<string>))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ApiResponse<string>))]
-        //[Authorize]   
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+ 
+        //[Authorize(Roles = "SuperAdmin")]   
         [HttpPost("Register")]
         public async Task<ActionResult> Register(RegisterUserDto registerDto)
         {
@@ -66,6 +70,17 @@ namespace EDocument_API.Controllers.V1
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "User has been created successfully" });
         }
 
+        /// <summary>
+        /// User login
+        /// </summary>
+        /// <param name="UserWriteDto">Username and password</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>success message</returns>
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+
         [HttpPost("Login")]
         public async Task<ActionResult> Login(UserWriteDto loginWriteDto)
         {
@@ -75,6 +90,17 @@ namespace EDocument_API.Controllers.V1
             return result;
         }
 
+
+        /// <summary>
+        /// Unlock user
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>success message</returns>
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Unlock/{username}")]
         public async Task<ActionResult> UnlockUser(string username)
         {
@@ -88,6 +114,25 @@ namespace EDocument_API.Controllers.V1
             await _userManager.SetLockoutEndDateAsync(user, null);
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"username: ({username}) has been unlocked successfully" });
+        }
+
+
+        /// <summary>
+        /// Get locked users
+        /// </summary>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of locked users</returns>
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<UserViewModel>>))]
+        [HttpGet("Unlock")]
+        public async Task<ActionResult> GetLockedUsers()
+        {
+            var lockedUsers = await _userManager.Users.Where(u=>u.LockoutEnabled).Select(u=>new UserViewModel {Id=u.Id }).ToListAsync();
+
+
+            return Ok(new ApiResponse<List<UserViewModel>> { StatusCode = (int)HttpStatusCode.OK, Details = lockedUsers });
         }
     }
 }
