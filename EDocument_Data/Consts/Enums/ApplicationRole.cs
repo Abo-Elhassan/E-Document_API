@@ -8,7 +8,7 @@ namespace EDocument_Data.Consts.Enums
 {
     public enum ApplicationRole
     {
-        Sys_Admin,
+        SuperAdmin,
         HR,
         Finance,
         Procurement,
@@ -16,11 +16,11 @@ namespace EDocument_Data.Consts.Enums
         Security,
         Adminstration,
         Stores,
-        Customer_Service,
-        Operation_BGC,
+        CustomerService,
+        OperationBGC,
         Engineering,
         Commercial,
-        Info_Fort
+        InfoFort
 
 
     }
