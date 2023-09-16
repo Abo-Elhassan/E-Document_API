@@ -35,6 +35,9 @@ namespace EDocument_Data.DTOs.User
         [Required]
         public bool IsEmployee { get; set; }
 
+        [Required]
+        public bool IsActive { get; set; }
+
 
         [StringLength(200)]
         public string? Company { get; set; }

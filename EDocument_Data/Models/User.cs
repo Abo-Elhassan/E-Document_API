@@ -18,15 +18,17 @@ public partial class User:IdentityUser
 
     public string Position { get; set; }
 
-    public long? DepartmentId { get; set; }
+    public long DepartmentId { get; set; }
 
-    public long? SectionId { get; set; }
+    public long SectionId { get; set; }
 
-    public string? ManagerId { get; set; }
+    public string ManagerId { get; set; }
 
     public string Company { get; set; }
 
     public bool IsEmployee { get; set; }
+
+    public bool IsActive { get; set; }
 
     public DateTime? LastLogin { get; set; }
 
