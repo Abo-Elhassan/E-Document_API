@@ -18,8 +18,11 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.Id)
             .ValueGeneratedNever();
 
+            entity.Property(e => e.DepartmentId)
+           .IsRequired(false); 
+
             entity.Property(e => e.HeadId)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(50);
 
             entity.Property(e => e.CreatedAt)
