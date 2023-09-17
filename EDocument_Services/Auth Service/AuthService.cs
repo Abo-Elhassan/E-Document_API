@@ -24,7 +24,7 @@ namespace EDocument_Services.Auth_Service
         private readonly IOptions<JwtSettings> _jwtSettings;
         private readonly ApplicationDbContext _context;
 
-        public AuthService(UserManager<User> userManager,  IOptions<JwtSettings> jwtSettings, ApplicationDbContext context)
+        public AuthService(UserManager<User> userManager, IOptions<JwtSettings> jwtSettings, ApplicationDbContext context)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
@@ -69,7 +69,7 @@ namespace EDocument_Services.Auth_Service
 
         #region Handle Authentication
 
-        public async Task<ActionResult> AuthenticatUserAsync(UserWriteDto loginWriteDto)
+        public async Task<ActionResult> AuthenticatUserAsync(LoginWriteDto loginWriteDto)
         {
             var user = await _context.Users
                             .Include(u => u.Department)
@@ -94,7 +94,7 @@ namespace EDocument_Services.Auth_Service
             return result;
         }
 
-        private async Task<ActionResult> AuthenticatEmpolyeeAsync(UserWriteDto loginWriteDto, User user, bool isLockedOut)
+        private async Task<ActionResult> AuthenticatEmpolyeeAsync(LoginWriteDto loginWriteDto, User user, bool isLockedOut)
         {
             try
             {
@@ -108,16 +108,15 @@ namespace EDocument_Services.Auth_Service
 
                 var userRoles = await _userManager.GetRolesAsync(user);
 
-                if (userRoles.Count == 0)
-                {
-                    return new NotFoundObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"{loginWriteDto.UserName} roles not found" });
-                }
+                if (userRoles.Count == 0) return new NotFoundObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"{loginWriteDto.UserName} roles not found" });
 
                 var userDetails = await GetUserDetails(user);
 
+                if (userDetails.MenuContents.Count == 0) return new NotFoundObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "There are no available requests" });
+
                 user.LastLogin = DateTime.Now;
 
-                return new OkObjectResult(new ApiResponse<UserReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = userDetails });
+                return new OkObjectResult(new ApiResponse<LoginReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = userDetails });
             }
             catch (COMException)
             {
@@ -125,29 +124,25 @@ namespace EDocument_Services.Auth_Service
             }
         }
 
-        private async Task<ActionResult> AuthenticatGuestAsync(UserWriteDto loginWriteDto, User user, bool isLockedOut)
+        private async Task<ActionResult> AuthenticatGuestAsync(LoginWriteDto loginWriteDto, User user, bool isLockedOut)
         {
             var correctPassword = await _userManager.CheckPasswordAsync(user, loginWriteDto.Password);
 
-            if (!correctPassword)
-            {
-                return await HandleWrongLoginAttempt(user, isLockedOut);
-            }
+            if (!correctPassword) return await HandleWrongLoginAttempt(user, isLockedOut);
 
             await _userManager.ResetAccessFailedCountAsync(user);
 
             var userRoles = await _userManager.GetRolesAsync(user);
 
-            if (userRoles.Count == 0)
-            {
-                return new NotFoundObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"{loginWriteDto.UserName} roles not found" });
-            }
+            if (userRoles.Count == 0) return new NotFoundObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"{loginWriteDto.UserName} roles not found" });
 
             var userDetails = await GetUserDetails(user);
 
+            if (userDetails.MenuContents.Count == 0) return new NotFoundObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "There are no available requests" });
+
             user.LastLogin = DateTime.Now;
 
-            return new OkObjectResult(new ApiResponse<UserReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = userDetails });
+            return new OkObjectResult(new ApiResponse<LoginReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = userDetails });
         }
 
         private async Task<ActionResult> HandleWrongLoginAttempt(User user, bool isLockedOut)
@@ -169,13 +164,12 @@ namespace EDocument_Services.Auth_Service
             return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Usermame or Password is incorrect, you have another {3 - (accessFailedCount + 1)} attempts" });
         }
 
-
-        private async Task<UserReadDto> GetUserDetails(User user)
+        private async Task<LoginReadDto> GetUserDetails(User user)
         {
             var jwtSecurityToken = await CreateJwtToken(user);
             var userRoles = _userManager.GetRolesAsync(user).Result.ToList();
 
-            var userDetails = new UserReadDto
+            var userDetails = new LoginReadDto
             {
                 UserId = user.Id,
                 UserName = user.UserName,
@@ -206,14 +200,15 @@ namespace EDocument_Services.Auth_Service
 
             foreach (var department in departments)
             {
+                var menuContent = new MenuContent();
+                var displayedRequests = new List<DisplayedRequest>();
+
                 foreach (var request in filteredRequests)
                 {
                     if (department.Id == request.DepartmentId)
                     {
-                        var menuContent = new MenuContent();
                         menuContent.Department = department.DepartmentName;
                         menuContent.Icon = department.DepartmentIcon;
-                        var displayedRequests = new List<DisplayedRequest>();
 
                         var displayedRequest = new DisplayedRequest();
                         var requestDdl = new List<RequestDdlContent>();
@@ -265,19 +260,16 @@ namespace EDocument_Services.Auth_Service
                         displayedRequests.Add(displayedRequest);
 
                         menuContent.DisplayedRequests = displayedRequests;
-
-                        menuContents.Add(menuContent);
                     }
                 }
+
+                if (menuContent.Department is not null)
+                    menuContents.Add(menuContent);
             }
 
             return menuContents;
         }
 
-
         #endregion Handle Authentication
-
-
-
     }
 }
