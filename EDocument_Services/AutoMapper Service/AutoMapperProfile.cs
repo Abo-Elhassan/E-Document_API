@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using EDocument_Data.DTOs.Department;
+using EDocument_Data.DTOs.Section;
 using EDocument_Data.DTOs.User;
 using EDocument_Data.Models;
-using EDocument_Data.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,22 @@ namespace EDocument_Services.AutoMapper_Service
     {
         public AutoMapperProfile()
         {
-            CreateMap<RegisterUserDto, User>();
+            
+            CreateMap<CreateUserDto, User>();
+            CreateMap<UserWriteDto, User>();
+            CreateMap<User, UserReadDto>()
+                .ForMember(
+                x => x.DepartmentName,
+                y => y.MapFrom(
+                    z => z.Department.DepartmentName))
+                .ForMember(
+                x => x.SectionName,
+                y => y.MapFrom(
+                    z => z.Section.SectionName))
+                .ForMember(x => x.Roles, opt => opt.Ignore()).ReverseMap();
+
             CreateMap<Department, DepartmentReadDto>();
-           
+
             CreateMap<Section, SectionReadDto>();
 
         }
