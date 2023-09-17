@@ -15,7 +15,9 @@ namespace EDocument_Services.AutoMapper_Service
         public AutoMapperProfile()
         {
             CreateMap<RegisterUserDto, User>();
+            CreateMap<Department, DepartmentReadDto>();
            
+            CreateMap<Section, SectionReadDto>();
 
         }
     }
