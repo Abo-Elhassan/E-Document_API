@@ -12,15 +12,13 @@ public partial class User:IdentityUser
 
     public override string NormalizedUserName { get; set; }
 
-    // public override string Email => UserName!=null && IsEmployee? $"{UserName}@dpwsapps.com": Email;
-
     public string FullName { get; set; }
 
     public string Position { get; set; }
 
-    public long DepartmentId { get; set; }
+    public long? DepartmentId { get; set; }
 
-    public long SectionId { get; set; }
+    public long? SectionId { get; set; }
 
     public string ManagerId { get; set; }
 

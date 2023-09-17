@@ -12,7 +12,7 @@ namespace EDocument_Data.Models
     {
         public long Id { get; set; }
         public string SectionName { get; set; }
-        public long DepartmentId { get; set; }
+        public long? DepartmentId { get; set; }
         public string HeadId { get; set; }
         public Department Department { get; set; }
         public virtual ICollection<User> Employees { get; set; }  = new HashSet<User>();
