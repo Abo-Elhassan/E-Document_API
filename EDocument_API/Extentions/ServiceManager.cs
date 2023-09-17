@@ -1,6 +1,5 @@
 ﻿using EDocument_API.Extentions;
 using EDocument_Data.Consts;
-using EDocument_Data.Consts.Enums;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_EF;
@@ -12,12 +11,13 @@ using EDocument_UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Net;
 using System.Reflection;
+using System.Threading.RateLimiting;
 
 namespace EDocument_API.Shared
 {
@@ -65,6 +65,19 @@ namespace EDocument_API.Shared
 
                     return new BadRequestObjectResult(new ApiResponse<List<string>> { StatusCode = (int)HttpStatusCode.BadRequest, Details = errors });
                 };
+            });
+
+            services.AddRateLimiter(rateLimiterOptions =>
+            {
+                rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+                rateLimiterOptions.AddFixedWindowLimiter("fixed", options =>
+                {
+                    options.PermitLimit = 10;
+                    options.Window = TimeSpan.FromSeconds(10);
+                    options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                    options.QueueLimit = 5;
+                });
             });
 
             #endregion ApiBehavior Configuration
@@ -209,7 +222,8 @@ namespace EDocument_API.Shared
 
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
-            #endregion
+
+            #endregion Appsettings Configurations
 
             return services;
         }
