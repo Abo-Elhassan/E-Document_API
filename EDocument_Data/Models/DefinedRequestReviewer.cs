@@ -14,13 +14,18 @@ public  class DefinedRequestReviewer : BaseEntity
 
     public string ReviewerId { get; set; }
 
+    public string DelegatedReviewerId { get; set; }
+    
     public string StageName { get; set; }
 
     public int StageNumber { get; set; }
 
     public ReviewerType ReviewerType { get; set; }
 
+    public DateTime? DelegatedUntil { get; set; }
+
     public virtual DefinedRequest DefinedRequest { get; set; }
 
     public virtual User Reviewer { get; set; }
+
 }

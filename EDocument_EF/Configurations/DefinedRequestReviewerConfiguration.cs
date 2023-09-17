@@ -19,12 +19,19 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.ReviewerId)
             .HasMaxLength(50);
 
+            entity.Property(e => e.DelegatedReviewerId)
+            .IsRequired(false)
+            .HasMaxLength(50);
+
             entity.Property(e => e.StageName)
             .HasMaxLength(50);
 
             entity.Property(e => e.ReviewerType).HasConversion<string>()
             .IsRequired()
             .HasMaxLength(50);
+
+            entity.Property(e => e.DelegatedUntil)
+            .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedAt)
             .HasColumnType("smalldatetime");
@@ -47,6 +54,8 @@ namespace EDocument_EF.Configurations
             .HasForeignKey(d => d.ReviewerId)
             .OnDelete(DeleteBehavior.Restrict)
             .HasConstraintName("FK_DefinedRequestReviewer_User");
+
+
 
 
 
