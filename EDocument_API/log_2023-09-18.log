@@ -3743,3 +3743,41 @@ ORDER BY [p].[RequestId], [p].[PoNumber], [r].[Id], [r0].[RequestId]
 2023-09-18T13:34:13.8382728+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (8ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
 SELECT COUNT(*)
 FROM [PoRequest] AS [p]
+2023-09-18T13:37:04.5313498+03:00	INFO	[EDocument_API.Controllers.V1.PoRequestController]	[0]	Start GetFiltered from UserController
+2023-09-18T13:41:36.9177755+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-18T13:41:36.9279146+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-18T13:41:36.9367137+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-18T13:41:36.9574481+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-18T13:42:44.1476227+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-18T13:42:44.9281431+03:00	INFO	[EDocument_API.Controllers.V1.PoRequestController]	[0]	Start GetFiltered from UserController
+2023-09-18T13:42:53.8425958+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-18T13:42:53.8533727+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-18T13:42:55.5387531+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (181ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[RequestId], [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[VendorName], [t].[VendorNumber], [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[CreatorId], [r].[CurrentStage], [r].[DeclinedBy], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt], [r].[ModifiedBy], [r].[Status], [r0].[RequestId], [r0].[ReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status]
+FROM (
+    SELECT [p].[RequestId], [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[VendorName], [p].[VendorNumber]
+    FROM [PoRequest] AS [p]
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [Request] AS [r] ON [t].[RequestId] = [r].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [r].[Id] = [r0].[RequestId]
+ORDER BY [t].[RequestId], [t].[PoNumber], [r].[Id], [r0].[RequestId]
+2023-09-18T13:42:55.8415238+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (24ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+2023-09-18T13:46:33.9535188+03:00	INFO	[EDocument_API.Controllers.V1.PoRequestController]	[0]	Start GetFiltered from UserController
+2023-09-18T13:46:35.6056900+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (15ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[RequestId], [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[VendorName], [t].[VendorNumber], [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[CreatorId], [r].[CurrentStage], [r].[DeclinedBy], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt], [r].[ModifiedBy], [r].[Status], [r0].[RequestId], [r0].[ReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status]
+FROM (
+    SELECT [p].[RequestId], [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[VendorName], [p].[VendorNumber]
+    FROM [PoRequest] AS [p]
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [Request] AS [r] ON [t].[RequestId] = [r].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [r].[Id] = [r0].[RequestId]
+ORDER BY [t].[RequestId], [t].[PoNumber], [r].[Id], [r0].[RequestId]
+2023-09-18T13:46:35.6123892+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]

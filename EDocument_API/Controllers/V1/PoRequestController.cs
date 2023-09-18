@@ -59,8 +59,8 @@ namespace EDocument_API.Controllers.V1
             var paginatedData = await _unitOfWork.Repository<PoRequest>().FindAllAsync(
                 filters: filterDto?.Filters,
                 includes: includes,
-                skip: filterDto?.PageNo - 1,
-                take: filterDto?.PageSize,
+                skip: filterDto?.PageNo??1 - 1,
+                take: filterDto?.PageSize??10,
                 orderBy: filterDto?.orderBy,
                 orderByDirection: filterDto?.orderByDirection
                 );
@@ -70,7 +70,7 @@ namespace EDocument_API.Controllers.V1
             var totalPages = 1;
             if (filterDto?.PageSize is not null)
             {
-                totalPages = (int)Math.Ceiling((decimal)totalCount / (int)filterDto.PageSize!);
+                totalPages = (int)Math.Ceiling((decimal)totalCount / (int)(filterDto.PageSize??10));
             }
 
             var requests = _mapper.Map<List<PoRequestReadDto>>(paginatedData);
@@ -79,8 +79,8 @@ namespace EDocument_API.Controllers.V1
             {
                 TotalCount = totalCount,
                 TotalPages = totalPages,
-                CurrentPage = filterDto?.PageNo,
-                PageSize = filterDto?.PageSize,
+                CurrentPage = filterDto?.PageNo??1,
+                PageSize = filterDto?.PageSize??10,
                 PaginatedData = requests
             };
             return Ok(new ApiResponse<FilterReadDto<PoRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
