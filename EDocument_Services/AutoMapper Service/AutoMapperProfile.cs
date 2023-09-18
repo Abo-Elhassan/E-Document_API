@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using EDocument_Data.DTOs.Department;
+using EDocument_Data.DTOs.Requests;
+using EDocument_Data.DTOs.Requests.PoRequest;
+using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.DTOs.Section;
 using EDocument_Data.DTOs.User;
 using EDocument_Data.Models;
@@ -33,6 +36,16 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<Department, DepartmentReadDto>();
 
             CreateMap<Section, SectionReadDto>();
+
+            CreateMap<Request, RequestReadDto>();
+            CreateMap<RequestReviewer, RequestReviewerReadDto>();
+
+
+            CreateMap<PoRequest, PoRequestReadDto>()
+                .ForMember(x=>x.RequestInfo, y=>y.MapFrom(z=>z.Request))
+                .ForMember(x => x.RequestReviewers, y => y.MapFrom(z => z.Request.RequestReviewers));
+
+
 
         }
     }

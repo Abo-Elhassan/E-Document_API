@@ -19,7 +19,7 @@ namespace EDocument_Data.Models
 
         public int StageNumber { get; set; }
 
-        public string ReviewerType { get; set; }
+        public ReviewerType ReviewerType { get; set; }
 
         public RequestStatus Status { get; set; }
 

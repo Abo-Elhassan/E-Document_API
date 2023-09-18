@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDocument_Repositories.Application_Repositories
+namespace EDocument_Repositories.Application_Repositories.UserRepository
 {
     public interface IUserRepository: IGenericRepository<User>
     {

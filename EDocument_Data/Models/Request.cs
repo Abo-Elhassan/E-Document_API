@@ -36,7 +36,7 @@ public partial class Request : BaseEntity
     public virtual ICollection<ApplicationUserRequest> ApplicationUserRequests { get; set; } = new HashSet<ApplicationUserRequest>();
     public virtual ICollection<DomainAccountRequest> DomainAccountRequests { get; set; } = new HashSet<DomainAccountRequest>();
     public virtual ICollection<VoucherRequest> VoucherRequests { get; set; } = new HashSet<VoucherRequest>();
-    public virtual ICollection<PoRequest> PoRequests { get; set; } = new HashSet<PoRequest>();
+    public virtual PoRequest PoRequest { get; set; } 
     //public virtual ICollection<JobPlanRequest> JobPlanRequests { get; set; } = new HashSet<JobPlanRequest>();
 
 }

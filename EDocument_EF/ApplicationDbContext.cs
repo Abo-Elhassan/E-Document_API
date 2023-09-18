@@ -996,7 +996,17 @@ namespace EDocument_EF
 
             #endregion Section
 
+            #region Defined Request
+            builder.Entity<DefinedRequest>().HasData(
+                new DefinedRequest { Id = 1, RequestName= "PO" ,RouteName = "/Procurement/PO/" , ReviewersNumber =1, DepartmentId =16}
+                );
+            #endregion
 
+            #region Defined Request Reviewers
+            builder.Entity<DefinedRequestReviewer>().HasData(
+                new DefinedRequestReviewer { DefinedRequestId = 1, ReviewerId = "51124" ,StageName="Finance Reviewer", StageNumber=1, ReviewerType =ReviewerType.Basic}
+                );
+            #endregion
 
 
             #endregion Seeding

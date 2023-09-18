@@ -8,7 +8,7 @@ namespace EDocument_Data.Consts.Enums
 {
     public enum ReviewerType
     {
-        Default,
+        Basic,
         DirectManager,
         SectionHead,
         DepartmentManager,

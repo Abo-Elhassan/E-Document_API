@@ -13,6 +13,16 @@
              </remarks>
              <returns>List of Departmens</returns>
         </member>
+        <member name="M:EDocument_API.Controllers.V1.PoRequestController.GetFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
+             <summary>
+             Get All PO Requests With Key/Value Pair Filter
+             </summary>
+             <param name="filterDto">filter information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All PO Requests</returns>
+        </member>
         <member name="M:EDocument_API.Controllers.V1.RoleController.Get">
              <summary>
              Get All E-Document Roles

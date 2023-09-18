@@ -13,8 +13,9 @@ namespace EDocument_EF.Configurations
         {
             entity.ToTable(nameof(PoRequest));
 
-            entity.HasKey(e =>  e.PoNumber); 
+            entity.HasKey(e => new { e.RequestId, e.PoNumber });
 
+            entity.HasIndex(p => p.PoNumber);
             entity.HasIndex(p => p.PoDescription);
             entity.HasIndex(p => p.VendorName);
             entity.HasIndex(p => p.VendorNumber);
@@ -52,8 +53,8 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.ModifiedBy)
             .HasMaxLength(50);
 
-            entity.HasOne(d => d.Request).WithMany(p => p.PoRequests)
-            .HasForeignKey(d => d.RequestId)
+            entity.HasOne(d => d.Request).WithOne(p => p.PoRequest)
+            .HasForeignKey<PoRequest>(d => d.RequestId)
             .OnDelete(DeleteBehavior.Restrict)
             .HasConstraintName("FK_PoRequest_Request");
 
