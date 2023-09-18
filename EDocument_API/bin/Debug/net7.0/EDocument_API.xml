@@ -4,25 +4,123 @@
         <name>EDocument_API</name>
     </assembly>
     <members>
-        <member name="M:EDocument_API.Controllers.V1.UserController.Register(EDocument_Data.DTOs.User.RegisterUserDto)">
+        <member name="M:EDocument_API.Controllers.V1.DepartmentController.Get">
+             <summary>
+             Get All Departments
+             </summary>
+             <remarks>
+            
+             </remarks>
+             <returns>List of Departmens</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RoleController.Get">
+             <summary>
+             Get All E-Document Roles
+             </summary>
+             <remarks>
+            
+             </remarks>
+             <returns>List of E-Document Role</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RoleController.Add(System.String)">
+             <summary>
+             Add new E-Docuement role
+             </summary>
+             <param name="role">roleId and roleName</param>
+             <remarks>
+            
+             </remarks>
+             <returns>message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RoleController.Delete(System.String)">
+             <summary>
+             Delete E-Docuement role
+             </summary>
+             <param name="name">role Name</param>
+             <remarks>
+            
+             </remarks>
+             <returns>message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.SectionController.Get">
+             <summary>
+             Get All Sections
+             </summary>
+             <remarks>
+            
+             </remarks>
+             <returns>List of Sections</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.UserController.GetFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
+             <summary>
+             Get All Users With Key/Value Pair Filter
+             </summary>
+             <param name="filterDto">filter information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All Users</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.UserController.GetFilterdDynamically(EDocument_Data.DTOs.Filter.DynamicFilterWriteDto)">
+             <summary>
+             Get All Users With Dynamic Filter
+             </summary>
+             <param name="DynamicfilterDto">filter information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All Users</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.UserController.Search(System.String)">
+             <summary>
+             Get All Filtered Users
+             </summary>
+             <param name="filterValue"></param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of Filtered Users</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.UserController.Add(EDocument_Data.DTOs.User.CreateUserDto)">
              <summary>
              Add new user
              </summary>
-             <param name="registerDto">User Informarion</param>
+             <param name="createUserDto">User Informarion</param>
              <remarks>
             
              </remarks>
-             <returns>success message</returns>
+             <returns> message</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.UserController.UnlockUser(System.String)">
+        <member name="M:EDocument_API.Controllers.V1.UserController.Update(System.String,EDocument_Data.DTOs.User.UserWriteDto)">
              <summary>
-             Unlock user
+             Edit user information
              </summary>
-             <param name="username">Username</param>
+            <param name="id">User id</param>
+             <param name="userWriteDto">User Informarion</param>
              <remarks>
             
              </remarks>
-             <returns>success message</returns>
+             <returns>message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.UserController.ManageUserRoles(EDocument_Data.DTOs.User.UserRoleDto)">
+             <summary>
+             Add/Edit User Roles
+             </summary>
+             <param name="userRoleDto">User id with list of his roles</param>
+             <remarks>
+            
+             </remarks>
+             <returns>message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.UserController.Login(EDocument_Data.DTOs.User.LoginWriteDto)">
+             <summary>
+             User login
+             </summary>
+             <param name="loginWriteDto">Username and password</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.UserController.GetLockedUsers">
              <summary>
@@ -32,6 +130,16 @@
             
              </remarks>
              <returns>List of locked users</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.UserController.UnlockUser(System.String)">
+             <summary>
+             Unlock user
+             </summary>
+             <param name="id">user id</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
         </member>
         <member name="M:EDocument_API.Extentions.ConfigureSwaggerOptions.Configure(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
             <summary>
