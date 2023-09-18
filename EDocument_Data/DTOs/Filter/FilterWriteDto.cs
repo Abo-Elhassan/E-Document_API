@@ -12,7 +12,10 @@ namespace EDocument_Data.DTOs.Filter
 
     public class FilterDto
     {
+        [Range(1, int.MaxValue, ErrorMessage = "PageNo must be greater than 0.")]
         public int? PageNo { get; set; } = 1;
+
+        [Range(1, 30, ErrorMessage = "PageSize must be greater than 0.")]
         public int? PageSize { get; set; } = 10;
         public string? orderBy { get; set; }
         public OrderBy? orderByDirection { get; set; }
@@ -28,7 +31,7 @@ namespace EDocument_Data.DTOs.Filter
     public class DynamicFilterWriteDto : FilterDto
     {
         [Required]
-        public required string filterValue { get; init; }
+        public required string FilterValue { get; init; }
 
     }
 
