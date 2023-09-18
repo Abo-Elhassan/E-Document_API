@@ -10,14 +10,22 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
 {
     public class PoRequestReadDto
     {
-        public  RequestReadDto? RequestInfo { get; set; }
-        public  List<RequestReviewerReadDto>? RequestReviewers { get; set; }
-        public  string? PoNumber { get; set; }
-        public  string? PoDescription { get; set; }
-        public  string? VendorName { get; set; }
-        public  string? VendorNumber { get; set; }
-        public  string? InvoiceNumber { get; set; }
-        public  string? PoAttachmentPath { get; set; }
-        public  string? InvoiceAttachmentPath { get; set; }
+ 
+        public long Id { get; init; }
+        public int CurrentStage { get; init; }
+        public RequestStatus Status { get; init; }
+        public string? Justification { get; init; }
+        public string? CreatorId { get; init; }
+        public string? DeclinedBy { get; init; }
+        public long DefinedRequestId { get; init; }
+        public string? PoNumber { get; init; }
+        public string? PoDescription { get; init; }
+        public string? VendorName { get; init; }
+        public string? VendorNumber { get; init; }
+        public string? InvoiceNumber { get; init; }
+        public string? PoAttachmentPath { get; init; }
+        public string? InvoiceAttachmentPath { get; init; }
+
+        public List<RequestReviewerReadDto>? RequestReviewers { get; set; }
     }
 }

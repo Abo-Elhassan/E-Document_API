@@ -42,7 +42,13 @@ namespace EDocument_Services.AutoMapper_Service
 
 
             CreateMap<PoRequest, PoRequestReadDto>()
-                .ForMember(x=>x.RequestInfo, y=>y.MapFrom(z=>z.Request))
+                .ForMember(x=>x.Id, y=>y.MapFrom(z=>z.Request.Id))
+                .ForMember(x => x.CurrentStage, y => y.MapFrom(z => z.Request.CurrentStage))
+                .ForMember(x => x.Status, y => y.MapFrom(z => z.Request.Status))
+                .ForMember(x => x.Justification, y => y.MapFrom(z => z.Request.Justification))
+                .ForMember(x => x.CreatorId, y => y.MapFrom(z => z.Request.CreatorId))
+                .ForMember(x => x.DeclinedBy, y => y.MapFrom(z => z.Request.DeclinedBy))
+                .ForMember(x => x.DefinedRequestId, y => y.MapFrom(z => z.Request.DefinedRequestId))
                 .ForMember(x => x.RequestReviewers, y => y.MapFrom(z => z.Request.RequestReviewers));
 
 

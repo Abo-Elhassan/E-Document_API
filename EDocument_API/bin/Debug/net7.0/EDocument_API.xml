@@ -13,7 +13,7 @@
              </remarks>
              <returns>List of Departmens</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.PoRequestController.GetFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetPoRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
              <summary>
              Get All PO Requests With Key/Value Pair Filter
              </summary>
@@ -22,6 +22,16 @@
             
              </remarks>
              <returns>List of All PO Requests</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetPoRequestsFilterdDynamically(EDocument_Data.DTOs.Filter.DynamicFilterWriteDto)">
+             <summary>
+             Get All PO Requests With Dynamic Filter
+             </summary>
+             <param name="DynamicfilterDto">filter information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All PO Requests </returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.RoleController.Get">
              <summary>
