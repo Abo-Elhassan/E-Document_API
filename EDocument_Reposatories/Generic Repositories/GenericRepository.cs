@@ -125,7 +125,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
 
 
-        public virtual IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual IEnumerable<T> FindAll(Expression<Func<T, bool>>? criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
@@ -136,8 +136,10 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     query = query.Include(item);
                 }
             }
-
-            query = query.Where(criteria);
+            if (criteria != null)
+            {
+                query = query.Where(criteria);
+            }
 
             if (dateFilters != null)
             {
@@ -167,7 +169,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return query.ToList();
         }
 
-        public virtual IEnumerable<T> FindAll(Dictionary<string, string> filters, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual IEnumerable<T> FindAll(Dictionary<string, string>? filters, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var ColumnName = "";
             var ColumnValue = "";
@@ -240,10 +242,10 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
             if (!string.IsNullOrEmpty(filterValue))
             {
-                dynamicFilter = string.Join(" OR ", properties
-                .Select(property => property.PropertyType == typeof(string) ? $"{property}.Contains(@0)" : $"{property}.Equals(@0)"));
+                dynamicFilter = string.Join(" OR ", properties.Where(p => p.PropertyType == typeof(string) || p.PropertyType == typeof(DateTime) || p.PropertyType == typeof(long) || p.PropertyType == typeof(float))
+                .Select(property => property.PropertyType == typeof(string) ? $"{property.Name}.Contains(@0)" : $"{property.Name}.Equals(@0)"));
                 query = query.Where(dynamicFilter, filterValue);
-               
+
             }
 
             if (dateFilters != null)
@@ -269,7 +271,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return query.ToList();
         }
 
-        public virtual async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>>? criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             IQueryable<T> query = _context.Set<T>();
 
@@ -281,7 +283,10 @@ namespace EDocument_Reposatories.Generic_Reposatories
                 }
             }
 
-            query = query.Where(criteria);
+            if (criteria != null)
+            {
+                query = query.Where(criteria);
+            }
 
             if (dateFilters != null)
             {
@@ -311,7 +316,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return await query.ToListAsync();
         }
 
-        public virtual async Task<IEnumerable<T>> FindAllAsync(Dictionary<string, string> filters, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<IEnumerable<T>> FindAllAsync(Dictionary<string, string>? filters, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var ColumnName = "";
             var ColumnValue = "";
@@ -384,8 +389,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
             if (!string.IsNullOrEmpty(filterValue))
             {
-                dynamicFilter = string.Join(" OR ", properties
-                .Select(property => property.PropertyType == typeof(string) ? $"{property}.Contains(@0)" : $"{property}.Equals(@0)"));
+                dynamicFilter = string.Join(" OR ", properties.Where(p => p.PropertyType == typeof(string) || p.PropertyType == typeof(DateTime) || p.PropertyType == typeof(long) || p.PropertyType == typeof(float))
+                .Select(property => property.PropertyType == typeof(string) ? $"{property.Name}.Contains(@0)" : $"{property.Name}.Equals(@0)"));
                 query = query.Where(dynamicFilter, filterValue);
 
             }

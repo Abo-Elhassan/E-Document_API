@@ -64,7 +64,6 @@ namespace EDocument_API.Controllers.V1
         /// <returns>message</returns>
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<string>>))]
-
         [HttpPost("{name}")]
         public async Task<ActionResult> Add(string name)
         {
@@ -93,7 +92,6 @@ namespace EDocument_API.Controllers.V1
         /// <returns>message</returns>
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<string>>))]
-
         [HttpDelete("{name}")]
         public async Task<ActionResult> Delete(string name)
         {

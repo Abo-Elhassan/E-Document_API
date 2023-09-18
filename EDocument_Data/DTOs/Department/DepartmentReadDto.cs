@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace EDocument_Data.DTOs.Department
 {
-    public record struct DepartmentReadDto
+    public record class DepartmentReadDto
     {
-        public required int DepartmentId { get; init; }
+        public required long Id { get; init; }
 
         public required string DepartmentName { get; init; }
     }

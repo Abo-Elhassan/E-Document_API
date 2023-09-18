@@ -15,7 +15,7 @@ namespace EDocument_Data.DTOs.User
         public  string? Email { get; init; }
         public  string? PhoneNumber { get; init; }
         public  string? Position { get; init; }
-        public required string IsEmployee { get; init; }
+        public required bool IsEmployee { get; init; }
         public  string? ManagerId { get; init; }
         public  long? DepartmentId { get; init; }
         public  string? DepartmentName { get; init; }

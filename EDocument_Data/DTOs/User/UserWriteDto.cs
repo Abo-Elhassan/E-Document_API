@@ -47,7 +47,6 @@ namespace EDocument_Data.DTOs.User
 
         public long? SectionId { get; init; }
 
-        [Required]
         [StringLength(50)]
         public string? ManagerId { get; init; }
          

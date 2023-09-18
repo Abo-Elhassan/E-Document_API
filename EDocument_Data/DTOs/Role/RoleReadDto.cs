@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EDocument_Data.DTOs.Role
 {
-    public class RoleReadDto
+    public record class RoleReadDto
     {
         public required string RoleId { get; init; }
         public required string RoleName { get; init; }

@@ -18,6 +18,8 @@ namespace EDocument_Services.AutoMapper_Service
             
             CreateMap<CreateUserDto, User>();
             CreateMap<UserWriteDto, User>();
+            CreateMap<User, SearchUserDto>();
+            CreateMap<User, LockedUserDto>();
             CreateMap<User, UserReadDto>()
                 .ForMember(
                 x => x.DepartmentName,
@@ -28,7 +30,6 @@ namespace EDocument_Services.AutoMapper_Service
                 y => y.MapFrom(
                     z => z.Section.SectionName))
                 .ForMember(x => x.Roles, opt => opt.Ignore()).ReverseMap();
-
             CreateMap<Department, DepartmentReadDto>();
 
             CreateMap<Section, SectionReadDto>();

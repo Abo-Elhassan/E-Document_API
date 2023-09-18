@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Application Repositories\Role Repository\IRoleRepository.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EDocument_Data\EDocument_Data.csproj" />
     <ProjectReference Include="..\EDocument_EF\EDocument_EF.csproj" />
   </ItemGroup>
