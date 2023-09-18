@@ -214,6 +214,8 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start Add user from {nameof(UserController)} for {JsonSerializer.Serialize(createUserDto.UserName)} ");
 
             var newUser = _mapper.Map<User>(createUserDto);
+            newUser.LockoutEnabled = false;
+
             newUser.CreatedBy = User?.Identity?.Name;
 
             var createResult = await _userManager.CreateAsync(newUser, createUserDto.Password);
@@ -332,7 +334,7 @@ namespace EDocument_API.Controllers.V1
         public async Task<ActionResult> GetLockedUsers()
         {
             _logger.LogInformation($"Start GetLockedUsers from {nameof(UserController)}");
-            var lockedUsers = await _userManager.Users.Where(u => u.LockoutEnabled && u.LockoutEnd != null).ToListAsync();
+            var lockedUsers = await _userManager.Users.Where(u => u.LockoutEnabled).ToListAsync();
 
             var dispalyedLockedUsers = _mapper.Map<List<User>, List<LockedUserDto>>(lockedUsers);
 
@@ -361,6 +363,7 @@ namespace EDocument_API.Controllers.V1
             }
             await _userManager.ResetAccessFailedCountAsync(user);
             await _userManager.SetLockoutEndDateAsync(user, null);
+            await _userManager.SetLockoutEnabledAsync(user, false);
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"user: ({id}) has been unlocked successfully" });
         }

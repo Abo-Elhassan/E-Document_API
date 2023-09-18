@@ -73,9 +73,9 @@
         </member>
         <member name="M:EDocument_API.Controllers.V1.UserController.Search(System.String)">
              <summary>
-             Get All Filtered Users
+             Get All Filtered Users by Id/FullName
              </summary>
-             <param name="filterValue"></param>
+             <param name="searchValue"> user Id or full name</param>
              <remarks>
             
              </remarks>

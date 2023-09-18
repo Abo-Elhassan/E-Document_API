@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDocument_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230913184024_refactorRequestRole")]
-    partial class refactorRequestRole
+    [Migration("20230917110045_addSection")]
+    partial class addSection
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,7 +123,7 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<long>("RequestId")
+                    b.Property<long?>("RequestId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -308,11 +308,6 @@ namespace EDocument_EF.Migrations
                     b.Property<long>("DepartmentId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("IconName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("smalldatetime");
 
@@ -355,6 +350,13 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DelegatedReviewerId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("DelegatedUntil")
+                        .HasColumnType("smalldatetime");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("smalldatetime");
@@ -428,13 +430,15 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("DepartmentIcon")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DepartmentName")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("ManagerId")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -450,6 +454,145 @@ namespace EDocument_EF.Migrations
                     b.HasIndex("ManagerId");
 
                     b.ToTable("Department", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            DepartmentIcon = "Administration.svg",
+                            DepartmentName = "Administration",
+                            ManagerId = "50269"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            DepartmentName = "Freight Forwarding",
+                            ManagerId = "90010"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            DepartmentName = "Business Transformation",
+                            ManagerId = "51331"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            DepartmentIcon = "Commercial.svg",
+                            DepartmentName = "Commercial",
+                            ManagerId = "51573"
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            DepartmentIcon = "Communications.svg",
+                            DepartmentName = "Communications",
+                            ManagerId = "51668"
+                        },
+                        new
+                        {
+                            Id = 6L,
+                            DepartmentIcon = "Customer Service.svg",
+                            DepartmentName = "Customer Service",
+                            ManagerId = "51229"
+                        },
+                        new
+                        {
+                            Id = 7L,
+                            DepartmentName = "Executive Management",
+                            ManagerId = "Exp-16"
+                        },
+                        new
+                        {
+                            Id = 8L,
+                            DepartmentName = "Finance",
+                            ManagerId = "51124"
+                        },
+                        new
+                        {
+                            Id = 9L,
+                            DepartmentName = "Governmental Relation",
+                            ManagerId = "50962"
+                        },
+                        new
+                        {
+                            Id = 10L,
+                            DepartmentName = "HC - DUBUY Sales",
+                            ManagerId = "51573"
+                        },
+                        new
+                        {
+                            Id = 11L,
+                            DepartmentName = "HC - Samsung SDS project",
+                            ManagerId = "50140"
+                        },
+                        new
+                        {
+                            Id = 12L,
+                            DepartmentIcon = "IT.svg",
+                            DepartmentName = "IT",
+                            ManagerId = "51331"
+                        },
+                        new
+                        {
+                            Id = 13L,
+                            DepartmentIcon = "OPS-BGC.svg",
+                            DepartmentName = "OPS-Cargo & Bulk",
+                            ManagerId = "50354"
+                        },
+                        new
+                        {
+                            Id = 14L,
+                            DepartmentName = "OPS-Containers",
+                            ManagerId = "50141"
+                        },
+                        new
+                        {
+                            Id = 15L,
+                            DepartmentIcon = "People .svg",
+                            DepartmentName = "People",
+                            ManagerId = "50279"
+                        },
+                        new
+                        {
+                            Id = 16L,
+                            DepartmentIcon = "Procurement.svg",
+                            DepartmentName = "Procurement",
+                            ManagerId = "51188"
+                        },
+                        new
+                        {
+                            Id = 17L,
+                            DepartmentName = "Projects & Facility Management",
+                            ManagerId = "51659"
+                        },
+                        new
+                        {
+                            Id = 18L,
+                            DepartmentName = "QHSE",
+                            ManagerId = "50882"
+                        },
+                        new
+                        {
+                            Id = 19L,
+                            DepartmentIcon = "Security.svg",
+                            DepartmentName = "Security",
+                            ManagerId = "50263"
+                        },
+                        new
+                        {
+                            Id = 20L,
+                            DepartmentIcon = "Stores.svg",
+                            DepartmentName = "Store",
+                            ManagerId = "50000"
+                        },
+                        new
+                        {
+                            Id = 21L,
+                            DepartmentIcon = "Technical Engineering.svg",
+                            DepartmentName = "Technical",
+                            ManagerId = "50136"
+                        });
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.DomainAccountRequest", b =>
@@ -741,15 +884,105 @@ namespace EDocument_EF.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Role", "security");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "0",
+                            ConcurrencyStamp = "b4525d24-f87b-4d42-848e-45bf534abacc",
+                            Name = "SuperAdmin",
+                            NormalizedName = "SUPERADMIN"
+                        },
+                        new
+                        {
+                            Id = "1",
+                            ConcurrencyStamp = "e2af89cc-fafc-437f-aa13-c7127efc42d8",
+                            Name = "HR",
+                            NormalizedName = "HR"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            ConcurrencyStamp = "d9391d7b-a7f8-4250-a597-7b1199567c1a",
+                            Name = "Finance",
+                            NormalizedName = "FINANCE"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            ConcurrencyStamp = "360c8c1b-744d-426f-8bf8-4dfa1e9e1626",
+                            Name = "Procurement",
+                            NormalizedName = "PROCUREMENT"
+                        },
+                        new
+                        {
+                            Id = "4",
+                            ConcurrencyStamp = "e92b1586-b3fe-4e03-9158-afd73920b26f",
+                            Name = "IT",
+                            NormalizedName = "IT"
+                        },
+                        new
+                        {
+                            Id = "5",
+                            ConcurrencyStamp = "e3f32d07-79a4-4595-a935-cf34a29522fe",
+                            Name = "Security",
+                            NormalizedName = "SECURITY"
+                        },
+                        new
+                        {
+                            Id = "6",
+                            ConcurrencyStamp = "14f2345f-2647-47ec-b8ef-a939b8958a1b",
+                            Name = "Adminstration",
+                            NormalizedName = "ADMINSTRATION"
+                        },
+                        new
+                        {
+                            Id = "7",
+                            ConcurrencyStamp = "64bd9f3c-a896-43c3-a9b0-ed142779e3aa",
+                            Name = "Stores",
+                            NormalizedName = "STORES"
+                        },
+                        new
+                        {
+                            Id = "8",
+                            ConcurrencyStamp = "c3ddfe05-9a98-44ef-92e5-6e1451752287",
+                            Name = "CustomerService",
+                            NormalizedName = "CUSTOMERSERVICE"
+                        },
+                        new
+                        {
+                            Id = "9",
+                            ConcurrencyStamp = "73f4dad6-2ebb-4335-a647-d1719deefcae",
+                            Name = "OperationBGC",
+                            NormalizedName = "OPERATIONBGC"
+                        },
+                        new
+                        {
+                            Id = "10",
+                            ConcurrencyStamp = "b84bc2c2-9481-47d2-94ad-37f6abfda664",
+                            Name = "Engineering",
+                            NormalizedName = "ENGINEERING"
+                        },
+                        new
+                        {
+                            Id = "11",
+                            ConcurrencyStamp = "3a5a9962-8817-48ab-baf2-577d6e818741",
+                            Name = "Commercial",
+                            NormalizedName = "COMMERCIAL"
+                        },
+                        new
+                        {
+                            Id = "12",
+                            ConcurrencyStamp = "727237b9-e613-4825-ad3b-c5f2276066ae",
+                            Name = "InfoFort",
+                            NormalizedName = "INFOFORT"
+                        });
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Section", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("smalldatetime");
@@ -758,11 +991,10 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<long>("DepartmentId")
+                    b.Property<long?>("DepartmentId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("HeadId")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -781,9 +1013,193 @@ namespace EDocument_EF.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("HeadId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[HeadId] IS NOT NULL");
 
                     b.ToTable("Section", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            DepartmentId = 1L,
+                            SectionName = "Administration"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            DepartmentId = 2L,
+                            SectionName = "Freight Forwarding"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            DepartmentId = 3L,
+                            SectionName = "Business Transformation"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            DepartmentId = 4L,
+                            HeadId = "51509",
+                            SectionName = "Commercial / Containers"
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            DepartmentId = 4L,
+                            HeadId = "51583",
+                            SectionName = "Commercial Bulk / GC"
+                        },
+                        new
+                        {
+                            Id = 6L,
+                            DepartmentId = 5L,
+                            SectionName = "Communications"
+                        },
+                        new
+                        {
+                            Id = 7L,
+                            DepartmentId = 6L,
+                            SectionName = "Customer Service"
+                        },
+                        new
+                        {
+                            Id = 8L,
+                            DepartmentId = 7L,
+                            SectionName = "Executive Management"
+                        },
+                        new
+                        {
+                            Id = 9L,
+                            DepartmentId = 8L,
+                            SectionName = "Finance"
+                        },
+                        new
+                        {
+                            Id = 10L,
+                            DepartmentId = 9L,
+                            SectionName = "Governmental Relation"
+                        },
+                        new
+                        {
+                            Id = 11L,
+                            DepartmentId = 10L,
+                            HeadId = "90015",
+                            SectionName = "Samsung SDS project"
+                        },
+                        new
+                        {
+                            Id = 12L,
+                            DepartmentId = 11L,
+                            HeadId = "90008",
+                            SectionName = "DUBUY- Sales"
+                        },
+                        new
+                        {
+                            Id = 13L,
+                            DepartmentId = 12L,
+                            SectionName = "IT"
+                        },
+                        new
+                        {
+                            Id = 14L,
+                            DepartmentId = 13L,
+                            HeadId = "51449",
+                            SectionName = "OPS-Cargo & Bulk"
+                        },
+                        new
+                        {
+                            Id = 15L,
+                            DepartmentId = 13L,
+                            HeadId = "50844",
+                            SectionName = "OPS- DRI"
+                        },
+                        new
+                        {
+                            Id = 16L,
+                            DepartmentId = 15L,
+                            HeadId = "50670",
+                            SectionName = "OPS-Containers"
+                        },
+                        new
+                        {
+                            Id = 17L,
+                            DepartmentId = 14L,
+                            HeadId = "50128",
+                            SectionName = "OPS-CFS"
+                        },
+                        new
+                        {
+                            Id = 18L,
+                            DepartmentId = 15L,
+                            SectionName = "People"
+                        },
+                        new
+                        {
+                            Id = 19L,
+                            DepartmentId = 16L,
+                            SectionName = "Procurement"
+                        },
+                        new
+                        {
+                            Id = 20L,
+                            DepartmentId = 17L,
+                            SectionName = "Projects"
+                        },
+                        new
+                        {
+                            Id = 21L,
+                            DepartmentId = 18L,
+                            HeadId = "51520",
+                            SectionName = "Safety"
+                        },
+                        new
+                        {
+                            Id = 22L,
+                            DepartmentId = 18L,
+                            SectionName = "Clinic"
+                        },
+                        new
+                        {
+                            Id = 23L,
+                            DepartmentId = 19L,
+                            SectionName = "Security"
+                        },
+                        new
+                        {
+                            Id = 24L,
+                            DepartmentId = 20L,
+                            SectionName = "Store"
+                        },
+                        new
+                        {
+                            Id = 25L,
+                            DepartmentId = 21L,
+                            HeadId = "51090",
+                            SectionName = "TEC-Crane"
+                        },
+                        new
+                        {
+                            Id = 26L,
+                            DepartmentId = 21L,
+                            HeadId = "51529",
+                            SectionName = "Projects"
+                        },
+                        new
+                        {
+                            Id = 27L,
+                            DepartmentId = 21L,
+                            HeadId = "50562",
+                            SectionName = "TEC-Planning"
+                        },
+                        new
+                        {
+                            Id = 28L,
+                            DepartmentId = 21L,
+                            HeadId = "51126",
+                            SectionName = "TEC-Workshop"
+                        });
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.TravelDeskRequest", b =>
@@ -934,6 +1350,9 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsEmployee")
                         .HasColumnType("bit");
 
@@ -970,6 +1389,7 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -1010,6 +1430,722 @@ namespace EDocument_EF.Migrations
                     b.HasIndex("SectionId");
 
                     b.ToTable("User", "security");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "50269",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "f3983488-7db3-4a80-82fe-31d219addbd8",
+                            Email = "admin_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN_MANGER@DPWORLD.COM",
+                            NormalizedUserName = "ADMIN_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Administration",
+                            SecurityStamp = "adad3f15-16ac-443a-a558-20cae69db074",
+                            TwoFactorEnabled = false,
+                            UserName = "admin_manager"
+                        },
+                        new
+                        {
+                            Id = "90010",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "e5eaaec1-c540-4885-9322-bf3b8c3443cb",
+                            Email = "freightforwarding_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Hanaa Mohamed",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "FREIGHTFORWARDING_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "FF_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Freight Forwarding",
+                            SecurityStamp = "544b0d01-01c7-4934-848f-a78cbf4b1fd3",
+                            TwoFactorEnabled = false,
+                            UserName = "ff_manager"
+                        },
+                        new
+                        {
+                            Id = "51330",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "7181c85d-4a2a-4566-98b3-820b9795df8a",
+                            Email = "businesstransformation_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Alaa Nasr",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "BUSINESSTRANSFORMATION_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "BT_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Business Transformation",
+                            SecurityStamp = "0b07768a-4642-4cc3-b54a-199d5f707b9a",
+                            TwoFactorEnabled = false,
+                            UserName = "bt_manager"
+                        },
+                        new
+                        {
+                            Id = "51573",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "aea1f28c-6d56-413a-b1f9-65a591bf45fe",
+                            Email = "commercial_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Aliaa Elgammal",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "COMMERCIAL_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "COMMERCIAL_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Commercial",
+                            SecurityStamp = "4f120746-0130-44b9-b9ec-2d176f2761ae",
+                            TwoFactorEnabled = false,
+                            UserName = "commercial_manager"
+                        },
+                        new
+                        {
+                            Id = "51668",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "a287ef41-4ce3-447d-bb68-62425877619f",
+                            Email = "communications_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Amina Hatem",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "COMMUNICATIONS_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "COMMUNICATIONS_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Communications",
+                            SecurityStamp = "ad3a28b8-2b46-4f26-87ca-7b6a9ebf3707",
+                            TwoFactorEnabled = false,
+                            UserName = "communications_manager"
+                        },
+                        new
+                        {
+                            Id = "51229",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "16174d63-fcdf-4989-a9ba-54754a7d6858",
+                            Email = "customerservice_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Hassan Nagah",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "CUSTOMERSERVICE_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "CS_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Customer Service",
+                            SecurityStamp = "8abb6017-f0ed-4639-bee8-66765787fa91",
+                            TwoFactorEnabled = false,
+                            UserName = "cs_manager"
+                        },
+                        new
+                        {
+                            Id = "Exp-16",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "fd3dc03b-1b8f-448c-8c11-e8d8cab9ac4f",
+                            Email = "executivemanagement_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Urs Moll",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "EXECUTIVEMANAGEMENT_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "EM_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Executive Management",
+                            SecurityStamp = "f870add3-4b49-48cd-a9d9-453e67e337e7",
+                            TwoFactorEnabled = false,
+                            UserName = "em_manager"
+                        },
+                        new
+                        {
+                            Id = "51124",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "08581069-a419-4b67-8139-9f2bc47a1430",
+                            Email = "finance_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Mustafa Sultan",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "FINANCE_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "FINANCE_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Finance",
+                            SecurityStamp = "c3cdc786-c198-409c-9589-e581f2e50936",
+                            TwoFactorEnabled = false,
+                            UserName = "finance_manager"
+                        },
+                        new
+                        {
+                            Id = "50962",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "c5bbaee6-6674-4a4f-9aba-a0d61f73c58c",
+                            Email = "governmentalrelation_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Mohamed Tarek",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "GOVERNMENTALRELATION_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "GR_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Governmental Relation",
+                            SecurityStamp = "9bb6cf5f-81e7-4399-b173-864d718548f8",
+                            TwoFactorEnabled = false,
+                            UserName = "gr_manager"
+                        },
+                        new
+                        {
+                            Id = "51572",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "f4ee388c-1e41-473d-8291-9584fbc9b3d1",
+                            Email = "hc-ds_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Aliaa Elgammal",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "HC-DS_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "HC-DS_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of HC - DUBUY Sales",
+                            SecurityStamp = "604d1cc3-ecfb-4cbd-b2d5-4e9050f24426",
+                            TwoFactorEnabled = false,
+                            UserName = "hc-ds_manager"
+                        },
+                        new
+                        {
+                            Id = "50140",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "1d8f4458-ce2d-4909-8408-90a1aac5710e",
+                            Email = "hc-ssp_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Maged Mohsen",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "HC-SSP_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "HC-SSP_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of HC - Samsung SDS project",
+                            SecurityStamp = "29874614-52cf-48c3-97a9-8b381d9a08bc",
+                            TwoFactorEnabled = false,
+                            UserName = "hc-ssp_manager"
+                        },
+                        new
+                        {
+                            Id = "51331",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "825bddc7-3fdb-409a-883b-e64f1c73c50c",
+                            Email = "it_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Alaa Nasr",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "IT_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "IT_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of IT",
+                            SecurityStamp = "cb25ed1c-f498-42a5-b2c4-30dd418a9f16",
+                            TwoFactorEnabled = false,
+                            UserName = "it_manager"
+                        },
+                        new
+                        {
+                            Id = "50354",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "01b94a3c-ba0f-4c33-80df-5c24ddebc666",
+                            Email = "ops-bgc_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Mohamed Radwan",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "OPS-BGC_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "OPS-BGC_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of OPS-Cargo & Bulk",
+                            SecurityStamp = "5f2e20a4-177c-4320-88da-1315da2506f9",
+                            TwoFactorEnabled = false,
+                            UserName = "ops-bgc_manager"
+                        },
+                        new
+                        {
+                            Id = "50141",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "4ba2559a-cd52-4288-8ff8-a50f018484a7",
+                            Email = "ops-ct_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Maged Mohsen",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "OPS-CT_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "OPS-CT_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of OPS-Containers",
+                            SecurityStamp = "674257b8-dd44-4207-97b4-90d573473f0a",
+                            TwoFactorEnabled = false,
+                            UserName = "ops-ct_manager"
+                        },
+                        new
+                        {
+                            Id = "50279",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "25695195-ecc9-46dc-8d8b-c3db4dc3f7fc",
+                            Email = "people_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Waleed Aboelgadayl",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "PEOPLE_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "PEOPLE_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of People",
+                            SecurityStamp = "f2a53f2a-e15f-4a13-b07b-ba489550476a",
+                            TwoFactorEnabled = false,
+                            UserName = "people_manager"
+                        },
+                        new
+                        {
+                            Id = "51188",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "7719bd8e-1046-4b16-9381-c0cd0cabc418",
+                            Email = "procurement_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Tamer Elsayed",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "PROCUREMENT_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "PROCURMENT_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Procurment",
+                            SecurityStamp = "6c3caad8-f270-4966-89e3-5eba712d5f51",
+                            TwoFactorEnabled = false,
+                            UserName = "procurment_manager"
+                        },
+                        new
+                        {
+                            Id = "51659",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "9ad7dc40-3cf1-4947-b954-c689eb052ce0",
+                            Email = "projectsfacilitymanager_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Mohamed Mandour",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "PROJECTSFACILITYMANAGER_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "PROJECTS_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Projects & Facility Management",
+                            SecurityStamp = "377eecd5-149b-42a9-9841-0c33ccd4a021",
+                            TwoFactorEnabled = false,
+                            UserName = "projects_manager"
+                        },
+                        new
+                        {
+                            Id = "50882",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "1e651060-314f-42d5-80d7-09fe061c9072",
+                            Email = "qhse_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Hassan Abdelghany",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "QHSE_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "QHSE_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of QHSE",
+                            SecurityStamp = "84765c36-0ef4-44c9-9229-edb1ff3c292e",
+                            TwoFactorEnabled = false,
+                            UserName = "qhse_manager"
+                        },
+                        new
+                        {
+                            Id = "50263",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "f61563b8-058f-4d41-8d0e-4fde043dc4a9",
+                            Email = "security_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "SECURITY_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "SECURITY_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Security",
+                            SecurityStamp = "ffab755f-8b58-4255-bd97-5aa5fd066fd2",
+                            TwoFactorEnabled = false,
+                            UserName = "security_manager"
+                        },
+                        new
+                        {
+                            Id = "50000",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "deb15826-6c52-4a57-a336-034c9bf2a5aa",
+                            Email = "stores_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "STORES_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "STORES_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Stores",
+                            SecurityStamp = "d5dbdb19-18fd-42c1-b00f-6fe2f9ca2166",
+                            TwoFactorEnabled = false,
+                            UserName = "stores_manager"
+                        },
+                        new
+                        {
+                            Id = "50136",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "999c351e-2a82-409c-beec-1863c77e953a",
+                            Email = "engineering_manager@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ENGINEERING_MANAGER@DPWORLD.COM",
+                            NormalizedUserName = "ENGINEERING_MANAGER",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Head of Engineering",
+                            SecurityStamp = "81da0fe2-ae3f-422b-86ff-e854cfc70450",
+                            TwoFactorEnabled = false,
+                            UserName = "engineering_manager"
+                        },
+                        new
+                        {
+                            Id = "51509",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "7eeb6fe7-5c40-46a2-a915-294514b1e862",
+                            Email = "commercial-ct_sec_head@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ECOMMERCIAL-CT_SEC_HEAD@DPWORLD.COM",
+                            NormalizedUserName = "COMMERCIAL-CT_SEC_HEAD",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Commercial / Containers Section Head",
+                            SecurityStamp = "c0faafcd-895d-4288-bdc6-3d91667cbc08",
+                            TwoFactorEnabled = false,
+                            UserName = "commercial-ct_sec_head"
+                        },
+                        new
+                        {
+                            Id = "51583",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "0fdb864f-49f3-471e-9fec-5fc3f7a4fdbb",
+                            Email = "commercial-bgc_sec_head@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ECOMMERCIAL-BGC_SEC_HEAD@DPWORLD.COM",
+                            NormalizedUserName = "COMMERCIAL-BGC_SEC_HEAD",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "CommercialBulk / GC Section Head",
+                            SecurityStamp = "c664e1b0-8354-442d-a7d1-6a5cbb1f715a",
+                            TwoFactorEnabled = false,
+                            UserName = "commercial-bgc_sec_head"
+                        },
+                        new
+                        {
+                            Id = "90015",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "0ef6f472-f336-4fe9-ba67-adaded6622d9",
+                            Email = "hc-ssp_sec_head@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "HC-SSP_SEC_HEAD@DPWORLD.COM",
+                            NormalizedUserName = "HC-SSP_SEC_HEAD",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "HC - Samsung SDS project  Section Head",
+                            SecurityStamp = "eec4ba4a-d5e6-4edc-b21f-6187a55d29a2",
+                            TwoFactorEnabled = false,
+                            UserName = "hc-ssp_sec_head"
+                        },
+                        new
+                        {
+                            Id = "90008",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "c19f29eb-85b5-4d5a-b2b5-e49175bb01b5",
+                            Email = "hc-ds_sec_head@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "HC-DS_SEC_HEAD@DPWORLD.COM",
+                            NormalizedUserName = "HC-DS_SEC_HEAD",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "HC - DUBUY Sales Section Head",
+                            SecurityStamp = "053e0eb9-46b5-44c4-8225-2ed10d207e30",
+                            TwoFactorEnabled = false,
+                            UserName = "hc-ds_sec_head"
+                        },
+                        new
+                        {
+                            Id = "51520",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "6184b327-e0c8-45cc-aee4-47a54df30452",
+                            Email = "qhse_sec_head@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "QHSE_SEC_HEAD@DPWORLD.COM",
+                            NormalizedUserName = "QHSE_SEC_HEAD",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "QHSE Section HEad",
+                            SecurityStamp = "2e881afe-da06-4068-9437-673542713601",
+                            TwoFactorEnabled = false,
+                            UserName = "qhse_sec_head"
+                        },
+                        new
+                        {
+                            Id = "51449",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "6c41d9df-0f89-4fb9-ae74-1aa7a403b9f1",
+                            Email = "ops-cg_sec_head@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "OPS-CG_SEC_HEAD@DPWORLD.COM",
+                            NormalizedUserName = "OPS-CG_SEC_HEAD",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "OPS-Cargo & Bulk Section Head",
+                            SecurityStamp = "e75606c9-4025-4367-8db2-c92208d12bdc",
+                            TwoFactorEnabled = false,
+                            UserName = "ops-cg_sec_head"
+                        },
+                        new
+                        {
+                            Id = "50844",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "10a3066d-7809-407a-95c7-b04a35dfb27f",
+                            Email = "ops-dri_sec_head@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "OPS-DRI_SEC_HEAD@DPWORLD.COM",
+                            NormalizedUserName = "OPS-DRI_SEC_HEAD",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "OPS-DRI Section Head",
+                            SecurityStamp = "e4d83a8a-8cda-43b8-839a-5ceb23f6ca5f",
+                            TwoFactorEnabled = false,
+                            UserName = "ops-dri_sec_head"
+                        },
+                        new
+                        {
+                            Id = "50670",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "57b7c284-0686-419f-ac23-9e744f54a3cc",
+                            Email = "ops-ct_sec_head@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "OPS-DRI_SEC_HEAD@DPWORLD.COM",
+                            NormalizedUserName = "OPS-CT_SEC_HEAD",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "OPS-Containers Section Head",
+                            SecurityStamp = "b57d2680-fb8e-4ead-aab7-62f9b17f784e",
+                            TwoFactorEnabled = false,
+                            UserName = "ops-ct_sec_head"
+                        },
+                        new
+                        {
+                            Id = "50128",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "285f733e-574e-4311-b879-a98499e22b73",
+                            Email = "ops-cfs_sec_head@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "OPS-CFS_SEC_HEAD@DPWORLD.COM",
+                            NormalizedUserName = "OPS-CFS_SEC_HEAD",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "OPS-CFS Section Head",
+                            SecurityStamp = "8c2b1521-3c66-4c63-bd59-be74b30bc181",
+                            TwoFactorEnabled = false,
+                            UserName = "ops-cfs_sec_head"
+                        },
+                        new
+                        {
+                            Id = "51126",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "77c396a8-69af-4fed-94a4-1c6dd01f3027",
+                            Email = "tec-workshop_sec_head@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "TEC-WORKSHOP_SEC_HEAD@DPWORLD.COM",
+                            NormalizedUserName = "TEC-WORKSHOP_SEC_HEAD",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "TEC-Workshop Section Head",
+                            SecurityStamp = "1db62b92-edaa-4f47-8c83-12008a452b11",
+                            TwoFactorEnabled = false,
+                            UserName = "tec-workshop_sec_head"
+                        },
+                        new
+                        {
+                            Id = "51090",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "fcc1b836-0db2-4315-bb64-43a00ebad8c4",
+                            Email = "tec-crane_sec_head@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "TEC-CRANE_SEC_HEAD@DPWORLD.COM",
+                            NormalizedUserName = "TEC-CRANE_SEC_HEAD",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "TEC-Crane Section Head",
+                            SecurityStamp = "bddd4b22-1b7a-448c-b1c2-d4b1d5dbf9ab",
+                            TwoFactorEnabled = false,
+                            UserName = "tec-crane_sec_head"
+                        },
+                        new
+                        {
+                            Id = "50562",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "73d4acbf-13c6-48e6-addc-2fef827bb87c",
+                            Email = "tec-planning_sec_head@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "TEC-PLANNING_SEC_HEAD@DPWORLD.COM",
+                            NormalizedUserName = "TEC-PLANNING_SEC_HEAD",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "TEC-Planning Section Head",
+                            SecurityStamp = "72f39435-5584-4e63-92dd-0844d13866b8",
+                            TwoFactorEnabled = false,
+                            UserName = "tec-planning_sec_head"
+                        },
+                        new
+                        {
+                            Id = "51529",
+                            AccessFailedCount = 0,
+                            Company = "DP World",
+                            ConcurrencyStamp = "b0990aa9-9408-4bb4-9af7-48bef751ea93",
+                            Email = "projects_sec_head@dpworld.com",
+                            EmailConfirmed = false,
+                            FullName = "Ahmed Zaki",
+                            IsActive = true,
+                            IsEmployee = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "PROJECTS_SEC_HEAD@DPWORLD.COM",
+                            NormalizedUserName = "PROJECTS_SEC_HEAD",
+                            PhoneNumber = "01002234498",
+                            PhoneNumberConfirmed = false,
+                            Position = "Projects Section Head",
+                            SecurityStamp = "65be7f5f-3f73-4b77-9c69-24cabf3e4d0d",
+                            TwoFactorEnabled = false,
+                            UserName = "projects_sec_head"
+                        });
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.VoucherRequest", b =>
@@ -1204,7 +2340,6 @@ namespace EDocument_EF.Migrations
                         .WithMany("Attachments")
                         .HasForeignKey("RequestId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
                         .HasConstraintName("FK_Attachment_Request");
 
                     b.Navigation("Request");
@@ -1306,7 +2441,6 @@ namespace EDocument_EF.Migrations
                         .WithMany("ManagedDepartments")
                         .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
                         .HasConstraintName("FK_Department_User");
 
                     b.Navigation("Manager");
@@ -1414,14 +2548,12 @@ namespace EDocument_EF.Migrations
                         .WithMany("Sections")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
                         .HasConstraintName("FK_Section_Department");
 
                     b.HasOne("EDocument_Data.Models.User", "Head")
                         .WithOne("MangedSection")
                         .HasForeignKey("EDocument_Data.Models.Section", "HeadId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
                         .HasConstraintName("FK_Section_User");
 
                     b.Navigation("Department");

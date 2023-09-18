@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace EDocument_EF.Migrations
 {
     /// <inheritdoc />
@@ -93,7 +95,7 @@ namespace EDocument_EF.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RequestId = table.Column<long>(type: "bigint", nullable: false),
+                    RequestId = table.Column<long>(type: "bigint", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -182,7 +184,6 @@ namespace EDocument_EF.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RequestName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     RouteName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    IconName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ReviewersNumber = table.Column<int>(type: "int", nullable: false),
                     DepartmentId = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
@@ -199,8 +200,13 @@ namespace EDocument_EF.Migrations
                 name: "DefinedRequestRole",
                 columns: table => new
                 {
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DefinedRequestId = table.Column<long>(type: "bigint", nullable: false)
+                    RoleId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    DefinedRequestId = table.Column<long>(type: "bigint", nullable: false),
+                    Permission = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -226,9 +232,11 @@ namespace EDocument_EF.Migrations
                 {
                     DefinedRequestId = table.Column<long>(type: "bigint", nullable: false),
                     ReviewerId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    DelegatedReviewerId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     StageName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     StageNumber = table.Column<int>(type: "int", nullable: false),
                     ReviewerType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    DelegatedUntil = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -251,7 +259,8 @@ namespace EDocument_EF.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false),
                     DepartmentName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ManagerId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    DepartmentIcon = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ManagerId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -474,11 +483,10 @@ namespace EDocument_EF.Migrations
                 name: "Section",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     SectionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DepartmentId = table.Column<long>(type: "bigint", nullable: false),
-                    HeadId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    DepartmentId = table.Column<long>(type: "bigint", nullable: true),
+                    HeadId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -503,23 +511,28 @@ namespace EDocument_EF.Migrations
                     Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Position = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     DepartmentId = table.Column<long>(type: "bigint", nullable: true),
                     SectionId = table.Column<long>(type: "bigint", nullable: true),
                     ManagerId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Company = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    IsEmployee = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     LastLogin = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "smalldatetime", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false)
@@ -640,6 +653,27 @@ namespace EDocument_EF.Migrations
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                schema: "security",
+                table: "Role",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "0", "2747bff9-8ace-4b90-9169-e9659d36c0e0", "SuperAdmin", "SUPERADMIN" },
+                    { "1", "1fdbe97b-3681-4002-9515-c0b82c8ec6fa", "HR", "HR" },
+                    { "10", "0bf3009c-fb47-4d25-bf3a-61270eb0cfcb", "Engineering", "ENGINEERING" },
+                    { "11", "728ac55a-b327-41d9-8d2b-c62112610709", "Commercial", "COMMERCIAL" },
+                    { "12", "f7367b0a-3f78-4c75-8d31-cfabf3b8743a", "InfoFort", "INFOFORT" },
+                    { "2", "2d344664-722d-4b1a-b7b2-a2eedc34e389", "Finance", "FINANCE" },
+                    { "3", "9d380fcf-d1ca-4801-b4d5-7b06721a7f7f", "Procurement", "PROCUREMENT" },
+                    { "4", "d308ad56-5be3-45ca-a62d-b404dda6f6d6", "IT", "IT" },
+                    { "5", "6257aae6-008b-4bda-bbb1-572e5a5e4d19", "Security", "SECURITY" },
+                    { "6", "cd768ae5-f37e-4d87-a19c-f934761b847f", "Adminstration", "ADMINSTRATION" },
+                    { "7", "a10dbe86-b2ff-467b-bac4-bff48555d893", "Stores", "STORES" },
+                    { "8", "1d30553f-2d44-4789-889e-444c62484b9d", "CustomerService", "CUSTOMERSERVICE" },
+                    { "9", "b6d6d252-6e57-4917-838f-66aa0ee07277", "OperationBGC", "OPERATIONBGC" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -770,7 +804,8 @@ namespace EDocument_EF.Migrations
                 name: "IX_Section_HeadId",
                 table: "Section",
                 column: "HeadId",
-                unique: true);
+                unique: true,
+                filter: "[HeadId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TravelDeskRequest_RequestId",
