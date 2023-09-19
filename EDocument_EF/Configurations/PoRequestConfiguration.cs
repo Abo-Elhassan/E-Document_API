@@ -13,13 +13,11 @@ namespace EDocument_EF.Configurations
         {
             entity.ToTable(nameof(PoRequest));
 
-            entity.HasKey(e => new { e.RequestId, e.PoNumber });
-
-            entity.HasIndex(p => p.PoNumber);
-            entity.HasIndex(p => p.PoDescription);
+            entity.HasKey(p=>p.PoNumber).IsClustered(false);
+            entity.HasIndex(p => p.RequestId).IsClustered();
             entity.HasIndex(p => p.VendorName);
-            entity.HasIndex(p => p.VendorNumber);
             entity.HasIndex(p => p.InvoiceNumber);
+
 
 
             entity.Property(e => e.PoDescription)

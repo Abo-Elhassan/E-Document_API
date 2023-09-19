@@ -4677,7 +4677,8 @@
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
           "EDocument_Data": "1.0.0",
-          "EDocument_EF": "1.0.0"
+          "EDocument_EF": "1.0.0",
+          "EDocument_Services": "1.0.0"
         },
         "compile": {
           "bin/placeholder/EDocument_Repositories.dll": {}

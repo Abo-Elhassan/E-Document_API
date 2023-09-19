@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Mime;
+using EDocument_Services.Helpers;
 
 namespace EDocument_API.Controllers.V1
 {
@@ -56,32 +57,32 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start GetPoRequestsFiltered from {nameof(UserController)}");
             var includes = new string[] { nameof(Models.Request), "Request.RequestReviewers" };
 
-           if(filterDto != null && filterDto.Filters != null)
-                filterDto.Filters =Utilities.ConvertKeysToPascalCase(filterDto?.Filters);
 
 
-            var paginatedData = await _unitOfWork.Repository<PoRequest>().FindAllAsync(
+            var result = await _unitOfWork.Repository<PoRequest>().FindAllAsync(
                 filters: filterDto?.Filters,
+                creatorId: filterDto?.CreatorId,
                 includes: includes,
-                skip: (filterDto?.PageNo ?? 1) - 1,
+                skip: ((filterDto?.PageNo ?? 1) - 1)* filterDto?.PageSize??10,
                 take: filterDto?.PageSize ?? 10,
                 orderBy: filterDto?.orderBy,
-                orderByDirection: filterDto?.orderByDirection
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
                 );
 
 
-            var totalCount = await _unitOfWork.Repository<PoRequest>().CountAsync();
+            var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
             
 
-            var requests = _mapper.Map<List<PoRequestReadDto>>(paginatedData);
+            var requests = _mapper.Map<List<PoRequestReadDto>>(result.PaginatedData);
 
             var response = new FilterReadDto<PoRequestReadDto>
             {
                 TotalCount = totalCount,
                 TotalPages = totalPages,
                 CurrentPage = filterDto?.PageNo ?? 1,
-                PageSize = filterDto?.PageSize ?? 10,
+                PageSize = requests.Count,
                 PaginatedData = requests
             };
             return Ok(new ApiResponse<FilterReadDto<PoRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
@@ -106,28 +107,30 @@ namespace EDocument_API.Controllers.V1
             DynamicfilterDto.PageNo = DynamicfilterDto?.PageNo ?? 1;
             DynamicfilterDto!.PageSize = DynamicfilterDto?.PageSize ?? 10;
 
-            var paginatedData = await _unitOfWork.Repository<PoRequest>().FindAllAsync(
+            var result = await _unitOfWork.Repository<PoRequest>().FindAllAsync(
                 filterValue: DynamicfilterDto!.FilterValue,
+                creatorId: DynamicfilterDto?.CreatorId,
                 includes: includes,
-                skip: DynamicfilterDto.PageNo - 1,
-                take: DynamicfilterDto.PageSize,
+                skip: ((DynamicfilterDto?.PageNo ?? 1) - 1) * DynamicfilterDto?.PageSize ?? 10,
+                take: DynamicfilterDto?.PageSize,
                 orderBy: DynamicfilterDto?.orderBy,
-                orderByDirection: DynamicfilterDto?.orderByDirection
+                orderByDirection: DynamicfilterDto?.orderByDirection,
+                dateFilters: DynamicfilterDto?.dateFilters
                 );
 
 
-            var totalCount = await _unitOfWork.Repository<PoRequest>().CountAsync();
+            var totalCount = result.TotalCount;
             var  totalPages = (int)Math.Ceiling((decimal)totalCount / (int)DynamicfilterDto!.PageSize);
            
 
-            var requests = _mapper.Map<List<PoRequestReadDto>>(paginatedData);
+            var requests = _mapper.Map<List<PoRequestReadDto>>(result.PaginatedData);
 
             var response = new FilterReadDto<PoRequestReadDto>
             {
                 TotalCount = totalCount,
                 TotalPages = totalPages,
                 CurrentPage = DynamicfilterDto.PageNo,
-                PageSize = DynamicfilterDto.PageSize ,
+                PageSize = requests.Count,
                 PaginatedData = requests
             };
             return Ok(new ApiResponse<FilterReadDto<PoRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });

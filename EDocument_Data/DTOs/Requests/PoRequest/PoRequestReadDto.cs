@@ -21,7 +21,7 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
         public string? PoNumber { get; init; }
         public string? PoDescription { get; init; }
         public string? VendorName { get; init; }
-        public string? VendorNumber { get; init; }
+        public int VendorNumber { get; init; }
         public string? InvoiceNumber { get; init; }
         public string? PoAttachmentPath { get; init; }
         public string? InvoiceAttachmentPath { get; init; }

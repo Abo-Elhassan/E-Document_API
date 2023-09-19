@@ -15,11 +15,13 @@ namespace EDocument_Data.Consts.Enums
         IT,
         Security,
         Adminstration,
-        Stores,
+        Store,
         CustomerService,
+        OperationCT,
         OperationBGC,
         Engineering,
         Commercial,
+        Communications,
         InfoFort
 
 

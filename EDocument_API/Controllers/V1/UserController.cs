@@ -6,10 +6,12 @@ using EDocument_Data.DTOs.User;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_Services.Auth_Service;
+using EDocument_Services.Helpers;
 using EDocument_UnitOfWork;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Printing;
 using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
@@ -58,25 +60,21 @@ namespace EDocument_API.Controllers.V1
         {
             _logger.LogInformation($"Start GetFiltered from {nameof(UserController)}");
             var includes = new string[] { nameof(Department), nameof(Section) };
-
-
-            if (filterDto != null && filterDto.Filters != null)
-                filterDto.Filters = Utilities.ConvertKeysToPascalCase(filterDto?.Filters);
-
-            var paginatedData = await _unitOfWork.Repository<User>().FindAllAsync(
+            var result = await _unitOfWork.Repository<User>().FindAllAsync(
                 filters: filterDto?.Filters,
+                creatorId: filterDto?.CreatorId,
                 includes: includes,
-                skip: filterDto?.PageNo - 1,
+                skip: (filterDto?.PageNo - 1)* filterDto?.PageNo,
                 take: filterDto?.PageSize,
                 orderBy: filterDto?.orderBy,
-                orderByDirection: filterDto?.orderByDirection
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
                 );
 
-
-            var totalCount = await _unitOfWork.Repository<User>().CountAsync();
+            var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
 
-            var users = _mapper.Map<List<UserReadDto>>(paginatedData);
+            var users = _mapper.Map<List<UserReadDto>>(result.PaginatedData);
             var roles = await _roleManager.Roles.ToListAsync();
 
             foreach (var user in users)
@@ -95,7 +93,7 @@ namespace EDocument_API.Controllers.V1
                 TotalCount = totalCount,
                 TotalPages = totalPages,
                 CurrentPage = filterDto?.PageNo ?? 1,
-                PageSize = filterDto?.PageSize ?? 10,
+                PageSize = users.Count,
                 PaginatedData = users
             };
             return Ok(new ApiResponse<FilterReadDto<UserReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
@@ -122,20 +120,22 @@ namespace EDocument_API.Controllers.V1
             DynamicfilterDto.PageNo = DynamicfilterDto?.PageNo ?? 1;
             DynamicfilterDto!.PageSize = DynamicfilterDto?.PageSize ?? 10;
 
-            var paginatedData = await _unitOfWork.Repository<User>().FindAllAsync(
+            var result = await _unitOfWork.Repository<User>().FindAllAsync(
                 filterValue: DynamicfilterDto!.FilterValue,
+                creatorId: DynamicfilterDto?.CreatorId,
                 includes: includes,
-                skip: DynamicfilterDto?.PageNo - 1,
+                skip: (DynamicfilterDto?.PageNo - 1)* DynamicfilterDto?.PageNo,
                 take: DynamicfilterDto?.PageSize,
                 orderBy: DynamicfilterDto?.orderBy,
-                orderByDirection: DynamicfilterDto?.orderByDirection
+                orderByDirection: DynamicfilterDto?.orderByDirection,
+                dateFilters: DynamicfilterDto?.dateFilters
                 );
 
 
-            var totalCount = await _unitOfWork.Repository<User>().CountAsync();
+            var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (int)DynamicfilterDto!.PageSize);
 
-            var users = _mapper.Map<List<UserReadDto>>(paginatedData);
+            var users = _mapper.Map<List<UserReadDto>>(result.PaginatedData);
             var roles = await _roleManager.Roles.ToListAsync();
 
             foreach (var user in users)
@@ -154,7 +154,7 @@ namespace EDocument_API.Controllers.V1
                 TotalCount = totalCount,
                 TotalPages = totalPages,
                 CurrentPage = DynamicfilterDto.PageNo,
-                PageSize = DynamicfilterDto.PageSize,
+                PageSize = users.Count,
                 PaginatedData = users
             };
             return Ok(new ApiResponse<FilterReadDto<UserReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });

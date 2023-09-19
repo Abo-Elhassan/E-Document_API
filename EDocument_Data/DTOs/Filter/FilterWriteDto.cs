@@ -12,6 +12,9 @@ namespace EDocument_Data.DTOs.Filter
 
     public class FilterDto
     {
+        [StringLength(maximumLength: 50)]
+        public string? CreatorId { get; set; }
+
         [Range(1, int.MaxValue, ErrorMessage = "PageNo must be greater than 0.")]
         public int? PageNo { get; set; } = 1;
 
