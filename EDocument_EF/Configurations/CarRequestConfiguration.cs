@@ -77,8 +77,8 @@ namespace EDocument_EF.Configurations
 
 
 
-            entity.HasOne(d => d.Request).WithMany(p => p.CarRequests)
-            .HasForeignKey(d => d.RequestId)
+            entity.HasOne(d => d.Request).WithOne(p => p.CarRequest)
+            .HasForeignKey<CarRequest>(d => d.RequestId)
             .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_CarRequest_Request");
 

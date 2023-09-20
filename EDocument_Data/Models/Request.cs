@@ -32,11 +32,11 @@ public partial class Request : BaseEntity
 
     public virtual ICollection<RequestApplicationRole> RequestApplicationRoles { get; set; } = new HashSet<RequestApplicationRole>();
     public virtual ICollection<RequestReviewer> RequestReviewers { get; set; } = new HashSet<RequestReviewer>();
-    public virtual ICollection<CarRequest> CarRequests { get; set; } = new HashSet<CarRequest>();
-    public virtual ICollection<TravelDeskRequest> TravelDeskRequests { get; set; } = new HashSet<TravelDeskRequest>();
-    public virtual ICollection<ApplicationUserRequest> ApplicationUserRequests { get; set; } = new HashSet<ApplicationUserRequest>();
-    public virtual ICollection<DomainAccountRequest> DomainAccountRequests { get; set; } = new HashSet<DomainAccountRequest>();
-    public virtual ICollection<VoucherRequest> VoucherRequests { get; set; } = new HashSet<VoucherRequest>();
+    public virtual CarRequest CarRequest { get; set; } 
+    public virtual TravelDeskRequest TravelDeskRequest { get; set; } 
+    public virtual ApplicationUserRequest ApplicationUserRequest { get; set; } 
+    public virtual DomainAccountRequest DomainAccountRequest { get; set; }
+    public virtual VoucherRequest VoucherRequest { get; set; } 
     public virtual PoRequest PoRequest { get; set; } 
     //public virtual ICollection<JobPlanRequest> JobPlanRequests { get; set; } = new HashSet<JobPlanRequest>();
 

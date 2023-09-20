@@ -52,11 +52,10 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.ModifiedBy)
             .HasMaxLength(50);
 
-            entity.HasOne(d => d.Request).WithMany(p => p.ApplicationUserRequests)
-            .HasForeignKey(d => d.RequestId)
+            entity.HasOne(d => d.Request).WithOne(p => p.ApplicationUserRequest)
+            .HasForeignKey<ApplicationUserRequest>(d => d.RequestId)
             .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_ApplicationUserRequest_Request");
-
 
 
 

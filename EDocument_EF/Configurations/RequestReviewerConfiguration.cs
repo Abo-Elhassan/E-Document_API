@@ -19,6 +19,9 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.AssignedReviewerId)
             .HasMaxLength(50);
 
+            entity.Property(e => e.ReviewedBy)
+            .HasMaxLength(200);
+
 
             entity.Property(e => e.ReviewerType).HasConversion<string>()
             .HasMaxLength(50);

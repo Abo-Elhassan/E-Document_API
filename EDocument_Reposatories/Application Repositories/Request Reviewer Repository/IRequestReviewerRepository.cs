@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDocument_Repositories.Application_Repositories.Request_Repository
+namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repository
 {
-    public interface IRequestRepository<T> where T : class
+    public interface IRequestReviewerRepository: IGenericRepository<RequestReviewer>
     {
-
+        //Task <IEnumerable<RequestReviewer>> GetRequestReviewersAsync(long id);
     }
+
 }

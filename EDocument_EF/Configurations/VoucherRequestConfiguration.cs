@@ -34,8 +34,8 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.ModifiedBy)
             .HasMaxLength(50);
 
-            entity.HasOne(d => d.Request).WithMany(p => p.VoucherRequests)
-            .HasForeignKey(d => d.RequestId)
+            entity.HasOne(d => d.Request).WithOne(p => p.VoucherRequest)
+            .HasForeignKey<VoucherRequest>(d => d.RequestId)
             .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_VoucherRequest_Request");
 

@@ -60,8 +60,8 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.ModifiedBy)
             .HasMaxLength(50);
 
-            entity.HasOne(d => d.Request).WithMany(p => p.DomainAccountRequests)
-            .HasForeignKey(d => d.RequestId)
+            entity.HasOne(d => d.Request).WithOne(p => p.DomainAccountRequest)
+            .HasForeignKey<DomainAccountRequest>(d => d.RequestId)
             .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_DomainAccountRequest_Request");
 

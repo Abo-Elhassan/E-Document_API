@@ -110,8 +110,8 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50)
             .IsUnicode(false);
 
-            entity.HasOne(d => d.Request).WithMany(p => p.TravelDeskRequests)
-            .HasForeignKey(d => d.RequestId)
+            entity.HasOne(d => d.Request).WithOne(p => p.TravelDeskRequest)
+            .HasForeignKey<TravelDeskRequest>(d => d.RequestId)
             .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_TravelDeskRequest_Request");
 

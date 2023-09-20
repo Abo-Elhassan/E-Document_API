@@ -2613,3 +2613,372 @@ INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
 LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
 LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
 ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T13:00:48.4796656+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2023-09-20T13:00:48.4985463+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (9ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2023-09-20T13:00:48.5002028+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2023-09-20T13:00:48.5008534+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2023-09-20T13:00:48.5105816+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2023-09-20T13:00:48.5224774+03:00	INFO	[Microsoft.EntityFrameworkCore.Migrations]	[Microsoft.EntityFrameworkCore.Migrations.MigrationApplying]	Applying migration '20230920100035_updateRequestsRelations'.
+2023-09-20T13:00:48.6355772+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DROP INDEX [IX_VoucherRequest_RequestId] ON [VoucherRequest];
+2023-09-20T13:00:48.6370729+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DROP INDEX [IX_TravelDeskRequest_RequestId] ON [TravelDeskRequest];
+2023-09-20T13:00:48.6380068+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DROP INDEX [IX_DomainAccountRequest_RequestId] ON [DomainAccountRequest];
+2023-09-20T13:00:48.6387444+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DROP INDEX [IX_CarRequest_RequestId] ON [CarRequest];
+2023-09-20T13:00:48.6395885+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DROP INDEX [IX_ApplicationUserRequest_RequestId] ON [ApplicationUserRequest];
+2023-09-20T13:00:48.6421648+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [DefinedRequestRole]
+WHERE [DefinedRequestId] = CAST(1 AS bigint) AND [RoleId] = N'6488cb87-fc36-46dc-a06b-8e402641b102';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:48.6426280+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [DefinedRequestRole]
+WHERE [DefinedRequestId] = CAST(1 AS bigint) AND [RoleId] = N'abddb48a-6657-429c-b9ba-1ad8f10fabca';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:48.6472574+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'0f81f547-b096-4aa6-a495-e15252a555c5';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:48.6500983+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'1b7e5001-4ee8-4220-92a9-8459ad25561a';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.0707273+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'22a1054f-27fb-4e1e-a695-853570329f28';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.0739233+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'2cf317d0-33e3-4f35-b071-fcca4b309a27';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.0774510+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'4676a63b-678b-4560-9ce0-e9915278b4d9';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.0807063+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'572ffdd7-aa12-4985-9f30-fa9152fc29b6';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.0840063+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'599a22ab-4b4b-40ee-99ab-fc24cabb1af3';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.0878896+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'5ca1f5ac-8f21-4041-8f4d-13549c6cfe31';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.0910606+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'6848367e-2d9d-4e0c-858e-692d05ca26c8';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.0937916+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'6d9d6418-6154-494b-9967-23012e4bae19';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.0968479+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'7d1c73e0-c319-4ebc-b108-9b6ed64c1efe';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.9859572+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (8ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'dc3c247b-3898-481e-bce2-adf700885973';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.9922822+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'f3b88eb3-33c1-4cad-af14-75fee309e9f1';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.9939538+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[UserRoles]
+WHERE [RoleId] = N'abddb48a-6657-429c-b9ba-1ad8f10fabca' AND [UserId] = N'51124';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.9946451+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[UserRoles]
+WHERE [RoleId] = N'6488cb87-fc36-46dc-a06b-8e402641b102' AND [UserId] = N'51188';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:49.9999377+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'6488cb87-fc36-46dc-a06b-8e402641b102';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:50.0047348+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'abddb48a-6657-429c-b9ba-1ad8f10fabca';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:50.0299580+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (25ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'ConcurrencyStamp', N'Name', N'NormalizedName') AND [object_id] = OBJECT_ID(N'[security].[Role]'))
+    SET IDENTITY_INSERT [security].[Role] ON;
+INSERT INTO [security].[Role] ([Id], [ConcurrencyStamp], [Name], [NormalizedName])
+VALUES (N'117e4e1d-dfcb-48eb-87f2-67f79d080fa0', N'cb3acbf8-f247-4d79-81ba-2f0555c33607', N'Communications', N'COMMUNICATIONS'),
+(N'17eabe57-8333-4125-82c4-a3114dd570f8', N'41ef4a42-0b6d-440c-9369-098719f942da', N'SuperAdmin', N'SUPERADMIN'),
+(N'244ede6e-4e0c-44c2-8442-93b696dfe3c0', N'55deb855-9077-4a9f-9ff2-a6e9669ddf65', N'HR', N'HR'),
+(N'3ae17827-8afc-49dc-8db7-04e0d5b28fbc', N'd5ef73ff-b3f5-4971-a0ab-94a8f3dda6a7', N'OperationCT', N'OPERATIONCT'),
+(N'461d1dbd-91bf-4511-ae69-b4493fd5a7e7', N'96d2f171-a582-4feb-8f14-5e4f75afe613', N'Commercial', N'COMMERCIAL'),
+(N'5bc48309-23aa-46b1-989e-c8275ef0746a', N'15bd297f-2b98-497f-ae9f-09df2b289737', N'OperationBGC', N'OPERATIONBGC'),
+(N'77e4a066-8690-4567-828e-92bebab64032', N'083e0291-7c1d-4f1c-af86-93807c520971', N'Finance', N'FINANCE'),
+(N'7e2c9731-2059-4e5e-8133-2d427c59a531', N'16582e65-2b9a-4f6d-a619-8c77ffa40358', N'Security', N'SECURITY'),
+(N'7ff8f9b6-8843-4648-af06-c249eb189e73', N'747cea43-0cc8-497e-86c2-cd9ded9cd106', N'Engineering', N'ENGINEERING'),
+(N'bba22c98-f80d-4f2e-8cd3-2268b2f6a119', N'c4a4c690-6e07-4de3-a298-579117947cf8', N'CustomerService', N'CUSTOMERSERVICE'),
+(N'bee465c1-16f7-404f-a12f-2aa0549fc30e', N'053934f8-fead-445d-ab7e-b927d3eed66f', N'Adminstration', N'ADMINSTRATION'),
+(N'c55f00ec-b8b2-4d7e-84eb-85e40d44b944', N'5a5c69ce-b29d-4295-9227-8ea820dce52a', N'Procurement', N'PROCUREMENT'),
+(N'c6795103-158e-478d-8dd7-6e042dfbd687', N'b1bbae4e-cba2-4187-98bb-bb3eb9011607', N'IT', N'IT'),
+(N'd8afc429-c3c5-456e-9066-8c5432d41a3c', N'f493d483-2b48-438e-b98a-83b4a6044a88', N'InfoFort', N'INFOFORT'),
+(N'fc7cc3e9-a7de-44e0-96b8-70afeff8bc79', N'4de44b67-1e37-48ff-aef9-47be12b351b9', N'Store', N'STORE');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'ConcurrencyStamp', N'Name', N'NormalizedName') AND [object_id] = OBJECT_ID(N'[security].[Role]'))
+    SET IDENTITY_INSERT [security].[Role] OFF;
+2023-09-20T13:00:52.4249065+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'c4aac87a-955c-400b-a9e4-a2e8eccab983', [SecurityStamp] = N'1472d6fc-9734-4c6d-90ef-a06654ca5a48'
+WHERE [Id] = N'50000';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:52.4254570+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'5676615e-2b61-4b94-8026-8db4386143ac', [SecurityStamp] = N'5cbee8f7-ffc6-40a2-94ea-6b95869b992d'
+WHERE [Id] = N'50128';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:52.4259245+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'5deae0c4-2416-4977-be4b-31d91ad80507', [SecurityStamp] = N'72215891-1e49-4616-ba47-213e06a97f63'
+WHERE [Id] = N'50136';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:52.4263164+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'f0ff379f-7b62-48df-a349-fd78bcc41f03', [SecurityStamp] = N'e4fe7287-a6a4-4b27-be87-2c697c3cffe7'
+WHERE [Id] = N'50140';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:52.4266502+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'67304fac-57b0-407e-83a2-25a0d36e8a88', [SecurityStamp] = N'1c03d0b2-131c-4479-be55-46fb1483f285'
+WHERE [Id] = N'50141';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:52.4272558+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'd0a95c8b-7d84-413d-99e9-3e4550ac3714', [SecurityStamp] = N'c43f439b-fcbb-478e-8c58-76f57441c134'
+WHERE [Id] = N'50263';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:53.1190337+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'5b485168-ac68-418a-9d21-d83e406b1baf', [SecurityStamp] = N'44a00696-64c8-4631-9ad4-c15125bedb55'
+WHERE [Id] = N'50269';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:53.1196588+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'00e2ed7d-d370-471e-a017-ec08b5c1bcea', [SecurityStamp] = N'cf8a4e2c-5deb-4eb7-8f84-d6086d144ad4'
+WHERE [Id] = N'50279';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:53.1201516+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'26d96987-919a-489f-ac73-8fb021aa8066', [SecurityStamp] = N'103759ad-ee43-4d88-94d1-7a89412b8983'
+WHERE [Id] = N'50354';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:53.1205284+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'ac5f714a-488e-432f-8f25-60018ee1106f', [SecurityStamp] = N'3db213ca-cc15-403e-9f45-614b7d9fabca'
+WHERE [Id] = N'50562';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:53.1208407+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'78424653-cdf5-48d7-898e-f6737b456450', [SecurityStamp] = N'744c90da-d969-419d-a86b-0b0376f6d81b'
+WHERE [Id] = N'50670';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:53.1212847+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'8a1fc6bd-78d1-49cb-afa8-e90b10409762', [SecurityStamp] = N'f5f53d66-0eac-4cca-b18b-cdf37f9ca1d5'
+WHERE [Id] = N'50844';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:53.9081534+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'702b46f4-410b-4f2b-b392-6b10919cd38d', [SecurityStamp] = N'119e6d2f-9aee-41a8-87ad-a011fa51c09d'
+WHERE [Id] = N'50882';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:53.9155880+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'1cca87c4-d3ea-44dd-9503-48774373e9d2', [SecurityStamp] = N'67d70538-7a6a-4127-8ea4-863d83f4e77d'
+WHERE [Id] = N'50962';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:53.9160873+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'41674b50-c3d5-43d0-a4d3-388b3ded2c25', [SecurityStamp] = N'0239f4c3-7ace-4a63-9f0a-35b18eb15503'
+WHERE [Id] = N'51090';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:53.9166717+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'a013092d-7749-4fb8-a684-6759807407ef', [SecurityStamp] = N'191cd698-bb24-462e-aa13-70d41f914a2c'
+WHERE [Id] = N'51124';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:53.9171412+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'1fe6eaa4-355a-403b-bf1d-1c271590088f', [SecurityStamp] = N'4d594951-3955-46b4-89d5-90c6bea013a0'
+WHERE [Id] = N'51126';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:53.9174184+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'0c8c9294-7d72-4b35-b6cf-d20cb270c03c', [SecurityStamp] = N'fc762a98-f34b-4000-b2e7-e6621005c9f8'
+WHERE [Id] = N'51188';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:54.8020463+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'aba7fff8-52a8-459d-a3af-40e4ec3da579', [SecurityStamp] = N'5ef390e5-f85e-453c-8e26-f07641ddbe7c'
+WHERE [Id] = N'51229';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:54.8028857+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'5c63a11b-c6c9-4b24-a865-a83851dc0ab2', [SecurityStamp] = N'ab22e4ae-3abc-4cca-ad92-b8d543a84fab'
+WHERE [Id] = N'51330';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:54.8033931+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'cb9e0d01-343d-4a9e-8883-a9c426c8527f', [SecurityStamp] = N'e2c537e1-f938-4da6-a76e-a62dc780746a'
+WHERE [Id] = N'51331';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:54.8038258+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'149510fb-80d5-4ad8-833e-98de27d66c45', [SecurityStamp] = N'4e03107b-db19-45af-bf2f-f4e4bfc81192'
+WHERE [Id] = N'51449';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:54.8042323+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'5bb66dec-2993-4560-86cd-7d1e1bcb9ca5', [SecurityStamp] = N'c5e67059-fe70-416b-b005-2372fe0f7387'
+WHERE [Id] = N'51509';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:54.8048432+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'5cf9b115-78f8-4034-8cb1-8aa242eae6f7', [SecurityStamp] = N'db8f2c94-d5af-4159-9aa5-7496e4a2110c'
+WHERE [Id] = N'51520';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:55.8697608+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'4aa0b63d-94c5-4a8c-8154-9509d111fd54', [SecurityStamp] = N'494bb708-128f-4f1d-9aa4-c2811676c160'
+WHERE [Id] = N'51529';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:55.8702423+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'50d43bf9-8c6c-44b2-ae5c-faf806278e96', [SecurityStamp] = N'e036fac0-de8d-469d-a6fc-32bdf9cd3b85'
+WHERE [Id] = N'51572';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:55.8705940+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'230ef1d9-05cd-4921-a332-93d3c3a34a49', [SecurityStamp] = N'12546dc0-72c6-4157-a79d-af73d18980f1'
+WHERE [Id] = N'51573';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:55.8711368+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'244c0e0e-e451-417b-b2c3-a22b374e8c84', [SecurityStamp] = N'e6793662-72ef-4aeb-b3f4-1eefe41b176d'
+WHERE [Id] = N'51583';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:55.8713885+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'7117fa67-c87a-4d3c-81a5-3197e4503cb9', [SecurityStamp] = N'5ee82064-a788-4e23-8690-519077796baf'
+WHERE [Id] = N'51659';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:55.8715831+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'18df0283-9454-42f2-9e1e-1bdbb68468d4', [SecurityStamp] = N'43143caf-91e5-4f2f-8efa-f955dc733f70'
+WHERE [Id] = N'51668';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:56.7687139+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'3a693eb7-37f9-4be4-9146-cd444cdc7682', [SecurityStamp] = N'73c32452-0792-4425-af4d-b1d2ce34e78e'
+WHERE [Id] = N'90008';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:56.7690313+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'88411f14-0e28-42ea-821b-53fa781af054', [SecurityStamp] = N'b98a5319-b52a-4133-956a-5c5c86d6c87d'
+WHERE [Id] = N'90010';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:56.7693706+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'd493001f-de49-4f53-8c2c-3964f3b1284a', [SecurityStamp] = N'8e214821-df30-412a-85b2-1249397e3f11'
+WHERE [Id] = N'90015';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:56.7697732+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'd0b7e3b2-e9e9-41f8-824d-35eb71fb7c4d', [SecurityStamp] = N'23e88c26-bf53-4be6-8f2a-305d7535e0c6'
+WHERE [Id] = N'Exp-16';
+SELECT @@ROWCOUNT;
+2023-09-20T13:00:56.7893407+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (19ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'DefinedRequestId', N'RoleId', N'CreatedAt', N'CreatedBy', N'ModifiedAt', N'ModifiedBy', N'Permission') AND [object_id] = OBJECT_ID(N'[DefinedRequestRole]'))
+    SET IDENTITY_INSERT [DefinedRequestRole] ON;
+INSERT INTO [DefinedRequestRole] ([DefinedRequestId], [RoleId], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [Permission])
+VALUES (CAST(1 AS bigint), N'77e4a066-8690-4567-828e-92bebab64032', NULL, NULL, NULL, NULL, N'Review'),
+(CAST(1 AS bigint), N'c55f00ec-b8b2-4d7e-84eb-85e40d44b944', NULL, NULL, NULL, NULL, N'Request');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'DefinedRequestId', N'RoleId', N'CreatedAt', N'CreatedBy', N'ModifiedAt', N'ModifiedBy', N'Permission') AND [object_id] = OBJECT_ID(N'[DefinedRequestRole]'))
+    SET IDENTITY_INSERT [DefinedRequestRole] OFF;
+2023-09-20T13:00:56.8051153+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (16ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'RoleId', N'UserId') AND [object_id] = OBJECT_ID(N'[security].[UserRoles]'))
+    SET IDENTITY_INSERT [security].[UserRoles] ON;
+INSERT INTO [security].[UserRoles] ([RoleId], [UserId])
+VALUES (N'77e4a066-8690-4567-828e-92bebab64032', N'51124'),
+(N'c55f00ec-b8b2-4d7e-84eb-85e40d44b944', N'51188');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'RoleId', N'UserId') AND [object_id] = OBJECT_ID(N'[security].[UserRoles]'))
+    SET IDENTITY_INSERT [security].[UserRoles] OFF;
+2023-09-20T13:00:57.6094762+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (9ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_VoucherRequest_RequestId] ON [VoucherRequest] ([RequestId]);
+2023-09-20T13:00:57.6107545+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_TravelDeskRequest_RequestId] ON [TravelDeskRequest] ([RequestId]);
+2023-09-20T13:00:57.6114567+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_DomainAccountRequest_RequestId] ON [DomainAccountRequest] ([RequestId]);
+2023-09-20T13:00:57.6123486+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_CarRequest_RequestId] ON [CarRequest] ([RequestId]);
+2023-09-20T13:00:58.1426739+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_ApplicationUserRequest_RequestId] ON [ApplicationUserRequest] ([RequestId]);
+2023-09-20T13:00:58.1437830+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230920100035_updateRequestsRelations', N'7.0.10');
+2023-09-20T13:41:55.8539814+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T13:41:55.8588050+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T13:41:55.8605650+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T13:41:55.8623491+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T14:03:09.0076430+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T14:03:09.0141128+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T14:03:09.0164571+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T14:03:09.0184088+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T14:03:47.5822335+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-20T14:04:27.0827577+03:00	INFO	[EDocument_API.Controllers.V1.UserController]	[0]	Start Login from UserController for procurment_manager
+2023-09-20T14:04:30.4897179+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (97ms) [Parameters=[@__loginWriteDto_UserName_0='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [d].[Id], [d].[CreatedAt], [d].[CreatedBy], [d].[DepartmentIcon], [d].[DepartmentName], [d].[ManagerId], [d].[ModifiedAt], [d].[ModifiedBy], [s].[Id], [s].[CreatedAt], [s].[CreatedBy], [s].[DepartmentId], [s].[HeadId], [s].[ModifiedAt], [s].[ModifiedBy], [s].[SectionName]
+FROM [security].[User] AS [u]
+LEFT JOIN [Department] AS [d] ON [u].[DepartmentId] = [d].[Id]
+LEFT JOIN [Section] AS [s] ON [u].[SectionId] = [s].[Id]
+WHERE [u].[UserName] = @__loginWriteDto_UserName_0
+2023-09-20T14:04:30.9046199+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (9ms) [Parameters=[@__userId_0='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT [r].[Name]
+FROM [security].[UserRoles] AS [u]
+INNER JOIN [security].[Role] AS [r] ON [u].[RoleId] = [r].[Id]
+WHERE [u].[UserId] = @__userId_0
+2023-09-20T14:04:30.9261708+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[@__userId_0='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT [r].[Name]
+FROM [security].[UserRoles] AS [u]
+INNER JOIN [security].[Role] AS [r] ON [u].[RoleId] = [r].[Id]
+WHERE [u].[UserId] = @__userId_0
+2023-09-20T14:04:30.9569783+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT [r].[Name]
+FROM [security].[UserRoles] AS [u]
+INNER JOIN [security].[Role] AS [r] ON [u].[RoleId] = [r].[Id]
+WHERE [u].[UserId] = @__userId_0
+2023-09-20T14:04:31.1497304+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (9ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [d].[RoleId], [d].[DefinedRequestId], [d].[CreatedAt], [d].[CreatedBy], [d].[ModifiedAt], [d].[ModifiedBy], [d].[Permission], [r].[Id], [r].[ConcurrencyStamp], [r].[Name], [r].[NormalizedName], [d0].[Id], [d0].[CreatedAt], [d0].[CreatedBy], [d0].[DepartmentId], [d0].[ModifiedAt], [d0].[ModifiedBy], [d0].[RequestName], [d0].[ReviewersNumber], [d0].[RouteName]
+FROM [DefinedRequestRole] AS [d]
+INNER JOIN [security].[Role] AS [r] ON [d].[RoleId] = [r].[Id]
+INNER JOIN [DefinedRequest] AS [d0] ON [d].[DefinedRequestId] = [d0].[Id]
+2023-09-20T14:04:31.2678583+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [r].[Id], [r].[ConcurrencyStamp], [r].[Name], [r].[NormalizedName]
+FROM [security].[Role] AS [r]
+WHERE [r].[NormalizedName] = @__normalizedRoleName_0
+2023-09-20T14:04:31.2991501+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[@__p_0='?' (Size = 50), @__p_1='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [u].[UserId], [u].[RoleId]
+FROM [security].[UserRoles] AS [u]
+WHERE [u].[UserId] = @__p_0 AND [u].[RoleId] = @__p_1
+2023-09-20T14:04:31.3056019+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [r].[Id], [r].[ConcurrencyStamp], [r].[Name], [r].[NormalizedName]
+FROM [security].[Role] AS [r]
+WHERE [r].[NormalizedName] = @__normalizedRoleName_0
+2023-09-20T14:04:31.3209722+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[@__p_0='?' (Size = 50), @__p_1='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [u].[UserId], [u].[RoleId]
+FROM [security].[UserRoles] AS [u]
+WHERE [u].[UserId] = @__p_0 AND [u].[RoleId] = @__p_1
+2023-09-20T14:04:31.3529139+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [d].[Id], [d].[DepartmentName], [d].[DepartmentIcon]
+FROM [Department] AS [d]
+2023-09-20T14:04:31.5834069+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (13ms) [Parameters=[@p2='?' (Size = 50), @p3='?' (Size = 4000), @p0='?' (DbType = DateTime), @p1='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [security].[User] SET [LastLogin] = @p0, [ModifiedAt] = @p1
+OUTPUT 1
+WHERE [Id] = @p2 AND [ConcurrencyStamp] = @p3;
+2023-09-20T14:04:51.2703062+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T14:06:04.4458915+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188'
+2023-09-20T14:06:04.4620969+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T14:06:04.4659844+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T14:06:04.5263646+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.MultipleCollectionIncludeWarning]	Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2023-09-20T14:06:04.5597278+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (15ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorFullName], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorFullName], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188'
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]

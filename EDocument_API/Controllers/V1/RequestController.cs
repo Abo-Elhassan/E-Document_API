@@ -13,7 +13,7 @@ using EDocument_Services.Helpers;
 using EDocument_EF;
 using EDocument_Data.DTOs.User;
 using Microsoft.AspNetCore.Authorization;
-using EDocument_Repositories.Application_Repositories.Request_Repository;
+
 using Microsoft.Build.Framework;
 using EDocument_Reposatories.Generic_Reposatories;
 using EDocument_Data.DTOs.Requests;
@@ -135,23 +135,29 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<PoRequestReadDto>>))]
         [HttpPost("Po/Filter")]
         [Authorize(Roles = "Finance,Procurement")]
-        public async Task<ActionResult> GetPoRequestsFiltered(RequestFilterWriteDto filterDto)
+        public async Task<ActionResult> GetPoRequestsFiltered(FilterWriteDto filterDto)
         {
             _logger.LogInformation($"Start GetPoRequestsFiltered from {nameof(UserController)}");
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             string? reviewingExpression = null;
+            RequestPermission permission;
+            var userRole = User.FindFirstValue(ClaimTypes.Role);
+
+            permission = userRole == ApplicationRole.Procurement.ToString() ? RequestPermission.Request : RequestPermission.Review;
+
             (int TotalCount, IEnumerable<PoRequest> PaginatedData) result;
 
-            if (filterDto.Permission==RequestPermission.Review)
+            if (permission == RequestPermission.Review)
             {
                 reviewingExpression = "Request.RequestReviewers.Any(AssignedReviewerId == @0)";
             }
+
 
             if (filterDto?.Filters != null)
             {
                 result = await _unitOfWork.Repository<PoRequest>().FindAllRequestsAsync(
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
-                permission: filterDto.Permission,
+                permission: permission,
                 reviewingExpression: reviewingExpression,
                 filters: filterDto?.Filters,
                 includes: includes,
@@ -166,7 +172,7 @@ namespace EDocument_API.Controllers.V1
             {
                 result = await _unitOfWork.Repository<PoRequest>().FindAllRequestsAsync(
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
-                permission: filterDto.Permission,
+                permission: permission,
                 reviewingExpression: reviewingExpression,
                 filterValue: filterDto?.FilterValue,
                 includes: includes,
@@ -181,7 +187,7 @@ namespace EDocument_API.Controllers.V1
             {
                 result = await _unitOfWork.Repository<PoRequest>().FindAllRequestsAsync(
                                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
-                                permission: filterDto.Permission,
+                                permission: permission,
                                 reviewingExpression: reviewingExpression,
                                 filters: filterDto?.Filters,
                                 includes: includes,
@@ -203,7 +209,7 @@ namespace EDocument_API.Controllers.V1
             var requests = _mapper.Map<List<PoRequestReadDto>>(result.PaginatedData);
 
 
-            if (filterDto?.Permission == RequestPermission.Review)
+            if (permission == RequestPermission.Review)
             {
                 foreach (var request in requests)
                 {
