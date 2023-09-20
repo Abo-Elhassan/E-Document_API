@@ -24,8 +24,6 @@ namespace EDocument_Reposatories.Generic_Reposatories
         public virtual T? GetById(long id)
         {
             var entity = _context.Set<T>().Find(id);
-
-            
             return entity;
         }
 

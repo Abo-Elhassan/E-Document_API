@@ -1,30 +1,21 @@
 ﻿using AutoMapper;
+using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Filter;
 using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
+using EDocument_Repositories.Application_Repositories.Request_Reviewer_Repository;
 using EDocument_UnitOfWork;
-using Models = EDocument_Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Mime;
-using EDocument_Services.Helpers;
-using EDocument_EF;
-using EDocument_Data.DTOs.User;
-using Microsoft.AspNetCore.Authorization;
-
-using Microsoft.Build.Framework;
-using EDocument_Reposatories.Generic_Reposatories;
-using EDocument_Data.DTOs.Requests;
-using System.Runtime.ConstrainedExecution;
 using System.Security.Claims;
-using EDocument_Data.Consts.Enums;
 using System.Text.Json;
-using EDocument_Repositories.Application_Repositories.Request_Reviewer_Repository;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using Azure.Core;
-using System.Linq.Expressions;
+
+using Models = EDocument_Data.Models;
 
 namespace EDocument_API.Controllers.V1
 {
@@ -53,10 +44,10 @@ namespace EDocument_API.Controllers.V1
             _requestReviewerRepository = RequestReviewerRepository;
         }
 
-
         #region Procurement
 
         #region PO Request
+
         /// <summary>
         /// Get PO Requests By Id
         /// </summary>
@@ -69,8 +60,7 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<PoRequestReadDto>))]
         [HttpGet("Po/{id}")]
         [Authorize(Roles = "Finance,Procurement")]
-
-        public async Task<ActionResult> GetPoRequestById( long id)
+        public async Task<ActionResult> GetPoRequestById(long id)
         {
             _logger.LogInformation($"Start GetPoRequestById from {nameof(UserController)}");
 
@@ -87,9 +77,7 @@ namespace EDocument_API.Controllers.V1
             var result = _mapper.Map<PoRequestReadDto>(poRequest);
 
             return Ok(new ApiResponse<PoRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
-
         }
-
 
         /// <summary>
         /// Delete PO Requests By Id
@@ -102,20 +90,18 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpDelete("Po/{id}")]
         [Authorize(Roles = "Finance,Procurement")]
-
-        public async Task<ActionResult> DeletePoRequest( long id)
+        public async Task<ActionResult> DeletePoRequest(long id)
         {
             _logger.LogInformation($"Start DeletePoRequest from {nameof(UserController)}");
-            var includes = new string[] { "PoRequest",  "Attachments", "RequestReviewers" };
+            var includes = new string[] { "PoRequest", "Attachments", "RequestReviewers" };
 
             var poRequest = await _unitOfWork.Repository<Models.Request>().FindRequestAsync(
             requestId: id,
-            expression:"Id==@0",
+            expression: "Id==@0",
             includes: includes
                 );
-          
 
-            if( poRequest is null )
+            if (poRequest is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
             poRequest.PoRequest.ModifiedBy = User?.Identity?.Name;
@@ -123,10 +109,9 @@ namespace EDocument_API.Controllers.V1
             _unitOfWork.Complete();
 
             _unitOfWork.Repository<Models.Request>().Delete(poRequest);
-             _unitOfWork.Complete();
+            _unitOfWork.Complete();
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
-
         }
 
         /// <summary>
@@ -152,17 +137,14 @@ namespace EDocument_API.Controllers.V1
 
             (int TotalCount, IEnumerable<PoRequest> PaginatedData) result;
 
-
             if (permission == RequestPermission.Request)
             {
-                userCondition= "Request.CreatorId ==@0";
+                userCondition = "Request.CreatorId ==@0";
             }
             else
             {
-                userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0)";
+                userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
             }
-
-
 
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
@@ -178,7 +160,7 @@ namespace EDocument_API.Controllers.V1
                 dateFilters: filterDto?.dateFilters
                 );
             }
-            else 
+            else
             {
                 result = await _unitOfWork.Repository<PoRequest>().FindAllRequestsAsync(
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
@@ -193,16 +175,10 @@ namespace EDocument_API.Controllers.V1
                 );
             }
 
-
-
-
-
             var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
 
-        
             var requests = _mapper.Map<List<PoRequestReadDto>>(result.PaginatedData);
-
 
             if (permission == RequestPermission.Review)
             {
@@ -212,12 +188,8 @@ namespace EDocument_API.Controllers.V1
 
                     request.ReviewerStatus = reviewer?.Status;
                     request.ReviewerStage = reviewer?.StageNumber;
-
                 }
             }
-
-            
-
 
             var response = new FilterReadDto<PoRequestReadDto>
             {
@@ -228,7 +200,6 @@ namespace EDocument_API.Controllers.V1
                 PaginatedData = requests
             };
             return Ok(new ApiResponse<FilterReadDto<PoRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
-
         }
 
         /// <summary>
@@ -247,14 +218,10 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start GetCreatorPoRequestsFiltered from {nameof(UserController)}");
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             string? userCondition = null;
-            
 
             (int TotalCount, IEnumerable<PoRequest> PaginatedData) result;
 
-                userCondition = "Request.CreatorId ==@0";
-
-
-
+            userCondition = "Request.CreatorId ==@0";
 
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
@@ -264,7 +231,7 @@ namespace EDocument_API.Controllers.V1
                 filterValue: filterDto?.FilterValue,
                 includes: includes,
                 skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
-                take: filterDto?.PageSize??10,
+                take: filterDto?.PageSize ?? 10,
                 orderBy: filterDto?.orderBy,
                 orderByDirection: filterDto?.orderByDirection,
                 dateFilters: filterDto?.dateFilters
@@ -285,13 +252,8 @@ namespace EDocument_API.Controllers.V1
                 );
             }
 
-
-
-
-
             var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
-
 
             var requests = _mapper.Map<List<PoRequestReadDto>>(result.PaginatedData);
 
@@ -304,7 +266,6 @@ namespace EDocument_API.Controllers.V1
                 PaginatedData = requests
             };
             return Ok(new ApiResponse<FilterReadDto<PoRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
-
         }
 
         /// <summary>
@@ -324,13 +285,11 @@ namespace EDocument_API.Controllers.V1
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             string? userCondition = null;
 
-
             (int TotalCount, IEnumerable<PoRequest> PaginatedData) result;
 
-                userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0)";
+            userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
 
-
-
+    
 
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
@@ -361,30 +320,21 @@ namespace EDocument_API.Controllers.V1
                 );
             }
 
-
-
-
-
             var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
 
-
             var requests = _mapper.Map<List<PoRequestReadDto>>(result.PaginatedData);
 
+            foreach (var request in requests)
+            {
+                var reviewer = request.RequestReviewers?.FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-                foreach (var request in requests)
-                {
-                    var reviewer = request.RequestReviewers?.FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                request.ReviewerStatus = reviewer?.Status;
+                request.ReviewerStage = reviewer?.StageNumber;
+            }
+         //   requests = requests.Where(r => r.CurrentStage >= r.ReviewerStage).ToList();
 
-                    request.ReviewerStatus = reviewer?.Status;
-                    request.ReviewerStage = reviewer?.StageNumber;
-
-                }
-            requests = requests.Where(r => r.CurrentStage >= r.ReviewerStage).ToList();
-
-
-
-        var response = new FilterReadDto<PoRequestReadDto>
+            var response = new FilterReadDto<PoRequestReadDto>
             {
                 TotalCount = totalCount,
                 TotalPages = totalPages,
@@ -393,9 +343,7 @@ namespace EDocument_API.Controllers.V1
                 PaginatedData = requests
             };
             return Ok(new ApiResponse<FilterReadDto<PoRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
-
         }
-
 
         /// <summary>
         /// Create PO Request
@@ -408,32 +356,31 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Po/Create")]
-        [Authorize(Roles ="Procurement")]
+        [Authorize(Roles = "Procurement")]
         public async Task<ActionResult> Create(PoRequestCreateDto poRequestCreateDto)
         {
             _logger.LogInformation($"Start Create from {nameof(UserController)} for {JsonSerializer.Serialize(poRequestCreateDto)} ");
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            var request = new Models.Request { Id= requestId, DefinedRequestId = poRequestCreateDto.DefinedRequestId };
+            var request = new Models.Request { Id = requestId, DefinedRequestId = poRequestCreateDto.DefinedRequestId };
             var definedRequestReviewers = await _requestReviewerRepository.GetDefinedRequestReviewersAsync(poRequestCreateDto.DefinedRequestId);
             request.RequestReviewers = _mapper.Map<List<RequestReviewer>>(definedRequestReviewers);
-            request.PoRequest =_mapper.Map<PoRequest>(poRequestCreateDto);
+            request.PoRequest = _mapper.Map<PoRequest>(poRequestCreateDto);
             request.CreatorId = user?.Id;
             request.PoRequest.CreatorFullName = user?.FullName;
             request.CurrentStage = 1;
-            
+
             request.CreatedBy = user?.UserName;
             request.PoRequest.CreatedBy = user?.UserName;
 
             _unitOfWork.Repository<Models.Request>().Add(request);
 
-           var result =  _unitOfWork.Complete();
-            if (result<1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
+            var result = _unitOfWork.Complete();
+            if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request id = '{requestId}'" });
         }
-
 
         /// <summary>
         /// Update PO Request
@@ -456,32 +403,26 @@ namespace EDocument_API.Controllers.V1
             Expression<Func<Models.Request, bool>> expression = (r => r.Id == id);
 
             var request = await _unitOfWork.Repository<Models.Request>().FindAsync(expression, new string[] { "PoRequest" });
-            
+
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
 
-            if(request.Status!=RequestStatus.Declined)
+            if (request.Status != RequestStatus.Declined)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update request information during reviewing proccess" });
-
 
             _mapper.Map(poRequestUpdateDto, request.PoRequest);
 
             request.ModifiedBy = user?.UserName;
-           request.PoRequest.ModifiedBy = user?.UserName;
-
-
-
-
+            request.PoRequest.ModifiedBy = user?.UserName;
 
             var result = _unitOfWork.Complete();
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
-        #endregion
 
-        #endregion
+        #endregion PO Request
 
-
+        #endregion Procurement
     }
 }
