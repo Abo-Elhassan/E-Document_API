@@ -33,7 +33,7 @@
              </remarks>
              <returns>message</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.RequestController.GetPoRequestsFiltered(EDocument_Data.DTOs.Filter.RequestFilterWriteDto)">
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetPoRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
              <summary>
              Get All PO Requests With  Filter
              </summary>
