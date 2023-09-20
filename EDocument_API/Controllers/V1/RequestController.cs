@@ -55,25 +55,72 @@ namespace EDocument_API.Controllers.V1
         /// <summary>
         /// Get PO Requests By Id
         /// </summary>
-        /// <param name="definedRequestId">request type id</param>
-        /// <param name="requestId">request id</param>
+        /// <param name="id">request id</param>
         /// <remarks>
         ///
         /// </remarks>
         /// <returns>PO Request</returns>
+
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<PoRequestReadDto>))]
-        [HttpGet("Po/{definedRequestId}/{requestId}")]
-        public async Task<ActionResult> GetPoRequestByIds(long definedRequestId, long requestId)
+        [HttpGet("Po/{id}")]
+        [Authorize(Roles = "Finance,Procurement")]
+
+        public async Task<ActionResult> GetPoRequestByIds( long id)
         {
             _logger.LogInformation($"Start GetPoRequestByIds from {nameof(UserController)}");
 
-            var poRequest = await _unitOfWork.Repository<PoRequest>().FindRequestById(
-            definedRequestId: definedRequestId,
-            requestId: requestId
-                );
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            var poRequest = await _unitOfWork.Repository<PoRequest>().FindRequestAsync(
+            requestId: id,
+            expression: "Request.Id==@0",
+            includes: includes
+            );
+
+            if (poRequest is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
             var result = _mapper.Map<PoRequestReadDto>(poRequest);
 
             return Ok(new ApiResponse<PoRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+
+        }
+
+
+        /// <summary>
+        /// Delete PO Requests By Id
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpDelete("Po/{id}")]
+        [Authorize(Roles = "Finance,Procurement")]
+
+        public async Task<ActionResult> DeletePoRequest( long id)
+        {
+            _logger.LogInformation($"Start DeletePoRequest from {nameof(UserController)}");
+            var includes = new string[] { "PoRequest",  "Attachments", "RequestReviewers" };
+
+            var poRequest = await _unitOfWork.Repository<Request>().FindRequestAsync(
+            requestId: id,
+            expression:"Id==@0",
+            includes: includes
+                );
+          
+
+            if( poRequest is null )
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            poRequest.PoRequest.ModifiedBy = User?.Identity?.Name;
+            poRequest.ModifiedBy = User?.Identity?.Name;
+            _unitOfWork.Complete();
+
+            _unitOfWork.Repository<Request>().Delete(poRequest);
+             _unitOfWork.Complete();
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
 
         }
 
@@ -91,14 +138,16 @@ namespace EDocument_API.Controllers.V1
         public async Task<ActionResult> GetPoRequestsFiltered(RequestFilterWriteDto filterDto)
         {
             _logger.LogInformation($"Start GetPoRequestsFiltered from {nameof(UserController)}");
-            var includes = new string[] { nameof(Models.Request), "Request.Creator", "Request.RequestReviewers"};
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+
+
+            
 
             var result = await _unitOfWork.Repository<PoRequest>().FindAllRequestsAsync(
-            definedRequestId: filterDto.DefinedRequestId,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 permission: filterDto.Permission,
                 filters: filterDto?.Filters,
-               // includes: includes,
+                includes: includes,
                 skip: ((filterDto?.PageNo) - 1)* filterDto?.PageSize,
                 take: filterDto?.PageSize,
                 orderBy: filterDto?.orderBy,
@@ -109,9 +158,23 @@ namespace EDocument_API.Controllers.V1
 
             var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
-            
 
+        
             var requests = _mapper.Map<List<PoRequestReadDto>>(result.PaginatedData);
+
+
+            if (filterDto?.Permission == RequestPermission.Review)
+            {
+                foreach (var request in requests)
+                {
+                    var reviewer = request.RequestReviewers?.FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                    request.ReviewerStatus = reviewer?.Status;
+                    request.ReviewerStage = reviewer?.StageNumber;
+
+                }
+            }
+
 
             var response = new FilterReadDto<PoRequestReadDto>
             {

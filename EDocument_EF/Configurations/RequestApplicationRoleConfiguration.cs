@@ -30,7 +30,7 @@ namespace EDocument_EF.Configurations
             entity.HasOne(e => e.Request)
             .WithMany(p => p.RequestApplicationRoles)
             .HasForeignKey(e => e.RequestId)
-            .OnDelete(DeleteBehavior.Restrict)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_RequestApplicationRole_Request");
 
             entity.HasOne(e => e.Application)

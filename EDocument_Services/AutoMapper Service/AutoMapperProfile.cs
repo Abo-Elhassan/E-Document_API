@@ -41,7 +41,10 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<Request, RequestReadDto>();
             CreateMap<Attachment, AttachmentReadDto>();
             CreateMap<RequestReviewer, RequestReviewerReadDto>()
-                .ForMember(x => x.AssignedReviewer, y => y.MapFrom(z => z.Reviewer.FullName));
+                .ForMember(x => x.AssignedReviewerFullName, y => y.MapFrom(z => z.Reviewer.FullName));
+
+            CreateMap<RequestReviewer, RequestReviewerReadDto>()
+              .ForMember(x => x.AssignedReviewerId, y => y.MapFrom(z => z.AssignedReviewerId));
 
 
             CreateMap<PoRequest, PoRequestReadDto>()
@@ -52,7 +55,8 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(x => x.CreatorId, y => y.MapFrom(z => z.Request.CreatorId))
                 .ForMember(x => x.CreatorName, y => y.MapFrom(z => z.Request.Creator.FullName))
                 .ForMember(x => x.DefinedRequestId, y => y.MapFrom(z => z.Request.DefinedRequestId))
-                .ForMember(x => x.Attachments, y => y.MapFrom(z => z.Request.Attachments));
+                .ForMember(x => x.Attachments, y => y.MapFrom(z => z.Request.Attachments))
+                .ForMember(x => x.RequestReviewers, y => y.MapFrom(z => z.Request.RequestReviewers));
 
 
 

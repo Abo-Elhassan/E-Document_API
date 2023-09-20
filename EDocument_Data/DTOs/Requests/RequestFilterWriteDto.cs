@@ -11,8 +11,6 @@ namespace EDocument_Data.DTOs.Requests
 {
     public class RequestFilterWriteDto : FilterWriteDto
     {
-        [Required]
-        public long DefinedRequestId { get; init; }
 
         [Required]
         public RequestPermission Permission { get; set; }
@@ -22,8 +20,6 @@ namespace EDocument_Data.DTOs.Requests
 
     public class DynamicRequestFilterWriteDto : DynamicFilterWriteDto
     {
-        [Required]
-        public long DefinedRequestId { get; init; }
 
         [Required]
         [StringLength(50)]

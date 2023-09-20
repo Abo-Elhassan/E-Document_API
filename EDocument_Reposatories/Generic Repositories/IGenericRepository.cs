@@ -26,9 +26,9 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
 
 
-        T? Find(Expression<Func<T, bool>> criteria, string[]? includes = null);
+        T? Find(Expression<Func<T, bool>>? criteria=null, string[]? includes = null);
 
-        Task<T?> FindAsync(Expression<Func<T, bool>> criteria, string[]? includes = null);
+        Task<T?> FindAsync(Expression<Func<T, bool>>? criteria = null, string[]? includes = null);
 
 
 
@@ -61,9 +61,9 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
 
 
-        Task<T?> FindRequestById(long definedRequestId,long requestId);
+        Task<T?> FindRequestAsync(long requestId, string expression, string[]? includes = null);
 
-        Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(long definedRequestId, string userId, RequestPermission permission, Dictionary<string, string>? filters,  int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
+        Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string userId, RequestPermission permission, string? reviewingExpression = null, string[]? includes = null, Dictionary<string, string>? filters = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
 
 
     }

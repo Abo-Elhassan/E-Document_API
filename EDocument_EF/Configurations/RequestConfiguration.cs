@@ -38,10 +38,13 @@ namespace EDocument_EF.Configurations
 
             entity.HasOne(d => d.Creator).WithMany(p => p.CreatedRequests)
             .HasForeignKey(d => d.CreatorId)
+            .OnDelete(DeleteBehavior.Restrict)
             .HasConstraintName("FK_Request_User");
+           
 
             entity.HasOne(d => d.DefinedRequest).WithMany(p => p.Requests)
             .HasForeignKey(d => d.DefinedRequestId)
+            .OnDelete(DeleteBehavior.Restrict)
             .HasConstraintName("FK_Request_DefinedRequest");
 
             OnConfigurePartial(entity);

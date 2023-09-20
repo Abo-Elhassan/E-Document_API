@@ -36,7 +36,7 @@ namespace EDocument_EF.Configurations
 
             entity.HasOne(d => d.Request).WithMany(p => p.VoucherRequests)
             .HasForeignKey(d => d.RequestId)
-            .OnDelete(DeleteBehavior.Restrict)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_VoucherRequest_Request");
 
             OnConfigurePartial(entity);

@@ -53,7 +53,7 @@ namespace EDocument_EF.Configurations
 
             entity.HasOne(d => d.Request).WithOne(p => p.PoRequest)
             .HasForeignKey<PoRequest>(d => d.RequestId)
-            .OnDelete(DeleteBehavior.Restrict)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_PoRequest_Request");
 
             OnConfigurePartial(entity);

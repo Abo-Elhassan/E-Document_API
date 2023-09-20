@@ -83,9 +83,9 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
 
 
-        public virtual T? Find(Expression<Func<T, bool>> criteria, string[]? includes = null)
+        public virtual T? Find(Expression<Func<T, bool>>? criteria=null, string[]? includes = null)
         {
-            IQueryable<T> query = _context.Set<T>().AsNoTracking();
+            IQueryable<T> query = _context.Set<T>();
 
             if (includes != null)
                 foreach (var item in includes)
@@ -93,12 +93,21 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     query = query.Include(item);
                 }
 
-            return query.SingleOrDefault(criteria);
+
+            if(criteria != null)
+            {
+                return query.SingleOrDefault(criteria);
+            }
+            else
+            {
+                return query.SingleOrDefault();
+            }
+           
         }
 
-        public virtual async Task<T?> FindAsync(Expression<Func<T, bool>> criteria, string[]? includes = null)
+        public virtual async Task<T?> FindAsync(Expression<Func<T, bool>>? criteria=null, string[]? includes = null)
         {
-            IQueryable<T> query = _context.Set<T>().AsNoTracking();
+            IQueryable<T> query = _context.Set<T>();
 
             if (includes != null)
                 foreach (var item in includes)
@@ -106,7 +115,14 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     query = query.Include(item);
                 }
 
-            return await query.SingleOrDefaultAsync(criteria);
+            if (criteria != null)
+            {
+                return await query.SingleOrDefaultAsync(criteria);
+            }
+            else
+            {
+                return await query.SingleOrDefaultAsync();
+            }  
         }
 
 
@@ -671,7 +687,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
         public void Delete(T entity)
         {
-            _context.Set<T>().Remove(entity);
+           _context.Set<T>().Remove(entity);
         }
 
 
@@ -680,35 +696,48 @@ namespace EDocument_Reposatories.Generic_Reposatories
             _context.Set<T>().RemoveRange(entities);
         }
 
-        public virtual async Task<T?> FindRequestById(long definedRequestId, long requestId)
+        public virtual async Task<T?> FindRequestAsync( long requestId, string expression,string[]? includes = null)
         {
-            IQueryable<T> query = _context.Set<T>()
-                 .Include("Request")
-                 .Include("Request.Creator")
-                 .Include("Request.Attachments")
-                 .Where("Request.DefinedRequestId==@0 AND Request.Id==@1", definedRequestId, requestId);
-
-
+            IQueryable<T> query = _context.Set<T>();
+                
+            #region Include Tables
+            if (includes != null)
+            {
+                foreach (var item in includes)
+                {
+                    if (!string.IsNullOrEmpty(item))
+                    {
+                        query = query.Include(item);
+                    }
+                }
+            }
+            #endregion
+            query = query.Where(expression, requestId);
             return await query.FirstOrDefaultAsync();   
         }
 
-        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(long definedRequestId, string userId, RequestPermission permission, Dictionary<string, string>? filters,  int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync( string userId, RequestPermission permission,string? reviewingExpression = null, string[]? includes = null, Dictionary<string, string>? filters=null,  int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var ColumnName = "";
             var ColumnValue = "";
             var expression = "";
             (int TotalCount, IEnumerable<T> PaginatedData) result;
 
-            var assignedRequests = await _context.PoRequests.Include(x => x.Request).Include(y => y.Request.RequestReviewers).ThenInclude(r => r.Reviewer).Where(u => u.Request.RequestReviewers.Any(P => P.AssignedReviewerId == "51678")).ToListAsync();
-            var assignedRequest = await _context.PoRequests.Include(r => r.Request).Include(u=>u.Request.Creator).Include(rr => rr.Request.RequestReviewers).Where(rr => rr.Request.RequestReviewers.Any(rr=>rr.AssignedReviewerId=="")).ToListAsync();
+            IQueryable<T> query = _context.Set<T>();
 
 
-            IQueryable<T> query = _context.Set<T>()
-                .Include("Request")
-                .Include("Request.Creator")
-                .Include("Request.RequestReviewers")
-                .Include("Request.Attachments")
-                .Where("Request.DefinedRequestId==@0", definedRequestId);
+            #region Include Tables
+            if (includes != null)
+            {
+                foreach (var item in includes)
+                {
+                    if (!string.IsNullOrEmpty(item))
+                    {
+                        query = query.Include(item);
+                    }
+                }
+            }
+            #endregion
 
             #region Permission Filter
 
@@ -718,7 +747,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             }
             else
             {
-
+                query = query.Where("Request.RequestReviewers.Any(AssignedReviewerId == @0)", userId);
             }
             #endregion
 
@@ -788,7 +817,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
 
 
-            result.PaginatedData = await query.ToListAsync();
+            result.PaginatedData =  await query.ToListAsync();
             #endregion
 
 

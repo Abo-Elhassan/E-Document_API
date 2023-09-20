@@ -41,7 +41,7 @@ namespace EDocument_EF.Configurations
 
             entity.HasOne(d => d.Request).WithMany(p => p.RequestReviewers)
             .HasForeignKey(d => d.RequestId)
-            .OnDelete(DeleteBehavior.Restrict)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_RequestReviewer_Request");
 
             entity.HasOne(d => d.Reviewer).WithMany(p => p.RequestReviewers)
