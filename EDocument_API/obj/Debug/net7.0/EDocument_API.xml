@@ -63,11 +63,22 @@
              </remarks>
              <returns>List of All Reviewer PO Requests</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.RequestController.Create(EDocument_Data.DTOs.Requests.PoRequest.PoRequestWriteDto)">
+        <member name="M:EDocument_API.Controllers.V1.RequestController.Create(EDocument_Data.DTOs.Requests.PoRequest.PoRequestCreateDto)">
              <summary>
              Create PO Request
              </summary>
-             <param name="poRequestWriteDto">Po request Informarion</param>
+             <param name="poRequestCreateDto">Po request Informarion</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.Update(System.Int64,EDocument_Data.DTOs.Requests.PoRequest.PoRequestUpdateDto)">
+            <summary>
+            Update PO Request
+            </summary>
+            <param name="id">Po request Id</param>
+             <param name="poRequestUpdateDto">Po request Informarion</param>
              <remarks>
             
              </remarks>

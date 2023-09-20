@@ -7,23 +7,23 @@ using System.Threading.Tasks;
 
 namespace EDocument_Data.DTOs.Requests.PoRequest
 {
-    public class PoRequestWriteDto
+    public class PoRequestCreateDto
     {
         [Required]
         [RegularExpression("^(SOK.PO.)[0-9]{2}-[0-9]+$")]
-        public required string PoNumber { get; init; }
+        public  string PoNumber { get; init; }
 
         public string PoDescription { get; init; }
         [Required]
-        public required string VendorName { get; init; }
+        public  string VendorName { get; init; }
         [Required]
         public int VendorNumber { get; init; }
         [Required]
-        public required string InvoiceNumber { get; init; }
+        public  string InvoiceNumber { get; init; }
         [Required]
-        public required string PoAttachmentPath { get; init; }
+        public  string PoAttachmentPath { get; init; }
         [Required]
-        public required string InvoiceAttachmentPath { get; init; }
+        public  string InvoiceAttachmentPath { get; init; }
 
         //public List<Attachment> Attachments { get; set; }
         [Required]

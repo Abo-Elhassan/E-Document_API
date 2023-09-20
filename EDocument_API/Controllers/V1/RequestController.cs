@@ -23,6 +23,8 @@ using EDocument_Data.Consts.Enums;
 using System.Text.Json;
 using EDocument_Repositories.Application_Repositories.Request_Reviewer_Repository;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Azure.Core;
+using System.Linq.Expressions;
 
 namespace EDocument_API.Controllers.V1
 {
@@ -106,7 +108,7 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start DeletePoRequest from {nameof(UserController)}");
             var includes = new string[] { "PoRequest",  "Attachments", "RequestReviewers" };
 
-            var poRequest = await _unitOfWork.Repository<Request>().FindRequestAsync(
+            var poRequest = await _unitOfWork.Repository<Models.Request>().FindRequestAsync(
             requestId: id,
             expression:"Id==@0",
             includes: includes
@@ -120,7 +122,7 @@ namespace EDocument_API.Controllers.V1
             poRequest.ModifiedBy = User?.Identity?.Name;
             _unitOfWork.Complete();
 
-            _unitOfWork.Repository<Request>().Delete(poRequest);
+            _unitOfWork.Repository<Models.Request>().Delete(poRequest);
              _unitOfWork.Complete();
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
@@ -398,7 +400,7 @@ namespace EDocument_API.Controllers.V1
         /// <summary>
         /// Create PO Request
         /// </summary>
-        /// <param name="poRequestWriteDto">Po request Informarion</param>
+        /// <param name="poRequestCreateDto">Po request Informarion</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -407,16 +409,16 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Po/Create")]
         [Authorize(Roles ="Procurement")]
-        public async Task<ActionResult> Create(PoRequestWriteDto poRequestWriteDto)
+        public async Task<ActionResult> Create(PoRequestCreateDto poRequestCreateDto)
         {
-            _logger.LogInformation($"Start Create from {nameof(UserController)} for {JsonSerializer.Serialize(poRequestWriteDto)} ");
+            _logger.LogInformation($"Start Create from {nameof(UserController)} for {JsonSerializer.Serialize(poRequestCreateDto)} ");
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            var request = new Request {Id= requestId, DefinedRequestId = poRequestWriteDto.DefinedRequestId };
-            var definedRequestReviewers = await _requestReviewerRepository.GetDefinedRequestReviewersAsync(poRequestWriteDto.DefinedRequestId);
+            var request = new Models.Request { Id= requestId, DefinedRequestId = poRequestCreateDto.DefinedRequestId };
+            var definedRequestReviewers = await _requestReviewerRepository.GetDefinedRequestReviewersAsync(poRequestCreateDto.DefinedRequestId);
             request.RequestReviewers = _mapper.Map<List<RequestReviewer>>(definedRequestReviewers);
-            request.PoRequest =_mapper.Map<PoRequest>(poRequestWriteDto);
+            request.PoRequest =_mapper.Map<PoRequest>(poRequestCreateDto);
             request.CreatorId = user?.Id;
             request.PoRequest.CreatorFullName = user?.FullName;
             request.CurrentStage = 1;
@@ -424,7 +426,7 @@ namespace EDocument_API.Controllers.V1
             request.CreatedBy = user?.UserName;
             request.PoRequest.CreatedBy = user?.UserName;
 
-            _unitOfWork.Repository<Request>().Add(request);
+            _unitOfWork.Repository<Models.Request>().Add(request);
 
            var result =  _unitOfWork.Complete();
             if (result<1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
@@ -432,6 +434,50 @@ namespace EDocument_API.Controllers.V1
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request id = '{requestId}'" });
         }
 
+
+        /// <summary>
+        /// Update PO Request
+        /// </summary>
+        /// <param name="id">Po request Id</param>
+
+        /// <param name="poRequestUpdateDto">Po request Informarion</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("Po/Update/{id}")]
+        [Authorize(Roles = "Procurement")]
+        public async Task<ActionResult> Update(long id, PoRequestUpdateDto poRequestUpdateDto)
+        {
+            _logger.LogInformation($"Start Update from {nameof(UserController)} for {JsonSerializer.Serialize(poRequestUpdateDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            Expression<Func<Models.Request, bool>> expression = (r => r.Id == id);
+
+            var request = await _unitOfWork.Repository<Models.Request>().FindAsync(expression, new string[] { "PoRequest" });
+            
+            if (request == null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
+
+            if(request.Status!=RequestStatus.Declined)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update request information during reviewing proccess" });
+
+
+            _mapper.Map(poRequestUpdateDto, request.PoRequest);
+
+            request.ModifiedBy = user?.UserName;
+           request.PoRequest.ModifiedBy = user?.UserName;
+
+
+
+
+
+            var result = _unitOfWork.Complete();
+            if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
+        }
         #endregion
 
         #endregion

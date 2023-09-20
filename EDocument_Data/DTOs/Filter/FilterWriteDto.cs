@@ -16,7 +16,7 @@ namespace EDocument_Data.DTOs.Filter
         [Range(1, int.MaxValue, ErrorMessage = "PageNo must be greater than 0.")]
         public int? PageNo { get; set; } = 1;
 
-        [Range(1, 30, ErrorMessage = "PageSize must be greater than 0 and less than 30.")]
+        [Range(1, 100, ErrorMessage = "PageSize must be greater than 0 and less than 100.")]
         public int? PageSize { get; set; } = 10;
         public string? orderBy { get; set; }
         public OrderBy? orderByDirection { get; set; }
