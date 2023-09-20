@@ -3,6 +3,7 @@ using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_EF;
 using EDocument_Services.Helpers;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.IdentityModel.Tokens;
@@ -290,9 +291,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return result;
         }
 
-        public virtual (int TotalCount, IEnumerable<T> PaginatedData) FindAll(string filterValue, string? createdBy = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual (int TotalCount, IEnumerable<T> PaginatedData) FindAll(string? filterValue=null, string? createdBy = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
-            var expression = "";
             var dynamicFilter = "";
             (int TotalCount, IEnumerable<T> PaginatedData) result;
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
@@ -543,9 +543,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return result;
         }
 
-        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllAsync(string filterValue, string? createdBy = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllAsync(string? filterValue=null, string? createdBy = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
-            var expression = "";
             var dynamicFilter = "";
             (int TotalCount, IEnumerable<T> PaginatedData) result;
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
@@ -723,7 +722,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             var expression = "";
             (int TotalCount, IEnumerable<T> PaginatedData) result;
 
-            IQueryable<T> query = _context.Set<T>();
+            IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
 
             #region Include Tables
@@ -818,6 +817,99 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
 
             result.PaginatedData =  await query.ToListAsync();
+            #endregion
+
+
+            return result;
+        }
+        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string userId, RequestPermission permission, string? reviewingExpression = null, string[]? includes = null, string? filterValue = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        {
+            var dynamicFilter = "";
+            (int TotalCount, IEnumerable<T> PaginatedData) result;
+
+            IQueryable<T> query = _context.Set<T>().AsNoTracking();
+
+            #region Include Tables
+            if (includes != null)
+            {
+                foreach (var item in includes)
+                {
+                    if (!string.IsNullOrEmpty(item))
+                    {
+                        query = query.Include(item);
+                    }
+                }
+            }
+            #endregion
+
+            #region Permission Filter
+
+            if (permission == RequestPermission.Request)
+            {
+                query = query.Where("Request.CreatorId ==@0", userId);
+            }
+            else
+            {
+                query = query.Where("Request.RequestReviewers.Any(AssignedReviewerId == @0)", userId);
+            }
+            #endregion
+
+            #region Apply General Filter
+
+            var properties = typeof(T).GetProperties();
+
+            if (!string.IsNullOrEmpty(filterValue))
+            {
+                dynamicFilter = string.Join(" OR ", properties.Where(p => p.PropertyType == typeof(string) || p.PropertyType == typeof(DateTime) || p.PropertyType == typeof(long) || p.PropertyType == typeof(float))
+                .Select(property => property.PropertyType == typeof(string) ? $"{property.Name}.Contains(@0)" : $"{property.Name}.Equals(@0)"));
+                query = query.Where(dynamicFilter, filterValue);
+
+            }
+            #endregion
+
+            #region Apply Date Filter
+            if (dateFilters != null)
+            {
+                foreach (var filter in dateFilters)
+                {
+                    var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
+
+                    var property = typeof(T).GetProperty(pascalCaseColumnName);
+
+                    if (property != null)
+                    {
+                        query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                    }
+                }
+            }
+            #endregion
+
+            result.TotalCount = query.Count();
+
+            #region Apply Sorting
+            if (orderBy != null && orderByDirection != null)
+            {
+                var sortDirection = orderByDirection == OrderBy.Asc ? OrderBy.Asc : OrderBy.Desc;
+                orderBy = Utilities.ConvertColumnNameToPascalCase(orderBy);
+
+                var property = typeof(T).GetProperty(orderBy);
+                if (property != null)
+                {
+                    query = query.OrderBy($"{orderBy} {sortDirection}");
+                }
+
+            }
+            #endregion
+
+            #region Apply Pagination
+            if (skip.HasValue && take.HasValue)
+            {
+                query = query.Skip(skip.Value).Take(take.Value);
+            }
+
+
+
+            result.PaginatedData = await query.ToListAsync();
             #endregion
 
 

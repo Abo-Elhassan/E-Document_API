@@ -1797,3 +1797,819 @@ INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
 LEFT JOIN [RequestReviewer] AS [r1] ON [t].[Id] = [r1].[RequestId]
 LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
 ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r1].[RequestId], [r1].[AssignedReviewerId]
+2023-09-20T12:23:01.6400685+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T12:23:01.6468828+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T12:23:01.6493433+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T12:23:01.6515562+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T12:24:30.7822735+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T12:24:30.7866135+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T12:24:30.7884915+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T12:24:30.7899602+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T12:25:24.2865230+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-20T12:25:25.4658397+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:25:31.4514665+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryPossibleUnintendedUseOfEqualsWarning]	Possible unintended use of method 'Equals' for arguments 'p.RequestId' and '15' of different types in a query. This comparison will always return false.
+2023-09-20T12:25:32.1223218+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (60ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188' AND (([p].[PoNumber] LIKE N'%15%') OR ([p].[PoDescription] LIKE N'%15%') OR ([p].[VendorName] LIKE N'%15%') OR ([p].[InvoiceNumber] LIKE N'%15%') OR ([p].[PoAttachmentPath] LIKE N'%15%') OR ([p].[InvoiceAttachmentPath] LIKE N'%15%') OR ([p].[CreatedBy] LIKE N'%15%') OR ([p].[ModifiedBy] LIKE N'%15%'))
+2023-09-20T12:25:32.2093306+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryPossibleUnintendedUseOfEqualsWarning]	Possible unintended use of method 'Equals' for arguments 'p.RequestId' and '15' of different types in a query. This comparison will always return false.
+2023-09-20T12:25:32.2180529+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:25:32.2225602+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:25:32.3702157+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.MultipleCollectionIncludeWarning]	Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2023-09-20T12:25:32.5138908+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (72ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188' AND (([p].[PoNumber] LIKE N'%15%') OR ([p].[PoDescription] LIKE N'%15%') OR ([p].[VendorName] LIKE N'%15%') OR ([p].[InvoiceNumber] LIKE N'%15%') OR ([p].[PoAttachmentPath] LIKE N'%15%') OR ([p].[InvoiceAttachmentPath] LIKE N'%15%') OR ([p].[CreatedBy] LIKE N'%15%') OR ([p].[ModifiedBy] LIKE N'%15%'))
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:25:32.5872995+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188'
+2023-09-20T12:25:32.5931268+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:25:32.5955815+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:25:32.6188752+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.MultipleCollectionIncludeWarning]	Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2023-09-20T12:25:32.6520570+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (15ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188'
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:26:00.8598765+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:26:00.9847233+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryPossibleUnintendedUseOfEqualsWarning]	Possible unintended use of method 'Equals' for arguments 'p.RequestId' and 'SOK.PO.09-8+' of different types in a query. This comparison will always return false.
+2023-09-20T12:26:01.0065597+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188' AND (([p].[PoNumber] LIKE N'%SOK.PO.09-8+%') OR ([p].[PoDescription] LIKE N'%SOK.PO.09-8+%') OR ([p].[VendorName] LIKE N'%SOK.PO.09-8+%') OR ([p].[InvoiceNumber] LIKE N'%SOK.PO.09-8+%') OR ([p].[PoAttachmentPath] LIKE N'%SOK.PO.09-8+%') OR ([p].[InvoiceAttachmentPath] LIKE N'%SOK.PO.09-8+%') OR ([p].[CreatedBy] LIKE N'%SOK.PO.09-8+%') OR ([p].[ModifiedBy] LIKE N'%SOK.PO.09-8+%'))
+2023-09-20T12:26:01.0155675+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryPossibleUnintendedUseOfEqualsWarning]	Possible unintended use of method 'Equals' for arguments 'p.RequestId' and 'SOK.PO.09-8+' of different types in a query. This comparison will always return false.
+2023-09-20T12:26:01.0196590+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:26:01.0230323+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:26:01.0519630+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.MultipleCollectionIncludeWarning]	Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2023-09-20T12:26:01.1135100+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (33ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188' AND (([p].[PoNumber] LIKE N'%SOK.PO.09-8+%') OR ([p].[PoDescription] LIKE N'%SOK.PO.09-8+%') OR ([p].[VendorName] LIKE N'%SOK.PO.09-8+%') OR ([p].[InvoiceNumber] LIKE N'%SOK.PO.09-8+%') OR ([p].[PoAttachmentPath] LIKE N'%SOK.PO.09-8+%') OR ([p].[InvoiceAttachmentPath] LIKE N'%SOK.PO.09-8+%') OR ([p].[CreatedBy] LIKE N'%SOK.PO.09-8+%') OR ([p].[ModifiedBy] LIKE N'%SOK.PO.09-8+%'))
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:26:01.1302935+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188'
+2023-09-20T12:26:01.1543713+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (19ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188'
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:26:07.6664949+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:26:07.6919473+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188' AND (([p].[PoNumber] LIKE N'%SOK.PO.09-8+%') OR ([p].[PoDescription] LIKE N'%SOK.PO.09-8+%') OR ([p].[VendorName] LIKE N'%SOK.PO.09-8+%') OR ([p].[InvoiceNumber] LIKE N'%SOK.PO.09-8+%') OR ([p].[PoAttachmentPath] LIKE N'%SOK.PO.09-8+%') OR ([p].[InvoiceAttachmentPath] LIKE N'%SOK.PO.09-8+%') OR ([p].[CreatedBy] LIKE N'%SOK.PO.09-8+%') OR ([p].[ModifiedBy] LIKE N'%SOK.PO.09-8+%'))
+2023-09-20T12:26:07.6976991+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188' AND (([p].[PoNumber] LIKE N'%SOK.PO.09-8+%') OR ([p].[PoDescription] LIKE N'%SOK.PO.09-8+%') OR ([p].[VendorName] LIKE N'%SOK.PO.09-8+%') OR ([p].[InvoiceNumber] LIKE N'%SOK.PO.09-8+%') OR ([p].[PoAttachmentPath] LIKE N'%SOK.PO.09-8+%') OR ([p].[InvoiceAttachmentPath] LIKE N'%SOK.PO.09-8+%') OR ([p].[CreatedBy] LIKE N'%SOK.PO.09-8+%') OR ([p].[ModifiedBy] LIKE N'%SOK.PO.09-8+%'))
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:26:07.7011038+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188'
+2023-09-20T12:26:07.7057575+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188'
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:27:34.7345929+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:28:53.3226916+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188' AND (([p].[PoNumber] LIKE N'%15%') OR ([p].[PoDescription] LIKE N'%15%') OR ([p].[VendorName] LIKE N'%15%') OR ([p].[InvoiceNumber] LIKE N'%15%') OR ([p].[PoAttachmentPath] LIKE N'%15%') OR ([p].[InvoiceAttachmentPath] LIKE N'%15%') OR ([p].[CreatedBy] LIKE N'%15%') OR ([p].[ModifiedBy] LIKE N'%15%'))
+2023-09-20T12:28:56.0717327+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (10ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188' AND (([p].[PoNumber] LIKE N'%15%') OR ([p].[PoDescription] LIKE N'%15%') OR ([p].[VendorName] LIKE N'%15%') OR ([p].[InvoiceNumber] LIKE N'%15%') OR ([p].[PoAttachmentPath] LIKE N'%15%') OR ([p].[InvoiceAttachmentPath] LIKE N'%15%') OR ([p].[CreatedBy] LIKE N'%15%') OR ([p].[ModifiedBy] LIKE N'%15%'))
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:28:56.0800875+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188'
+2023-09-20T12:28:56.0917993+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (8ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188'
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:30:17.7112276+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:30:20.2286083+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188' AND (([p].[PoNumber] LIKE N'%15%') OR ([p].[PoDescription] LIKE N'%15%') OR ([p].[VendorName] LIKE N'%15%') OR ([p].[InvoiceNumber] LIKE N'%15%') OR ([p].[PoAttachmentPath] LIKE N'%15%') OR ([p].[InvoiceAttachmentPath] LIKE N'%15%') OR ([p].[CreatedBy] LIKE N'%15%') OR ([p].[ModifiedBy] LIKE N'%15%'))
+2023-09-20T12:30:20.2534803+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (21ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188' AND (([p].[PoNumber] LIKE N'%15%') OR ([p].[PoDescription] LIKE N'%15%') OR ([p].[VendorName] LIKE N'%15%') OR ([p].[InvoiceNumber] LIKE N'%15%') OR ([p].[PoAttachmentPath] LIKE N'%15%') OR ([p].[InvoiceAttachmentPath] LIKE N'%15%') OR ([p].[CreatedBy] LIKE N'%15%') OR ([p].[ModifiedBy] LIKE N'%15%'))
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:30:32.9038812+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:30:40.6484727+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryPossibleUnintendedUseOfEqualsWarning]	Possible unintended use of method 'Equals' for arguments 'p.RequestId' and 'SOK.PO.15-3+' of different types in a query. This comparison will always return false.
+2023-09-20T12:30:40.6650799+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (12ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188' AND (([p].[PoNumber] LIKE N'%SOK.PO.15-3+%') OR ([p].[PoDescription] LIKE N'%SOK.PO.15-3+%') OR ([p].[VendorName] LIKE N'%SOK.PO.15-3+%') OR ([p].[InvoiceNumber] LIKE N'%SOK.PO.15-3+%') OR ([p].[PoAttachmentPath] LIKE N'%SOK.PO.15-3+%') OR ([p].[InvoiceAttachmentPath] LIKE N'%SOK.PO.15-3+%') OR ([p].[CreatedBy] LIKE N'%SOK.PO.15-3+%') OR ([p].[ModifiedBy] LIKE N'%SOK.PO.15-3+%'))
+2023-09-20T12:30:40.6735997+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryPossibleUnintendedUseOfEqualsWarning]	Possible unintended use of method 'Equals' for arguments 'p.RequestId' and 'SOK.PO.15-3+' of different types in a query. This comparison will always return false.
+2023-09-20T12:30:40.6758254+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:30:40.6779213+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:30:40.7026698+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.MultipleCollectionIncludeWarning]	Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2023-09-20T12:30:40.7401987+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (20ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188' AND (([p].[PoNumber] LIKE N'%SOK.PO.15-3+%') OR ([p].[PoDescription] LIKE N'%SOK.PO.15-3+%') OR ([p].[VendorName] LIKE N'%SOK.PO.15-3+%') OR ([p].[InvoiceNumber] LIKE N'%SOK.PO.15-3+%') OR ([p].[PoAttachmentPath] LIKE N'%SOK.PO.15-3+%') OR ([p].[InvoiceAttachmentPath] LIKE N'%SOK.PO.15-3+%') OR ([p].[CreatedBy] LIKE N'%SOK.PO.15-3+%') OR ([p].[ModifiedBy] LIKE N'%SOK.PO.15-3+%'))
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:31:22.1174537+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:31:25.5407593+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188'
+2023-09-20T12:31:25.5536125+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (10ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188'
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:32:57.6571173+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:33:01.0886901+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryPossibleUnintendedUseOfEqualsWarning]	Possible unintended use of method 'Equals' for arguments 'p.VendorNumber' and '8' of different types in a query. This comparison will always return false.
+2023-09-20T12:33:01.0956174+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE 0 = 1
+2023-09-20T12:33:01.0998164+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryPossibleUnintendedUseOfEqualsWarning]	Possible unintended use of method 'Equals' for arguments 'p.VendorNumber' and '8' of different types in a query. This comparison will always return false.
+2023-09-20T12:33:01.1018494+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:33:01.1039737+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:33:01.1139033+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.MultipleCollectionIncludeWarning]	Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2023-09-20T12:33:01.1302365+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE 0 = 1
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:33:10.4473598+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:33:10.4527722+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryPossibleUnintendedUseOfEqualsWarning]	Possible unintended use of method 'Equals' for arguments 'p.VendorNumber' and '18' of different types in a query. This comparison will always return false.
+2023-09-20T12:33:10.4586252+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE 0 = 1
+2023-09-20T12:33:10.4624984+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryPossibleUnintendedUseOfEqualsWarning]	Possible unintended use of method 'Equals' for arguments 'p.VendorNumber' and '18' of different types in a query. This comparison will always return false.
+2023-09-20T12:33:10.4645890+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:33:10.4667162+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:33:10.4791630+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.MultipleCollectionIncludeWarning]	Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2023-09-20T12:33:10.5002484+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE 0 = 1
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:33:24.9120034+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:33:24.9225837+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188'
+2023-09-20T12:33:24.9369503+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (11ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188'
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:37:21.5680834+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:37:24.4081243+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE 0 = 1
+2023-09-20T12:37:24.4152352+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE 0 = 1
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:37:36.7020759+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:37:41.1840314+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188' AND ([p].[VendorName] LIKE N'%18%')
+2023-09-20T12:37:41.1881651+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:37:41.1905557+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:37:41.2066021+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.MultipleCollectionIncludeWarning]	Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2023-09-20T12:37:41.2421578+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (16ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188' AND ([p].[VendorName] LIKE N'%18%')
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:37:47.7929153+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:37:49.6193076+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188' AND ([p].[VendorName] LIKE N'%a%')
+2023-09-20T12:37:49.6259123+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:37:49.6285318+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:37:49.6521733+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.MultipleCollectionIncludeWarning]	Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2023-09-20T12:37:49.6922925+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (19ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188' AND ([p].[VendorName] LIKE N'%a%')
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:38:44.4726521+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:38:46.5531434+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (8ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188' AND ([p].[InvoiceNumber] LIKE N'%35%')
+2023-09-20T12:38:46.5584248+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:38:46.5606274+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:38:46.5794445+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.MultipleCollectionIncludeWarning]	Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2023-09-20T12:38:46.6189089+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (19ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188' AND ([p].[InvoiceNumber] LIKE N'%35%')
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:39:17.7331229+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:39:20.7569054+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryPossibleUnintendedUseOfEqualsWarning]	Possible unintended use of method 'Equals' for arguments 'p.VendorNumber' and '35' of different types in a query. This comparison will always return false.
+2023-09-20T12:39:20.7620227+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE 0 = 1
+2023-09-20T12:39:20.7650849+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryPossibleUnintendedUseOfEqualsWarning]	Possible unintended use of method 'Equals' for arguments 'p.VendorNumber' and '35' of different types in a query. This comparison will always return false.
+2023-09-20T12:39:20.7670258+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:39:20.7687947+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:39:20.7858661+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.MultipleCollectionIncludeWarning]	Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2023-09-20T12:39:20.8027641+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE 0 = 1
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]
+2023-09-20T12:43:26.1098902+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T12:43:26.1148776+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T12:43:26.1167083+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T12:43:26.1182944+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T12:44:43.4342766+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-20T12:44:44.6329448+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:44:54.7169609+03:00	FAIL	[EDocument_API.Middlewares.ExceptionMiddleware]	[0]	Cannot implicitly convert type 'System.Text.Json.JsonElement' to 'string'Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: Cannot implicitly convert type 'System.Text.Json.JsonElement' to 'string'
+   at CallSite.Target(Closure, CallSite, Object)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at EDocument_Reposatories.Generic_Reposatories.GenericRepository`1.FindAllRequestsAsync(String userId, RequestPermission permission, String reviewingExpression, String[] includes, Dictionary`2 filters, Nullable`1 skip, Nullable`1 take, String orderBy, Nullable`1 orderByDirection, DateFilter[] dateFilters) in F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_Reposatories\Generic Repositories\GenericRepository.cs:line 765
+   at EDocument_API.Controllers.V1.RequestController.GetPoRequestsFiltered(RequestFilterWriteDto filterDto) in F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\Controllers\V1\RequestController.cs:line 152
+   at lambda_method6(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at EDocument_API.Middlewares.ExceptionMiddleware.Invoke(HttpContext context) in F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\Middlewares\ExceptionMiddleware.cs:line 30
+
+2023-09-20T12:46:49.4809740+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T12:46:49.4861431+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T12:46:49.4877880+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T12:46:49.4891206+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T12:50:43.3731544+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (22ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2023-09-20T12:50:43.3943817+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2023-09-20T12:50:43.3961629+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2023-09-20T12:50:43.3967881+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2023-09-20T12:50:43.4101281+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2023-09-20T12:50:43.4214501+03:00	INFO	[Microsoft.EntityFrameworkCore.Migrations]	[Microsoft.EntityFrameworkCore.Migrations.MigrationsNotApplied]	No migrations were applied. The database is already up to date.
+2023-09-20T12:51:07.5930638+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (22ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2023-09-20T12:51:07.6269078+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (17ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2023-09-20T12:51:07.6305002+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2023-09-20T12:51:07.6313580+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2023-09-20T12:51:07.6454110+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2023-09-20T12:51:07.6674341+03:00	INFO	[Microsoft.EntityFrameworkCore.Migrations]	[Microsoft.EntityFrameworkCore.Migrations.MigrationApplying]	Applying migration '20230920095055_addCreatorFullName'.
+2023-09-20T12:51:07.8335931+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (17ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [ApplicationUserRequest] DROP CONSTRAINT [FK_ApplicationUserRequest_Request];
+2023-09-20T12:51:07.8368480+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Attachment] DROP CONSTRAINT [FK_Attachment_Request];
+2023-09-20T12:51:07.8386269+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [CarRequest] DROP CONSTRAINT [FK_CarRequest_Request];
+2023-09-20T12:51:07.8409552+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [DomainAccountRequest] DROP CONSTRAINT [FK_DomainAccountRequest_Request];
+2023-09-20T12:51:07.8431857+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [PoRequest] DROP CONSTRAINT [FK_PoRequest_Request];
+2023-09-20T12:51:07.8445865+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Request] DROP CONSTRAINT [FK_Request_DefinedRequest];
+2023-09-20T12:51:07.8467519+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Request] DROP CONSTRAINT [FK_Request_User];
+2023-09-20T12:51:07.8486127+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [RequestApplicationRole] DROP CONSTRAINT [FK_RequestApplicationRole_Request];
+2023-09-20T12:51:07.8503115+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [RequestReviewer] DROP CONSTRAINT [FK_RequestReviewer_Request];
+2023-09-20T12:51:07.8524103+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [TravelDeskRequest] DROP CONSTRAINT [FK_TravelDeskRequest_Request];
+2023-09-20T12:51:07.8537233+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [VoucherRequest] DROP CONSTRAINT [FK_VoucherRequest_Request];
+2023-09-20T12:51:08.4461530+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [DefinedRequestRole]
+WHERE [DefinedRequestId] = CAST(1 AS bigint) AND [RoleId] = N'b3d4f0fb-49ac-4940-bb4d-d2217435d857';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:08.4468455+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [DefinedRequestRole]
+WHERE [DefinedRequestId] = CAST(1 AS bigint) AND [RoleId] = N'd0e993b9-f63e-49c6-8077-2dafda5099ea';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:08.4640114+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (17ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'08c943f2-9de4-4fcf-bae6-e0914a085264';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:08.4700734+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'222727bd-5404-4c72-9faf-5c07fbf9c6f3';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:08.4801734+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'2b40d794-8c8e-4438-8d5d-b1c63748ad7e';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:08.4896430+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (9ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'30ead12a-94f0-4e6a-9843-6f273a501ba8';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:08.4963380+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'4135de4e-b28a-43e1-a7c0-c47c45c9e204';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:08.5002040+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'6f44104f-8d89-4cbf-8074-50522f899c9c';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:09.2906238+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'7dfa575c-0c26-4d2c-8e47-a8ea0f44ec00';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:09.2947058+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'889f4f0a-0f8a-48b8-82b7-4132f53a1fed';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:09.2981545+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'a688e8c8-2dd4-4711-b3c2-b7071103140f';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:09.3041589+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'ccfa0fb4-cf2e-4416-9f00-e6ed9595959c';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:09.3099223+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'd493bff1-6fe1-4fc2-99b7-3de053fe18d9';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:09.3139160+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'dec56611-3901-4f58-8544-27931cc01387';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:09.3189601+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'f411bbc1-0c06-4394-9abc-e844cb5c8bd6';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:09.3215689+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[UserRoles]
+WHERE [RoleId] = N'd0e993b9-f63e-49c6-8077-2dafda5099ea' AND [UserId] = N'51124';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:10.4287706+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[UserRoles]
+WHERE [RoleId] = N'b3d4f0fb-49ac-4940-bb4d-d2217435d857' AND [UserId] = N'51188';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:10.4345114+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'b3d4f0fb-49ac-4940-bb4d-d2217435d857';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:10.4406020+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+DELETE FROM [security].[Role]
+WHERE [Id] = N'd0e993b9-f63e-49c6-8077-2dafda5099ea';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:10.4472964+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Request] ADD [CreatorFullName] nvarchar(200) NULL;
+2023-09-20T12:51:10.4670905+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (20ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'ConcurrencyStamp', N'Name', N'NormalizedName') AND [object_id] = OBJECT_ID(N'[security].[Role]'))
+    SET IDENTITY_INSERT [security].[Role] ON;
+INSERT INTO [security].[Role] ([Id], [ConcurrencyStamp], [Name], [NormalizedName])
+VALUES (N'0f81f547-b096-4aa6-a495-e15252a555c5', N'9f8e363d-a031-49e6-8a7b-4b03eec5564f', N'InfoFort', N'INFOFORT'),
+(N'1b7e5001-4ee8-4220-92a9-8459ad25561a', N'a76a1c3d-ffe5-47cc-afde-160261fa8840', N'Adminstration', N'ADMINSTRATION'),
+(N'22a1054f-27fb-4e1e-a695-853570329f28', N'e6c9a7e5-9574-4e28-853f-56bf22ee2cab', N'OperationCT', N'OPERATIONCT'),
+(N'2cf317d0-33e3-4f35-b071-fcca4b309a27', N'b445d5bb-55df-44dc-a230-f84813cfabcf', N'CustomerService', N'CUSTOMERSERVICE'),
+(N'4676a63b-678b-4560-9ce0-e9915278b4d9', N'efc83b31-9380-44f4-8ff5-60bf0b39065c', N'Engineering', N'ENGINEERING'),
+(N'572ffdd7-aa12-4985-9f30-fa9152fc29b6', N'db5c5272-d966-4931-bd28-25c944d7cd18', N'IT', N'IT'),
+(N'599a22ab-4b4b-40ee-99ab-fc24cabb1af3', N'146d8f3d-0dfd-4d84-b013-881ce88e06b2', N'Security', N'SECURITY'),
+(N'5ca1f5ac-8f21-4041-8f4d-13549c6cfe31', N'c6ed859f-46ea-43c9-8181-203b0fdea5f6', N'Communications', N'COMMUNICATIONS'),
+(N'6488cb87-fc36-46dc-a06b-8e402641b102', N'8b407876-6328-47ab-9d87-c8f3455efe6d', N'Procurement', N'PROCUREMENT'),
+(N'6848367e-2d9d-4e0c-858e-692d05ca26c8', N'89693b12-4b17-4472-a816-f3c9613ed59e', N'Commercial', N'COMMERCIAL'),
+(N'6d9d6418-6154-494b-9967-23012e4bae19', N'8ee952c7-76b7-473b-a2e4-cd22d650b084', N'SuperAdmin', N'SUPERADMIN'),
+(N'7d1c73e0-c319-4ebc-b108-9b6ed64c1efe', N'78b2fda0-c9fb-416d-ab36-dff8ce34c980', N'OperationBGC', N'OPERATIONBGC'),
+(N'abddb48a-6657-429c-b9ba-1ad8f10fabca', N'a46f4b26-e894-4f01-9bd7-e655b22b9edf', N'Finance', N'FINANCE'),
+(N'dc3c247b-3898-481e-bce2-adf700885973', N'790a1b4e-96f6-496b-a79f-0831b01ebf1d', N'Store', N'STORE'),
+(N'f3b88eb3-33c1-4cad-af14-75fee309e9f1', N'4a818dd2-ab3c-4330-9b4d-07137d6b96c2', N'HR', N'HR');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'ConcurrencyStamp', N'Name', N'NormalizedName') AND [object_id] = OBJECT_ID(N'[security].[Role]'))
+    SET IDENTITY_INSERT [security].[Role] OFF;
+2023-09-20T12:51:11.5033581+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'36daaee2-bf58-4ccb-a533-b2913a74f182', [SecurityStamp] = N'fdd6843c-50bf-4bb3-84d6-b44f561e8bbe'
+WHERE [Id] = N'50000';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:11.5041428+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'81bc5b21-8f31-4ee8-86f5-21235015cf6b', [SecurityStamp] = N'7a66359c-7f30-4756-83dc-b7b907b85566'
+WHERE [Id] = N'50128';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:12.1783802+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'3dfd910a-25cf-468a-b7f1-80f31aa3e9e6', [SecurityStamp] = N'e6e0548f-a7cb-43a3-8e07-23614fcf3eb5'
+WHERE [Id] = N'50136';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:12.1789233+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'826045a0-8591-4015-aaca-7bf1c4bfdabc', [SecurityStamp] = N'70585c6f-7a64-4133-a391-5f990539d020'
+WHERE [Id] = N'50140';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:12.1796931+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'be557acc-6e00-4ba6-8b48-ec58d700eb5e', [SecurityStamp] = N'e73c914c-93cb-4a14-868e-d8e92cec9a7b'
+WHERE [Id] = N'50141';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:12.1802833+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'c4a647bb-b16a-4e42-9314-aba6e5a3f55c', [SecurityStamp] = N'7e18018d-26c1-4226-a808-210f471dc2d3'
+WHERE [Id] = N'50263';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:12.1806818+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'6ddb1ffc-b20b-4bae-8c9a-8cf478133a08', [SecurityStamp] = N'0bbe911e-2c7b-4fb3-8314-7157f2857250'
+WHERE [Id] = N'50269';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:12.1809910+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'7f146748-7ffe-4504-a181-6a36807fd955', [SecurityStamp] = N'ddc2a107-f853-4994-ba4b-8a54f094d642'
+WHERE [Id] = N'50279';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:13.0573225+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'559bdc72-3ddf-4545-975c-f3c810647f20', [SecurityStamp] = N'f1c38d8d-beee-4b72-bc3f-f876044d5d66'
+WHERE [Id] = N'50354';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:13.0578415+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'6c364649-c6a2-4df9-8cfd-18dbf4f47f98', [SecurityStamp] = N'67808570-106a-44f9-a97b-c421ac459fea'
+WHERE [Id] = N'50562';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:13.0583088+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'12d00d49-a156-43b5-8ca2-7b5e99801b95', [SecurityStamp] = N'171c012e-c5a6-47ec-a5be-7f2b496d8d10'
+WHERE [Id] = N'50670';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:13.0587438+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'f2763047-a066-470f-8dd7-eda9ccceaed7', [SecurityStamp] = N'd0e12e78-42e0-4320-a7ca-82baa0fb7e4c'
+WHERE [Id] = N'50844';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:13.0592180+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'dff3e883-0ca2-4f2e-8d99-e9587da4e419', [SecurityStamp] = N'c3ac9e59-d9d5-4e71-aea2-8df923a9f7d5'
+WHERE [Id] = N'50882';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:13.0597881+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'56285206-e186-4cdf-aa9b-3fd8fbe9ed79', [SecurityStamp] = N'df8ae3ee-60bb-4715-955d-a12f374cde32'
+WHERE [Id] = N'50962';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:13.9508381+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'8bfc810f-0c36-46a3-9453-6c7296dd46f1', [SecurityStamp] = N'f99382b1-3fa0-43ed-aebe-541014eec375'
+WHERE [Id] = N'51090';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:13.9512701+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'4caaf349-1d57-49bb-af34-9557d4c6b31f', [SecurityStamp] = N'cf9184ef-5167-4470-858b-fe56f6af32cc'
+WHERE [Id] = N'51124';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:13.9516647+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'7ea02ab4-fca0-495a-9e49-e3e3554d7b6b', [SecurityStamp] = N'128f871a-9110-4aa6-b776-30c3d8aed433'
+WHERE [Id] = N'51126';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:13.9520316+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'99639859-51ea-473a-a643-f7dec220de25', [SecurityStamp] = N'a7ba46ca-b9de-4204-a537-92682ca95cf1'
+WHERE [Id] = N'51188';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:13.9522631+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'c8593c9b-760c-4279-a3e8-03796aa072a0', [SecurityStamp] = N'5613fe12-c092-4825-9458-04e4f1da30cd'
+WHERE [Id] = N'51229';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:13.9524622+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'c5202a5c-d47e-4307-b548-9b654aa18048', [SecurityStamp] = N'3c86e99b-96f4-4f11-9ab1-09d379037a2d'
+WHERE [Id] = N'51330';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:14.9873762+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'4ae898f0-d8d9-4c10-b982-ab1b741869a7', [SecurityStamp] = N'42f3f858-30d1-4e74-8fc8-648eb49a4a6c'
+WHERE [Id] = N'51331';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:14.9900750+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'6112b8a9-672d-4739-8e09-f55d5407dd00', [SecurityStamp] = N'f534f41b-35a4-4f89-95f7-37bf3221e84c'
+WHERE [Id] = N'51449';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:14.9905431+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'e637693b-4362-4221-be5f-2d565817e4e5', [SecurityStamp] = N'3105de42-d76a-4bc3-9929-c4304df52516'
+WHERE [Id] = N'51509';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:14.9910254+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'94515833-e967-4d88-9329-e6655fde7887', [SecurityStamp] = N'4d51a202-7fe6-4f9f-a235-b5fdd9f6e478'
+WHERE [Id] = N'51520';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:14.9913930+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'b2fa42ff-549f-40ec-a17d-b4fa684ce680', [SecurityStamp] = N'711d29c0-748a-4007-ab25-6a9061331ca2'
+WHERE [Id] = N'51529';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:14.9918177+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'6ce50568-06b3-417f-bb82-ae5c521bdca3', [SecurityStamp] = N'b71cbc78-20ba-401f-b5f4-0da5486daad9'
+WHERE [Id] = N'51572';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:15.8353797+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'ee2f602f-b9f3-4e03-a663-cb93ca2ca335', [SecurityStamp] = N'8b4c3061-a30f-43db-820a-342992c4bb4d'
+WHERE [Id] = N'51573';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:15.8361253+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'c3ebfaf4-b8ac-411f-8bcf-672ef473b040', [SecurityStamp] = N'99f1d282-3a28-41e4-a6ae-d6015038a671'
+WHERE [Id] = N'51583';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:15.8365386+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'033bfb48-ce8f-4fff-8af6-08e750d23b43', [SecurityStamp] = N'5e2df340-8ee6-4ae9-804a-318fb3325157'
+WHERE [Id] = N'51659';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:15.8370845+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'6ef6a7c8-22a9-42fc-a6fe-e388fcf5ada5', [SecurityStamp] = N'c4ec59f4-1da3-4965-8a12-e5166745aea6'
+WHERE [Id] = N'51668';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:15.8373939+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'5b9d5d7f-634c-4032-a718-4984103bd52e', [SecurityStamp] = N'3320a9b4-52ac-44a6-9781-90223c1c83d7'
+WHERE [Id] = N'90008';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:15.8376835+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'52f6fc39-ca36-4350-864f-d067d3472997', [SecurityStamp] = N'fac207c6-e301-47a3-9895-73702cf32a07'
+WHERE [Id] = N'90010';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:16.9087379+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'2da5a05c-5fe3-4d27-9bd6-488b66d32002', [SecurityStamp] = N'3234dd4f-9f42-47c2-a723-2e49b098de8f'
+WHERE [Id] = N'90015';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:16.9090960+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [security].[User] SET [ConcurrencyStamp] = N'eb5dada2-56bd-4a7c-91cb-1ffbbe8a309e', [SecurityStamp] = N'955452f0-553e-48bc-b541-761c36b2867c'
+WHERE [Id] = N'Exp-16';
+SELECT @@ROWCOUNT;
+2023-09-20T12:51:16.9299113+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (21ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'DefinedRequestId', N'RoleId', N'CreatedAt', N'CreatedBy', N'ModifiedAt', N'ModifiedBy', N'Permission') AND [object_id] = OBJECT_ID(N'[DefinedRequestRole]'))
+    SET IDENTITY_INSERT [DefinedRequestRole] ON;
+INSERT INTO [DefinedRequestRole] ([DefinedRequestId], [RoleId], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [Permission])
+VALUES (CAST(1 AS bigint), N'6488cb87-fc36-46dc-a06b-8e402641b102', NULL, NULL, NULL, NULL, N'Request'),
+(CAST(1 AS bigint), N'abddb48a-6657-429c-b9ba-1ad8f10fabca', NULL, NULL, NULL, NULL, N'Review');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'DefinedRequestId', N'RoleId', N'CreatedAt', N'CreatedBy', N'ModifiedAt', N'ModifiedBy', N'Permission') AND [object_id] = OBJECT_ID(N'[DefinedRequestRole]'))
+    SET IDENTITY_INSERT [DefinedRequestRole] OFF;
+2023-09-20T12:51:16.9506765+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (21ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'RoleId', N'UserId') AND [object_id] = OBJECT_ID(N'[security].[UserRoles]'))
+    SET IDENTITY_INSERT [security].[UserRoles] ON;
+INSERT INTO [security].[UserRoles] ([RoleId], [UserId])
+VALUES (N'abddb48a-6657-429c-b9ba-1ad8f10fabca', N'51124'),
+(N'6488cb87-fc36-46dc-a06b-8e402641b102', N'51188');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'RoleId', N'UserId') AND [object_id] = OBJECT_ID(N'[security].[UserRoles]'))
+    SET IDENTITY_INSERT [security].[UserRoles] OFF;
+2023-09-20T12:51:17.8496562+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [ApplicationUserRequest] ADD CONSTRAINT [FK_ApplicationUserRequest_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE CASCADE;
+2023-09-20T12:51:17.8507348+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Attachment] ADD CONSTRAINT [FK_Attachment_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE CASCADE;
+2023-09-20T12:51:17.8513461+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [CarRequest] ADD CONSTRAINT [FK_CarRequest_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE CASCADE;
+2023-09-20T12:51:17.8520461+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [DomainAccountRequest] ADD CONSTRAINT [FK_DomainAccountRequest_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE CASCADE;
+2023-09-20T12:51:17.8540332+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [PoRequest] ADD CONSTRAINT [FK_PoRequest_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE CASCADE;
+2023-09-20T12:51:17.8560340+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Request] ADD CONSTRAINT [FK_Request_DefinedRequest] FOREIGN KEY ([DefinedRequestId]) REFERENCES [DefinedRequest] ([Id]) ON DELETE NO ACTION;
+2023-09-20T12:51:18.5285429+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Request] ADD CONSTRAINT [FK_Request_User] FOREIGN KEY ([CreatorId]) REFERENCES [security].[User] ([Id]) ON DELETE NO ACTION;
+2023-09-20T12:51:18.5301145+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [RequestApplicationRole] ADD CONSTRAINT [FK_RequestApplicationRole_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE CASCADE;
+2023-09-20T12:51:18.5333415+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [RequestReviewer] ADD CONSTRAINT [FK_RequestReviewer_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE CASCADE;
+2023-09-20T12:51:18.5350948+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [TravelDeskRequest] ADD CONSTRAINT [FK_TravelDeskRequest_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE CASCADE;
+2023-09-20T12:51:18.5363334+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [VoucherRequest] ADD CONSTRAINT [FK_VoucherRequest_Request] FOREIGN KEY ([RequestId]) REFERENCES [Request] ([Id]) ON DELETE CASCADE;
+2023-09-20T12:51:18.5372403+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230920095055_addCreatorFullName', N'7.0.10');
+2023-09-20T12:53:54.1021987+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T12:53:54.1074426+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T12:53:54.1091825+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T12:53:54.1106052+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T12:54:15.4830579+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-20T12:54:16.1244403+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T12:54:25.9245163+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (46ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[CreatorId] = N'51188'
+2023-09-20T12:54:25.9974449+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:54:26.0002856+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T12:54:26.2187210+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.MultipleCollectionIncludeWarning]	Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2023-09-20T12:54:26.3498888+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (71ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorFullName], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [r0].[RequestId], [r0].[AssignedReviewerId], [r0].[CreatedAt], [r0].[CreatedBy], [r0].[ModifiedAt], [r0].[ModifiedBy], [r0].[ReviewedBy], [r0].[ReviewerNotes], [r0].[ReviewerType], [r0].[StageName], [r0].[StageNumber], [r0].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorFullName], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[CreatorId] = N'51188'
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+INNER JOIN [security].[User] AS [u] ON [t].[CreatorId] = [u].[Id]
+LEFT JOIN [RequestReviewer] AS [r0] ON [t].[Id] = [r0].[RequestId]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [u].[Id], [r0].[RequestId], [r0].[AssignedReviewerId]

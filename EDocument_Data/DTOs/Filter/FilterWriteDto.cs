@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace EDocument_Data.DTOs.Filter
 {
 
-    public class FilterDto
+    public class FilterWriteDto
     {
 
         [Range(1, int.MaxValue, ErrorMessage = "PageNo must be greater than 0.")]
@@ -21,18 +21,8 @@ namespace EDocument_Data.DTOs.Filter
         public string? orderBy { get; set; }
         public OrderBy? orderByDirection { get; set; }
         public DateFilter[]? dateFilters { get; set; }
-
-    }
-    public class FilterWriteDto:FilterDto
-    {
         public Dictionary<string, string>? Filters { get; set; }
-
-    }
-
-    public class DynamicFilterWriteDto : FilterDto
-    {
-        [Required]
-        public  string? FilterValue { get; init; }
+        public string? FilterValue { get; init; }
 
     }
 

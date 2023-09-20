@@ -48,7 +48,7 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
-        /// Get All Users With Key/Value Pair Filter
+        /// Get All Users With Filter
         /// </summary>
         /// <param name="filterDto">filter information</param>
         /// <remarks>
@@ -57,21 +57,54 @@ namespace EDocument_API.Controllers.V1
         /// <returns>List of All Users</returns>
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<UserReadDto>>))]
-        [HttpPost("KeyFilter")]
+        [HttpPost("Filter")]
         [Authorize(Roles = "Finance,Procurement")]
         public async Task<ActionResult> GetFiltered(FilterWriteDto filterDto)
         {
             _logger.LogInformation($"Start GetFiltered from {nameof(UserController)}");
             var includes = new string[] { nameof(Department), nameof(Section) };
-            var result = await _unitOfWork.Repository<User>().FindAllAsync(
+
+            (int TotalCount, IEnumerable<User> PaginatedData) result;
+
+
+            if (filterDto.Filters!=null)
+            {
+                result = await _unitOfWork.Repository<User>().FindAllAsync(
                 filters: filterDto?.Filters,
                 includes: includes,
-                skip: (filterDto?.PageNo - 1)* filterDto?.PageSize,
+                skip: (filterDto?.PageNo - 1) * filterDto?.PageSize,
                 take: filterDto?.PageSize,
                 orderBy: filterDto?.orderBy,
                 orderByDirection: filterDto?.orderByDirection,
                 dateFilters: filterDto?.dateFilters
                 );
+
+            }
+            else if (filterDto.FilterValue != null)
+            {
+                result = await _unitOfWork.Repository<User>().FindAllAsync(
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: (filterDto?.PageNo - 1) * filterDto?.PageSize,
+                take: filterDto?.PageSize,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<User>().FindAllAsync(
+                filters: filterDto?.Filters,
+                includes: includes,
+                skip: (filterDto?.PageNo - 1) * filterDto?.PageSize,
+                take: filterDto?.PageSize,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+
 
             var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
@@ -104,63 +137,6 @@ namespace EDocument_API.Controllers.V1
 
 
 
-        /// <summary>
-        /// Get All Users With Dynamic Filter
-        /// </summary>
-        /// <param name="DynamicfilterDto">filter information</param>
-        /// <remarks>
-        ///
-        /// </remarks>
-        /// <returns>List of All Users</returns>
-
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<UserReadDto>>))]
-        [HttpPost("DynamicFilter")]
-        public async Task<ActionResult> GetFilterdDynamically(DynamicFilterWriteDto DynamicfilterDto)
-        {
-            _logger.LogInformation($"Start GetFilterdDynamically from {nameof(UserController)}");
-            var includes = new string[] { nameof(Department), nameof(Section) };
-            DynamicfilterDto.PageNo = DynamicfilterDto?.PageNo ?? 1;
-            DynamicfilterDto!.PageSize = DynamicfilterDto?.PageSize ?? 10;
-
-            var result = await _unitOfWork.Repository<User>().FindAllAsync(
-                filterValue: DynamicfilterDto!.FilterValue,
-                includes: includes,
-                skip: (DynamicfilterDto?.PageNo - 1)* DynamicfilterDto?.PageNo,
-                take: DynamicfilterDto?.PageSize,
-                orderBy: DynamicfilterDto?.orderBy,
-                orderByDirection: DynamicfilterDto?.orderByDirection,
-                dateFilters: DynamicfilterDto?.dateFilters
-                );
-
-
-            var totalCount = result.TotalCount;
-            var totalPages = (int)Math.Ceiling((decimal)totalCount / (int)DynamicfilterDto!.PageSize);
-
-            var users = _mapper.Map<List<UserReadDto>>(result.PaginatedData);
-            var roles = await _roleManager.Roles.ToListAsync();
-
-            foreach (var user in users)
-            {
-                var mappedUser = _mapper.Map<User>(user);
-                user.Roles = roles.Select(role => new RoleReadDto
-                {
-                    RoleId = role.Id,
-                    RoleName = role.Name!,
-                    IsGranted = _userManager.IsInRoleAsync(mappedUser, role.Name!).Result
-                }).ToList();
-            }
-
-            var response = new FilterReadDto<UserReadDto>
-            {
-                TotalCount = totalCount,
-                TotalPages = totalPages,
-                CurrentPage = DynamicfilterDto.PageNo,
-                PageSize = users.Count,
-                PaginatedData = users
-            };
-            return Ok(new ApiResponse<FilterReadDto<UserReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
-
-        }
 
 
         /// <summary>

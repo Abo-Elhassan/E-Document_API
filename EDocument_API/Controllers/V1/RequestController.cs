@@ -125,7 +125,7 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
-        /// Get All PO Requests With Key/Value Pair Filter
+        /// Get All PO Requests With  Filter
         /// </summary>
         /// <param name="filterDto">filter information</param>
         /// <remarks>
@@ -133,27 +133,67 @@ namespace EDocument_API.Controllers.V1
         /// </remarks>
         /// <returns>List of All PO Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<PoRequestReadDto>>))]
-        [HttpPost("Po/KeyFilter")]
+        [HttpPost("Po/Filter")]
         [Authorize(Roles = "Finance,Procurement")]
         public async Task<ActionResult> GetPoRequestsFiltered(RequestFilterWriteDto filterDto)
         {
             _logger.LogInformation($"Start GetPoRequestsFiltered from {nameof(UserController)}");
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            string? reviewingExpression = null;
+            (int TotalCount, IEnumerable<PoRequest> PaginatedData) result;
 
+            if (filterDto.Permission==RequestPermission.Review)
+            {
+                reviewingExpression = "Request.RequestReviewers.Any(AssignedReviewerId == @0)";
+            }
 
-            
-
-            var result = await _unitOfWork.Repository<PoRequest>().FindAllRequestsAsync(
+            if (filterDto?.Filters != null)
+            {
+                result = await _unitOfWork.Repository<PoRequest>().FindAllRequestsAsync(
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 permission: filterDto.Permission,
+                reviewingExpression: reviewingExpression,
                 filters: filterDto?.Filters,
                 includes: includes,
-                skip: ((filterDto?.PageNo) - 1)* filterDto?.PageSize,
+                skip: ((filterDto?.PageNo) - 1) * filterDto?.PageSize,
                 take: filterDto?.PageSize,
                 orderBy: filterDto?.orderBy,
                 orderByDirection: filterDto?.orderByDirection,
                 dateFilters: filterDto?.dateFilters
                 );
+            }
+            else if (!string.IsNullOrEmpty(filterDto?.FilterValue))
+            {
+                result = await _unitOfWork.Repository<PoRequest>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                permission: filterDto.Permission,
+                reviewingExpression: reviewingExpression,
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: ((filterDto?.PageNo) - 1) * filterDto?.PageSize,
+                take: filterDto?.PageSize,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<PoRequest>().FindAllRequestsAsync(
+                                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                                permission: filterDto.Permission,
+                                reviewingExpression: reviewingExpression,
+                                filters: filterDto?.Filters,
+                                includes: includes,
+                                skip: ((filterDto?.PageNo) - 1) * filterDto?.PageSize,
+                                take: filterDto?.PageSize,
+                                orderBy: filterDto?.orderBy,
+                                orderByDirection: filterDto?.orderByDirection,
+                                dateFilters: filterDto?.dateFilters
+                                );
+            }
+
+
 
 
             var totalCount = result.TotalCount;
@@ -175,6 +215,8 @@ namespace EDocument_API.Controllers.V1
                 }
             }
 
+            
+
 
             var response = new FilterReadDto<PoRequestReadDto>
             {
@@ -188,54 +230,6 @@ namespace EDocument_API.Controllers.V1
 
         }
 
-        /// <summary>
-        /// Get All PO Requests With Dynamic Filter
-        /// </summary>
-        /// <param name="DynamicfilterDto">filter information</param>
-        /// <remarks>
-        ///
-        /// </remarks>
-        /// <returns>List of All PO Requests </returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<PoRequestReadDto>>))]
-        [HttpPost("Po/DynamicFilter")]
-        [Authorize(Roles = "Finance,Procurement")]
-        public async Task<ActionResult> GetPoRequestsFilterdDynamically(DynamicFilterWriteDto DynamicfilterDto)
-        {
-            _logger.LogInformation($"Start GetPoRequestsFilterdDynamically from {nameof(UserController)}");
-            var includes = new string[] { nameof(Models.Request),"Request.User", "Request.RequestReviewers" };
-
-            DynamicfilterDto.PageNo = DynamicfilterDto?.PageNo ?? 1;
-            DynamicfilterDto!.PageSize = DynamicfilterDto?.PageSize ?? 10;
-
-            var result = await _unitOfWork.Repository<PoRequest>().FindAllAsync(
-                filterValue: DynamicfilterDto!.FilterValue,
-                createdBy: User?.Identity?.Name,
-                includes: includes,
-                skip: ((DynamicfilterDto?.PageNo ?? 1) - 1) * DynamicfilterDto?.PageSize ?? 10,
-                take: DynamicfilterDto?.PageSize,
-                orderBy: DynamicfilterDto?.orderBy,
-                orderByDirection: DynamicfilterDto?.orderByDirection,
-                dateFilters: DynamicfilterDto?.dateFilters
-                );
-
-
-            var totalCount = result.TotalCount;
-            var  totalPages = (int)Math.Ceiling((decimal)totalCount / (int)DynamicfilterDto!.PageSize);
-           
-
-            var requests = _mapper.Map<List<PoRequestReadDto>>(result.PaginatedData);
-
-            var response = new FilterReadDto<PoRequestReadDto>
-            {
-                TotalCount = totalCount,
-                TotalPages = totalPages,
-                CurrentPage = DynamicfilterDto.PageNo,
-                PageSize = requests.Count,
-                PaginatedData = requests
-            };
-            return Ok(new ApiResponse<FilterReadDto<PoRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
-
-        }
 
 
 

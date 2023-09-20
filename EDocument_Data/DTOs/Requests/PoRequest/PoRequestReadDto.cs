@@ -21,7 +21,7 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
         public RequestStatus? ReviewerStatus { get; set; }
         public string? Justification { get; init; }
         public string? CreatorId { get; init; }
-        public string? CreatorName { get; init; }
+        public string? CreatorFullName { get; init; }
         public long DefinedRequestId { get; init; }
         public string? PoNumber { get; init; }
         public string? PoDescription { get; init; }

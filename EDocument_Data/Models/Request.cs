@@ -20,6 +20,8 @@ public partial class Request : BaseEntity
 
     public string CreatorId { get; set; }
 
+    public string CreatorFullName { get; set; }
+
     public long DefinedRequestId { get; set; }
 
     public virtual ICollection<Attachment> Attachments { get; set; } = new HashSet<Attachment>();

@@ -33,25 +33,15 @@
              </remarks>
              <returns>message</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.RequestController.GetPoRequestsFiltered(EDocument_Data.DTOs.Requests.RequestFilterWriteDto)">
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetPoRequestsFiltered(EDocument_Data.DTOs.Filter.RequestFilterWriteDto)">
              <summary>
-             Get All PO Requests With Key/Value Pair Filter
+             Get All PO Requests With  Filter
              </summary>
              <param name="filterDto">filter information</param>
              <remarks>
             
              </remarks>
              <returns>List of All PO Requests</returns>
-        </member>
-        <member name="M:EDocument_API.Controllers.V1.RequestController.GetPoRequestsFilterdDynamically(EDocument_Data.DTOs.Filter.DynamicFilterWriteDto)">
-             <summary>
-             Get All PO Requests With Dynamic Filter
-             </summary>
-             <param name="DynamicfilterDto">filter information</param>
-             <remarks>
-            
-             </remarks>
-             <returns>List of All PO Requests </returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.RoleController.Get">
              <summary>
@@ -93,19 +83,9 @@
         </member>
         <member name="M:EDocument_API.Controllers.V1.UserController.GetFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
              <summary>
-             Get All Users With Key/Value Pair Filter
+             Get All Users With Filter
              </summary>
              <param name="filterDto">filter information</param>
-             <remarks>
-            
-             </remarks>
-             <returns>List of All Users</returns>
-        </member>
-        <member name="M:EDocument_API.Controllers.V1.UserController.GetFilterdDynamically(EDocument_Data.DTOs.Filter.DynamicFilterWriteDto)">
-             <summary>
-             Get All Users With Dynamic Filter
-             </summary>
-             <param name="DynamicfilterDto">filter information</param>
              <remarks>
             
              </remarks>

@@ -53,7 +53,7 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(x => x.Status, y => y.MapFrom(z => z.Request.Status))
                 .ForMember(x => x.Justification, y => y.MapFrom(z => z.Request.Justification))
                 .ForMember(x => x.CreatorId, y => y.MapFrom(z => z.Request.CreatorId))
-                .ForMember(x => x.CreatorName, y => y.MapFrom(z => z.Request.Creator.FullName))
+                .ForMember(x => x.CreatorFullName, y => y.MapFrom(z => z.Request.CreatorFullName))
                 .ForMember(x => x.DefinedRequestId, y => y.MapFrom(z => z.Request.DefinedRequestId))
                 .ForMember(x => x.Attachments, y => y.MapFrom(z => z.Request.Attachments))
                 .ForMember(x => x.RequestReviewers, y => y.MapFrom(z => z.Request.RequestReviewers));
