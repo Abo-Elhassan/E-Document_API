@@ -12,7 +12,10 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 {
     public interface IRequestReviewerRepository: IGenericRepository<RequestReviewer>
     {
-        //Task <IEnumerable<RequestReviewer>> GetRequestReviewersAsync(long id);
+
+        Task<IEnumerable<DefinedRequestReviewer>> GetDefinedRequestReviewersAsync(long definedRequestId);
+
+        Task<IEnumerable<RequestReviewer>> GetRequestReviewersAsync(long requestId);
     }
 
 }

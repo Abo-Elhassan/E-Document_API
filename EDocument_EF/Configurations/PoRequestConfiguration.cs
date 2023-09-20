@@ -39,6 +39,10 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.InvoiceAttachmentPath)
             .IsRequired();
 
+            entity.Property(e => e.CreatorFullName)
+            .HasMaxLength(200);
+
+
             entity.Property(e => e.CreatedAt)
            .HasColumnType("smalldatetime");
 

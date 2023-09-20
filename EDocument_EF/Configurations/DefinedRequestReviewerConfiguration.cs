@@ -11,12 +11,12 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<DefinedRequestReviewer> entity)
         {
-            entity.HasKey(e => new { e.DefinedRequestId, e.ReviewerId });
+            entity.HasKey(e => new { e.DefinedRequestId, e.AssignedReviewerId });
 
             entity.ToTable(nameof(DefinedRequestReviewer));
 
 
-            entity.Property(e => e.ReviewerId)
+            entity.Property(e => e.AssignedReviewerId)
             .HasMaxLength(50);
 
             entity.Property(e => e.DelegatedReviewerId)
@@ -51,7 +51,7 @@ namespace EDocument_EF.Configurations
             .HasConstraintName("FK_DefinedRequestReviewer_DefinedRequest");
 
             entity.HasOne(d => d.Reviewer).WithMany(p => p.DefinedRequestReviewers)
-            .HasForeignKey(d => d.ReviewerId)
+            .HasForeignKey(d => d.AssignedReviewerId)
             .OnDelete(DeleteBehavior.Restrict)
             .HasConstraintName("FK_DefinedRequestReviewer_User");
 

@@ -14,14 +14,12 @@ namespace EDocument_EF.Configurations
             entity.ToTable(nameof(Request));
 
             entity.Property(e => e.Id)
-            .UseIdentityColumn();
+            .ValueGeneratedNever();
 
             entity.Property(e => e.CreatorId)
             .IsRequired()
             .HasMaxLength(50);
 
-            entity.Property(e => e.CreatorFullName)
-            .HasMaxLength(200);
 
 
             entity.Property(e => e.Status).HasConversion<string>()

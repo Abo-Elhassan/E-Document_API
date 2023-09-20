@@ -12,7 +12,7 @@ public  class DefinedRequestReviewer : BaseEntity
 {
     public long DefinedRequestId { get; set; }
 
-    public string ReviewerId { get; set; }
+    public string AssignedReviewerId { get; set; }
 
     public string DelegatedReviewerId { get; set; }
     

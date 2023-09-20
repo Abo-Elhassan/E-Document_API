@@ -8,6 +8,7 @@ using EDocument_Services.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text;
@@ -24,11 +25,15 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             _context = context;
         }
 
+        public async Task<IEnumerable<DefinedRequestReviewer>> GetDefinedRequestReviewersAsync(long definedRequestId)
+        {
+            return await _context.DefinedRequestReviewers.Where(rr => rr.DefinedRequestId == definedRequestId).ToListAsync();
+        }
 
-        //public Task<IEnumerable<RequestReviewer>> GetRequestReviewersAsync(long id)
-        //{
-        //    var requestReviewers = _context.RequestReviewers.Include();
-        //}
+        public async Task<IEnumerable<RequestReviewer>> GetRequestReviewersAsync(long requestId)
+        {
+            return await _context.RequestReviewers.Include(rr=>rr.Reviewer).Where(rr=>rr.RequestId== requestId).ToListAsync();
+        }
 
     }
 }

@@ -149,40 +149,40 @@ namespace EDocument_EF
             builder.Entity<IdentityUserToken<string>>().ToTable("UserToken", "security");
 
             #region Seeding
-            var SuperAdminId = Guid.NewGuid().ToString();
-            var HRId = Guid.NewGuid().ToString();
-            var FinanceId = Guid.NewGuid().ToString();
-            var ProcurementId = Guid.NewGuid().ToString(); 
-            var ITId = Guid.NewGuid().ToString();
-            var SecurityId = Guid.NewGuid().ToString();
-            var AdminstrationId = Guid.NewGuid().ToString();
-            var StoreId = Guid.NewGuid().ToString();
-            var CustomerServiceId = Guid.NewGuid().ToString();
-            var OperationBGCId = Guid.NewGuid().ToString();
-            var OperationCTId = Guid.NewGuid().ToString();
-            var EngineeringId = Guid.NewGuid().ToString();
-            var CommercialId = Guid.NewGuid().ToString();
-            var CommunicationsId = Guid.NewGuid().ToString();
-            var InfoFortId = Guid.NewGuid().ToString();
-            #region Roles
 
-            builder.Entity<Role>().HasData(
-             new Role { Id = SuperAdminId, Name = ApplicationRole.SuperAdmin.ToString(), NormalizedName = ApplicationRole.SuperAdmin.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = HRId, Name = ApplicationRole.HR.ToString(), NormalizedName = ApplicationRole.HR.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = FinanceId, Name = ApplicationRole.Finance.ToString(), NormalizedName = ApplicationRole.Finance.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = ProcurementId, Name = ApplicationRole.Procurement.ToString(), NormalizedName = ApplicationRole.Procurement.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = ITId, Name = ApplicationRole.IT.ToString(), NormalizedName = ApplicationRole.IT.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = SecurityId, Name = ApplicationRole.Security.ToString(), NormalizedName = ApplicationRole.Security.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = AdminstrationId, Name = ApplicationRole.Adminstration.ToString(), NormalizedName = ApplicationRole.Adminstration.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = StoreId, Name = ApplicationRole.Store.ToString(), NormalizedName = ApplicationRole.Store.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = CustomerServiceId, Name = ApplicationRole.CustomerService.ToString(), NormalizedName = ApplicationRole.CustomerService.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = OperationBGCId, Name = ApplicationRole.OperationBGC.ToString(), NormalizedName = ApplicationRole.OperationBGC.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = OperationCTId, Name = ApplicationRole.OperationCT.ToString(), NormalizedName = ApplicationRole.OperationCT.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = EngineeringId, Name = ApplicationRole.Engineering.ToString(), NormalizedName = ApplicationRole.Engineering.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = CommercialId, Name = ApplicationRole.Commercial.ToString(), NormalizedName = ApplicationRole.Commercial.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = CommunicationsId, Name = ApplicationRole.Communications.ToString(), NormalizedName = ApplicationRole.Communications.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          new Role { Id = InfoFortId, Name = ApplicationRole.InfoFort.ToString(), NormalizedName = ApplicationRole.InfoFort.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() }
-             );
+           #region Roles
+          //  var SuperAdminId = Guid.NewGuid().ToString();
+          //  var HRId = Guid.NewGuid().ToString();
+          //  var FinanceId = Guid.NewGuid().ToString();
+          //  var ProcurementId = Guid.NewGuid().ToString();
+          //  var ITId = Guid.NewGuid().ToString();
+          //  var SecurityId = Guid.NewGuid().ToString();
+          //  var AdminstrationId = Guid.NewGuid().ToString();
+          //  var StoreId = Guid.NewGuid().ToString();
+          //  var CustomerServiceId = Guid.NewGuid().ToString();
+          //  var OperationBGCId = Guid.NewGuid().ToString();
+          //  var OperationCTId = Guid.NewGuid().ToString();
+          //  var EngineeringId = Guid.NewGuid().ToString();
+          //  var CommercialId = Guid.NewGuid().ToString();
+          //  var CommunicationsId = Guid.NewGuid().ToString();
+          //  var InfoFortId = Guid.NewGuid().ToString();
+          //  builder.Entity<Role>().HasData(
+          //   new Role { Id = SuperAdminId, Name = ApplicationRole.SuperAdmin.ToString(), NormalizedName = ApplicationRole.SuperAdmin.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = HRId, Name = ApplicationRole.HR.ToString(), NormalizedName = ApplicationRole.HR.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = FinanceId, Name = ApplicationRole.Finance.ToString(), NormalizedName = ApplicationRole.Finance.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = ProcurementId, Name = ApplicationRole.Procurement.ToString(), NormalizedName = ApplicationRole.Procurement.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = ITId, Name = ApplicationRole.IT.ToString(), NormalizedName = ApplicationRole.IT.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = SecurityId, Name = ApplicationRole.Security.ToString(), NormalizedName = ApplicationRole.Security.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = AdminstrationId, Name = ApplicationRole.Adminstration.ToString(), NormalizedName = ApplicationRole.Adminstration.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = StoreId, Name = ApplicationRole.Store.ToString(), NormalizedName = ApplicationRole.Store.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = CustomerServiceId, Name = ApplicationRole.CustomerService.ToString(), NormalizedName = ApplicationRole.CustomerService.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = OperationBGCId, Name = ApplicationRole.OperationBGC.ToString(), NormalizedName = ApplicationRole.OperationBGC.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = OperationCTId, Name = ApplicationRole.OperationCT.ToString(), NormalizedName = ApplicationRole.OperationCT.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = EngineeringId, Name = ApplicationRole.Engineering.ToString(), NormalizedName = ApplicationRole.Engineering.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = CommercialId, Name = ApplicationRole.Commercial.ToString(), NormalizedName = ApplicationRole.Commercial.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = CommunicationsId, Name = ApplicationRole.Communications.ToString(), NormalizedName = ApplicationRole.Communications.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+          //new Role { Id = InfoFortId, Name = ApplicationRole.InfoFort.ToString(), NormalizedName = ApplicationRole.InfoFort.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() }
+          //   );
 
             #endregion Roles
 
@@ -914,7 +914,7 @@ namespace EDocument_EF
                                                       IsEmployee = true,
                                                       Position = "TEC-Planning Section Head",
                                                       Company = "DP World",
-                                                      DepartmentId = 21,
+                                                     // DepartmentId = 21,
                                                       SecurityStamp = Guid.NewGuid().ToString(),
                                                       ManagerId = null,
                                                       EmailConfirmed = false,
@@ -936,7 +936,7 @@ namespace EDocument_EF
                                                          IsEmployee = true,
                                                          Position = "Projects Section Head",
                                                          Company = "DP World",
-                                                         DepartmentId = 21,
+                                                      DepartmentId = 21,
                                                          SecurityStamp = Guid.NewGuid().ToString(),
                                                          ManagerId = null,
                                                          EmailConfirmed = false,
@@ -977,14 +977,14 @@ namespace EDocument_EF
 
             #endregion Department
 
-            #region Section
+                    #region Section
 
             builder.Entity<Section>().HasData(
                  new Section { Id = 1, SectionName = "Administration", DepartmentId = 1 },
            new Section { Id = 2, SectionName = "Freight Forwarding", DepartmentId = 2 },
            new Section { Id = 3, SectionName = "Business Transformation", DepartmentId = 3 },
            new Section { Id = 4, SectionName = "Commercial / Containers", DepartmentId = 4, HeadId = "51509" },
-           new Section { Id = 5, SectionName = "Commercial Bulk / GC", DepartmentId = 4,  HeadId = "51583" },
+           new Section { Id = 5, SectionName = "Commercial Bulk / GC", DepartmentId = 4, HeadId = "51583" },
            new Section { Id = 6, SectionName = "Communications", DepartmentId = 5 },
            new Section { Id = 7, SectionName = "Customer Service", DepartmentId = 6 },
            new Section { Id = 8, SectionName = "Executive Management", DepartmentId = 7 },
@@ -1014,29 +1014,29 @@ namespace EDocument_EF
 
             #region Defined Request
             builder.Entity<DefinedRequest>().HasData(
-                new DefinedRequest { Id = 1, RequestName= "PO" ,RouteName = "/Procurement/PO/" , ReviewersNumber =1, DepartmentId =16}
+                new DefinedRequest { Id = 1, RequestName = "PO", RouteName = "/Procurement/PO/", ReviewersNumber = 1, DepartmentId = 16 }
                 );
             #endregion
 
             #region Defined Request Reviewers
             builder.Entity<DefinedRequestReviewer>().HasData(
-                new DefinedRequestReviewer { DefinedRequestId = 1, ReviewerId = "51124" ,StageName="Finance Reviewer", StageNumber=1, ReviewerType =ReviewerType.Basic}
+                new DefinedRequestReviewer { DefinedRequestId = 1, AssignedReviewerId = "51124", StageName = "Finance Reviewer", StageNumber = 1, ReviewerType = ReviewerType.Basic }
                 );
             #endregion
 
             #region Add Users Roles
 
             builder.Entity<IdentityUserRole<string>>().HasData(
-              new IdentityUserRole<string> { UserId = "51188", RoleId= ProcurementId },
-              new IdentityUserRole<string> { UserId = "51124", RoleId = FinanceId }
+              new IdentityUserRole<string> { UserId = "51188", RoleId = "6826ac7e-b4ae-47ff-8bf6-cc904db43d84" },
+              new IdentityUserRole<string> { UserId = "51124", RoleId = "121c1742-99e7-4b61-ab2f-f748876e2975" }
               );
 
             #endregion
 
             #region Add Roles Permissions
             builder.Entity<DefinedRequestRole>().HasData(
-             new DefinedRequestRole {  RoleId = ProcurementId, DefinedRequestId=1,Permission= RequestPermission.Request },
-             new DefinedRequestRole { RoleId = FinanceId, DefinedRequestId = 1, Permission = RequestPermission.Review }
+             new DefinedRequestRole { RoleId = "6826ac7e-b4ae-47ff-8bf6-cc904db43d84", DefinedRequestId = 1, Permission = RequestPermission.Request },
+             new DefinedRequestRole { RoleId = "121c1742-99e7-4b61-ab2f-f748876e2975", DefinedRequestId = 1, Permission = RequestPermission.Review }
             );
             #endregion
 

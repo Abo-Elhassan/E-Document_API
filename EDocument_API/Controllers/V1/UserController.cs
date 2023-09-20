@@ -174,7 +174,7 @@ namespace EDocument_API.Controllers.V1
 
 
         /// <summary>
-        /// Add new user
+        /// Create new user
         /// </summary>
         /// <param name="createUserDto">User Informarion</param>
         /// <remarks>
@@ -183,10 +183,10 @@ namespace EDocument_API.Controllers.V1
         /// <returns> message</returns>
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
-        [HttpPost("Add")]
-        public async Task<ActionResult> Add(CreateUserDto createUserDto)
+        [HttpPost("Create")]
+        public async Task<ActionResult> Create(CreateUserDto createUserDto)
         {
-            _logger.LogInformation($"Start Add user from {nameof(UserController)} for {JsonSerializer.Serialize(createUserDto.UserName)} ");
+            _logger.LogInformation($"Start create user from {nameof(UserController)} for {JsonSerializer.Serialize(createUserDto.UserName)} ");
 
             
             var newUser = _mapper.Map<User>(createUserDto);

@@ -13,7 +13,7 @@
              </remarks>
              <returns>List of Departmens</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.RequestController.GetPoRequestByIds(System.Int64)">
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetPoRequestById(System.Int64)">
              <summary>
              Get PO Requests By Id
              </summary>
@@ -42,6 +42,36 @@
             
              </remarks>
              <returns>List of All PO Requests</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetCreatorPoRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
+             <summary>
+             Get All PO Requests By Creator With Filter
+             </summary>
+             <param name="filterDto">filter information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All Created PO Requests</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetReviewerPoRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
+             <summary>
+             Get All PO Requests By Reviewer With Filter
+             </summary>
+             <param name="filterDto">filter information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All Reviewer PO Requests</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.Create(EDocument_Data.DTOs.Requests.PoRequest.PoRequestWriteDto)">
+             <summary>
+             Create PO Request
+             </summary>
+             <param name="poRequestWriteDto">Po request Informarion</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.RoleController.Get">
              <summary>
@@ -101,9 +131,9 @@
              </remarks>
              <returns>List of Filtered Users</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.UserController.Add(EDocument_Data.DTOs.User.CreateUserDto)">
+        <member name="M:EDocument_API.Controllers.V1.UserController.Create(EDocument_Data.DTOs.User.CreateUserDto)">
              <summary>
-             Add new user
+             Create new user
              </summary>
              <param name="createUserDto">User Informarion</param>
              <remarks>

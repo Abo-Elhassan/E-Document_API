@@ -715,7 +715,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return await query.FirstOrDefaultAsync();   
         }
 
-        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync( string userId, RequestPermission permission,string? reviewingExpression = null, string[]? includes = null, Dictionary<string, string>? filters=null,  int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync( string userId, string userCondition, string[]? includes = null, Dictionary<string, string>? filters=null,  int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var ColumnName = "";
             var ColumnValue = "";
@@ -740,14 +740,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
             #region Permission Filter
 
-            if (permission == RequestPermission.Request)
-            {
-                query = query.Where("Request.CreatorId ==@0", userId);
-            }
-            else
-            {
-                query = query.Where("Request.RequestReviewers.Any(AssignedReviewerId == @0)", userId);
-            }
+                query = query.Where(userCondition, userId);
+            
             #endregion
 
 
@@ -762,13 +756,13 @@ namespace EDocument_Reposatories.Generic_Reposatories
                 foreach (var filter in filters)
                 {
                     ColumnName = Utilities.ConvertColumnNameToPascalCase(filter.Key);
-                    ColumnValue = filter.Value;
-
+                    
                     var property = typeof(T).GetProperty(ColumnName);
+
                     if (property != null && !string.IsNullOrEmpty(filter.Value))
                     {
                         expression = property.PropertyType == typeof(string) ? $"{ColumnName}.Contains(@0)" : $"{ColumnName}.Equals(@0)";
-                        query = query.Where(expression, ColumnValue);
+                        query = query.Where(expression, property.PropertyType == typeof(string) ? filter.Value : int.Parse(filter.Value));
                     }
                 }
             }
@@ -822,13 +816,13 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
             return result;
         }
-        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string userId, RequestPermission permission, string? reviewingExpression = null, string[]? includes = null, string? filterValue = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string userId, string userCondition, string[]? includes = null, string? filterValue = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var dynamicFilter = "";
             (int TotalCount, IEnumerable<T> PaginatedData) result;
 
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
-
+     
             #region Include Tables
             if (includes != null)
             {
@@ -844,14 +838,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
             #region Permission Filter
 
-            if (permission == RequestPermission.Request)
-            {
-                query = query.Where("Request.CreatorId ==@0", userId);
-            }
-            else
-            {
-                query = query.Where("Request.RequestReviewers.Any(AssignedReviewerId == @0)", userId);
-            }
+                query = query.Where(userCondition, userId);
             #endregion
 
             #region Apply General Filter
