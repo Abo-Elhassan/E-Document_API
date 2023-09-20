@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace EDocument_Data.Consts.Enums
 {
-    public enum Permission
+    public enum RequestReference
     {
-        Request,
-        Review,
-        All
+        PoRequest = 1
     }
 }

@@ -8,8 +8,8 @@ namespace EDocument_Data.Consts.Enums
 {
     public enum RequestPermission
     {
-        Creator,
-        Reviewer,
+        Request,
+        Review,
         All
     }
 }

@@ -4,6 +4,7 @@ using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_EF;
 using EDocument_Reposatories.Generic_Reposatories;
+using EDocument_Repositories.Application_Repositories.Request_Repository;
 using EDocument_Services.Auth_Service;
 using EDocument_Services.AutoMapper_Service;
 using EDocument_Services.Mail_Service;
@@ -135,7 +136,6 @@ namespace EDocument_API.Shared
             #endregion Services
 
             #region Repositories
-
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

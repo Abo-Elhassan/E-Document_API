@@ -13,7 +13,18 @@
              </remarks>
              <returns>List of Departmens</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.RequestController.GetPoRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetPoRequestByIds(System.Int64,System.Int64)">
+             <summary>
+             Get PO Requests By Id
+             </summary>
+             <param name="definedRequestId">request type id</param>
+             <param name="requestId">request id</param>
+             <remarks>
+            
+             </remarks>
+             <returns>PO Request</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetPoRequestsFiltered(EDocument_Data.DTOs.Requests.RequestFilterWriteDto)">
              <summary>
              Get All PO Requests With Key/Value Pair Filter
              </summary>

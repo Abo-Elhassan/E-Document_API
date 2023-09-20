@@ -216,7 +216,7 @@ namespace EDocument_Services.Auth_Service
                         displayedRequest.DefinedRequestId = request.DefinedRequestId;
                         displayedRequest.DefinedRequestName = request.RequestName;
 
-                        if (request.Permission == Permission.All)
+                        if (request.Permission == RequestPermission.All)
                         {
                             requestDdl = new List<RequestDdlContent>
                             {
@@ -232,7 +232,7 @@ namespace EDocument_Services.Auth_Service
                                 }
                             };
                         }
-                        else if (request.Permission == Permission.Request)
+                        else if (request.Permission == RequestPermission.Request)
                         {
                             requestDdl = new List<RequestDdlContent>
                             {

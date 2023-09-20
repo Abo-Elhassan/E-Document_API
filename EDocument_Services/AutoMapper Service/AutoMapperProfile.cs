@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EDocument_Data.DTOs.Department;
 using EDocument_Data.DTOs.Requests;
+using EDocument_Data.DTOs.Requests.Attachments;
 using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.DTOs.Section;
@@ -38,7 +39,9 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<Section, SectionReadDto>();
 
             CreateMap<Request, RequestReadDto>();
-            CreateMap<RequestReviewer, RequestReviewerReadDto>();
+            CreateMap<Attachment, AttachmentReadDto>();
+            CreateMap<RequestReviewer, RequestReviewerReadDto>()
+                .ForMember(x => x.AssignedReviewer, y => y.MapFrom(z => z.Reviewer.FullName));
 
 
             CreateMap<PoRequest, PoRequestReadDto>()
@@ -47,9 +50,9 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(x => x.Status, y => y.MapFrom(z => z.Request.Status))
                 .ForMember(x => x.Justification, y => y.MapFrom(z => z.Request.Justification))
                 .ForMember(x => x.CreatorId, y => y.MapFrom(z => z.Request.CreatorId))
-                .ForMember(x => x.DeclinedBy, y => y.MapFrom(z => z.Request.DeclinedBy))
+                .ForMember(x => x.CreatorName, y => y.MapFrom(z => z.Request.Creator.FullName))
                 .ForMember(x => x.DefinedRequestId, y => y.MapFrom(z => z.Request.DefinedRequestId))
-                .ForMember(x => x.RequestReviewers, y => y.MapFrom(z => z.Request.RequestReviewers));
+                .ForMember(x => x.Attachments, y => y.MapFrom(z => z.Request.Attachments));
 
 
 

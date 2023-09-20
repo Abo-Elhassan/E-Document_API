@@ -1035,8 +1035,8 @@ namespace EDocument_EF
 
             #region Add Roles Permissions
             builder.Entity<DefinedRequestRole>().HasData(
-             new DefinedRequestRole {  RoleId = ProcurementId, DefinedRequestId=1,Permission=Permission.Request },
-             new DefinedRequestRole { RoleId = FinanceId, DefinedRequestId = 1, Permission = Permission.Review }
+             new DefinedRequestRole {  RoleId = ProcurementId, DefinedRequestId=1,Permission= RequestPermission.Request },
+             new DefinedRequestRole { RoleId = FinanceId, DefinedRequestId = 1, Permission = RequestPermission.Review }
             );
             #endregion
 

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EDocument_Data.DTOs;
 using EDocument_Data.DTOs.Filter;
+using EDocument_Data.DTOs.Requests;
 using EDocument_Data.DTOs.Role;
 using EDocument_Data.DTOs.User;
 using EDocument_Data.Models;
@@ -8,6 +9,7 @@ using EDocument_Data.Models.Shared;
 using EDocument_Services.Auth_Service;
 using EDocument_Services.Helpers;
 using EDocument_UnitOfWork;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -56,15 +58,15 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<UserReadDto>>))]
         [HttpPost("KeyFilter")]
-        public async Task<ActionResult> GetFiltered(FilterWriteDto? filterDto)
+        [Authorize(Roles = "Finance,Procurement")]
+        public async Task<ActionResult> GetFiltered(FilterWriteDto filterDto)
         {
             _logger.LogInformation($"Start GetFiltered from {nameof(UserController)}");
             var includes = new string[] { nameof(Department), nameof(Section) };
             var result = await _unitOfWork.Repository<User>().FindAllAsync(
                 filters: filterDto?.Filters,
-                creatorId: filterDto?.CreatorId,
                 includes: includes,
-                skip: (filterDto?.PageNo - 1)* filterDto?.PageNo,
+                skip: (filterDto?.PageNo - 1)* filterDto?.PageSize,
                 take: filterDto?.PageSize,
                 orderBy: filterDto?.orderBy,
                 orderByDirection: filterDto?.orderByDirection,
@@ -122,7 +124,6 @@ namespace EDocument_API.Controllers.V1
 
             var result = await _unitOfWork.Repository<User>().FindAllAsync(
                 filterValue: DynamicfilterDto!.FilterValue,
-                creatorId: DynamicfilterDto?.CreatorId,
                 includes: includes,
                 skip: (DynamicfilterDto?.PageNo - 1)* DynamicfilterDto?.PageNo,
                 take: DynamicfilterDto?.PageSize,
@@ -211,6 +212,7 @@ namespace EDocument_API.Controllers.V1
         {
             _logger.LogInformation($"Start Add user from {nameof(UserController)} for {JsonSerializer.Serialize(createUserDto.UserName)} ");
 
+            
             var newUser = _mapper.Map<User>(createUserDto);
             newUser.LockoutEnabled = false;
 

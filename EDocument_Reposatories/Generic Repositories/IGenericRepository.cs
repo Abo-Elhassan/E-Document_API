@@ -1,5 +1,6 @@
 ﻿using EDocument_Data.Consts.Enums;
 using EDocument_Data.Models.Shared;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,13 +33,12 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
 
         (int TotalCount, IEnumerable<T> PaginatedData) FindAll(Expression<Func<T, bool>>? criteria,  string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
-        (int TotalCount, IEnumerable<T> PaginatedData) FindAll(Dictionary<string, string>? filters, string? creatorId = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy =  null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
-        (int TotalCount, IEnumerable<T> PaginatedData) FindAll(string filterValue, string? creatorId = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
+        (int TotalCount, IEnumerable<T> PaginatedData) FindAll(Dictionary<string, string>? filters, string? createdBy=null,  string[]? includes = null, int? skip = null, int? take = null, string? orderBy =  null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
+        (int TotalCount, IEnumerable<T> PaginatedData) FindAll(string filterValue, string? createdBy = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
 
         Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllAsync(Expression<Func<T, bool>>? criteria,  string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
-        Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllAsync(Dictionary<string, string>? filters, string? creatorId = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
-        Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllAsync(string filterValue, string? creatorId = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
-
+        Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllAsync(Dictionary<string, string>? filters, string? createdBy = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
+        Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllAsync(string filterValue, string? createdBy = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
 
         int Count();
         int Count(Expression<Func<T, bool>> criteria);
@@ -57,6 +57,14 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
         void Delete(T entity);
         void DeleteRange(IEnumerable<T> entities);
+
+
+
+
+        Task<T?> FindRequestById(long definedRequestId,long requestId);
+
+        Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(long definedRequestId, string userId, RequestPermission permission, Dictionary<string, string>? filters,  int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
+
 
     }
 }

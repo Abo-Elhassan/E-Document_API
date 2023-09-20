@@ -1,0 +1,586 @@
+2023-09-20T05:42:15.0735812+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T05:42:15.0871700+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T05:42:15.0897238+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T05:42:15.0918687+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T05:47:11.0626560+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T05:47:11.0664152+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T05:47:11.0677966+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T05:47:11.0689114+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T05:47:44.4897395+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-20T05:47:45.3722499+03:00	FAIL	[EDocument_API.Middlewares.ExceptionMiddleware]	[0]	Unable to resolve service for type 'EDocument_Repositories.Application_Repositories.Request_Repository.IRequestRepository`1[EDocument_Data.Models.PoRequest]' while attempting to activate 'EDocument_API.Controllers.V1.RequestController'.System.InvalidOperationException: Unable to resolve service for type 'EDocument_Repositories.Application_Repositories.Request_Repository.IRequestRepository`1[EDocument_Data.Models.PoRequest]' while attempting to activate 'EDocument_API.Controllers.V1.RequestController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method10(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at EDocument_API.Middlewares.ExceptionMiddleware.Invoke(HttpContext context) in F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\Middlewares\ExceptionMiddleware.cs:line 30
+
+2023-09-20T05:49:17.9149539+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T05:49:17.9183437+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T05:49:17.9196673+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T05:49:17.9205362+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T05:49:44.5684839+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-20T05:49:45.2467220+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T05:49:54.0488355+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (89ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt], [r].[ModifiedBy], [r].[Status], [t].[RequestId], [t].[AssignedReviewerId], [t].[CreatedAt], [t].[CreatedBy], [t].[ModifiedAt], [t].[ModifiedBy], [t].[ReviewedBy], [t].[ReviewerNotes], [t].[ReviewerType], [t].[StageName], [t].[StageNumber], [t].[Status], [t].[Id], [t].[AccessFailedCount], [t].[Company], [t].[ConcurrencyStamp], [t].[CreatedAt0], [t].[CreatedBy0], [t].[DepartmentId], [t].[Email], [t].[EmailConfirmed], [t].[FullName], [t].[IsActive], [t].[IsEmployee], [t].[LastLogin], [t].[LockoutEnabled], [t].[LockoutEnd], [t].[ManagerId], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[NormalizedEmail], [t].[NormalizedUserName], [t].[PasswordHash], [t].[PhoneNumber], [t].[PhoneNumberConfirmed], [t].[Position], [t].[SectionId], [t].[SecurityStamp], [t].[TwoFactorEnabled], [t].[UserName]
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+LEFT JOIN (
+    SELECT [r1].[RequestId], [r1].[AssignedReviewerId], [r1].[CreatedAt], [r1].[CreatedBy], [r1].[ModifiedAt], [r1].[ModifiedBy], [r1].[ReviewedBy], [r1].[ReviewerNotes], [r1].[ReviewerType], [r1].[StageName], [r1].[StageNumber], [r1].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt] AS [CreatedAt0], [u].[CreatedBy] AS [CreatedBy0], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt] AS [ModifiedAt0], [u].[ModifiedBy] AS [ModifiedBy0], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName]
+    FROM [RequestReviewer] AS [r1]
+    INNER JOIN [security].[User] AS [u] ON [r1].[AssignedReviewerId] = [u].[Id]
+) AS [t] ON [r].[Id] = [t].[RequestId]
+WHERE EXISTS (
+    SELECT 1
+    FROM [RequestReviewer] AS [r0]
+    WHERE [r].[Id] = [r0].[RequestId] AND [r0].[AssignedReviewerId] = N'51678')
+ORDER BY [p].[PoNumber], [r].[Id], [t].[RequestId], [t].[AssignedReviewerId]
+2023-09-20T05:50:10.0931410+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (30ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt], [r].[ModifiedBy], [r].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+LEFT JOIN [Attachment] AS [a] ON [r].[Id] = [a].[RequestId]
+WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [r].[CreatedBy] = N'procurment_manager'
+ORDER BY [p].[PoNumber], [r].[Id]
+2023-09-20T05:50:36.7511773+03:00	FAIL	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandError]	Failed executing DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [r].[CreatedBy] = N'procurment_manager'
+2023-09-20T05:50:36.7641566+03:00	FAIL	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryIterationFailed]	An exception occurred while iterating over the results of a query for context type 'EDocument_EF.ApplicationDbContext'.
+System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.ValidateConnectionForExecute(SqlCommand command)
+   at Microsoft.Data.SqlClient.SqlConnection.ValidateConnectionForExecute(String method, SqlCommand command)
+   at Microsoft.Data.SqlClient.SqlCommand.ValidateCommand(Boolean isAsync, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.ValidateConnectionForExecute(SqlCommand command)
+   at Microsoft.Data.SqlClient.SqlConnection.ValidateConnectionForExecute(String method, SqlCommand command)
+   at Microsoft.Data.SqlClient.SqlCommand.ValidateCommand(Boolean isAsync, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+
+2023-09-20T05:50:36.8727828+03:00	FAIL	[EDocument_API.Middlewares.ExceptionMiddleware]	[0]	There is already an open DataReader associated with this Connection which must be closed first.System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.ValidateConnectionForExecute(SqlCommand command)
+   at Microsoft.Data.SqlClient.SqlConnection.ValidateConnectionForExecute(String method, SqlCommand command)
+   at Microsoft.Data.SqlClient.SqlCommand.ValidateCommand(Boolean isAsync, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Linq.Enumerable.TryGetSingle[TSource](IEnumerable`1 source, Boolean& found)
+   at lambda_method621(Closure, QueryContext)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at EDocument_Repositories.Application_Repositories.Request_Repository.RequestRepository`1.FindAllByCreatorIdAsync(Int64 definedRequestId, String createdBy, Dictionary`2 filters, String[] includes, Nullable`1 skip, Nullable`1 take, String orderBy, Nullable`1 orderByDirection, DateFilter[] dateFilters)
+   at EDocument_API.Controllers.V1.RequestController.GetPoRequestsFiltered(RequestFilterWriteDto filterDto) in F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\Controllers\V1\RequestController.cs:line 71
+   at lambda_method6(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at EDocument_API.Middlewares.ExceptionMiddleware.Invoke(HttpContext context) in F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\Middlewares\ExceptionMiddleware.cs:line 30
+
+2023-09-20T05:50:59.5768603+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T05:51:01.8599961+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (20ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt], [r].[ModifiedBy], [r].[Status], [t].[RequestId], [t].[AssignedReviewerId], [t].[CreatedAt], [t].[CreatedBy], [t].[ModifiedAt], [t].[ModifiedBy], [t].[ReviewedBy], [t].[ReviewerNotes], [t].[ReviewerType], [t].[StageName], [t].[StageNumber], [t].[Status], [t].[Id], [t].[AccessFailedCount], [t].[Company], [t].[ConcurrencyStamp], [t].[CreatedAt0], [t].[CreatedBy0], [t].[DepartmentId], [t].[Email], [t].[EmailConfirmed], [t].[FullName], [t].[IsActive], [t].[IsEmployee], [t].[LastLogin], [t].[LockoutEnabled], [t].[LockoutEnd], [t].[ManagerId], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[NormalizedEmail], [t].[NormalizedUserName], [t].[PasswordHash], [t].[PhoneNumber], [t].[PhoneNumberConfirmed], [t].[Position], [t].[SectionId], [t].[SecurityStamp], [t].[TwoFactorEnabled], [t].[UserName]
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+LEFT JOIN (
+    SELECT [r1].[RequestId], [r1].[AssignedReviewerId], [r1].[CreatedAt], [r1].[CreatedBy], [r1].[ModifiedAt], [r1].[ModifiedBy], [r1].[ReviewedBy], [r1].[ReviewerNotes], [r1].[ReviewerType], [r1].[StageName], [r1].[StageNumber], [r1].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt] AS [CreatedAt0], [u].[CreatedBy] AS [CreatedBy0], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt] AS [ModifiedAt0], [u].[ModifiedBy] AS [ModifiedBy0], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName]
+    FROM [RequestReviewer] AS [r1]
+    INNER JOIN [security].[User] AS [u] ON [r1].[AssignedReviewerId] = [u].[Id]
+) AS [t] ON [r].[Id] = [t].[RequestId]
+WHERE EXISTS (
+    SELECT 1
+    FROM [RequestReviewer] AS [r0]
+    WHERE [r].[Id] = [r0].[RequestId] AND [r0].[AssignedReviewerId] = N'51678')
+ORDER BY [p].[PoNumber], [r].[Id], [t].[RequestId], [t].[AssignedReviewerId]
+2023-09-20T05:51:01.8675321+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [r].[CreatedBy] = N'procurment_manager'
+2023-09-20T05:51:01.8743168+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T05:51:01.8760123+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T05:51:01.9165577+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (19ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [r].[CreatedBy] = N'procurment_manager'
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id]
+2023-09-20T05:52:05.0182323+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T05:52:09.3514510+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (22ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt], [r].[ModifiedBy], [r].[Status], [t].[RequestId], [t].[AssignedReviewerId], [t].[CreatedAt], [t].[CreatedBy], [t].[ModifiedAt], [t].[ModifiedBy], [t].[ReviewedBy], [t].[ReviewerNotes], [t].[ReviewerType], [t].[StageName], [t].[StageNumber], [t].[Status], [t].[Id], [t].[AccessFailedCount], [t].[Company], [t].[ConcurrencyStamp], [t].[CreatedAt0], [t].[CreatedBy0], [t].[DepartmentId], [t].[Email], [t].[EmailConfirmed], [t].[FullName], [t].[IsActive], [t].[IsEmployee], [t].[LastLogin], [t].[LockoutEnabled], [t].[LockoutEnd], [t].[ManagerId], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[NormalizedEmail], [t].[NormalizedUserName], [t].[PasswordHash], [t].[PhoneNumber], [t].[PhoneNumberConfirmed], [t].[Position], [t].[SectionId], [t].[SecurityStamp], [t].[TwoFactorEnabled], [t].[UserName]
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+LEFT JOIN (
+    SELECT [r1].[RequestId], [r1].[AssignedReviewerId], [r1].[CreatedAt], [r1].[CreatedBy], [r1].[ModifiedAt], [r1].[ModifiedBy], [r1].[ReviewedBy], [r1].[ReviewerNotes], [r1].[ReviewerType], [r1].[StageName], [r1].[StageNumber], [r1].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt] AS [CreatedAt0], [u].[CreatedBy] AS [CreatedBy0], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt] AS [ModifiedAt0], [u].[ModifiedBy] AS [ModifiedBy0], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName]
+    FROM [RequestReviewer] AS [r1]
+    INNER JOIN [security].[User] AS [u] ON [r1].[AssignedReviewerId] = [u].[Id]
+) AS [t] ON [r].[Id] = [t].[RequestId]
+WHERE EXISTS (
+    SELECT 1
+    FROM [RequestReviewer] AS [r0]
+    WHERE [r].[Id] = [r0].[RequestId] AND [r0].[AssignedReviewerId] = N'51678')
+ORDER BY [p].[PoNumber], [r].[Id], [t].[RequestId], [t].[AssignedReviewerId]
+2023-09-20T05:52:30.6485808+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [r].[CreatedBy] = N'procurment_manager'
+2023-09-20T05:52:30.6569286+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [r].[CreatedBy] = N'procurment_manager'
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id]
+2023-09-20T05:53:47.1147922+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T05:53:51.8044246+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (22ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt], [r].[ModifiedBy], [r].[Status], [t].[RequestId], [t].[AssignedReviewerId], [t].[CreatedAt], [t].[CreatedBy], [t].[ModifiedAt], [t].[ModifiedBy], [t].[ReviewedBy], [t].[ReviewerNotes], [t].[ReviewerType], [t].[StageName], [t].[StageNumber], [t].[Status], [t].[Id], [t].[AccessFailedCount], [t].[Company], [t].[ConcurrencyStamp], [t].[CreatedAt0], [t].[CreatedBy0], [t].[DepartmentId], [t].[Email], [t].[EmailConfirmed], [t].[FullName], [t].[IsActive], [t].[IsEmployee], [t].[LastLogin], [t].[LockoutEnabled], [t].[LockoutEnd], [t].[ManagerId], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[NormalizedEmail], [t].[NormalizedUserName], [t].[PasswordHash], [t].[PhoneNumber], [t].[PhoneNumberConfirmed], [t].[Position], [t].[SectionId], [t].[SecurityStamp], [t].[TwoFactorEnabled], [t].[UserName]
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+LEFT JOIN (
+    SELECT [r1].[RequestId], [r1].[AssignedReviewerId], [r1].[CreatedAt], [r1].[CreatedBy], [r1].[ModifiedAt], [r1].[ModifiedBy], [r1].[ReviewedBy], [r1].[ReviewerNotes], [r1].[ReviewerType], [r1].[StageName], [r1].[StageNumber], [r1].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt] AS [CreatedAt0], [u].[CreatedBy] AS [CreatedBy0], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt] AS [ModifiedAt0], [u].[ModifiedBy] AS [ModifiedBy0], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName]
+    FROM [RequestReviewer] AS [r1]
+    INNER JOIN [security].[User] AS [u] ON [r1].[AssignedReviewerId] = [u].[Id]
+) AS [t] ON [r].[Id] = [t].[RequestId]
+WHERE EXISTS (
+    SELECT 1
+    FROM [RequestReviewer] AS [r0]
+    WHERE [r].[Id] = [r0].[RequestId] AND [r0].[AssignedReviewerId] = N'51678')
+ORDER BY [p].[PoNumber], [r].[Id], [t].[RequestId], [t].[AssignedReviewerId]
+2023-09-20T05:53:51.8103249+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [r].[CreatedBy] = N'procurment_manager'
+2023-09-20T05:53:51.8173629+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [r].[CreatedBy] = N'procurment_manager'
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id]
+2023-09-20T05:54:05.9440201+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T05:54:05.9483556+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T05:54:05.9502205+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T05:54:05.9512635+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T05:54:32.2974551+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-20T05:54:32.9493767+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T05:54:38.4353459+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (96ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt], [r].[ModifiedBy], [r].[Status], [t].[RequestId], [t].[AssignedReviewerId], [t].[CreatedAt], [t].[CreatedBy], [t].[ModifiedAt], [t].[ModifiedBy], [t].[ReviewedBy], [t].[ReviewerNotes], [t].[ReviewerType], [t].[StageName], [t].[StageNumber], [t].[Status], [t].[Id], [t].[AccessFailedCount], [t].[Company], [t].[ConcurrencyStamp], [t].[CreatedAt0], [t].[CreatedBy0], [t].[DepartmentId], [t].[Email], [t].[EmailConfirmed], [t].[FullName], [t].[IsActive], [t].[IsEmployee], [t].[LastLogin], [t].[LockoutEnabled], [t].[LockoutEnd], [t].[ManagerId], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[NormalizedEmail], [t].[NormalizedUserName], [t].[PasswordHash], [t].[PhoneNumber], [t].[PhoneNumberConfirmed], [t].[Position], [t].[SectionId], [t].[SecurityStamp], [t].[TwoFactorEnabled], [t].[UserName]
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+LEFT JOIN (
+    SELECT [r1].[RequestId], [r1].[AssignedReviewerId], [r1].[CreatedAt], [r1].[CreatedBy], [r1].[ModifiedAt], [r1].[ModifiedBy], [r1].[ReviewedBy], [r1].[ReviewerNotes], [r1].[ReviewerType], [r1].[StageName], [r1].[StageNumber], [r1].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt] AS [CreatedAt0], [u].[CreatedBy] AS [CreatedBy0], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt] AS [ModifiedAt0], [u].[ModifiedBy] AS [ModifiedBy0], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName]
+    FROM [RequestReviewer] AS [r1]
+    INNER JOIN [security].[User] AS [u] ON [r1].[AssignedReviewerId] = [u].[Id]
+) AS [t] ON [r].[Id] = [t].[RequestId]
+WHERE EXISTS (
+    SELECT 1
+    FROM [RequestReviewer] AS [r0]
+    WHERE [r].[Id] = [r0].[RequestId] AND [r0].[AssignedReviewerId] = N'51678')
+ORDER BY [p].[PoNumber], [r].[Id], [t].[RequestId], [t].[AssignedReviewerId]
+2023-09-20T05:54:51.1507771+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (14ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt], [r].[ModifiedBy], [r].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+LEFT JOIN [Attachment] AS [a] ON [r].[Id] = [a].[RequestId]
+WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [p].[CreatedBy] = N'procurment_manager'
+ORDER BY [p].[PoNumber], [r].[Id]
+2023-09-20T05:55:31.6079789+03:00	FAIL	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandError]	Failed executing DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [p].[CreatedBy] = N'procurment_manager'
+2023-09-20T05:55:31.6223151+03:00	FAIL	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.QueryIterationFailed]	An exception occurred while iterating over the results of a query for context type 'EDocument_EF.ApplicationDbContext'.
+System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.ValidateConnectionForExecute(SqlCommand command)
+   at Microsoft.Data.SqlClient.SqlConnection.ValidateConnectionForExecute(String method, SqlCommand command)
+   at Microsoft.Data.SqlClient.SqlCommand.ValidateCommand(Boolean isAsync, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.ValidateConnectionForExecute(SqlCommand command)
+   at Microsoft.Data.SqlClient.SqlConnection.ValidateConnectionForExecute(String method, SqlCommand command)
+   at Microsoft.Data.SqlClient.SqlCommand.ValidateCommand(Boolean isAsync, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+
+2023-09-20T05:55:31.7357696+03:00	FAIL	[EDocument_API.Middlewares.ExceptionMiddleware]	[0]	There is already an open DataReader associated with this Connection which must be closed first.System.InvalidOperationException: There is already an open DataReader associated with this Connection which must be closed first.
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.ValidateConnectionForExecute(SqlCommand command)
+   at Microsoft.Data.SqlClient.SqlConnection.ValidateConnectionForExecute(String method, SqlCommand command)
+   at Microsoft.Data.SqlClient.SqlCommand.ValidateCommand(Boolean isAsync, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Linq.Enumerable.TryGetSingle[TSource](IEnumerable`1 source, Boolean& found)
+   at lambda_method621(Closure, QueryContext)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at EDocument_Repositories.Application_Repositories.Request_Repository.RequestRepository`1.FindAllByCreatorIdAsync(Int64 definedRequestId, String createdBy, Dictionary`2 filters, String[] includes, Nullable`1 skip, Nullable`1 take, String orderBy, Nullable`1 orderByDirection, DateFilter[] dateFilters)
+   at EDocument_API.Controllers.V1.RequestController.GetPoRequestsFiltered(RequestFilterWriteDto filterDto) in F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\Controllers\V1\RequestController.cs:line 71
+   at lambda_method6(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at EDocument_API.Middlewares.ExceptionMiddleware.Invoke(HttpContext context) in F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\Middlewares\ExceptionMiddleware.cs:line 30
+
+2023-09-20T05:58:50.1926856+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T05:58:50.1971353+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T05:58:50.1984977+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T05:58:50.1996616+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T06:00:32.3322373+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-20T06:00:33.1464714+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T06:00:35.4125228+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (70ms) [Parameters=[@__normalizedUserName_0='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [security].[User] AS [u]
+WHERE [u].[NormalizedUserName] = @__normalizedUserName_0
+2023-09-20T06:00:38.7198843+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (27ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt], [r].[ModifiedBy], [r].[Status], [t].[RequestId], [t].[AssignedReviewerId], [t].[CreatedAt], [t].[CreatedBy], [t].[ModifiedAt], [t].[ModifiedBy], [t].[ReviewedBy], [t].[ReviewerNotes], [t].[ReviewerType], [t].[StageName], [t].[StageNumber], [t].[Status], [t].[Id], [t].[AccessFailedCount], [t].[Company], [t].[ConcurrencyStamp], [t].[CreatedAt0], [t].[CreatedBy0], [t].[DepartmentId], [t].[Email], [t].[EmailConfirmed], [t].[FullName], [t].[IsActive], [t].[IsEmployee], [t].[LastLogin], [t].[LockoutEnabled], [t].[LockoutEnd], [t].[ManagerId], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[NormalizedEmail], [t].[NormalizedUserName], [t].[PasswordHash], [t].[PhoneNumber], [t].[PhoneNumberConfirmed], [t].[Position], [t].[SectionId], [t].[SecurityStamp], [t].[TwoFactorEnabled], [t].[UserName]
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+LEFT JOIN (
+    SELECT [r1].[RequestId], [r1].[AssignedReviewerId], [r1].[CreatedAt], [r1].[CreatedBy], [r1].[ModifiedAt], [r1].[ModifiedBy], [r1].[ReviewedBy], [r1].[ReviewerNotes], [r1].[ReviewerType], [r1].[StageName], [r1].[StageNumber], [r1].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt] AS [CreatedAt0], [u].[CreatedBy] AS [CreatedBy0], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt] AS [ModifiedAt0], [u].[ModifiedBy] AS [ModifiedBy0], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName]
+    FROM [RequestReviewer] AS [r1]
+    INNER JOIN [security].[User] AS [u] ON [r1].[AssignedReviewerId] = [u].[Id]
+) AS [t] ON [r].[Id] = [t].[RequestId]
+WHERE EXISTS (
+    SELECT 1
+    FROM [RequestReviewer] AS [r0]
+    WHERE [r].[Id] = [r0].[RequestId] AND [r0].[AssignedReviewerId] = N'51678')
+ORDER BY [p].[PoNumber], [r].[Id], [t].[RequestId], [t].[AssignedReviewerId]
+2023-09-20T06:00:40.7479210+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [r].[CreatorId] = N'51188'
+2023-09-20T06:00:40.7617129+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T06:00:40.7641601+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T06:00:40.7963317+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (10ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [r].[CreatorId] = N'51188'
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id]
+2023-09-20T06:03:46.3490045+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T06:03:46.3527671+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T06:03:46.3542846+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T06:03:46.3555830+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T06:04:13.7412985+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-20T06:04:14.4571163+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestsFiltered from UserController
+2023-09-20T06:04:30.5376955+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (57ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt], [r].[ModifiedBy], [r].[Status], [t].[RequestId], [t].[AssignedReviewerId], [t].[CreatedAt], [t].[CreatedBy], [t].[ModifiedAt], [t].[ModifiedBy], [t].[ReviewedBy], [t].[ReviewerNotes], [t].[ReviewerType], [t].[StageName], [t].[StageNumber], [t].[Status], [t].[Id], [t].[AccessFailedCount], [t].[Company], [t].[ConcurrencyStamp], [t].[CreatedAt0], [t].[CreatedBy0], [t].[DepartmentId], [t].[Email], [t].[EmailConfirmed], [t].[FullName], [t].[IsActive], [t].[IsEmployee], [t].[LastLogin], [t].[LockoutEnabled], [t].[LockoutEnd], [t].[ManagerId], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[NormalizedEmail], [t].[NormalizedUserName], [t].[PasswordHash], [t].[PhoneNumber], [t].[PhoneNumberConfirmed], [t].[Position], [t].[SectionId], [t].[SecurityStamp], [t].[TwoFactorEnabled], [t].[UserName]
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+LEFT JOIN (
+    SELECT [r1].[RequestId], [r1].[AssignedReviewerId], [r1].[CreatedAt], [r1].[CreatedBy], [r1].[ModifiedAt], [r1].[ModifiedBy], [r1].[ReviewedBy], [r1].[ReviewerNotes], [r1].[ReviewerType], [r1].[StageName], [r1].[StageNumber], [r1].[Status], [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt] AS [CreatedAt0], [u].[CreatedBy] AS [CreatedBy0], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt] AS [ModifiedAt0], [u].[ModifiedBy] AS [ModifiedBy0], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName]
+    FROM [RequestReviewer] AS [r1]
+    INNER JOIN [security].[User] AS [u] ON [r1].[AssignedReviewerId] = [u].[Id]
+) AS [t] ON [r].[Id] = [t].[RequestId]
+WHERE EXISTS (
+    SELECT 1
+    FROM [RequestReviewer] AS [r0]
+    WHERE [r].[Id] = [r0].[RequestId] AND [r0].[AssignedReviewerId] = N'51678')
+ORDER BY [p].[PoNumber], [r].[Id], [t].[RequestId], [t].[AssignedReviewerId]
+2023-09-20T06:04:39.2603443+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [PoRequest] AS [p]
+INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [r].[CreatorId] = N'51188'
+2023-09-20T06:04:39.2695104+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T06:04:39.2718684+03:00	WARN	[Microsoft.EntityFrameworkCore.Query]	[Microsoft.EntityFrameworkCore.Query.RowLimitingOperationWithoutOrderByWarning]	The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2023-09-20T06:04:39.3129730+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (16ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [r].[CreatorId] = N'51188'
+    ORDER BY (SELECT 1)
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [t]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id]
+2023-09-20T08:29:45.6697482+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T08:29:45.6819151+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T08:29:45.6889435+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T08:29:45.6908951+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T08:30:34.9643556+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-20T08:30:35.4189504+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestByIds from UserController
+2023-09-20T08:30:39.5232207+03:00	FAIL	[EDocument_API.Middlewares.ExceptionMiddleware]	[0]	No property or field 'RequestId' exists in type 'Request'No property or field 'RequestId' exists in type 'Request' (at index 41)
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseMemberAccess(Type type, Expression expression)
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParsePrimary()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseUnary()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseMultiplicative()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseAdditive()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseShiftOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseComparisonOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseLogicalAndOrOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseIn()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseAndOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseOrOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseLambdaOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseNullCoalescingOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseConditionalOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.Parse(Type resultType, Boolean createParameterCtor)
+   at System.Linq.Dynamic.Core.DynamicExpressionParser.ParseLambda(Type delegateType, ParsingConfig parsingConfig, Boolean createParameterCtor, ParameterExpression[] parameters, Type resultType, String expression, Object[] values)
+   at System.Linq.Dynamic.Core.DynamicExpressionParser.ParseLambda(ParsingConfig parsingConfig, Boolean createParameterCtor, ParameterExpression[] parameters, Type resultType, String expression, Object[] values)
+   at System.Linq.Dynamic.Core.DynamicExpressionParser.ParseLambda(ParsingConfig parsingConfig, Boolean createParameterCtor, Type itType, Type resultType, String expression, Object[] values)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.Where(IQueryable source, ParsingConfig config, String predicate, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.Where[TSource](IQueryable`1 source, ParsingConfig config, String predicate, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.Where[TSource](IQueryable`1 source, String predicate, Object[] args)
+   at EDocument_Reposatories.Generic_Reposatories.GenericRepository`1.FindRequestById(Int64 definedRequestId, Int64 requestId)
+   at EDocument_API.Controllers.V1.RequestController.GetPoRequestByIds(Int64 definedRequestId, Int64 requestId) in F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\Controllers\V1\RequestController.cs:line 70
+   at lambda_method6(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at EDocument_API.Middlewares.ExceptionMiddleware.Invoke(HttpContext context) in F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\Middlewares\ExceptionMiddleware.cs:line 30
+
+2023-09-20T08:31:06.0983827+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestByIds from UserController
+2023-09-20T08:31:06.3258100+03:00	FAIL	[EDocument_API.Middlewares.ExceptionMiddleware]	[0]	No property or field 'RequestId' exists in type 'Request'No property or field 'RequestId' exists in type 'Request' (at index 41)
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseMemberAccess(Type type, Expression expression)
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParsePrimary()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseUnary()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseMultiplicative()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseAdditive()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseShiftOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseComparisonOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseLogicalAndOrOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseIn()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseAndOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseOrOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseLambdaOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseNullCoalescingOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.ParseConditionalOperator()
+   at System.Linq.Dynamic.Core.Parser.ExpressionParser.Parse(Type resultType, Boolean createParameterCtor)
+   at System.Linq.Dynamic.Core.DynamicExpressionParser.ParseLambda(Type delegateType, ParsingConfig parsingConfig, Boolean createParameterCtor, ParameterExpression[] parameters, Type resultType, String expression, Object[] values)
+   at System.Linq.Dynamic.Core.DynamicExpressionParser.ParseLambda(ParsingConfig parsingConfig, Boolean createParameterCtor, ParameterExpression[] parameters, Type resultType, String expression, Object[] values)
+   at System.Linq.Dynamic.Core.DynamicExpressionParser.ParseLambda(ParsingConfig parsingConfig, Boolean createParameterCtor, Type itType, Type resultType, String expression, Object[] values)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.Where(IQueryable source, ParsingConfig config, String predicate, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.Where[TSource](IQueryable`1 source, ParsingConfig config, String predicate, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.Where[TSource](IQueryable`1 source, String predicate, Object[] args)
+   at EDocument_Reposatories.Generic_Reposatories.GenericRepository`1.FindRequestById(Int64 definedRequestId, Int64 requestId)
+   at EDocument_API.Controllers.V1.RequestController.GetPoRequestByIds(Int64 definedRequestId, Int64 requestId) in F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\Controllers\V1\RequestController.cs:line 70
+   at lambda_method6(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at EDocument_API.Middlewares.ExceptionMiddleware.Invoke(HttpContext context) in F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API\Middlewares\ExceptionMiddleware.cs:line 30
+
+2023-09-20T08:31:18.4067537+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-20T08:31:18.4144360+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-20T08:31:18.4171787+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-20T08:31:18.4193635+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-20T08:31:33.7058576+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-20T08:31:34.1579893+03:00	INFO	[EDocument_API.Controllers.V1.RequestController]	[0]	Start GetPoRequestByIds from UserController
+2023-09-20T08:31:39.5357090+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (83ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [t].[PoNumber], [t].[CreatedAt], [t].[CreatedBy], [t].[InvoiceAttachmentPath], [t].[InvoiceNumber], [t].[ModifiedAt], [t].[ModifiedBy], [t].[PoAttachmentPath], [t].[PoDescription], [t].[RequestId], [t].[VendorName], [t].[VendorNumber], [t].[Id], [t].[CreatedAt0], [t].[CreatedBy0], [t].[CreatorId], [t].[CurrentStage], [t].[DefinedRequestId], [t].[Justification], [t].[ModifiedAt0], [t].[ModifiedBy0], [t].[Status], [t].[Id0], [t].[AccessFailedCount], [t].[Company], [t].[ConcurrencyStamp], [t].[CreatedAt1], [t].[CreatedBy1], [t].[DepartmentId], [t].[Email], [t].[EmailConfirmed], [t].[FullName], [t].[IsActive], [t].[IsEmployee], [t].[LastLogin], [t].[LockoutEnabled], [t].[LockoutEnd], [t].[ManagerId], [t].[ModifiedAt1], [t].[ModifiedBy1], [t].[NormalizedEmail], [t].[NormalizedUserName], [t].[PasswordHash], [t].[PhoneNumber], [t].[PhoneNumberConfirmed], [t].[Position], [t].[SectionId], [t].[SecurityStamp], [t].[TwoFactorEnabled], [t].[UserName], [a].[Id], [a].[CreatedAt], [a].[CreatedBy], [a].[FilePath], [a].[ModifiedAt], [a].[ModifiedBy], [a].[RequestId]
+FROM (
+    SELECT TOP(1) [p].[PoNumber], [p].[CreatedAt], [p].[CreatedBy], [p].[InvoiceAttachmentPath], [p].[InvoiceNumber], [p].[ModifiedAt], [p].[ModifiedBy], [p].[PoAttachmentPath], [p].[PoDescription], [p].[RequestId], [p].[VendorName], [p].[VendorNumber], [r].[Id], [r].[CreatedAt] AS [CreatedAt0], [r].[CreatedBy] AS [CreatedBy0], [r].[CreatorId], [r].[CurrentStage], [r].[DefinedRequestId], [r].[Justification], [r].[ModifiedAt] AS [ModifiedAt0], [r].[ModifiedBy] AS [ModifiedBy0], [r].[Status], [u].[Id] AS [Id0], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt] AS [CreatedAt1], [u].[CreatedBy] AS [CreatedBy1], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt] AS [ModifiedAt1], [u].[ModifiedBy] AS [ModifiedBy1], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName]
+    FROM [PoRequest] AS [p]
+    INNER JOIN [Request] AS [r] ON [p].[RequestId] = [r].[Id]
+    INNER JOIN [security].[User] AS [u] ON [r].[CreatorId] = [u].[Id]
+    WHERE [r].[DefinedRequestId] = CAST(1 AS bigint) AND [r].[Id] = CAST(203 AS bigint)
+) AS [t]
+LEFT JOIN [Attachment] AS [a] ON [t].[Id] = [a].[RequestId]
+ORDER BY [t].[PoNumber], [t].[Id], [t].[Id0]
+2023-09-20T08:34:01.7369789+03:00	INFO	[EDocument_API.Controllers.V1.UserController]	[0]	Start Login from UserController for it_manager
+2023-09-20T08:34:01.8797161+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (21ms) [Parameters=[@__loginWriteDto_UserName_0='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [d].[Id], [d].[CreatedAt], [d].[CreatedBy], [d].[DepartmentIcon], [d].[DepartmentName], [d].[ManagerId], [d].[ModifiedAt], [d].[ModifiedBy], [s].[Id], [s].[CreatedAt], [s].[CreatedBy], [s].[DepartmentId], [s].[HeadId], [s].[ModifiedAt], [s].[ModifiedBy], [s].[SectionName]
+FROM [security].[User] AS [u]
+LEFT JOIN [Department] AS [d] ON [u].[DepartmentId] = [d].[Id]
+LEFT JOIN [Section] AS [s] ON [u].[SectionId] = [s].[Id]
+WHERE [u].[UserName] = @__loginWriteDto_UserName_0
+2023-09-20T08:34:01.9455994+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[@__userId_0='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT [r].[Name]
+FROM [security].[UserRoles] AS [u]
+INNER JOIN [security].[Role] AS [r] ON [u].[RoleId] = [r].[Id]
+WHERE [u].[UserId] = @__userId_0
+2023-09-20T08:34:10.6106447+03:00	INFO	[EDocument_API.Controllers.V1.UserController]	[0]	Start Login from UserController for finance_manager
+2023-09-20T08:34:10.6367834+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (7ms) [Parameters=[@__loginWriteDto_UserName_0='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[Company], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[CreatedBy], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FullName], [u].[IsActive], [u].[IsEmployee], [u].[LastLogin], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[ManagerId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[Position], [u].[SectionId], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [d].[Id], [d].[CreatedAt], [d].[CreatedBy], [d].[DepartmentIcon], [d].[DepartmentName], [d].[ManagerId], [d].[ModifiedAt], [d].[ModifiedBy], [s].[Id], [s].[CreatedAt], [s].[CreatedBy], [s].[DepartmentId], [s].[HeadId], [s].[ModifiedAt], [s].[ModifiedBy], [s].[SectionName]
+FROM [security].[User] AS [u]
+LEFT JOIN [Department] AS [d] ON [u].[DepartmentId] = [d].[Id]
+LEFT JOIN [Section] AS [s] ON [u].[SectionId] = [s].[Id]
+WHERE [u].[UserName] = @__loginWriteDto_UserName_0
+2023-09-20T08:34:10.6457492+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (5ms) [Parameters=[@__userId_0='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT [r].[Name]
+FROM [security].[UserRoles] AS [u]
+INNER JOIN [security].[Role] AS [r] ON [u].[RoleId] = [r].[Id]
+WHERE [u].[UserId] = @__userId_0
+2023-09-20T08:34:10.6549941+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT [r].[Name]
+FROM [security].[UserRoles] AS [u]
+INNER JOIN [security].[Role] AS [r] ON [u].[RoleId] = [r].[Id]
+WHERE [u].[UserId] = @__userId_0
+2023-09-20T08:34:10.6670432+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT [r].[Name]
+FROM [security].[UserRoles] AS [u]
+INNER JOIN [security].[Role] AS [r] ON [u].[RoleId] = [r].[Id]
+WHERE [u].[UserId] = @__userId_0
+2023-09-20T08:34:10.7732995+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [d].[RoleId], [d].[DefinedRequestId], [d].[CreatedAt], [d].[CreatedBy], [d].[ModifiedAt], [d].[ModifiedBy], [d].[Permission], [r].[Id], [r].[ConcurrencyStamp], [r].[Name], [r].[NormalizedName], [d0].[Id], [d0].[CreatedAt], [d0].[CreatedBy], [d0].[DepartmentId], [d0].[ModifiedAt], [d0].[ModifiedBy], [d0].[RequestName], [d0].[ReviewersNumber], [d0].[RouteName]
+FROM [DefinedRequestRole] AS [d]
+INNER JOIN [security].[Role] AS [r] ON [d].[RoleId] = [r].[Id]
+INNER JOIN [DefinedRequest] AS [d0] ON [d].[DefinedRequestId] = [d0].[Id]
+2023-09-20T08:34:10.8499150+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (4ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [r].[Id], [r].[ConcurrencyStamp], [r].[Name], [r].[NormalizedName]
+FROM [security].[Role] AS [r]
+WHERE [r].[NormalizedName] = @__normalizedRoleName_0
+2023-09-20T08:34:10.8682143+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[@__p_0='?' (Size = 50), @__p_1='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [u].[UserId], [u].[RoleId]
+FROM [security].[UserRoles] AS [u]
+WHERE [u].[UserId] = @__p_0 AND [u].[RoleId] = @__p_1
+2023-09-20T08:34:10.8752401+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [r].[Id], [r].[ConcurrencyStamp], [r].[Name], [r].[NormalizedName]
+FROM [security].[Role] AS [r]
+WHERE [r].[NormalizedName] = @__normalizedRoleName_0
+2023-09-20T08:34:10.8798867+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (1ms) [Parameters=[@__p_0='?' (Size = 50), @__p_1='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [u].[UserId], [u].[RoleId]
+FROM [security].[UserRoles] AS [u]
+WHERE [u].[UserId] = @__p_0 AND [u].[RoleId] = @__p_1
+2023-09-20T08:34:10.8975505+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [d].[Id], [d].[DepartmentName], [d].[DepartmentIcon]
+FROM [Department] AS [d]
+2023-09-20T08:34:11.0066017+03:00	INFO	[Microsoft.EntityFrameworkCore.Database.Command]	[Microsoft.EntityFrameworkCore.Database.Command.CommandExecuted]	Executed DbCommand (11ms) [Parameters=[@p2='?' (Size = 50), @p3='?' (Size = 4000), @p0='?' (DbType = DateTime), @p1='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [security].[User] SET [LastLogin] = @p0, [ModifiedAt] = @p1
+OUTPUT 1
+WHERE [Id] = @p2 AND [ConcurrencyStamp] = @p3;

@@ -21,9 +21,6 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50);
 
 
-            entity.Property(e => e.DeclinedBy)
-            .HasMaxLength(200);
-
             entity.Property(e => e.Status).HasConversion<string>()
             .HasMaxLength(50);
 

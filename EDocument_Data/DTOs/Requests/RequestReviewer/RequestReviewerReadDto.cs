@@ -9,7 +9,9 @@ namespace EDocument_Data.DTOs.Requests.RequestReviewer
 {
     public class RequestReviewerReadDto
     {
-        public string? ReviewerId { get; set; }
+        public string? AssignedReviewer { get; set; }
+
+        public string? ReviewedBy { get; set; }
 
         public string? StageName { get; set; }
 

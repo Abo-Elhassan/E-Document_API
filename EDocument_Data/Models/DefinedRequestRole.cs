@@ -11,7 +11,7 @@ public  class DefinedRequestRole: BaseEntity
 {
     public string RoleId { get; set; }
     public long DefinedRequestId { get; set; }
-    public Permission Permission { get; set; }
+    public RequestPermission Permission { get; set; }
 
     public Role Role { get; set; }
 

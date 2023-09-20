@@ -19,7 +19,6 @@ public partial class Request : BaseEntity
     public string Justification { get; set; }
 
     public string CreatorId { get; set; }
-    public string DeclinedBy { get; set; }
 
     public long DefinedRequestId { get; set; }
 

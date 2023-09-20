@@ -13,7 +13,9 @@ namespace EDocument_Data.Models
     {
         public long RequestId { get; set; }
 
-        public string ReviewerId { get; set; }
+        public string AssignedReviewerId { get; set; }
+
+        public string ReviewedBy { get; set; }
 
         public string StageName { get; set; }
 
