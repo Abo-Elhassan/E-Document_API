@@ -69,33 +69,73 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
         public async Task BeginRequestCycle(long definedRequestId, long requestId)
         {
+            var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr => dr.DefinedRequest).FirstOrDefaultAsync(r => r.Id == requestId && r.RequestReviewers.All(rr => rr.StageNumber == r.CurrentStage));
             var requestReviewers = await GetDefinedRequestReviewersByIdAsync(definedRequestId);
-
             var firstReviewer = requestReviewers.FirstOrDefault(rr => rr.StageNumber == 1);
 
-          
+            request.CurrentStage++;
+
+
+
+            if (request.RequestReviewers.Any(r=>r.AssignedReviewerId== firstReviewer?.AssignedReviewerId))
+            {
+                request.CurrentStage++;
+            }
+
+
+
+
         }
 
-        public async Task ApproveRequest(long requestId, string reviewedBy, string reviewerNotes)
+        public  async Task ApproveRequestAsync(RequestReviewerWriteDto reviewingInfo)
         {
-            var request = await _context.Requests.Include(r => r.RequestReviewers).FirstOrDefaultAsync(r=> r.Id ==requestId && r.RequestReviewers.All(rr=>rr.StageNumber==r.CurrentStage));
+            var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr=>dr.DefinedRequest).FirstOrDefaultAsync(r=> r.Id == reviewingInfo.RequestId && r.RequestReviewers.All(rr=>rr.StageNumber==r.CurrentStage));
 
             foreach (var reviewer in request!.RequestReviewers)
             {
-                reviewer.ReviewedBy = reviewedBy;
+                reviewer.ReviewedBy = reviewingInfo.ReviewedBy;
                 reviewer.Status = RequestStatus.Approved;
-                reviewer.ReviewerNotes = reviewerNotes;
-                reviewer.ModifiedBy = reviewedBy;
+                reviewer.ReviewerNotes = reviewingInfo.ReviewedNotes;
+                reviewer.ModifiedBy = reviewingInfo.ReviewedBy;
             }
 
-         
-            throw new NotImplementedException();
+           
+
+            if (request.CurrentStage ==request.DefinedRequest.ReviewersNumber)
+            {
+                request.Status = RequestStatus.Approved;
+            }
+            else
+            {
+                request.CurrentStage = request.CurrentStage++;
+            }
+
+            request.ModifiedBy = reviewingInfo.ReviewedBy;
+
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+            
         }
 
 
-        public Task DeclineRequest(long requestId, string reviewedBy, string reviewerNotes)
+        public async Task DeclineRequestAsync(RequestReviewerWriteDto reviewingInfo)
         {
-            throw new NotImplementedException();
+            var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr => dr.DefinedRequest).FirstOrDefaultAsync(r => r.Id == reviewingInfo.RequestId && r.RequestReviewers.All(rr => rr.StageNumber == r.CurrentStage));
+
+            foreach (var reviewer in request!.RequestReviewers)
+            {
+                reviewer.ReviewedBy = reviewingInfo.ReviewedBy;
+                reviewer.Status = RequestStatus.Declined;
+                reviewer.ReviewerNotes = reviewingInfo.ReviewedNotes;
+                reviewer.ModifiedBy = reviewingInfo.ReviewedBy;
+            }
+
+            request.Status = RequestStatus.Declined;
+            request.CurrentStage = 0; 
+            request.ModifiedBy = reviewingInfo.ReviewedBy;
+
+            _context.Requests.Update(request);
+            _context.SaveChanges();
         }
 
 

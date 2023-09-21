@@ -94,6 +94,20 @@
              </remarks>
              <returns> message</returns>
         </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.Approve(EDocument_Data.DTOs.Requests.RequestReviewer.RequestReviewerWriteDto)">
+             <param name="requestReviewerWriteDto">Approve Po Request</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.Decline(EDocument_Data.DTOs.Requests.RequestReviewer.RequestReviewerWriteDto)">
+             <param name="requestReviewerWriteDto">Decline Po Request</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
         <member name="M:EDocument_API.Controllers.V1.RoleController.Get">
              <summary>
              Get All E-Document Roles

@@ -759,7 +759,14 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
                     if (property != null && !string.IsNullOrEmpty(filter.Value))
                     {
-                        expression = property.PropertyType == typeof(string) ? $"{ColumnName}.Contains(@0)" : $"{ColumnName}.Equals(@0)";
+                        if (property.PropertyType == typeof(string))
+                        {
+                            expression = ColumnName=="Status" ?$"Request.{ColumnName}.Contains(@0)": $"{ColumnName}.Contains(@0)";
+                        }
+                        else
+                        {
+                            expression = $"{ColumnName}.Equals(@0)";
+                        }
                         query = query.Where(expression, property.PropertyType == typeof(string) ? filter.Value : int.Parse(filter.Value));
                     }
                 }

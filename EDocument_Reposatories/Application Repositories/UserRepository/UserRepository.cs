@@ -69,7 +69,7 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
 
             if (user.IsEmployee)
             {
-                email = $"{username}@dpwsapps.com";
+                email = $"{user.UserName}@dpwsapps.com";
                 
             }
             else

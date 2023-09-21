@@ -451,6 +451,48 @@ namespace EDocument_API.Controllers.V1
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
 
+
+
+        /// <param name="requestReviewerWriteDto">Approve Po Request</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("Po/Approve")]
+        [Authorize(Roles = "Finance")]
+        public async Task<ActionResult> Approve(RequestReviewerWriteDto requestReviewerWriteDto)
+        {
+            _logger.LogInformation($"Start Approve from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+
+
+             await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto);
+       
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+
+
+        /// <param name="requestReviewerWriteDto">Decline Po Request</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("Po/Decline")]
+        [Authorize(Roles = "Finance")]
+        public async Task<ActionResult> Decline(RequestReviewerWriteDto requestReviewerWriteDto)
+        {
+            _logger.LogInformation($"Start Decline from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+
+
+            await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto);
+
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+
         #endregion PO Request
 
         #endregion Procurement
