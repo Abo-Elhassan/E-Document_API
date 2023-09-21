@@ -372,7 +372,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
         public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllAsync(Expression<Func<T, bool>>? criteria,  string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             (int TotalCount, IEnumerable<T> PaginatedData) result;
-            IQueryable<T> query = _context.Set<T>();
+            IQueryable<T> query = _context.Set<T>().AsNoTracking();
             #region Include Tables
             if (includes != null)
             {
@@ -451,7 +451,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             (int TotalCount, IEnumerable<T> PaginatedData) result;
 
  
-            IQueryable<T> query = _context.Set<T>();
+            IQueryable<T> query = _context.Set<T>().AsNoTracking();
       
             #region Include Tables
             if (includes != null)

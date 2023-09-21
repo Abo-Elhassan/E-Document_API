@@ -2,6 +2,7 @@
 using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Filter;
 using EDocument_Data.DTOs.Requests.PoRequest;
+using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_Repositories.Application_Repositories.Request_Reviewer_Repository;
@@ -44,6 +45,33 @@ namespace EDocument_API.Controllers.V1
             _requestReviewerRepository = RequestReviewerRepository;
         }
 
+
+        /// <summary>
+        /// Get Request Reviewers Details
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>Request Reviewers Details</returns>
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<ReviewersDetailsDto>>))]
+        [HttpGet("Reviewers/{id}")]
+        [Authorize]
+        public async Task<ActionResult> GetRequestReviewersById(long id)
+        {
+            _logger.LogInformation($"Start GetRequestReviewersById from {nameof(RequestController)}");
+
+            
+            var request = await _unitOfWork.Repository<Request>().GetByIdAsync(id);
+            if (request is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            var requestReviewers =await  _requestReviewerRepository.GetRequestReviewersByIdAsync(id);
+
+            return Ok(new ApiResponse<List<ReviewersDetailsDto>> { StatusCode = (int)HttpStatusCode.OK, Details = requestReviewers});
+        }
+
         #region Procurement
 
         #region PO Request
@@ -62,7 +90,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Finance,Procurement")]
         public async Task<ActionResult> GetPoRequestById(long id)
         {
-            _logger.LogInformation($"Start GetPoRequestById from {nameof(UserController)}");
+            _logger.LogInformation($"Start GetPoRequestById from {nameof(RequestController)}");
 
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             var poRequest = await _unitOfWork.Repository<PoRequest>().FindRequestAsync(
@@ -89,10 +117,11 @@ namespace EDocument_API.Controllers.V1
         /// <returns>message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpDelete("Po/{id}")]
-        [Authorize(Roles = "Finance,Procurement")]
+        [Authorize(Roles = "Procurement")]
         public async Task<ActionResult> DeletePoRequest(long id)
         {
-            _logger.LogInformation($"Start DeletePoRequest from {nameof(UserController)}");
+            _logger.LogInformation($"Start DeletePoRequest from {nameof(RequestController)}");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var includes = new string[] { "PoRequest", "Attachments", "RequestReviewers" };
 
             var poRequest = await _unitOfWork.Repository<Models.Request>().FindRequestAsync(
@@ -104,8 +133,8 @@ namespace EDocument_API.Controllers.V1
             if (poRequest is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
-            poRequest.PoRequest.ModifiedBy = User?.Identity?.Name;
-            poRequest.ModifiedBy = User?.Identity?.Name;
+            poRequest.PoRequest.ModifiedBy = user?.FullName;
+            poRequest.ModifiedBy = user?.FullName;
             _unitOfWork.Complete();
 
             _unitOfWork.Repository<Models.Request>().Delete(poRequest);
@@ -127,7 +156,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Finance,Procurement")]
         public async Task<ActionResult> GetPoRequestsFiltered(FilterWriteDto filterDto)
         {
-            _logger.LogInformation($"Start GetPoRequestsFiltered from {nameof(UserController)}");
+            _logger.LogInformation($"Start GetPoRequestsFiltered from {nameof(RequestController)}");
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             string? userCondition = null;
             RequestPermission permission;
@@ -215,7 +244,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Procurement")]
         public async Task<ActionResult> GetCreatorPoRequestsFiltered(FilterWriteDto? filterDto)
         {
-            _logger.LogInformation($"Start GetCreatorPoRequestsFiltered from {nameof(UserController)}");
+            _logger.LogInformation($"Start GetCreatorPoRequestsFiltered from {nameof(RequestController)}");
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             string? userCondition = null;
 
@@ -281,7 +310,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Finance")]
         public async Task<ActionResult> GetReviewerPoRequestsFiltered(FilterWriteDto? filterDto)
         {
-            _logger.LogInformation($"Start GetReviewerPoRequestsFiltered from {nameof(UserController)}");
+            _logger.LogInformation($"Start GetReviewerPoRequestsFiltered from {nameof(RequestController)}");
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             string? userCondition = null;
 
@@ -332,7 +361,7 @@ namespace EDocument_API.Controllers.V1
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;
             }
-         //   requests = requests.Where(r => r.CurrentStage >= r.ReviewerStage).ToList();
+
 
             var response = new FilterReadDto<PoRequestReadDto>
             {
@@ -359,20 +388,20 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Procurement")]
         public async Task<ActionResult> Create(PoRequestCreateDto poRequestCreateDto)
         {
-            _logger.LogInformation($"Start Create from {nameof(UserController)} for {JsonSerializer.Serialize(poRequestCreateDto)} ");
+            _logger.LogInformation($"Start Create from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestCreateDto)} ");
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var request = new Models.Request { Id = requestId, DefinedRequestId = poRequestCreateDto.DefinedRequestId };
-            var definedRequestReviewers = await _requestReviewerRepository.GetDefinedRequestReviewersAsync(poRequestCreateDto.DefinedRequestId);
+            var definedRequestReviewers = await _requestReviewerRepository.GetDefinedRequestReviewersByIdAsync(poRequestCreateDto.DefinedRequestId);
             request.RequestReviewers = _mapper.Map<List<RequestReviewer>>(definedRequestReviewers);
             request.PoRequest = _mapper.Map<PoRequest>(poRequestCreateDto);
             request.CreatorId = user?.Id;
             request.PoRequest.CreatorFullName = user?.FullName;
             request.CurrentStage = 1;
 
-            request.CreatedBy = user?.UserName;
-            request.PoRequest.CreatedBy = user?.UserName;
+            request.CreatedBy = user?.FullName;
+            request.PoRequest.CreatedBy = user?.FullName;
 
             _unitOfWork.Repository<Models.Request>().Add(request);
 
@@ -398,7 +427,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Procurement")]
         public async Task<ActionResult> Update(long id, PoRequestUpdateDto poRequestUpdateDto)
         {
-            _logger.LogInformation($"Start Update from {nameof(UserController)} for {JsonSerializer.Serialize(poRequestUpdateDto)} ");
+            _logger.LogInformation($"Start Update from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestUpdateDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Models.Request, bool>> expression = (r => r.Id == id);
 
@@ -412,8 +441,7 @@ namespace EDocument_API.Controllers.V1
 
             _mapper.Map(poRequestUpdateDto, request.PoRequest);
 
-            request.ModifiedBy = user?.UserName;
-            request.PoRequest.ModifiedBy = user?.UserName;
+            request.PoRequest.ModifiedBy = user?.FullName;
 
             var result = _unitOfWork.Complete();
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });

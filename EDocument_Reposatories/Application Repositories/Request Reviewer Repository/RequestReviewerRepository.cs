@@ -1,4 +1,5 @@
 ﻿using EDocument_Data.Consts.Enums;
+using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_EF;
@@ -25,14 +26,43 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             _context = context;
         }
 
-        public async Task<IEnumerable<DefinedRequestReviewer>> GetDefinedRequestReviewersAsync(long definedRequestId)
+        public async Task<IEnumerable<DefinedRequestReviewer>> GetDefinedRequestReviewersByIdAsync(long definedRequestId)
         {
-            return await _context.DefinedRequestReviewers.Where(rr => rr.DefinedRequestId == definedRequestId).ToListAsync();
+            return await _context.DefinedRequestReviewers.Where(rr => rr.DefinedRequestId == definedRequestId).AsNoTracking().ToListAsync();
         }
 
-        public async Task<IEnumerable<RequestReviewer>> GetRequestReviewersAsync(long requestId)
+        public async Task<List<ReviewersDetailsDto>> GetRequestReviewersByIdAsync(long requestId)
         {
-            return await _context.RequestReviewers.Include(rr=>rr.Reviewer).Where(rr=>rr.RequestId== requestId).ToListAsync();
+            var reviewersDetails = new List<ReviewersDetailsDto>();
+            var stages =  _context.RequestReviewers.Where(rr => rr.RequestId == requestId).AsEnumerable().DistinctBy(r=>r.StageNumber).Select(rr=>new { rr.StageNumber,rr.StageName, rr.Status,rr.ReviewedBy, rr.ReviewerNotes }).ToList();
+
+            var availableReviewers =  await _context.RequestReviewers.Include(rr => rr.Reviewer).AsNoTracking().Where(rr => rr.RequestId == requestId).ToListAsync();
+
+            foreach (var stage in stages)
+            {
+                var stageDetails = new ReviewersDetailsDto 
+                { 
+                    StageNumber = stage.StageNumber,
+                    StageTitle = stage.StageName, 
+                    Status = stage.Status,
+                    ReviewedBy = stage.ReviewedBy, 
+                    ReviewerNotes = stage.ReviewerNotes
+                };
+                var assignedReviewers = new List<string>();
+
+                foreach (var reviewer in availableReviewers)
+                {
+                    if (reviewer.StageNumber == stage.StageNumber)
+                    {
+                        assignedReviewers.Add(reviewer.Reviewer.FullName);
+                    }
+                }
+                stageDetails.AssignedReviewers= assignedReviewers;
+                reviewersDetails.Add(stageDetails);
+
+            }
+
+            return reviewersDetails;
         }
 
     }

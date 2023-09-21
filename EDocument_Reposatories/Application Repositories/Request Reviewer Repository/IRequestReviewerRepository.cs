@@ -1,4 +1,5 @@
 ﻿using EDocument_Data.Consts.Enums;
+using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_Reposatories.Generic_Reposatories;
@@ -13,9 +14,9 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
     public interface IRequestReviewerRepository: IGenericRepository<RequestReviewer>
     {
 
-        Task<IEnumerable<DefinedRequestReviewer>> GetDefinedRequestReviewersAsync(long definedRequestId);
+        Task<IEnumerable<DefinedRequestReviewer>> GetDefinedRequestReviewersByIdAsync(long definedRequestId);
 
-        Task<IEnumerable<RequestReviewer>> GetRequestReviewersAsync(long requestId);
+        Task<List<ReviewersDetailsDto>> GetRequestReviewersByIdAsync(long requestId);
     }
 
 }
