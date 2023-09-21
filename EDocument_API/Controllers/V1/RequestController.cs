@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Filter;
 using EDocument_Data.DTOs.Requests.PoRequest;
@@ -63,7 +64,7 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start GetRequestReviewersById from {nameof(RequestController)}");
             var reviewerDetails = new ReviewersDetailsDto();
             (int CurrentStage, List<ReviewersDetails> ReviewersDetails) response;
-            var request = await _unitOfWork.Repository<Request>().GetByIdAsync(id);
+            var request = await _unitOfWork.Repository<Models.Request>().GetByIdAsync(id);
             if (request is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
@@ -408,6 +409,8 @@ namespace EDocument_API.Controllers.V1
             _unitOfWork.Repository<Models.Request>().Add(request);
 
             var result = _unitOfWork.Complete();
+
+            await _requestReviewerRepository.BeginRequestCycle(poRequestCreateDto.DefinedRequestId, requestId);
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request id = '{requestId}'" });
@@ -446,6 +449,9 @@ namespace EDocument_API.Controllers.V1
             request.PoRequest.ModifiedBy = user?.FullName;
 
             var result = _unitOfWork.Complete();
+
+            await _requestReviewerRepository.BeginRequestCycle(1, request.Id);
+
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
@@ -465,9 +471,9 @@ namespace EDocument_API.Controllers.V1
         public async Task<ActionResult> Approve(RequestReviewerWriteDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start Approve from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-             await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, User.Identity.Name);
+             await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user!.FullName);
        
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
@@ -485,9 +491,10 @@ namespace EDocument_API.Controllers.V1
         public async Task<ActionResult> Decline(RequestReviewerWriteDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start Decline from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
 
-            await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, User.Identity.Name);
+            await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user!.FullName);
 
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
