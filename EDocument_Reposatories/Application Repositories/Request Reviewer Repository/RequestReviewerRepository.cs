@@ -26,21 +26,22 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             _context = context;
         }
 
+
         public async Task<IEnumerable<DefinedRequestReviewer>> GetDefinedRequestReviewersByIdAsync(long definedRequestId)
         {
             return await _context.DefinedRequestReviewers.Where(rr => rr.DefinedRequestId == definedRequestId).AsNoTracking().ToListAsync();
         }
 
-        public async Task<List<ReviewersDetailsDto>> GetRequestReviewersByIdAsync(long requestId)
+        public async Task<List<ReviewersDetails>> GetRequestReviewersByIdAsync(long requestId)
         {
-            var reviewersDetails = new List<ReviewersDetailsDto>();
+            var reviewersDetails = new List<ReviewersDetails>();
             var stages =  _context.RequestReviewers.Where(rr => rr.RequestId == requestId).AsEnumerable().DistinctBy(r=>r.StageNumber).Select(rr=>new { rr.StageNumber,rr.StageName, rr.Status,rr.ReviewedBy, rr.ReviewerNotes }).ToList();
 
             var availableReviewers =  await _context.RequestReviewers.Include(rr => rr.Reviewer).AsNoTracking().Where(rr => rr.RequestId == requestId).ToListAsync();
 
             foreach (var stage in stages)
             {
-                var stageDetails = new ReviewersDetailsDto 
+                var stageDetails = new ReviewersDetails 
                 { 
                     StageNumber = stage.StageNumber,
                     StageTitle = stage.StageName, 
@@ -64,6 +65,24 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
             return reviewersDetails;
         }
+
+
+        public Task BeginRequestCycle(long definedRequestId, long requestId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ApproveRequest(long requestId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Task DeclineRequest(long requestId)
+        {
+            throw new NotImplementedException();
+        }
+
 
     }
 }

@@ -14,7 +14,7 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
     public class PoRequestReadDto
     {
  
-        public long Id { get; init; }
+        public long RequestId { get; init; }
         public int CurrentStage { get; init; }
         public RequestStatus Status { get; init; }
         public int? ReviewerStage { get; set; }

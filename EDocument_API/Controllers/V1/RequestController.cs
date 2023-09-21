@@ -55,21 +55,23 @@ namespace EDocument_API.Controllers.V1
         /// </remarks>
         /// <returns>Request Reviewers Details</returns>
 
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<ReviewersDetailsDto>>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<ReviewersDetailsDto>))]
         [HttpGet("Reviewers/{id}")]
         [Authorize]
         public async Task<ActionResult> GetRequestReviewersById(long id)
         {
             _logger.LogInformation($"Start GetRequestReviewersById from {nameof(RequestController)}");
-
-            
+            var reviewerDetails = new ReviewersDetailsDto();
+            (int CurrentStage, List<ReviewersDetails> ReviewersDetails) response;
             var request = await _unitOfWork.Repository<Request>().GetByIdAsync(id);
             if (request is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
-            var requestReviewers =await  _requestReviewerRepository.GetRequestReviewersByIdAsync(id);
+            reviewerDetails.ReviewersDetails = await  _requestReviewerRepository.GetRequestReviewersByIdAsync(id);
+            reviewerDetails.CurrentStage=request.CurrentStage;
 
-            return Ok(new ApiResponse<List<ReviewersDetailsDto>> { StatusCode = (int)HttpStatusCode.OK, Details = requestReviewers});
+
+            return Ok(new ApiResponse<ReviewersDetailsDto> { StatusCode = (int)HttpStatusCode.OK, Details = reviewerDetails});
         }
 
         #region Procurement

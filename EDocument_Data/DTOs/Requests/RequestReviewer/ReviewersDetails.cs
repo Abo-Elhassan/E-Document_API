@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EDocument_Data.DTOs.Requests.RequestReviewer
 {
-    public class ReviewersDetailsDto
+    public class ReviewersDetails
     {
         public int StageNumber { get; set; }
         public string StageTitle { get; set; }
@@ -15,6 +15,13 @@ namespace EDocument_Data.DTOs.Requests.RequestReviewer
         public string ReviewedBy { get; set; }
         public string ReviewerNotes { get; set; }
         public List<string> AssignedReviewers { get; set; }
+
+    }
+
+    public class ReviewersDetailsDto
+    {
+        public int? CurrentStage { get; set; }
+        public List<ReviewersDetails> ReviewersDetails { get; set; }
 
     }
 }

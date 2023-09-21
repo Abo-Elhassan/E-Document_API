@@ -16,7 +16,11 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
         Task<IEnumerable<DefinedRequestReviewer>> GetDefinedRequestReviewersByIdAsync(long definedRequestId);
 
-        Task<List<ReviewersDetailsDto>> GetRequestReviewersByIdAsync(long requestId);
+        Task<List<ReviewersDetails>> GetRequestReviewersByIdAsync(long requestId);
+
+        Task BeginRequestCycle(long definedRequestId, long requestId);
+        Task ApproveRequest(long requestId);
+        Task DeclineRequest(long requestId);
     }
 
 }
