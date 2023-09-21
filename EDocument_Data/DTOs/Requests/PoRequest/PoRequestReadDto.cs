@@ -14,11 +14,9 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
     public class PoRequestReadDto
     {
  
-        public long RequestId { get; init; }
+        public long Id { get; init; }
         public int CurrentStage { get; init; }
         public RequestStatus Status { get; init; }
-        public int? ReviewerStage { get; set; }
-        public RequestStatus? ReviewerStatus { get; set; }
         public string? Justification { get; init; }
         public string? CreatorId { get; init; }
         public string? CreatorFullName { get; init; }
@@ -36,6 +34,14 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
         public DateTime CreatedAt { get; init; }
         public DateTime ModifiedAt { get; init; }
 
+    
+    }
+
+    public class PoRequestReviewerReadDto : PoRequestReadDto
+    {
+        public int? ReviewerStage { get; set; }
+        public RequestStatus? ReviewerStatus { get; set; }
         public List<RequestReviewerReadDto>? RequestReviewers { get; set; }
+
     }
 }

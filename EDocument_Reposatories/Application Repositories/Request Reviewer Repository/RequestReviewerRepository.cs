@@ -67,18 +67,33 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
         }
 
 
-        public Task BeginRequestCycle(long definedRequestId, long requestId)
+        public async Task BeginRequestCycle(long definedRequestId, long requestId)
         {
+            var requestReviewers = await GetDefinedRequestReviewersByIdAsync(definedRequestId);
+
+            var firstReviewer = requestReviewers.FirstOrDefault(rr => rr.StageNumber == 1);
+
+          
+        }
+
+        public async Task ApproveRequest(long requestId, string reviewedBy, string reviewerNotes)
+        {
+            var request = await _context.Requests.Include(r => r.RequestReviewers).FirstOrDefaultAsync(r=> r.Id ==requestId && r.RequestReviewers.All(rr=>rr.StageNumber==r.CurrentStage));
+
+            foreach (var reviewer in request!.RequestReviewers)
+            {
+                reviewer.ReviewedBy = reviewedBy;
+                reviewer.Status = RequestStatus.Approved;
+                reviewer.ReviewerNotes = reviewerNotes;
+                reviewer.ModifiedBy = reviewedBy;
+            }
+
+         
             throw new NotImplementedException();
         }
 
-        public Task ApproveRequest(long requestId)
-        {
-            throw new NotImplementedException();
-        }
 
-
-        public Task DeclineRequest(long requestId)
+        public Task DeclineRequest(long requestId, string reviewedBy, string reviewerNotes)
         {
             throw new NotImplementedException();
         }

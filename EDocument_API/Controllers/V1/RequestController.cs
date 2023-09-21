@@ -209,7 +209,7 @@ namespace EDocument_API.Controllers.V1
             var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
 
-            var requests = _mapper.Map<List<PoRequestReadDto>>(result.PaginatedData);
+            var requests = _mapper.Map<List<PoRequestReviewerReadDto>>(result.PaginatedData);
 
             if (permission == RequestPermission.Review)
             {
@@ -222,7 +222,7 @@ namespace EDocument_API.Controllers.V1
                 }
             }
 
-            var response = new FilterReadDto<PoRequestReadDto>
+            var response = new FilterReadDto<PoRequestReviewerReadDto>
             {
                 TotalCount = totalCount,
                 TotalPages = totalPages,
@@ -230,7 +230,7 @@ namespace EDocument_API.Controllers.V1
                 PageSize = requests.Count,
                 PaginatedData = requests
             };
-            return Ok(new ApiResponse<FilterReadDto<PoRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+            return Ok(new ApiResponse<FilterReadDto<PoRequestReviewerReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
         }
 
         /// <summary>
@@ -307,7 +307,7 @@ namespace EDocument_API.Controllers.V1
         ///
         /// </remarks>
         /// <returns>List of All Reviewer PO Requests</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<PoRequestReadDto>>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<PoRequestReviewerReadDto>>))]
         [HttpPost("Po/AssignedToMe")]
         [Authorize(Roles = "Finance")]
         public async Task<ActionResult> GetReviewerPoRequestsFiltered(FilterWriteDto? filterDto)
@@ -354,7 +354,7 @@ namespace EDocument_API.Controllers.V1
             var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
 
-            var requests = _mapper.Map<List<PoRequestReadDto>>(result.PaginatedData);
+            var requests = _mapper.Map<List<PoRequestReviewerReadDto>>(result.PaginatedData);
 
             foreach (var request in requests)
             {
@@ -365,7 +365,7 @@ namespace EDocument_API.Controllers.V1
             }
 
 
-            var response = new FilterReadDto<PoRequestReadDto>
+            var response = new FilterReadDto<PoRequestReviewerReadDto>
             {
                 TotalCount = totalCount,
                 TotalPages = totalPages,
@@ -373,7 +373,7 @@ namespace EDocument_API.Controllers.V1
                 PageSize = requests.Count,
                 PaginatedData = requests
             };
-            return Ok(new ApiResponse<FilterReadDto<PoRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+            return Ok(new ApiResponse<FilterReadDto<PoRequestReviewerReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
         }
 
         /// <summary>

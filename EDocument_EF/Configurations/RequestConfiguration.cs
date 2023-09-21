@@ -20,7 +20,8 @@ namespace EDocument_EF.Configurations
             .IsRequired()
             .HasMaxLength(50);
 
-
+            entity.Property(e => e.CurrentStage)
+            .HasDefaultValue(1);
 
             entity.Property(e => e.Status).HasConversion<string>()
             .HasMaxLength(50);
