@@ -19,8 +19,8 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
         Task<List<ReviewersDetails>> GetRequestReviewersByIdAsync(long requestId);
 
         Task BeginRequestCycle(long definedRequestId, long requestId);
-        Task ApproveRequestAsync(RequestReviewerWriteDto reviewingInfo);
-        Task DeclineRequestAsync(RequestReviewerWriteDto reviewingInfo);
+        Task ApproveRequestAsync(RequestReviewerWriteDto reviewingInfo,string reviewedBy);
+        Task DeclineRequestAsync(RequestReviewerWriteDto reviewingInfo,string reviewedBy);
     }
 
 }

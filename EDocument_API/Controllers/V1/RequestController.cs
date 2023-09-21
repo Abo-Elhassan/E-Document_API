@@ -465,9 +465,9 @@ namespace EDocument_API.Controllers.V1
         public async Task<ActionResult> Approve(RequestReviewerWriteDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start Approve from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-
-             await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto);
+             await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, User.Identity.Name);
        
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
@@ -487,7 +487,7 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start Decline from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
 
 
-            await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto);
+            await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, User.Identity.Name);
 
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });

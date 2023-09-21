@@ -756,18 +756,22 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     ColumnName = Utilities.ConvertColumnNameToPascalCase(filter.Key);
                     
                     var property = typeof(T).GetProperty(ColumnName);
-
-                    if (property != null && !string.IsNullOrEmpty(filter.Value))
+                    
+                    if ((property != null || ColumnName=="Status") && !string.IsNullOrEmpty(filter.Value))
                     {
-                        if (property.PropertyType == typeof(string))
+                        
+                        if (ColumnName == "Status")
                         {
                             expression = ColumnName=="Status" ?$"Request.{ColumnName}.Contains(@0)": $"{ColumnName}.Contains(@0)";
+                            query = query.Where(expression, filter.Value);
+
                         }
                         else
                         {
                             expression = $"{ColumnName}.Equals(@0)";
+                            query = query.Where(expression, property.PropertyType == typeof(string) ? filter.Value : int.Parse(filter.Value));
+
                         }
-                        query = query.Where(expression, property.PropertyType == typeof(string) ? filter.Value : int.Parse(filter.Value));
                     }
                 }
             }

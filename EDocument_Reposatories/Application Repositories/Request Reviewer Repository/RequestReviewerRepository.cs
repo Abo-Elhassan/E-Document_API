@@ -87,16 +87,16 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
         }
 
-        public  async Task ApproveRequestAsync(RequestReviewerWriteDto reviewingInfo)
+        public  async Task ApproveRequestAsync(RequestReviewerWriteDto reviewingInfo, string reviewedBy)
         {
             var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr=>dr.DefinedRequest).FirstOrDefaultAsync(r=> r.Id == reviewingInfo.RequestId && r.RequestReviewers.All(rr=>rr.StageNumber==r.CurrentStage));
 
             foreach (var reviewer in request!.RequestReviewers)
             {
-                reviewer.ReviewedBy = reviewingInfo.ReviewedBy;
+                reviewer.ReviewedBy = reviewedBy;
                 reviewer.Status = RequestStatus.Approved;
                 reviewer.ReviewerNotes = reviewingInfo.ReviewedNotes;
-                reviewer.ModifiedBy = reviewingInfo.ReviewedBy;
+                reviewer.ModifiedBy = reviewedBy;
             }
 
            
@@ -110,7 +110,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 request.CurrentStage = request.CurrentStage++;
             }
 
-            request.ModifiedBy = reviewingInfo.ReviewedBy;
+            request.ModifiedBy = reviewedBy;
 
             _context.Requests.Update(request);
             _context.SaveChanges();
@@ -118,26 +118,26 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
         }
 
 
-        public async Task DeclineRequestAsync(RequestReviewerWriteDto reviewingInfo)
+        public async Task DeclineRequestAsync(RequestReviewerWriteDto reviewingInfo, string reviewedBy)
         {
             var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr => dr.DefinedRequest).FirstOrDefaultAsync(r => r.Id == reviewingInfo.RequestId && r.RequestReviewers.All(rr => rr.StageNumber == r.CurrentStage));
 
             foreach (var reviewer in request!.RequestReviewers)
             {
-                reviewer.ReviewedBy = reviewingInfo.ReviewedBy;
+                reviewer.ReviewedBy = reviewedBy;
                 reviewer.Status = RequestStatus.Declined;
                 reviewer.ReviewerNotes = reviewingInfo.ReviewedNotes;
-                reviewer.ModifiedBy = reviewingInfo.ReviewedBy;
+                reviewer.ModifiedBy = reviewedBy;
             }
 
             request.Status = RequestStatus.Declined;
             request.CurrentStage = 0; 
-            request.ModifiedBy = reviewingInfo.ReviewedBy;
+            request.ModifiedBy = reviewedBy;
 
             _context.Requests.Update(request);
             _context.SaveChanges();
         }
-
+                                                                                
 
     }
 }
