@@ -51,7 +51,7 @@ namespace EDocument_API.Extentions
         {
             var info = new OpenApiInfo()
             {
-                Title = ".NET Core (.NET 7) Web API",
+                Title = "E-Document",
                 Version = desc.ApiVersion.ToString()
             };
 

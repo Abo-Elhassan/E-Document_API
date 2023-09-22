@@ -24,7 +24,7 @@ namespace EDocument_API.Controllers.V1
     [Produces(MediaTypeNames.Application.Json, MediaTypeNames.Application.Xml)]
     [Consumes(MediaTypeNames.Application.Json, MediaTypeNames.Application.Xml)]
     [ApiController]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/[controller]")]
     [ApiVersion("1.0")]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse<string>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ApiResponse<string>))]
@@ -468,7 +468,7 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Po/Approve")]
         [Authorize(Roles = "Finance")]
-        public async Task<ActionResult> Approve(RequestReviewerWriteDto requestReviewerWriteDto)
+        public async Task<ActionResult> ApprovePoRequest(RequestReviewerWriteDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start Approve from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -488,7 +488,7 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Po/Decline")]
         [Authorize(Roles = "Finance")]
-        public async Task<ActionResult> Decline(RequestReviewerWriteDto requestReviewerWriteDto)
+        public async Task<ActionResult> DeclinePoRequest(RequestReviewerWriteDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start Decline from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -503,5 +503,32 @@ namespace EDocument_API.Controllers.V1
         #endregion PO Request
 
         #endregion Procurement
+
+
+        [HttpPost("ConvertToBase64")]
+        public async Task<ActionResult> ConvertFile([FromForm]IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("File not provided or empty.");
+            }
+
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    await file.CopyToAsync(stream);
+                    var byteArray = stream.ToArray();
+                    var base64String = Convert.ToBase64String(byteArray);
+                    return Ok(base64String);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+
     }
 }

@@ -69,19 +69,22 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
         public async Task BeginRequestCycle(long definedRequestId, long requestId)
         {
-            var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr => dr.DefinedRequest).FirstOrDefaultAsync(r => r.Id == requestId && r.RequestReviewers.All(rr => rr.StageNumber == r.CurrentStage));
-            var requestReviewers = await GetRequestReviewersByIdAsync(requestId);
+            var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr => dr.DefinedRequest).FirstOrDefaultAsync(r => r.Id == requestId );
+            var requestReviewers =  request.RequestReviewers;
+            
             var firstReviewer = requestReviewers.FirstOrDefault(rr => rr.StageNumber == 1);
 
             request.CurrentStage=1;
 
 
 
-            //if (request.RequestReviewers.Any(r=>r.AssignedReviewerId== firstReviewer?.AssignedReviewerId))
-            //{
-            //    request.CurrentStage++;
+            if (request.RequestReviewers.Any(r => r.AssignedReviewerId == firstReviewer?.AssignedReviewerId && !r.StageName.Equals(1)))
+            {
+                request.CurrentStage++;
+                firstReviewer.Status = RequestStatus.Approved;
+                firstReviewer.ModifiedBy = "E-Documnet";
 
-            //}
+            }
 
 
             _context.SaveChanges();

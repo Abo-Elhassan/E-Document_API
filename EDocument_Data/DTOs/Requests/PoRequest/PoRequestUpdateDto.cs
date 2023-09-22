@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -22,12 +23,14 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
         [Required]
         public  string InvoiceNumber { get; init; }
         [Required]
-        public  string PoAttachmentPath { get; init; }
+        [FileValidation(2 * 1024 * 1024, ".pdf", ".docx", ".xlsx")]
+        public IFormFile PoAttachment { get; init; }
         [Required]
-        public  string InvoiceAttachmentPath { get; init; }
+        [FileValidation(2 * 1024 * 1024, ".pdf", ".docx", ".xlsx")]
+        public IFormFile InvoiceAttachment { get; init; }
 
-        //public List<Attachment> Attachments { get; set; }
-
+        [FileValidation(2 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx")]
+        public List<IFormFile> Attachments { get; set; }
 
 
     }

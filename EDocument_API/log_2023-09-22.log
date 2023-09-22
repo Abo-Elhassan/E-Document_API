@@ -1,0 +1,48 @@
+2023-09-22T07:55:45.5368174+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-22T07:55:45.5411235+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-22T07:55:45.5425812+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-22T07:55:45.5436587+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-22T08:00:17.3414394+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-22T08:00:17.3453816+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-22T08:00:17.3471491+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-22T08:00:17.3487380+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-22T08:01:04.9978399+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-22T08:02:46.6030203+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-22T08:02:46.6066532+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-22T08:02:46.6080571+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-22T08:02:46.6089498+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-22T08:03:21.8643016+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-22T19:45:25.1946621+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-22T19:45:25.2032378+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-22T19:45:25.2057497+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-22T19:45:25.2080613+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-22T19:46:06.5928876+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-22T19:52:23.8579261+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-22T19:52:23.8639600+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-22T19:52:23.8660039+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-22T19:52:23.8677938+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-22T19:52:40.2759049+03:00	WARN	[Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware]	[FailedToDeterminePort]	Failed to determine the https port for redirect.
+2023-09-22T22:08:44.4522232+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-22T22:08:44.4593392+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-22T22:08:44.4613007+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-22T22:08:44.4630406+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-22T22:09:12.4143712+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-22T22:09:12.4196809+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-22T22:09:12.4214220+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-22T22:09:12.4234171+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-22T22:10:31.9727288+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-22T22:10:31.9838918+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-22T22:10:31.9858018+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-22T22:10:31.9876868+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-22T22:13:56.3677922+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-22T22:13:56.3735889+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-22T22:13:56.3769791+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-22T22:13:56.3797084+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-22T22:27:55.6366030+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-22T22:27:55.6426548+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-22T22:27:55.6445103+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-22T22:27:55.6465367+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API
+2023-09-22T22:28:35.3900913+03:00	INFO	[Microsoft.Hosting.Lifetime]	[ListeningOnAddress]	Now listening on: http://localhost:5290
+2023-09-22T22:28:35.3966355+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Application started. Press Ctrl+C to shut down.
+2023-09-22T22:28:35.3985218+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Hosting environment: Development
+2023-09-22T22:28:35.4006692+03:00	INFO	[Microsoft.Hosting.Lifetime]	[0]	Content root path: F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_API

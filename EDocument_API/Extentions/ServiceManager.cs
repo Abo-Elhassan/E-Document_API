@@ -10,6 +10,7 @@ using EDocument_Services.AutoMapper_Service;
 using EDocument_Services.Mail_Service;
 using EDocument_UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.RateLimiting;
@@ -81,11 +82,18 @@ namespace EDocument_API.Shared
                 });
             });
 
-            #endregion ApiBehavior Configuration
+
+            services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 20 * 1024 * 1024;
+            });
+
+        
+        #endregion ApiBehavior Configuration
 
             #region Authentication
 
-            services.AddAuthentication(options =>
+        services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -167,9 +175,7 @@ namespace EDocument_API.Shared
                 opt.DefaultApiVersion = new ApiVersion(1, 0);
                 opt.AssumeDefaultVersionWhenUnspecified = true;
                 opt.ReportApiVersions = true;
-                opt.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader(),
-                                                                new HeaderApiVersionReader("x-api-version"),
-                                                                new MediaTypeApiVersionReader("x-api-version"));
+                opt.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader());
             });
 
             services.AddVersionedApiExplorer(setup =>
