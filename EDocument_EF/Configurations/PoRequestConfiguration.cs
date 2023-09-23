@@ -16,6 +16,7 @@ namespace EDocument_EF.Configurations
             entity.HasKey(p => p.RequestNumber);
             
             entity.Property(e => e.RequestNumber)
+            .HasMaxLength(50)
             .ValueGeneratedNever();
 
 

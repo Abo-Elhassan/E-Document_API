@@ -10,7 +10,7 @@ namespace EDocument_Data.Models
 {
     public class PoRequest : BaseEntity
     {
-        public long RequestNumber { get; set; }
+        public string RequestNumber { get; set; }
         public string PoNumber { get; set; }
         public string PoDescription { get; set; }
         public string VendorName { get; set; }

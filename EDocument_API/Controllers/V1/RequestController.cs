@@ -332,7 +332,7 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start Create from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestCreateDto)} ");
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
-            var requestNo = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmss"));
+            var requestNo = $"PO-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var request = new Models.Request { Id = requestId, DefinedRequestId = poRequestCreateDto.DefinedRequestId };
@@ -361,7 +361,7 @@ namespace EDocument_API.Controllers.V1
             await _requestReviewerRepository.BeginRequestCycle(poRequestCreateDto.DefinedRequestId, requestId);
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
-            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. = '{requestNo}'" });
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
         }
 
         /// <summary>

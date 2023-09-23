@@ -16,7 +16,7 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
     {
  
         public long Id { get; init; }
-        public long RequestNumber { get; init; }
+        public string RequestNumber { get; init; }
         public long DefinedRequestId { get; init; }
         public int CurrentStage { get; init; }
         public RequestStatus Status { get; init; }
