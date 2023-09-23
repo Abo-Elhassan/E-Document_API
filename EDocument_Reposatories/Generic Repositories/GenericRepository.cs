@@ -2,6 +2,7 @@
 using EDocument_Data.Models.Shared;
 using EDocument_EF;
 using EDocument_Services.Helpers;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
@@ -235,6 +236,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 query = query.Where($"CreatedBy ==@0", createdBy);
             }
+
             if (filters != null && filters.Count > 0)
             {
                 filters = Utilities.ConvertKeysToPascalCase(filters);
@@ -245,10 +247,10 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     ColumnValue = filter.Value;
 
                     var property = typeof(T).GetProperty(ColumnName);
-                    if (property != null && !string.IsNullOrEmpty(filter.Value))
+                    if (property != null && !string.IsNullOrEmpty(ColumnValue))
                     {
                         expression = property.PropertyType == typeof(string) ? $"{ColumnName}.Contains(@0)" : $"{ColumnName}.Equals(@0)";
-                        query = query.Where(expression, ColumnValue);
+                        query = query.Where(expression, property.PropertyType == typeof(string) ? ColumnValue : int.Parse(ColumnValue));
                     }
                 }
             }
@@ -523,14 +525,14 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
                 foreach (var filter in filters)
                 {
-                    ColumnName = Utilities.ConvertColumnNameToPascalCase(filter.Key);
+                    ColumnName = filter.Key;
                     ColumnValue = filter.Value;
 
                     var property = typeof(T).GetProperty(ColumnName);
-                    if (property != null && !string.IsNullOrEmpty(filter.Value))
+                    if (property != null && !string.IsNullOrEmpty(ColumnValue))
                     {
                         expression = property.PropertyType == typeof(string) ? $"{ColumnName}.Contains(@0)" : $"{ColumnName}.Equals(@0)";
-                        query = query.Where(expression, ColumnValue);
+                        query = query.Where(expression, property.PropertyType == typeof(string) ? ColumnValue : int.Parse(ColumnValue));
                     }
                 }
             }
@@ -794,27 +796,29 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
             #region Apply General Filter
 
+
             if (filters != null && filters.Count > 0)
             {
                 filters = Utilities.ConvertKeysToPascalCase(filters);
 
                 foreach (var filter in filters)
                 {
-                    ColumnName = Utilities.ConvertColumnNameToPascalCase(filter.Key);
+                    ColumnName = filter.Key;
+                    ColumnValue = filter.Value;
 
                     var property = typeof(T).GetProperty(ColumnName);
 
-                    if ((property != null || ColumnName == "Status") && !string.IsNullOrEmpty(filter.Value))
+                    if ((property != null || ColumnName == "Status") && !string.IsNullOrEmpty(ColumnValue))
                     {
                         if (ColumnName == "Status")
                         {
-                            expression = ColumnName == "Status" ? $"Request.{ColumnName}.Contains(@0)" : $"{ColumnName}.Contains(@0)";
-                            query = query.Where(expression, filter.Value);
+                            expression = $"Request.{ColumnName}.Contains(@0)";
+                            query = query.Where(expression, ColumnValue);
                         }
-                        else
+                        else if(property != null)
                         {
-                            expression = $"{ColumnName}.Equals(@0)";
-                            query = query.Where(expression, property.PropertyType == typeof(string) ? filter.Value : int.Parse(filter.Value));
+                            expression = property.PropertyType == typeof(string) ? $"{ColumnName}.Contains(@0)" : $"{ColumnName}.Equals(@0)";
+                            query = query.Where(expression, property.PropertyType == typeof(string) ? ColumnValue : int.Parse(ColumnValue));
                         }
                     }
                 }

@@ -2,7 +2,7 @@
 using EDocument_Data.Models.Shared;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace EDocument_API.Controllers.V1
 {
@@ -33,6 +33,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>targeted file</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FileStreamResult>))]
         [HttpGet("{filePath}")]
+        [Authorize]
         public ActionResult DownloadFile(string filePath)
         {
             if (System.IO.File.Exists(filePath))

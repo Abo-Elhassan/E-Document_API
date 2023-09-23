@@ -14,7 +14,7 @@ public partial class Request : BaseEntity
 
     public int? CurrentStage { get; set; }
 
-    public RequestStatus Status { get; set; }
+    public string Status { get; set; }
 
     public string Justification { get; set; }
 

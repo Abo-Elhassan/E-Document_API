@@ -45,7 +45,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 { 
                     StageNumber = stage.StageNumber,
                     StageTitle = stage.StageName, 
-                    Status = stage.Status,
+                    Status = stage.Status.ToString(),
                     ReviewedBy = stage.ReviewedBy, 
                     ReviewerNotes = stage.ReviewerNotes
                 };
@@ -78,10 +78,10 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
 
 
-            if (request.RequestReviewers.Any(r => r.AssignedReviewerId == firstReviewer?.AssignedReviewerId && !r.StageName.Equals(1)))
+            if (request.RequestReviewers.Any(r => r.AssignedReviewerId == firstReviewer?.AssignedReviewerId && !r.StageNumber.Equals(1)))
             {
                 request.CurrentStage++;
-                firstReviewer.Status = RequestStatus.Approved;
+                firstReviewer.Status = RequestStatus.Approved.ToString();
                 firstReviewer.ModifiedBy = "E-Documnet";
 
             }
@@ -98,7 +98,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             foreach (var reviewer in request!.RequestReviewers)
             {
                 reviewer.ReviewedBy = reviewedBy;
-                reviewer.Status = RequestStatus.Approved;
+                reviewer.Status = RequestStatus.Approved.ToString();
                 reviewer.ReviewerNotes = reviewingInfo.ReviewedNotes;
                 reviewer.ModifiedBy = reviewedBy;
             }
@@ -107,7 +107,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
             if (request.CurrentStage ==request.DefinedRequest.ReviewersNumber)
             {
-                request.Status = RequestStatus.Approved;
+                request.Status = RequestStatus.Approved.ToString();
             }
             else
             {
@@ -129,12 +129,12 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             foreach (var reviewer in request!.RequestReviewers)
             {
                 reviewer.ReviewedBy = reviewedBy;
-                reviewer.Status = RequestStatus.Declined;
+                reviewer.Status = RequestStatus.Declined.ToString();
                 reviewer.ReviewerNotes = reviewingInfo.ReviewedNotes;
                 reviewer.ModifiedBy = reviewedBy;
             }
 
-            request.Status = RequestStatus.Declined;
+            request.Status = RequestStatus.Declined.ToString();
             request.CurrentStage = 0; 
             request.ModifiedBy = reviewedBy;
 

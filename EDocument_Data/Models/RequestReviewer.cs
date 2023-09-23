@@ -23,7 +23,7 @@ namespace EDocument_Data.Models
 
         public ReviewerType ReviewerType { get; set; }
 
-        public RequestStatus Status { get; set; }
+        public string Status { get; set; }
 
         public string ReviewerNotes { get; set; }
 

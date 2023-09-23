@@ -20,6 +20,7 @@ using System.Security.Claims;
 using System.Text.Json;
 
 using Models = EDocument_Data.Models;
+using EDocument_Data.DTOs.Attachments;
 
 namespace EDocument_API.Controllers.V1
 {
@@ -116,7 +117,8 @@ namespace EDocument_API.Controllers.V1
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
             var result = _mapper.Map<PoRequestReadDto>(poRequest);
-
+            result.InvoiceAttachment = _mapper.Map<AttachmentReadDto>(poRequest.InvoiceAttachmentPath);
+            result.PoAttachment = _mapper.Map<AttachmentReadDto>(poRequest.PoAttachmentPath);
             return Ok(new ApiResponse<PoRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
@@ -146,12 +148,12 @@ namespace EDocument_API.Controllers.V1
             if (request is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
-            if (request.Status == RequestStatus.Approved)
+            if (request.Status == RequestStatus.Approved.ToString())
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete this request after as it has been already approved" });
 
             }
-            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved))
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
 
@@ -329,13 +331,15 @@ namespace EDocument_API.Controllers.V1
         {
             _logger.LogInformation($"Start Create from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestCreateDto)} ");
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
+
+            var requestNo = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmss"));
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var request = new Models.Request { Id = requestId, DefinedRequestId = poRequestCreateDto.DefinedRequestId };
             var definedRequestReviewers = await _requestReviewerRepository.GetDefinedRequestReviewersByIdAsync(poRequestCreateDto.DefinedRequestId);
             request.RequestReviewers = _mapper.Map<List<RequestReviewer>>(definedRequestReviewers);
             request.PoRequest = _mapper.Map<PoRequest>(poRequestCreateDto);
-
+            request.PoRequest.RequestNumber = requestNo;
             request.PoRequest.PoAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{requestId}", poRequestCreateDto.PoAttachment);
             request.PoRequest.InvoiceAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{requestId}", poRequestCreateDto.InvoiceAttachment);
 
@@ -345,7 +349,7 @@ namespace EDocument_API.Controllers.V1
             }
 
             request.CreatorId = user?.Id;
-            request.PoRequest.CreatorFullName = user?.FullName;
+            request.PoRequest.CreatedBy = user?.FullName;
             request.CurrentStage = 1;
             request.CreatedBy = user?.FullName;
             request.PoRequest.CreatedBy = user?.FullName;
@@ -357,7 +361,7 @@ namespace EDocument_API.Controllers.V1
             await _requestReviewerRepository.BeginRequestCycle(poRequestCreateDto.DefinedRequestId, requestId);
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
-            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request id = '{requestId}'" });
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. = '{requestNo}'" });
         }
 
         /// <summary>
@@ -378,32 +382,25 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start Update from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestUpdateDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Models.Request, bool>> requestRxpression = (r => r.Id == id);
-            Expression<Func<Attachment, bool>> attatchmentRxpression = (r => r.RequestId == id);
-            var oldAttachments = await _unitOfWork.Repository<Models.Attachment>().FindAllAsync(attatchmentRxpression,null);
-            foreach (var attachment in oldAttachments)
-            {
-                attachment.ModifiedBy = user.FullName;
-            }
+
             _unitOfWork.Complete();
-            var request = await _unitOfWork.Repository<Models.Request>().FindAsync(requestRxpression, new string[] { "PoRequest" });
+            var request = await _unitOfWork.Repository<Models.Request>().FindAsync(requestRxpression, new string[] { "PoRequest" ,"Attachments"});
 
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
 
-            if (request.Status != RequestStatus.Declined)
+            if (request.Status != RequestStatus.Declined.ToString())
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update request information during reviewing proccess" });
 
             _mapper.Map(poRequestUpdateDto, request.PoRequest);
 
-            //update modifier before delete to catch in trigger
-            foreach (var attachment in oldAttachments)
-            {
-                attachment.ModifiedBy = user.FullName;
-            }
-            _unitOfWork.Complete();
 
             _fileService.DeleteFolder($@"PoRequest\{request.Id}");
-            _unitOfWork.Repository<Attachment>().DeleteRange(oldAttachments);
+            foreach (var attachment in request.Attachments)
+            {
+                attachment.ModifiedAt = DateTime.Now;
+                attachment.ModifiedBy = user.FullName;
+            }
 
             request.PoRequest.PoAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{request.Id}", poRequestUpdateDto.PoAttachment);
             request.PoRequest.InvoiceAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{request.Id}", poRequestUpdateDto.InvoiceAttachment);
@@ -412,8 +409,15 @@ namespace EDocument_API.Controllers.V1
             {
                 request.Attachments = _fileService.UploadAttachments(request.Id, $@"PoRequest\{request.Id}", poRequestUpdateDto.Attachments,user.FullName);
             }
+            else
+            {
+                _unitOfWork.Repository<Attachment>().DeleteRange(request.Attachments);
+                _unitOfWork.Complete();
+            }
+
 
             request.PoRequest.ModifiedBy = user?.FullName;
+            request.ModifiedBy = user?.FullName;
 
             var result = _unitOfWork.Complete();
 

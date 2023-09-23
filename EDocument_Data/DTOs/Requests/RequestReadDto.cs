@@ -11,7 +11,7 @@ namespace EDocument_Data.DTOs.Requests
     {
         public required long Id { get; init; }
         public required int CurrentStage { get; init; }
-        public required RequestStatus Status { get; init; }
+        public required string Status { get; init; }
         public required string Justification { get; init; }
         public required string CreatorId { get; init; }
         public required string DeclinedBy { get; init; }

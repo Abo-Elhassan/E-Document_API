@@ -39,6 +39,11 @@ public class FileValidationAttribute : ValidationAttribute
                 }
             }
         }
+        else if(value == null)
+        {
+
+            return ValidationResult.Success;
+        }
         else
         {
             return new ValidationResult("Invalid input type");

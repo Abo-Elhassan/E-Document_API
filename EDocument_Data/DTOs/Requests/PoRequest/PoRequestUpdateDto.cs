@@ -15,6 +15,10 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
         public  long requestId { get; init; }
 
         [Required]
+        [RegularExpression("^(SOK.PO.)[0-9]{2}-[0-9]+$")]
+        public string PoNumber { get; init; }
+
+        [Required]
         public string PoDescription { get; init; }
         [Required]
         public  string VendorName { get; init; }

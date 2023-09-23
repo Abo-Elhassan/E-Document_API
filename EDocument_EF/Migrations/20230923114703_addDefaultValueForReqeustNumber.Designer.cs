@@ -4,6 +4,7 @@ using EDocument_EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDocument_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230923114703_addDefaultValueForReqeustNumber")]
+    partial class addDefaultValueForReqeustNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -699,8 +702,8 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("EDocument_Data.Models.PoRequest", b =>
                 {
-                    b.Property<long>("RequestNumber")
-                        .HasColumnType("bigint");
+                    b.Property<string>("PoNumber")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("smalldatetime");
@@ -732,10 +735,10 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PoNumber")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RequestNumber")
                         .HasColumnType("bigint");
 
                     b.Property<string>("VendorName")
@@ -745,11 +748,9 @@ namespace EDocument_EF.Migrations
                     b.Property<int>("VendorNumber")
                         .HasColumnType("int");
 
-                    b.HasKey("RequestNumber");
+                    b.HasKey("PoNumber");
 
                     b.HasIndex("InvoiceNumber");
-
-                    b.HasIndex("PoNumber");
 
                     b.HasIndex("RequestId")
                         .IsUnique();
@@ -1381,7 +1382,7 @@ namespace EDocument_EF.Migrations
                             Id = "50269",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "451f1a9d-04a8-4882-a365-29667b81875f",
+                            ConcurrencyStamp = "f6b0c6d6-f7a2-4737-9f01-c12f50e5b332",
                             DepartmentId = 1L,
                             Email = "admin_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1394,7 +1395,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Administration",
-                            SecurityStamp = "6f8c880b-8282-400d-8aee-95421bff2eea",
+                            SecurityStamp = "01ccae7e-e309-4067-ac23-cf0b175a9e2c",
                             TwoFactorEnabled = false,
                             UserName = "admin_manager"
                         },
@@ -1403,7 +1404,7 @@ namespace EDocument_EF.Migrations
                             Id = "90010",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "54af1c0b-04b1-4193-966a-c8eac8ce5610",
+                            ConcurrencyStamp = "d6e72415-2745-4c09-97ae-a6fbbfa5b7d8",
                             DepartmentId = 2L,
                             Email = "freightforwarding_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1416,7 +1417,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Freight Forwarding",
-                            SecurityStamp = "cb6f01fc-62c0-4049-a5df-9387afbf0a78",
+                            SecurityStamp = "5ff6edf2-3fbb-490a-bc18-147bb973b75e",
                             TwoFactorEnabled = false,
                             UserName = "ff_manager"
                         },
@@ -1425,7 +1426,7 @@ namespace EDocument_EF.Migrations
                             Id = "51330",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "362eda44-44b8-49cb-8944-e414e9f2b54b",
+                            ConcurrencyStamp = "76ec2e2a-0328-4abd-95af-b0e761bee06d",
                             DepartmentId = 3L,
                             Email = "businesstransformation_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1438,7 +1439,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Business Transformation",
-                            SecurityStamp = "e5301ce1-a3cc-4257-ab86-d5b7895abb36",
+                            SecurityStamp = "6c5cc8db-86ff-420c-930a-2ab8603ddeba",
                             TwoFactorEnabled = false,
                             UserName = "bt_manager"
                         },
@@ -1447,7 +1448,7 @@ namespace EDocument_EF.Migrations
                             Id = "51573",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "037c6461-126f-4efa-8bd2-2eb2857cd726",
+                            ConcurrencyStamp = "8d4b83c8-cd78-466c-9a26-c8a355b540b7",
                             DepartmentId = 4L,
                             Email = "commercial_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1460,7 +1461,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Commercial",
-                            SecurityStamp = "05421cbe-3999-417a-a4a5-9306ed994522",
+                            SecurityStamp = "8aa262ea-b096-42e9-b9ea-b077ff663abe",
                             TwoFactorEnabled = false,
                             UserName = "commercial_manager"
                         },
@@ -1469,7 +1470,7 @@ namespace EDocument_EF.Migrations
                             Id = "51668",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "831537f3-1df9-42a0-b590-1522b1c2bf83",
+                            ConcurrencyStamp = "c886888b-9d68-4182-ae3f-7633a1263170",
                             DepartmentId = 5L,
                             Email = "communications_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1482,7 +1483,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Communications",
-                            SecurityStamp = "38c07701-f785-43ae-9497-29dec1d894dd",
+                            SecurityStamp = "e2e3f535-8d02-42b7-87be-dcca4e0a93ff",
                             TwoFactorEnabled = false,
                             UserName = "communications_manager"
                         },
@@ -1491,7 +1492,7 @@ namespace EDocument_EF.Migrations
                             Id = "51229",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "48295878-1da2-4b6d-81f9-2d8a971afeb7",
+                            ConcurrencyStamp = "efdffaf0-07ca-4a48-b1fe-b10feb825ba5",
                             DepartmentId = 6L,
                             Email = "customerservice_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1504,7 +1505,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Customer Service",
-                            SecurityStamp = "b92daad5-8940-49c3-8ded-6fbdcc70038b",
+                            SecurityStamp = "d77258e4-0ad8-4afb-9024-2d37a3a70092",
                             TwoFactorEnabled = false,
                             UserName = "cs_manager"
                         },
@@ -1513,7 +1514,7 @@ namespace EDocument_EF.Migrations
                             Id = "Exp-16",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "2bcdaeec-97dc-49e9-9d95-c02e71a922b5",
+                            ConcurrencyStamp = "eedb80c3-44d7-4255-a479-968586f27789",
                             DepartmentId = 7L,
                             Email = "executivemanagement_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1526,7 +1527,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Executive Management",
-                            SecurityStamp = "823c5cbe-4703-47b3-8643-01c34153c903",
+                            SecurityStamp = "46de5c76-c14c-4579-b98f-2b918f849d6c",
                             TwoFactorEnabled = false,
                             UserName = "em_manager"
                         },
@@ -1535,7 +1536,7 @@ namespace EDocument_EF.Migrations
                             Id = "51124",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "9d979029-8094-4774-bd91-71edc8ba9e5f",
+                            ConcurrencyStamp = "e38c8ebc-6fbb-4914-836f-25e0adab3a93",
                             DepartmentId = 8L,
                             Email = "finance_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1548,7 +1549,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Finance",
-                            SecurityStamp = "f3071713-de2d-419e-a5ff-94661b1be157",
+                            SecurityStamp = "7202773a-f087-4084-b20b-392168d51a41",
                             TwoFactorEnabled = false,
                             UserName = "finance_manager"
                         },
@@ -1557,7 +1558,7 @@ namespace EDocument_EF.Migrations
                             Id = "50962",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "16ee4a45-4aa9-4ec4-b658-595f38e4d396",
+                            ConcurrencyStamp = "6f768218-a98e-49fc-8992-9f4c93adab50",
                             DepartmentId = 9L,
                             Email = "governmentalrelation_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1570,7 +1571,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Governmental Relation",
-                            SecurityStamp = "d9f9a7d9-6f28-4f0a-9b88-656aad80f1d2",
+                            SecurityStamp = "33908ebf-5a69-4b26-af50-84fc7529f9f3",
                             TwoFactorEnabled = false,
                             UserName = "gr_manager"
                         },
@@ -1579,7 +1580,7 @@ namespace EDocument_EF.Migrations
                             Id = "51572",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "7e0cf261-da6a-4d8f-b16b-c166525cd1a9",
+                            ConcurrencyStamp = "d51d2624-6cff-47ea-92ca-20fc1921e9c8",
                             DepartmentId = 10L,
                             Email = "hc-ds_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1592,7 +1593,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of HC - DUBUY Sales",
-                            SecurityStamp = "c06a08ad-5e79-4eaa-ba31-2e74c1f0ea90",
+                            SecurityStamp = "f3c2c55b-0237-4d82-bfa5-0c476df640e8",
                             TwoFactorEnabled = false,
                             UserName = "hc-ds_manager"
                         },
@@ -1601,7 +1602,7 @@ namespace EDocument_EF.Migrations
                             Id = "50140",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "ee05f7e3-13be-497a-b5a0-99bbafd02f64",
+                            ConcurrencyStamp = "21eca7a5-9a19-4d97-8e41-a373e276a31f",
                             DepartmentId = 11L,
                             Email = "hc-ssp_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1614,7 +1615,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of HC - Samsung SDS project",
-                            SecurityStamp = "a30a26ed-0d5e-411b-bb67-17193c95210a",
+                            SecurityStamp = "a55e6c6e-f155-492a-b6e3-b148438fcfb2",
                             TwoFactorEnabled = false,
                             UserName = "hc-ssp_manager"
                         },
@@ -1623,7 +1624,7 @@ namespace EDocument_EF.Migrations
                             Id = "51331",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "beb78316-262d-4024-9f77-5994cd48ea8b",
+                            ConcurrencyStamp = "9bf5a160-e325-478e-91a7-cd1944c42c04",
                             DepartmentId = 12L,
                             Email = "it_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1636,7 +1637,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of IT",
-                            SecurityStamp = "dcfee656-6f02-4758-94f6-844f1d8ba98b",
+                            SecurityStamp = "94030ac1-3f4a-4e6a-a0e8-a92eabddb17d",
                             TwoFactorEnabled = false,
                             UserName = "it_manager"
                         },
@@ -1645,7 +1646,7 @@ namespace EDocument_EF.Migrations
                             Id = "50354",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "e0a5596e-7deb-44e6-9789-572bf6948c2f",
+                            ConcurrencyStamp = "7fda5fcc-cf07-4666-a989-553de0c5d11a",
                             DepartmentId = 13L,
                             Email = "ops-bgc_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1658,7 +1659,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of OPS-Cargo & Bulk",
-                            SecurityStamp = "4dd255ea-7b84-4998-8880-13a0557e64e0",
+                            SecurityStamp = "9986f6ea-08f0-49c2-8b86-0a86afe9d3d7",
                             TwoFactorEnabled = false,
                             UserName = "ops-bgc_manager"
                         },
@@ -1667,7 +1668,7 @@ namespace EDocument_EF.Migrations
                             Id = "50141",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "76e61436-de31-4be2-a9e1-bba39af64b02",
+                            ConcurrencyStamp = "ec2cb970-a4d7-4711-bcfc-f81c5e637cf6",
                             DepartmentId = 14L,
                             Email = "ops-ct_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1680,7 +1681,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of OPS-Containers",
-                            SecurityStamp = "e907710d-ae80-4e50-b1d0-24355128699d",
+                            SecurityStamp = "21627821-029f-43f5-b924-0c0d3a0372ca",
                             TwoFactorEnabled = false,
                             UserName = "ops-ct_manager"
                         },
@@ -1689,7 +1690,7 @@ namespace EDocument_EF.Migrations
                             Id = "50279",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "20336c29-8446-4828-856b-8bb2ce4ac3da",
+                            ConcurrencyStamp = "ee5f7c32-09d2-419a-8d04-15d6cebba1bb",
                             DepartmentId = 15L,
                             Email = "people_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1702,7 +1703,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of People",
-                            SecurityStamp = "0ae36cae-a091-4e0f-bd02-a4251427c44a",
+                            SecurityStamp = "1a7912e8-f9bd-4516-8ce5-454d0f822233",
                             TwoFactorEnabled = false,
                             UserName = "people_manager"
                         },
@@ -1711,7 +1712,7 @@ namespace EDocument_EF.Migrations
                             Id = "51188",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "cd169bbe-9e25-4b66-998e-bf17d0ec3747",
+                            ConcurrencyStamp = "5739976b-952e-49e6-a04b-79d1c728f84f",
                             DepartmentId = 16L,
                             Email = "procurement_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1724,7 +1725,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Procurment",
-                            SecurityStamp = "e8f86d28-969f-4812-822d-36a56801d9c1",
+                            SecurityStamp = "ee38a1f6-67ad-49b3-b62e-a9ba503cd41e",
                             TwoFactorEnabled = false,
                             UserName = "procurment_manager"
                         },
@@ -1733,7 +1734,7 @@ namespace EDocument_EF.Migrations
                             Id = "51659",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "c287025d-a07b-4e93-8471-d29d3da690c1",
+                            ConcurrencyStamp = "ff2d3abd-b456-4e51-8eab-7bd86fa6cb42",
                             DepartmentId = 17L,
                             Email = "projectsfacilitymanager_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1746,7 +1747,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Projects & Facility Management",
-                            SecurityStamp = "6640ecb3-5109-4910-87bb-0665c7d60980",
+                            SecurityStamp = "5cc1d1aa-29b9-4d0c-9756-87783a7222a6",
                             TwoFactorEnabled = false,
                             UserName = "projects_manager"
                         },
@@ -1755,7 +1756,7 @@ namespace EDocument_EF.Migrations
                             Id = "50882",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "7ffdb0af-f7c8-4eec-9c78-f7ddb465b028",
+                            ConcurrencyStamp = "8ea8456a-27bd-4eae-9d88-fe801fa9cbdc",
                             DepartmentId = 18L,
                             Email = "qhse_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1768,7 +1769,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of QHSE",
-                            SecurityStamp = "1a3a850d-279f-4c52-9aba-763476d2f405",
+                            SecurityStamp = "a904ba95-9f35-4bf1-aae2-7265e10025f3",
                             TwoFactorEnabled = false,
                             UserName = "qhse_manager"
                         },
@@ -1777,7 +1778,7 @@ namespace EDocument_EF.Migrations
                             Id = "50263",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "284b62ed-a31e-4192-80e9-95804f9fd20b",
+                            ConcurrencyStamp = "09e6902d-3a37-4dcf-95e0-8835934e803c",
                             DepartmentId = 19L,
                             Email = "security_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1790,7 +1791,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Security",
-                            SecurityStamp = "d53aa64f-362b-4891-bda7-3a4fba13e64c",
+                            SecurityStamp = "573c41a3-81c2-454f-b023-f98136e6ca31",
                             TwoFactorEnabled = false,
                             UserName = "security_manager"
                         },
@@ -1799,7 +1800,7 @@ namespace EDocument_EF.Migrations
                             Id = "50000",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "ac9939ec-68d7-48a2-85bc-e300cf876030",
+                            ConcurrencyStamp = "c85852cd-4a60-4ed1-8693-37c833c83890",
                             DepartmentId = 20L,
                             Email = "stores_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1812,7 +1813,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Stores",
-                            SecurityStamp = "43d2172f-490f-46c4-a666-344720ceae71",
+                            SecurityStamp = "e5613c98-90cd-4cd5-aee5-935fa7964386",
                             TwoFactorEnabled = false,
                             UserName = "stores_manager"
                         },
@@ -1821,7 +1822,7 @@ namespace EDocument_EF.Migrations
                             Id = "50136",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "e6c5b0fe-4009-493a-b851-1675ab734296",
+                            ConcurrencyStamp = "c4aa8454-65ca-4b26-9935-676d7355010a",
                             DepartmentId = 21L,
                             Email = "engineering_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -1834,7 +1835,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Engineering",
-                            SecurityStamp = "ba935d74-fd91-4061-96a1-a4129597b668",
+                            SecurityStamp = "0e51c80a-f3df-4ce8-bd43-1c4901f0c992",
                             TwoFactorEnabled = false,
                             UserName = "engineering_manager"
                         },
@@ -1843,7 +1844,7 @@ namespace EDocument_EF.Migrations
                             Id = "51509",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "bcbaa3d4-fd62-4f8c-a5ce-2f413f15d05c",
+                            ConcurrencyStamp = "96e40908-470a-47a4-858c-c671c1d12b4e",
                             DepartmentId = 4L,
                             Email = "commercial-ct_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -1856,7 +1857,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Commercial / Containers Section Head",
-                            SecurityStamp = "5eb76e69-b66a-4ef4-bc7b-052fa3611d74",
+                            SecurityStamp = "e7279179-df87-4665-b715-82bf98ad8fed",
                             TwoFactorEnabled = false,
                             UserName = "commercial-ct_sec_head"
                         },
@@ -1865,7 +1866,7 @@ namespace EDocument_EF.Migrations
                             Id = "51583",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "e85efcd4-b9fb-4e44-9406-e8bc2ad80b41",
+                            ConcurrencyStamp = "6e1c61bc-90aa-4a55-b82d-c58aa98113ae",
                             DepartmentId = 4L,
                             Email = "commercial-bgc_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -1878,7 +1879,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "CommercialBulk / GC Section Head",
-                            SecurityStamp = "78ea6246-7f51-4f9a-86f7-d39daac4a7e6",
+                            SecurityStamp = "8a711d45-912b-4f9a-a246-05eab133ea8d",
                             TwoFactorEnabled = false,
                             UserName = "commercial-bgc_sec_head"
                         },
@@ -1887,7 +1888,7 @@ namespace EDocument_EF.Migrations
                             Id = "90015",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "a50c6635-7731-4650-9146-2251382281d3",
+                            ConcurrencyStamp = "9aa4d7b9-74ca-4a06-b514-961f6168d7b9",
                             DepartmentId = 10L,
                             Email = "hc-ssp_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -1900,7 +1901,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "HC - Samsung SDS project  Section Head",
-                            SecurityStamp = "ee31deb0-9f71-4a36-9bc8-ec1c27f72a93",
+                            SecurityStamp = "27a3fab7-165a-4969-945e-6a990bc4763f",
                             TwoFactorEnabled = false,
                             UserName = "hc-ssp_sec_head"
                         },
@@ -1909,7 +1910,7 @@ namespace EDocument_EF.Migrations
                             Id = "90008",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "cdf475d1-487c-49d9-8ef0-af68bc904854",
+                            ConcurrencyStamp = "23379ce4-e0ef-46b8-91d3-b95d6b051ee5",
                             DepartmentId = 11L,
                             Email = "hc-ds_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -1922,7 +1923,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "HC - DUBUY Sales Section Head",
-                            SecurityStamp = "3b4372b5-fd04-4061-b471-09a995c6230a",
+                            SecurityStamp = "8855ed84-6019-4379-b2e8-437dca37ed6c",
                             TwoFactorEnabled = false,
                             UserName = "hc-ds_sec_head"
                         },
@@ -1931,7 +1932,7 @@ namespace EDocument_EF.Migrations
                             Id = "51520",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "6eb5b206-dacb-4369-837b-757495dc0282",
+                            ConcurrencyStamp = "c89bac9e-c55a-4030-baf0-3c6e2abed930",
                             DepartmentId = 18L,
                             Email = "qhse_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -1944,7 +1945,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "QHSE Section HEad",
-                            SecurityStamp = "7676e4c0-1df6-4c74-907b-0f34836f1df5",
+                            SecurityStamp = "10b5ce10-532f-47d9-aa92-f255063638f4",
                             TwoFactorEnabled = false,
                             UserName = "qhse_sec_head"
                         },
@@ -1953,7 +1954,7 @@ namespace EDocument_EF.Migrations
                             Id = "51449",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "f4d2a1ee-4149-4c3f-acd9-6820ded4e175",
+                            ConcurrencyStamp = "7d041794-ad86-4bec-b7f1-18f9948d2216",
                             DepartmentId = 13L,
                             Email = "ops-cg_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -1966,7 +1967,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "OPS-Cargo & Bulk Section Head",
-                            SecurityStamp = "b0f3eaa6-3c6f-41b1-89b1-770a54150350",
+                            SecurityStamp = "7ba70b1d-20e6-4076-9510-3c46ad54f640",
                             TwoFactorEnabled = false,
                             UserName = "ops-cg_sec_head"
                         },
@@ -1975,7 +1976,7 @@ namespace EDocument_EF.Migrations
                             Id = "50844",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "91e886de-dfa3-4d96-ace3-136040e1c7e6",
+                            ConcurrencyStamp = "e3ad59d6-59b1-48d1-a8f4-8190a91187dd",
                             DepartmentId = 13L,
                             Email = "ops-dri_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -1988,7 +1989,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "OPS-DRI Section Head",
-                            SecurityStamp = "f9d31527-319a-40c4-9343-e88c827be967",
+                            SecurityStamp = "131a2307-d494-4395-a94a-59492c72fa52",
                             TwoFactorEnabled = false,
                             UserName = "ops-dri_sec_head"
                         },
@@ -1997,7 +1998,7 @@ namespace EDocument_EF.Migrations
                             Id = "50670",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "04ef3823-1223-413f-af5d-4983747bf6ca",
+                            ConcurrencyStamp = "180ba251-80ee-4b6f-92e8-e9bfe35c3db4",
                             DepartmentId = 14L,
                             Email = "ops-ct_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -2010,7 +2011,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "OPS-Containers Section Head",
-                            SecurityStamp = "bbd5b601-ea40-4391-a5bd-74b4c824911c",
+                            SecurityStamp = "f7f0e788-0e27-474b-9ed7-264a82795c56",
                             TwoFactorEnabled = false,
                             UserName = "ops-ct_sec_head"
                         },
@@ -2019,7 +2020,7 @@ namespace EDocument_EF.Migrations
                             Id = "50128",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "0587a264-875b-4a3b-b975-08f17e93d8db",
+                            ConcurrencyStamp = "0650c5d6-dc69-4542-9806-bd5ab6a32923",
                             DepartmentId = 14L,
                             Email = "ops-cfs_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -2032,7 +2033,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "OPS-CFS Section Head",
-                            SecurityStamp = "63eafde4-01c1-49d6-8f50-69cb112bf495",
+                            SecurityStamp = "28137324-04d7-4e1d-baaf-e9b50f160bab",
                             TwoFactorEnabled = false,
                             UserName = "ops-cfs_sec_head"
                         },
@@ -2041,7 +2042,7 @@ namespace EDocument_EF.Migrations
                             Id = "51126",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "222e63c7-a779-4f53-8a72-732a56810b8d",
+                            ConcurrencyStamp = "086f64bd-05ea-4d42-8d9b-1456d65cd836",
                             DepartmentId = 21L,
                             Email = "tec-workshop_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -2054,7 +2055,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "TEC-Workshop Section Head",
-                            SecurityStamp = "19b186ed-a57a-4adf-97f7-68df369f1ae4",
+                            SecurityStamp = "81e214b2-e721-4448-89bb-c51893f0d30a",
                             TwoFactorEnabled = false,
                             UserName = "tec-workshop_sec_head"
                         },
@@ -2063,7 +2064,7 @@ namespace EDocument_EF.Migrations
                             Id = "51090",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "c90bdc66-3f07-48b0-910d-ad3e72965851",
+                            ConcurrencyStamp = "54e78bdf-ab72-49e9-a4a1-6b38c3870228",
                             DepartmentId = 21L,
                             Email = "tec-crane_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -2076,7 +2077,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "TEC-Crane Section Head",
-                            SecurityStamp = "d341acdd-bdb3-42aa-9760-34e5f963181b",
+                            SecurityStamp = "6d62e2e6-f71e-4dfb-8e29-bab839df5709",
                             TwoFactorEnabled = false,
                             UserName = "tec-crane_sec_head"
                         },
@@ -2085,7 +2086,7 @@ namespace EDocument_EF.Migrations
                             Id = "50562",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "e1d8e5cc-3810-47de-800d-8be3c7f09e8a",
+                            ConcurrencyStamp = "0a2f0998-f73f-4eee-ad18-6225a7901178",
                             Email = "tec-planning_sec_head@dpworld.com",
                             EmailConfirmed = false,
                             FullName = "Ahmed Zaki",
@@ -2097,7 +2098,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "TEC-Planning Section Head",
-                            SecurityStamp = "94589006-1aae-4628-b514-f8ee31957c0d",
+                            SecurityStamp = "73e9274a-5828-4d05-9eca-c97c86180744",
                             TwoFactorEnabled = false,
                             UserName = "tec-planning_sec_head"
                         },
@@ -2106,7 +2107,7 @@ namespace EDocument_EF.Migrations
                             Id = "51529",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "d5b09dda-a523-4418-9d25-198dcecc7b0f",
+                            ConcurrencyStamp = "bff6aafa-11f3-40c1-bfd8-9c4b6a4cf9cb",
                             DepartmentId = 21L,
                             Email = "projects_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -2119,7 +2120,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Projects Section Head",
-                            SecurityStamp = "0778f1f3-9e54-452b-a4f0-eedbcffbb88b",
+                            SecurityStamp = "839a9e5f-2a4f-4b4b-90e3-f068364456ae",
                             TwoFactorEnabled = false,
                             UserName = "projects_sec_head"
                         });

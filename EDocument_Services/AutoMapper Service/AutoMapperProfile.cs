@@ -39,7 +39,13 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<Section, SectionReadDto>();
 
             CreateMap<Request, RequestReadDto>();
-            CreateMap<Attachment, AttachmentReadDto>();
+            CreateMap<Attachment, AttachmentReadDto>()
+                .ForMember(x => x.FilePath, y => y.MapFrom(z => z.FilePath))
+                .ForMember(x => x.FileName, y => y.MapFrom(z => Path.GetFileName(z.FilePath)));
+
+            CreateMap<string, AttachmentReadDto>()
+               .ForMember(x => x.FilePath, y => y.MapFrom(z => z))
+               .ForMember(x => x.FileName, y => y.MapFrom(z => Path.GetFileName(z)));
             CreateMap<RequestReviewer, RequestReviewerReadDto>()
                 .ForMember(x => x.AssignedReviewerFullName, y => y.MapFrom(z => z.Reviewer.FullName));
 

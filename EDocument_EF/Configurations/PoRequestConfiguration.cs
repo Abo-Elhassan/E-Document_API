@@ -13,8 +13,13 @@ namespace EDocument_EF.Configurations
         {
             entity.ToTable(nameof(PoRequest));
 
-            entity.HasKey(p => p.PoNumber);
-            entity.HasIndex(p => p.VendorName);
+            entity.HasKey(p => p.RequestNumber);
+            
+            entity.Property(e => e.RequestNumber)
+            .ValueGeneratedNever();
+
+
+            entity.HasIndex(p => p.PoNumber);
             entity.HasIndex(p => p.InvoiceNumber);
 
 
@@ -37,9 +42,6 @@ namespace EDocument_EF.Configurations
             
             entity.Property(e => e.InvoiceAttachmentPath)
             .IsRequired();
-
-            entity.Property(e => e.CreatorFullName)
-            .HasMaxLength(200);
 
 
             entity.Property(e => e.CreatedAt)
