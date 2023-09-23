@@ -1,12 +1,8 @@
 ﻿using EDocument_Data.Consts.Enums;
-using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_EF;
 using EDocument_Services.Helpers;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.IdentityModel.Tokens;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 
@@ -31,10 +27,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
         {
             var entity = _context.Set<T>().Find(id);
 
-
             return entity;
         }
-
 
         public virtual async Task<T?> GetByIdAsync(long id)
         {
@@ -49,8 +43,6 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
             return entity;
         }
-
-
 
         public virtual IEnumerable<T> GetAll(string[]? includes = null)
         {
@@ -80,9 +72,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return await query.ToListAsync();
         }
 
-
-
-        public virtual T? Find(Expression<Func<T, bool>>? criteria=null, string[]? includes = null)
+        public virtual T? Find(Expression<Func<T, bool>>? criteria = null, string[]? includes = null)
         {
             IQueryable<T> query = _context.Set<T>();
 
@@ -92,8 +82,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     query = query.Include(item);
                 }
 
-
-            if(criteria != null)
+            if (criteria != null)
             {
                 return query.SingleOrDefault(criteria);
             }
@@ -101,10 +90,9 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 return query.SingleOrDefault();
             }
-           
         }
 
-        public virtual async Task<T?> FindAsync(Expression<Func<T, bool>>? criteria=null, string[]? includes = null)
+        public virtual async Task<T?> FindAsync(Expression<Func<T, bool>>? criteria = null, string[]? includes = null)
         {
             IQueryable<T> query = _context.Set<T>();
 
@@ -121,21 +109,32 @@ namespace EDocument_Reposatories.Generic_Reposatories
             else
             {
                 return await query.SingleOrDefaultAsync();
-            }  
+            }
         }
 
+        public virtual IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[]? includes = null)
+        {
+            IQueryable<T> query = _context.Set<T>();
 
+            if (includes != null)
+                foreach (var item in includes)
+                {
+                    query = query.Include(item);
+                }
 
-        public virtual (int TotalCount, IEnumerable<T> PaginatedData) FindAll(Expression<Func<T, bool>>? criteria,  string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+            return query.Where(criteria).ToList();
+        }
+
+        public virtual (int TotalCount, IEnumerable<T> PaginatedData) FindAll(Expression<Func<T, bool>>? criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             (int TotalCount, IEnumerable<T> PaginatedData) result;
 
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
             #region Include Tables
+
             if (includes != null)
             {
-
                 foreach (var item in includes)
                 {
                     if (!string.IsNullOrEmpty(item))
@@ -144,7 +143,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Include Tables
 
             #region Apply General Filter
 
@@ -152,9 +152,11 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 query = query.Where(criteria);
             }
-            #endregion
+
+            #endregion Apply General Filter
 
             #region Apply Date Filter
+
             if (dateFilters != null)
             {
                 foreach (var filter in dateFilters)
@@ -169,10 +171,13 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Apply Date Filter
 
             result.TotalCount = query.Count();
+
             #region Apply Sorting
+
             if (orderBy != null && orderByDirection != null)
             {
                 if (orderByDirection == OrderBy.Asc)
@@ -184,7 +189,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     query = query.OrderByDescending(orderBy);
                 }
             }
-            #endregion
+
+            #endregion Apply Sorting
 
             #region Apply Pagination
 
@@ -194,7 +200,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
             }
 
             result.PaginatedData = query.ToList();
-            #endregion
+
+            #endregion Apply Pagination
 
             return result;
         }
@@ -206,7 +213,9 @@ namespace EDocument_Reposatories.Generic_Reposatories
             var expression = "";
             (int TotalCount, IEnumerable<T> PaginatedData) result;
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
+
             #region Include Tables
+
             if (includes != null)
             {
                 foreach (var item in includes)
@@ -217,9 +226,11 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Include Tables
 
             #region Apply General Filter
+
             if (createdBy != null)
             {
                 query = query.Where($"CreatedBy ==@0", createdBy);
@@ -241,9 +252,11 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Apply General Filter
 
             #region Apply Date Filter
+
             if (dateFilters != null)
             {
                 foreach (var filter in dateFilters)
@@ -259,11 +272,12 @@ namespace EDocument_Reposatories.Generic_Reposatories
                 }
             }
 
-            #endregion
+            #endregion Apply Date Filter
 
             result.TotalCount = query.Count();
 
             #region Apply Sorting
+
             if (orderBy != null && orderByDirection != null)
             {
                 var sortDirection = orderByDirection == OrderBy.Asc ? OrderBy.Asc : OrderBy.Desc;
@@ -275,26 +289,31 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     query = query.OrderBy($"{orderBy} {sortDirection}");
                 }
             }
-            #endregion
+
+            #endregion Apply Sorting
 
             #region Apply Pagination
+
             if (skip.HasValue && take.HasValue)
             {
                 query = query.Skip(skip.Value).Take(take.Value);
             }
 
             result.PaginatedData = query.ToList();
-            #endregion
+
+            #endregion Apply Pagination
 
             return result;
         }
 
-        public virtual (int TotalCount, IEnumerable<T> PaginatedData) FindAll(string? filterValue=null, string? createdBy = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual (int TotalCount, IEnumerable<T> PaginatedData) FindAll(string? filterValue = null, string? createdBy = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var dynamicFilter = "";
             (int TotalCount, IEnumerable<T> PaginatedData) result;
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
+
             #region Include Tables
+
             if (includes != null)
             {
                 foreach (var item in includes)
@@ -305,7 +324,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Include Tables
 
             #region Apply General Filter
 
@@ -320,11 +340,12 @@ namespace EDocument_Reposatories.Generic_Reposatories
                 dynamicFilter = string.Join(" OR ", properties.Where(p => p.PropertyType == typeof(string) || p.PropertyType == typeof(DateTime) || p.PropertyType == typeof(long) || p.PropertyType == typeof(float))
                 .Select(property => property.PropertyType == typeof(string) ? $"{property.Name}.Contains(@0)" : $"{property.Name}.Equals(@0)"));
                 query = query.Where(dynamicFilter, filterValue);
-
             }
-            #endregion
+
+            #endregion Apply General Filter
 
             #region Apply Date Filter
+
             if (dateFilters != null)
             {
                 foreach (var filter in dateFilters)
@@ -339,11 +360,13 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Apply Date Filter
 
             result.TotalCount = query.Count();
 
             #region Apply Sorting
+
             if (orderBy != null && orderByDirection != null)
             {
                 var sortDirection = orderByDirection == OrderBy.Asc ? OrderBy.Asc : OrderBy.Desc;
@@ -355,7 +378,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     query = query.OrderBy($"{orderBy} {sortDirection}");
                 }
             }
-            #endregion
+
+            #endregion Apply Sorting
 
             #region Apply Pagination
 
@@ -364,16 +388,31 @@ namespace EDocument_Reposatories.Generic_Reposatories
                 query = query.Skip(skip.Value).Take(take.Value);
             }
             result.PaginatedData = query.ToList();
-            #endregion
+
+            #endregion Apply Pagination
 
             return result;
         }
 
-        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllAsync(Expression<Func<T, bool>>? criteria,  string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, string[]? includes = null)
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            if (includes != null)
+                foreach (var item in includes)
+                {
+                    query = query.Include(item);
+                }
+
+            return await query.Where(criteria).ToListAsync();
+        }
+        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllAsync(Expression<Func<T, bool>>? criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             (int TotalCount, IEnumerable<T> PaginatedData) result;
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
+
             #region Include Tables
+
             if (includes != null)
             {
                 foreach (var item in includes)
@@ -385,7 +424,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
                 }
             }
 
-            #endregion
+            #endregion Include Tables
 
             #region Apply General Filter
 
@@ -393,9 +432,11 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 query = query.Where(criteria);
             }
-            #endregion
+
+            #endregion Apply General Filter
 
             #region Apply Date Filter
+
             if (dateFilters != null)
             {
                 foreach (var filter in dateFilters)
@@ -410,16 +451,17 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Apply Date Filter
 
             result.TotalCount = query.Count();
 
             #region Apply Sorting
+
             if (orderBy != null && orderByDirection != null)
             {
                 if (orderByDirection == OrderBy.Asc)
                 {
-
                     query = query.OrderBy(orderBy);
                 }
                 else
@@ -427,7 +469,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     query = query.OrderByDescending(orderBy);
                 }
             }
-            #endregion
+
+            #endregion Apply Sorting
 
             #region Apply Pagination
 
@@ -436,9 +479,9 @@ namespace EDocument_Reposatories.Generic_Reposatories
                 query = query.Skip(skip.Value).Take(take.Value);
             }
 
-
             result.PaginatedData = await query.ToListAsync();
-            #endregion
+
+            #endregion Apply Pagination
 
             return result;
         }
@@ -450,10 +493,10 @@ namespace EDocument_Reposatories.Generic_Reposatories
             var expression = "";
             (int TotalCount, IEnumerable<T> PaginatedData) result;
 
- 
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
-      
+
             #region Include Tables
+
             if (includes != null)
             {
                 foreach (var item in includes)
@@ -464,7 +507,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Include Tables
 
             #region Apply General Filter
 
@@ -490,9 +534,11 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Apply General Filter
 
             #region Apply Date Filter
+
             if (dateFilters != null)
             {
                 foreach (var filter in dateFilters)
@@ -507,11 +553,13 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Apply Date Filter
 
             result.TotalCount = query.Count();
 
             #region Apply Sorting
+
             if (orderBy != null && orderByDirection != null)
             {
                 var sortDirection = orderByDirection == OrderBy.Asc ? OrderBy.Asc : OrderBy.Desc;
@@ -522,32 +570,32 @@ namespace EDocument_Reposatories.Generic_Reposatories
                 {
                     query = query.OrderBy($"{orderBy} {sortDirection}");
                 }
-
             }
-            #endregion
+
+            #endregion Apply Sorting
 
             #region Apply Pagination
+
             if (skip.HasValue && take.HasValue)
             {
                 query = query.Skip(skip.Value).Take(take.Value);
             }
 
-
-
             result.PaginatedData = await query.ToListAsync();
-            #endregion
 
-     
+            #endregion Apply Pagination
+
             return result;
         }
 
-        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllAsync(string? filterValue=null, string? createdBy = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllAsync(string? filterValue = null, string? createdBy = null, string[]? includes = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var dynamicFilter = "";
             (int TotalCount, IEnumerable<T> PaginatedData) result;
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
             #region Include Tables
+
             if (includes != null)
             {
                 foreach (var item in includes)
@@ -558,9 +606,11 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Include Tables
 
             #region Apply General Filter
+
             if (createdBy != null)
             {
                 query = query.Where($"CreatedBy ==@0", createdBy);
@@ -573,11 +623,12 @@ namespace EDocument_Reposatories.Generic_Reposatories
                 dynamicFilter = string.Join(" OR ", properties.Where(p => p.PropertyType == typeof(string) || p.PropertyType == typeof(DateTime) || p.PropertyType == typeof(long) || p.PropertyType == typeof(float))
                 .Select(property => property.PropertyType == typeof(string) ? $"{property.Name}.Contains(@0)" : $"{property.Name}.Equals(@0)"));
                 query = query.Where(dynamicFilter, filterValue);
-
             }
-            #endregion
+
+            #endregion Apply General Filter
 
             #region Apply Date Filter
+
             if (dateFilters != null)
             {
                 foreach (var filter in dateFilters)
@@ -592,11 +643,13 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Apply Date Filter
 
             result.TotalCount = query.Count();
 
             #region Apply Sorting
+
             if (orderBy != null && orderByDirection != null)
             {
                 var sortDirection = orderByDirection == OrderBy.Asc ? OrderBy.Asc : OrderBy.Desc;
@@ -608,23 +661,22 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     query = query.OrderBy($"{orderBy} {sortDirection}");
                 }
             }
-            #endregion
+
+            #endregion Apply Sorting
 
             #region Apply Pagination
+
             if (skip.HasValue && take.HasValue)
             {
                 query = query.Skip(skip.Value).Take(take.Value);
             }
 
             result.PaginatedData = await query.ToListAsync();
-            #endregion
 
-           
+            #endregion Apply Pagination
 
             return result;
         }
-
-
 
         public int Count()
         {
@@ -645,8 +697,6 @@ namespace EDocument_Reposatories.Generic_Reposatories
         {
             return await _context.Set<T>().CountAsync(criteria);
         }
-
-
 
         public T Add(T entity)
         {
@@ -673,31 +723,28 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return entities;
         }
 
-
-
         public T Update(T entity)
         {
             _context.Set<T>().Update(entity);
             return entity;
         }
 
-
         public void Delete(T entity)
         {
-           _context.Set<T>().Remove(entity);
+            _context.Set<T>().Remove(entity);
         }
-
 
         public void DeleteRange(IEnumerable<T> entities)
         {
             _context.Set<T>().RemoveRange(entities);
         }
 
-        public virtual async Task<T?> FindRequestAsync( long requestId, string expression,string[]? includes = null)
+        public virtual async Task<T?> FindRequestAsync(long requestId, string expression, string[]? includes = null)
         {
             IQueryable<T> query = _context.Set<T>();
-                
+
             #region Include Tables
+
             if (includes != null)
             {
                 foreach (var item in includes)
@@ -708,12 +755,14 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Include Tables
+
             query = query.Where(expression, requestId);
-            return await query.FirstOrDefaultAsync();   
+            return await query.FirstOrDefaultAsync();
         }
 
-        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync( string userId, string userCondition, string[]? includes = null, Dictionary<string, string>? filters=null,  int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string userId, string userCondition, string[]? includes = null, Dictionary<string, string>? filters = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var ColumnName = "";
             var ColumnValue = "";
@@ -722,8 +771,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
-
             #region Include Tables
+
             if (includes != null)
             {
                 foreach (var item in includes)
@@ -734,18 +783,16 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Include Tables
 
             #region Permission Filter
 
-                query = query.Where(userCondition, userId);
-            
-            #endregion
+            query = query.Where(userCondition, userId);
 
+            #endregion Permission Filter
 
-
-
-            #region Apply General Filter           
+            #region Apply General Filter
 
             if (filters != null && filters.Count > 0)
             {
@@ -754,30 +801,29 @@ namespace EDocument_Reposatories.Generic_Reposatories
                 foreach (var filter in filters)
                 {
                     ColumnName = Utilities.ConvertColumnNameToPascalCase(filter.Key);
-                    
+
                     var property = typeof(T).GetProperty(ColumnName);
-                    
-                    if ((property != null || ColumnName=="Status") && !string.IsNullOrEmpty(filter.Value))
+
+                    if ((property != null || ColumnName == "Status") && !string.IsNullOrEmpty(filter.Value))
                     {
-                        
                         if (ColumnName == "Status")
                         {
-                            expression = ColumnName=="Status" ?$"Request.{ColumnName}.Contains(@0)": $"{ColumnName}.Contains(@0)";
+                            expression = ColumnName == "Status" ? $"Request.{ColumnName}.Contains(@0)" : $"{ColumnName}.Contains(@0)";
                             query = query.Where(expression, filter.Value);
-
                         }
                         else
                         {
                             expression = $"{ColumnName}.Equals(@0)";
                             query = query.Where(expression, property.PropertyType == typeof(string) ? filter.Value : int.Parse(filter.Value));
-
                         }
                     }
                 }
             }
-            #endregion
+
+            #endregion Apply General Filter
 
             #region Apply Date Filter
+
             if (dateFilters != null)
             {
                 foreach (var filter in dateFilters)
@@ -792,11 +838,13 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Apply Date Filter
 
             result.TotalCount = query.Count();
 
             #region Apply Sorting
+
             if (orderBy != null && orderByDirection != null)
             {
                 var sortDirection = orderByDirection == OrderBy.Asc ? OrderBy.Asc : OrderBy.Desc;
@@ -807,32 +855,33 @@ namespace EDocument_Reposatories.Generic_Reposatories
                 {
                     query = query.OrderBy($"{orderBy} {sortDirection}");
                 }
-
             }
-            #endregion
+
+            #endregion Apply Sorting
 
             #region Apply Pagination
+
             if (skip.HasValue && take.HasValue)
             {
                 query = query.Skip(skip.Value).Take(take.Value);
             }
 
+            result.PaginatedData = await query.ToListAsync();
 
-
-            result.PaginatedData =  await query.ToListAsync();
-            #endregion
-
+            #endregion Apply Pagination
 
             return result;
         }
+
         public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string userId, string userCondition, string[]? includes = null, string? filterValue = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var dynamicFilter = "";
             (int TotalCount, IEnumerable<T> PaginatedData) result;
 
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
-     
+
             #region Include Tables
+
             if (includes != null)
             {
                 foreach (var item in includes)
@@ -843,12 +892,14 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Include Tables
 
             #region Permission Filter
 
-                query = query.Where(userCondition, userId);
-            #endregion
+            query = query.Where(userCondition, userId);
+
+            #endregion Permission Filter
 
             #region Apply General Filter
 
@@ -859,11 +910,12 @@ namespace EDocument_Reposatories.Generic_Reposatories
                 dynamicFilter = string.Join(" OR ", properties.Where(p => p.PropertyType == typeof(string) || p.PropertyType == typeof(DateTime) || p.PropertyType == typeof(long) || p.PropertyType == typeof(float))
                 .Select(property => property.PropertyType == typeof(string) ? $"{property.Name}.Contains(@0)" : $"{property.Name}.Equals(@0)"));
                 query = query.Where(dynamicFilter, filterValue);
-
             }
-            #endregion
+
+            #endregion Apply General Filter
 
             #region Apply Date Filter
+
             if (dateFilters != null)
             {
                 foreach (var filter in dateFilters)
@@ -878,11 +930,13 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     }
                 }
             }
-            #endregion
+
+            #endregion Apply Date Filter
 
             result.TotalCount = query.Count();
 
             #region Apply Sorting
+
             if (orderBy != null && orderByDirection != null)
             {
                 var sortDirection = orderByDirection == OrderBy.Asc ? OrderBy.Asc : OrderBy.Desc;
@@ -893,24 +947,22 @@ namespace EDocument_Reposatories.Generic_Reposatories
                 {
                     query = query.OrderBy($"{orderBy} {sortDirection}");
                 }
-
             }
-            #endregion
+
+            #endregion Apply Sorting
 
             #region Apply Pagination
+
             if (skip.HasValue && take.HasValue)
             {
                 query = query.Skip(skip.Value).Take(take.Value);
             }
 
-
-
             result.PaginatedData = await query.ToListAsync();
-            #endregion
 
+            #endregion Apply Pagination
 
             return result;
         }
-
     }
 }

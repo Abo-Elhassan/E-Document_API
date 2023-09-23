@@ -24,7 +24,7 @@ namespace EDocument_Data.DTOs.User
         public  List<string> Roles { get; init; }
         public  ICollection<MenuContent> MenuContents { get; init; } = new HashSet<MenuContent>();
         public  string Token { get; init; }
-        public  DateTime TokenExpiryDate { get; init; }
+        public  double TokenExpiryDuration { get; init; }
 
      
 

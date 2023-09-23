@@ -13,6 +13,16 @@
              </remarks>
              <returns>List of Departmens</returns>
         </member>
+        <member name="M:EDocument_API.Controllers.V1.DownloadController.DownloadFile(System.String)">
+             <summary>
+             Download File 
+             </summary>
+             <param name="filePath">file path</param>
+             <remarks>
+            
+             </remarks>
+             <returns>targeted file</returns>
+        </member>
         <member name="M:EDocument_API.Controllers.V1.RequestController.GetRequestReviewersById(System.Int64)">
              <summary>
              Get Request Reviewers Details
@@ -42,16 +52,6 @@
             
              </remarks>
              <returns>message</returns>
-        </member>
-        <member name="M:EDocument_API.Controllers.V1.RequestController.GetPoRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
-             <summary>
-             Get All PO Requests With  Filter
-             </summary>
-             <param name="filterDto">filter information</param>
-             <remarks>
-            
-             </remarks>
-             <returns>List of All PO Requests</returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.RequestController.GetCreatorPoRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
              <summary>
@@ -84,10 +84,10 @@
              <returns> message</returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.RequestController.Update(System.Int64,EDocument_Data.DTOs.Requests.PoRequest.PoRequestUpdateDto)">
-            <summary>
-            Update PO Request
-            </summary>
-            <param name="id">Po request Id</param>
+             <summary>
+             Update PO Request
+             </summary>
+             <param name="id">Po request Id</param>
              <param name="poRequestUpdateDto">Po request Informarion</param>
              <remarks>
             
@@ -95,6 +95,9 @@
              <returns> message</returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.RequestController.ApprovePoRequest(EDocument_Data.DTOs.Requests.RequestReviewer.RequestReviewerWriteDto)">
+             <summary>
+             Approve PO Request
+             </summary>
              <param name="requestReviewerWriteDto">Approve Po Request</param>
              <remarks>
             
@@ -102,6 +105,9 @@
              <returns> message</returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.RequestController.DeclinePoRequest(EDocument_Data.DTOs.Requests.RequestReviewer.RequestReviewerWriteDto)">
+             <summary>
+             Decline PO Request
+             </summary>
              <param name="requestReviewerWriteDto">Decline Po Request</param>
              <remarks>
             

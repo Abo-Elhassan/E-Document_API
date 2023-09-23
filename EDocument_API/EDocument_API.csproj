@@ -35,6 +35,10 @@
     <ProjectReference Include="..\EDocument_UnitOfWork\EDocument_UnitOfWork.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 
 
 </Project>

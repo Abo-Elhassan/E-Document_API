@@ -1,4 +1,5 @@
 ﻿using EDocument_API.Extentions;
+using EDocument_Services.File_Service;
 using EDocument_Data.Consts;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
@@ -132,6 +133,12 @@ namespace EDocument_API.Shared
 
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
             services.AddScoped<IMailService, MailService>();
+
+            #endregion Mail
+
+            #region File
+
+            services.AddTransient<IFileService, FileService>();
 
             #endregion Mail
 

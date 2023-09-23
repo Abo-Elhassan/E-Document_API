@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using EDocument_Data.DTOs.Attachments;
 using EDocument_Data.DTOs.Department;
 using EDocument_Data.DTOs.Requests;
-using EDocument_Data.DTOs.Requests.Attachments;
 using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.DTOs.Section;

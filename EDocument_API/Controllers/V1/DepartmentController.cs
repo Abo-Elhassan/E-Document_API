@@ -12,8 +12,8 @@ using System.Net.Mime;
 
 namespace EDocument_API.Controllers.V1
 {
-    [Produces(MediaTypeNames.Application.Json, MediaTypeNames.Application.Xml)]
-    [Consumes(MediaTypeNames.Application.Json, MediaTypeNames.Application.Xml)]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
 
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]

@@ -181,7 +181,7 @@ namespace EDocument_Services.Auth_Service
                 Company = user?.Company,
                 IsEmployee = user?.IsEmployee ?? true,
                 Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                TokenExpiryDate = jwtSecurityToken.ValidTo,
+                TokenExpiryDuration = TimeSpan.FromDays(_jwtSettings.Value.DurationInDays).TotalMilliseconds,
                 Roles = userRoles,
                 MenuContents = GetMenuContents(user).Result
             };
