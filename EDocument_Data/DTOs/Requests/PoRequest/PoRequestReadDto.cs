@@ -20,19 +20,19 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
         public long DefinedRequestId { get; init; }
         public int CurrentStage { get; init; }
         public RequestStatus Status { get; init; }
-        public string? Justification { get; init; }
-        public string? CreatorId { get; init; }
-        public string? PoNumber { get; init; }
-        public string? PoDescription { get; init; }
-        public string? VendorName { get; init; }
+        public string Justification { get; init; }
+        public string CreatorId { get; init; }
+        public string PoNumber { get; init; }
+        public string PoDescription { get; init; }
+        public string VendorName { get; init; }
         public int VendorNumber { get; init; }
-        public string? InvoiceNumber { get; init; }
-        public AttachmentReadDto? PoAttachment { get; set; }
-        public AttachmentReadDto? InvoiceAttachment { get; set; }
+        public string InvoiceNumber { get; init; }
+        public AttachmentReadDto PoAttachment { get; set; }
+        public AttachmentReadDto InvoiceAttachment { get; set; }
 
-        public List<AttachmentReadDto>? Attachments { get; set; }
+        public List<AttachmentReadDto> Attachments { get; set; }
 
-        public string? CreatedBy { get; init; }
+        public string CreatedBy { get; init; }
         public DateTime CreatedAt { get; init; }
         public DateTime ModifiedAt { get; init; }
 

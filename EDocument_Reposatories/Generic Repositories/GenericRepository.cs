@@ -162,14 +162,18 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 foreach (var filter in dateFilters)
                 {
-                    var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
-
-                    var property = typeof(T).GetProperty(pascalCaseColumnName);
-
-                    if (property != null)
+                    if (filter.From != null && filter.To != null)
                     {
-                        query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                        var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
+
+                        var property = typeof(T).GetProperty(pascalCaseColumnName);
+
+                        if (property != null)
+                        {
+                            query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From?.Year}, {filter.From?.Month}, {filter.From?.Day}) && {filter.ColumnName} <= DateTime({filter.To?.Year}, {filter.To?.Month}, {filter.To?.Day})");
+                        }
                     }
+
                 }
             }
 
@@ -263,14 +267,18 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 foreach (var filter in dateFilters)
                 {
-                    var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
-
-                    var property = typeof(T).GetProperty(pascalCaseColumnName);
-
-                    if (property != null)
+                    if (filter.From != null && filter.To != null)
                     {
-                        query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                        var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
+
+                        var property = typeof(T).GetProperty(pascalCaseColumnName);
+
+                        if (property != null)
+                        {
+                            query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From?.Year}, {filter.From?.Month}, {filter.From?.Day}) && {filter.ColumnName} <= DateTime({filter.To?.Year}, {filter.To?.Month}, {filter.To?.Day})");
+                        }
                     }
+
                 }
             }
 
@@ -352,14 +360,18 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 foreach (var filter in dateFilters)
                 {
-                    var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
-
-                    var property = typeof(T).GetProperty(pascalCaseColumnName);
-
-                    if (property != null)
+                    if (filter.From != null && filter.To != null)
                     {
-                        query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                        var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
+
+                        var property = typeof(T).GetProperty(pascalCaseColumnName);
+
+                        if (property != null)
+                        {
+                            query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From?.Year}, {filter.From?.Month}, {filter.From?.Day}) && {filter.ColumnName} <= DateTime({filter.To?.Year}, {filter.To?.Month}, {filter.To?.Day})");
+                        }
                     }
+
                 }
             }
 
@@ -443,14 +455,18 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 foreach (var filter in dateFilters)
                 {
-                    var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
-
-                    var property = typeof(T).GetProperty(pascalCaseColumnName);
-
-                    if (property != null)
+                    if (filter.From != null && filter.To != null)
                     {
-                        query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                        var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
+
+                        var property = typeof(T).GetProperty(pascalCaseColumnName);
+
+                        if (property != null)
+                        {
+                            query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From?.Year}, {filter.From?.Month}, {filter.From?.Day}) && {filter.ColumnName} <= DateTime({filter.To?.Year}, {filter.To?.Month}, {filter.To?.Day})");
+                        }
                     }
+
                 }
             }
 
@@ -545,14 +561,18 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 foreach (var filter in dateFilters)
                 {
-                    var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
-
-                    var property = typeof(T).GetProperty(pascalCaseColumnName);
-
-                    if (property != null)
+                    if (filter.From != null && filter.To != null)
                     {
-                        query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                        var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
+
+                        var property = typeof(T).GetProperty(pascalCaseColumnName);
+
+                        if (property != null)
+                        {
+                            query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From?.Year}, {filter.From?.Month}, {filter.From?.Day}) && {filter.ColumnName} <= DateTime({filter.To?.Year}, {filter.To?.Month}, {filter.To?.Day})");
+                        }
                     }
+
                 }
             }
 
@@ -635,14 +655,18 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 foreach (var filter in dateFilters)
                 {
-                    var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
-
-                    var property = typeof(T).GetProperty(pascalCaseColumnName);
-
-                    if (property != null)
+                    if (filter.From != null && filter.To != null)
                     {
-                        query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                        var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
+
+                        var property = typeof(T).GetProperty(pascalCaseColumnName);
+
+                        if (property != null)
+                        {
+                            query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From?.Year}, {filter.From?.Month}, {filter.From?.Day}) && {filter.ColumnName} <= DateTime({filter.To?.Year}, {filter.To?.Month}, {filter.To?.Day})");
+                        }
                     }
+
                 }
             }
 
@@ -832,14 +856,18 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 foreach (var filter in dateFilters)
                 {
-                    var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
-
-                    var property = typeof(T).GetProperty(pascalCaseColumnName);
-
-                    if (property != null)
+                    if (filter.From!=null&&filter.To!=null)
                     {
-                        query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                        var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
+
+                        var property = typeof(T).GetProperty(pascalCaseColumnName);
+
+                        if (property != null)
+                        {
+                            query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From?.Year}, {filter.From?.Month}, {filter.From?.Day}) && {filter.ColumnName} <= DateTime({filter.To?.Year}, {filter.To?.Month}, {filter.To?.Day})");
+                        }
                     }
+
                 }
             }
 
@@ -924,14 +952,18 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 foreach (var filter in dateFilters)
                 {
-                    var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
-
-                    var property = typeof(T).GetProperty(pascalCaseColumnName);
-
-                    if (property != null)
+                    if (filter.From != null && filter.To != null)
                     {
-                        query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From.Year}, {filter.From.Month}, {filter.From.Day}) && {filter.ColumnName} <= DateTime({filter.To.Year}, {filter.To.Month}, {filter.To.Day})");
+                        var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
+
+                        var property = typeof(T).GetProperty(pascalCaseColumnName);
+
+                        if (property != null)
+                        {
+                            query = query.Where($"{pascalCaseColumnName} >= DateTime({filter.From?.Year}, {filter.From?.Month}, {filter.From?.Day}) && {filter.ColumnName} <= DateTime({filter.To?.Year}, {filter.To?.Month}, {filter.To?.Day})");
+                        }
                     }
+
                 }
             }
 

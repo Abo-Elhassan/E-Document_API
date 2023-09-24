@@ -3,56 +3,59 @@ using EDocument_Data.Models.Shared;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using EDocument_Data.Consts;
+using System.Web;
 
 namespace EDocument_API.Controllers.V1
 {
 
     [ApiController]
-    [Route("api/v{version:apiVersion}/[controller]")]
-    [ApiVersion("1.0")]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse<string>))]
+    [Route("api/[controller]")]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ApiResponse<string>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ApiResponse<string>))]
     public class DownloadController : ControllerBase
     {
         private readonly IFileService _fileService;
-        
+        private readonly IWebHostEnvironment _environment;
+        private readonly string _rootPath;
 
-        public DownloadController(IFileService fileService)
+        public DownloadController(IFileService fileService, IWebHostEnvironment environment)
         {
             _fileService = fileService;
-         
+            _environment = environment;
+            _rootPath = $@"{_environment?.WebRootPath}\Attachments\";
         }
         /// <summary>
         /// Download File 
         /// </summary>
-        /// <param name="filePath">file path</param>
+        /// <param name="fileName">file name</param>
         /// <remarks>
         ///
         /// </remarks>
         /// <returns>targeted file</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FileStreamResult>))]
-        [HttpGet("{filePath}")]
-        [Authorize]
-        public ActionResult DownloadFile(string filePath)
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<PhysicalFileResult>))]
+        [HttpGet("{fileName}")]
+        //[Authorize]
+        public IActionResult Download(string fileName)
         {
+            var decodedFileName = HttpUtility.UrlDecode(fileName);
+            string filePath = Path.Combine(_rootPath, decodedFileName);
+
             if (System.IO.File.Exists(filePath))
             {
-  
-                var fileName = Path.GetFileName(filePath);
-                var contentType = _fileService.GetContentType(filePath);
-
-                return File(new FileStream(filePath, FileMode.Open, FileAccess.Read), contentType, fileName);
+                return PhysicalFile(filePath, "application/octet-stream");
             }
             else
             {
-             
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "File not found" });
-
             }
+
+
+           
+
+
         }
-
-
-      
+                      
     }
 }

@@ -7,6 +7,7 @@ using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.DTOs.Section;
 using EDocument_Data.DTOs.User;
 using EDocument_Data.Models;
+using EDocument_Services.File_Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,12 @@ namespace EDocument_Services.AutoMapper_Service
 {
     public class AutoMapperProfile:Profile
     {
+  
+
         public AutoMapperProfile()
         {
-            
+ 
+
             CreateMap<CreateUserDto, User>();
             CreateMap<UserWriteDto, User>();
             CreateMap<User, SearchUserDto>();
@@ -40,12 +44,12 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<Request, RequestReadDto>();
             CreateMap<Attachment, AttachmentReadDto>()
-                .ForMember(x => x.FilePath, y => y.MapFrom(z => z.FilePath))
-                .ForMember(x => x.FileName, y => y.MapFrom(z => Path.GetFileName(z.FilePath)));
+               .ForMember(x => x.FileName, y => y.MapFrom(z => Path.GetFileName(z.FilePath)));
 
-            CreateMap<string, AttachmentReadDto>()
-               .ForMember(x => x.FilePath, y => y.MapFrom(z => z))
-               .ForMember(x => x.FileName, y => y.MapFrom(z => Path.GetFileName(z)));
+            //CreateMap<string, AttachmentReadDto>()
+            //     .ForMember(x => x.FileName, y => y.MapFrom(z => Path.GetFileName(z)))
+            //    .ForMember(x => x.FileUrl, y => y.MapFrom(z => FileService.GetFileUrl(z)));
+
             CreateMap<RequestReviewer, RequestReviewerReadDto>()
                 .ForMember(x => x.AssignedReviewerFullName, y => y.MapFrom(z => z.Reviewer.FullName));
 
@@ -75,9 +79,7 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<PoRequestCreateDto, PoRequest>();
             CreateMap<PoRequestUpdateDto, PoRequest>();
             CreateMap<DefinedRequestReviewer, RequestReviewer>();
-
-
-
+          
         }
     }
 }

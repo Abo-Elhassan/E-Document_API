@@ -13,11 +13,11 @@
              </remarks>
              <returns>List of Departmens</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.DownloadController.DownloadFile(System.String)">
+        <member name="M:EDocument_API.Controllers.V1.DownloadController.Download(System.String)">
              <summary>
              Download File 
              </summary>
-             <param name="filePath">file path</param>
+             <param name="fileName">file name</param>
              <remarks>
             
              </remarks>

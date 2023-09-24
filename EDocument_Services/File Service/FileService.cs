@@ -1,12 +1,18 @@
-﻿using EDocument_Data.Models;
+﻿using EDocument_Data.Consts;
+using EDocument_Data.Models;
+using EDocument_Data.Models.Shared;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace EDocument_Services.File_Service
 {
@@ -33,7 +39,7 @@ namespace EDocument_Services.File_Service
 
         public void DeleteFolder(string folderPath)
         {
-            var folderRootPath = Path.Combine(_rootPath, folderPath);
+            var folderRootPath = Path.Combine(ApplicationConsts.ClientOrigin, folderPath);
             if (Directory.Exists(folderRootPath))
             {
 
@@ -52,6 +58,24 @@ namespace EDocument_Services.File_Service
                 contentType = regKey.GetValue("Content Type").ToString();
 
             return contentType;
+        }
+
+        public  string? GetFileUrl(string filePath)
+        {
+            if (System.IO.File.Exists(filePath))
+            {
+                var fileName = filePath.Replace(_rootPath, "");
+
+                var encodedFilePath= HttpUtility.UrlEncode(fileName);               
+
+                var downloadUrl = $"{ApplicationConsts.ApiOrigin}/Download/{encodedFilePath}";
+                return downloadUrl;
+            }
+            else
+            {
+                return null;
+            }
+          
         }
 
         public string UploadAttachment(string requestPath, IFormFile file)

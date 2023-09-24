@@ -117,8 +117,19 @@ namespace EDocument_API.Controllers.V1
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
             var result = _mapper.Map<PoRequestReadDto>(poRequest);
-            result.InvoiceAttachment = _mapper.Map<AttachmentReadDto>(poRequest.InvoiceAttachmentPath);
-            result.PoAttachment = _mapper.Map<AttachmentReadDto>(poRequest.PoAttachmentPath);
+            //result.InvoiceAttachment = _mapper.Map<AttachmentReadDto>(poRequest.InvoiceAttachmentPath);
+            //result.PoAttachment = _mapper.Map<AttachmentReadDto>(poRequest.PoAttachmentPath);
+
+            result.InvoiceAttachment = new AttachmentReadDto {FileName= Path.GetFileName(poRequest.InvoiceAttachmentPath), FileUrl=_fileService.GetFileUrl(poRequest.InvoiceAttachmentPath)};
+            result.PoAttachment = new AttachmentReadDto { FileName = Path.GetFileName(poRequest.PoAttachmentPath), FileUrl = _fileService.GetFileUrl(poRequest.PoAttachmentPath) };
+
+            var attachments = new List<AttachmentReadDto>();
+
+            foreach (var attachment in poRequest.Request.Attachments)
+            {
+                attachments.Add(new AttachmentReadDto { FileName = Path.GetFileName(attachment.FilePath), FileUrl= _fileService.GetFileUrl(attachment.FilePath)});
+            }
+            result.Attachments = attachments;   
             return Ok(new ApiResponse<PoRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
@@ -226,6 +237,8 @@ namespace EDocument_API.Controllers.V1
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
 
             var requests = _mapper.Map<List<PoRequestReadDto>>(result.PaginatedData);
+
+
 
             var response = new FilterReadDto<PoRequestReadDto>
             {

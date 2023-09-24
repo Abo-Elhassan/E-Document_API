@@ -9,7 +9,8 @@ namespace EDocument_Data.DTOs.Attachments
     public class AttachmentReadDto
     {
         public string FileName { get; set; }
-        public string FilePath { get; set; }
+        public string FileUrl{ get; set; }
+
 
     }
 }
