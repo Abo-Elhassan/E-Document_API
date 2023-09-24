@@ -26,12 +26,12 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
         public int VendorNumber { get; init; }
         [Required]
         public  string InvoiceNumber { get; init; }
-        [Required]
+
         [FileValidation(2 * 1024 * 1024, ".pdf", ".docx", ".xlsx", ".xls")]
-        public IFormFile PoAttachment { get; init; }
-        [Required]
+        public IFormFile? PoAttachment { get; init; }
+
         [FileValidation(2 * 1024 * 1024, ".pdf", ".docx", ".xlsx", ".xls")]
-        public IFormFile InvoiceAttachment { get; init; }
+        public IFormFile? InvoiceAttachment { get; init; }
 
         [FileValidation(2 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx" ,".xls")]
         public List<IFormFile>? Attachments { get; set; }

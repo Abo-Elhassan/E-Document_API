@@ -405,28 +405,59 @@ namespace EDocument_API.Controllers.V1
             if (request.Status != RequestStatus.Declined.ToString())
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update request information during reviewing proccess" });
 
-            _mapper.Map(poRequestUpdateDto, request.PoRequest);
+            var oldPoAttachmentPath = request.PoRequest.PoAttachmentPath;
+            var oldInvoiceAtachmentPath = request.PoRequest.InvoiceAttachmentPath;
+            var oldAttachments = request.Attachments;
+            var oldRequestNumber = request.PoRequest.RequestNumber;
+            request.PoRequest = _mapper.Map<PoRequest>(poRequestUpdateDto);
+            request.PoRequest.RequestNumber = oldRequestNumber;
 
 
-            _fileService.DeleteFolder($@"PoRequest\{request.Id}");
-            foreach (var attachment in request.Attachments)
+
+            if (poRequestUpdateDto.PoAttachment == null)
             {
-                attachment.ModifiedAt = DateTime.Now;
-                attachment.ModifiedBy = user.FullName;
-            }
-
-            request.PoRequest.PoAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{request.Id}", poRequestUpdateDto.PoAttachment);
-            request.PoRequest.InvoiceAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{request.Id}", poRequestUpdateDto.InvoiceAttachment);
-
-            if (poRequestUpdateDto.Attachments != null && poRequestUpdateDto.Attachments.Count > 0)
-            {
-                request.Attachments = _fileService.UploadAttachments(request.Id, $@"PoRequest\{request.Id}", poRequestUpdateDto.Attachments,user.FullName);
+                request.PoRequest.PoAttachmentPath = oldPoAttachmentPath;
             }
             else
             {
-                _unitOfWork.Repository<Attachment>().DeleteRange(request.Attachments);
-                _unitOfWork.Complete();
+                _fileService.DeleteFile(oldPoAttachmentPath);
+                request.PoRequest.PoAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{request.Id}", poRequestUpdateDto.PoAttachment);
             }
+
+            if (poRequestUpdateDto.InvoiceAttachment == null)
+            {
+                request.PoRequest.InvoiceAttachmentPath = oldInvoiceAtachmentPath;
+            }
+            else
+            {
+                _fileService.DeleteFile(oldInvoiceAtachmentPath);
+                request.PoRequest.InvoiceAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{request.Id}", poRequestUpdateDto.InvoiceAttachment);
+            }
+
+
+
+            if (poRequestUpdateDto.Attachments==null || poRequestUpdateDto.Attachments.Count==0)
+            {
+                request.Attachments = oldAttachments;
+            }
+            else
+            {
+
+                foreach (var attachment in request.Attachments)
+                {
+                    attachment.ModifiedAt = DateTime.Now;
+                    attachment.ModifiedBy = user.FullName;
+                }
+
+                foreach (var oldAttachment in oldAttachments)
+                {
+                    _fileService.DeleteFile(oldAttachment.FilePath);
+                }
+
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"PoRequest\{request.Id}", poRequestUpdateDto.Attachments, user.FullName);
+            }
+
+
 
 
             request.PoRequest.ModifiedBy = user?.FullName;

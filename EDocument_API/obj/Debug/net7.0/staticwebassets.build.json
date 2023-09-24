@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "JYHH38znYyVvd34CJjJF1Wokr9AywIAvUra1ke1APL8=",
+  "Hash": "enHsGci58KagK1GZzOLp444Gyq+GVXnZLmD3MNSJ6oQ=",
   "Source": "EDocument_API",
   "BasePath": "_content/EDocument_API",
   "Mode": "Default",
@@ -15,40 +15,5 @@
       "Pattern": "**"
     }
   ],
-  "Assets": [
-    {
-      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023092304214266\\mServices Lite.docx",
-      "SourceId": "EDocument_API",
-      "SourceType": "Discovered",
-      "ContentRoot": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\",
-      "BasePath": "_content/EDocument_API",
-      "RelativePath": "Attachments/PoRequest/2023092304214266/mServices Lite.docx",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023092304214266\\mServices Lite.docx"
-    },
-    {
-      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023092304214266\\mServices Lite.pdf",
-      "SourceId": "EDocument_API",
-      "SourceType": "Discovered",
-      "ContentRoot": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\",
-      "BasePath": "_content/EDocument_API",
-      "RelativePath": "Attachments/PoRequest/2023092304214266/mServices Lite.pdf",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023092304214266\\mServices Lite.pdf"
-    }
-  ]
+  "Assets": []
 }
