@@ -20,7 +20,7 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
         public long DefinedRequestId { get; init; }
         public int CurrentStage { get; init; }
         public RequestStatus Status { get; init; }
-        public string Justification { get; init; }
+        public string Remarks { get; init; }
         public string CreatorId { get; init; }
         public string PoNumber { get; init; }
         public string PoDescription { get; init; }
@@ -33,8 +33,8 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
         public List<AttachmentReadDto> Attachments { get; set; }
 
         public string CreatedBy { get; init; }
-        public DateTime CreatedAt { get; init; }
-        public DateTime ModifiedAt { get; init; }
+        public DateTime? CreatedAt { get; init; }
+        public DateTime? ModifiedAt { get; init; }
 
     
     }

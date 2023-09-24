@@ -46,9 +46,9 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<Attachment, AttachmentReadDto>()
                .ForMember(x => x.FileName, y => y.MapFrom(z => Path.GetFileName(z.FilePath)));
 
-            //CreateMap<string, AttachmentReadDto>()
-            //     .ForMember(x => x.FileName, y => y.MapFrom(z => Path.GetFileName(z)))
-            //    .ForMember(x => x.FileUrl, y => y.MapFrom(z => FileService.GetFileUrl(z)));
+            CreateMap<string, AttachmentReadDto>()
+                 .ForMember(x => x.FileName, y => y.MapFrom(z => Path.GetFileName(z)))
+                .ForMember(x => x.FileUrl, y => y.MapFrom(z => z));
 
             CreateMap<RequestReviewer, RequestReviewerReadDto>()
                 .ForMember(x => x.AssignedReviewerFullName, y => y.MapFrom(z => z.Reviewer.FullName));
@@ -61,7 +61,7 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Request.Id))
                 .ForMember(x => x.CurrentStage, y => y.MapFrom(z => z.Request.CurrentStage))
                 .ForMember(x => x.Status, y => y.MapFrom(z => z.Request.Status))
-                .ForMember(x => x.Justification, y => y.MapFrom(z => z.Request.Justification))
+                .ForMember(x => x.Remarks, y => y.MapFrom(z => z.Request.Justification))
                 .ForMember(x => x.CreatorId, y => y.MapFrom(z => z.Request.CreatorId))
                 .ForMember(x => x.DefinedRequestId, y => y.MapFrom(z => z.Request.DefinedRequestId))
                 .ForMember(x => x.Attachments, y => y.MapFrom(z => z.Request.Attachments));
@@ -70,7 +70,7 @@ namespace EDocument_Services.AutoMapper_Service
             .ForMember(x => x.Id, y => y.MapFrom(z => z.Request.Id))
             .ForMember(x => x.CurrentStage, y => y.MapFrom(z => z.Request.CurrentStage))
             .ForMember(x => x.Status, y => y.MapFrom(z => z.Request.Status))
-            .ForMember(x => x.Justification, y => y.MapFrom(z => z.Request.Justification))
+            .ForMember(x => x.Remarks, y => y.MapFrom(z => z.Request.Justification))
             .ForMember(x => x.CreatorId, y => y.MapFrom(z => z.Request.CreatorId))
             .ForMember(x => x.DefinedRequestId, y => y.MapFrom(z => z.Request.DefinedRequestId))
             .ForMember(x => x.Attachments, y => y.MapFrom(z => z.Request.Attachments))

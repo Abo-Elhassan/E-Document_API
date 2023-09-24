@@ -45,7 +45,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 { 
                     StageNumber = stage.StageNumber,
                     StageTitle = stage.StageName, 
-                    Status = stage.Status.ToString(),
+                    Status = (RequestStatus)Enum.Parse(typeof(RequestStatus),stage.Status),
                     ReviewedBy = stage.ReviewedBy, 
                     ReviewerNotes = stage.ReviewerNotes
                 };

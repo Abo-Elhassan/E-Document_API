@@ -31,6 +31,8 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
         [FileValidation(10 * 1024 * 1024,true, ".pdf", ".docx", ".xlsx", ".xls")]
         public List<IFormFile>? Attachments { get; set; }
 
+        public string Remarks { get; set; }
+
         [Required]
         public long DefinedRequestId { get; init; }
     }

@@ -81,16 +81,13 @@ namespace EDocument_Services.File_Service
         public string UploadAttachment(string requestPath, IFormFile file)
         {
 
-            if (!Directory.Exists(_rootPath))
-            {
-                Directory.CreateDirectory(_rootPath);
-            }
-            string filePath = Path.Combine(_rootPath, requestPath, file.FileName);
-
             if (!Directory.Exists(Path.Combine(_rootPath, requestPath)))
             {
                 Directory.CreateDirectory(Path.Combine(_rootPath, requestPath));
             }
+            string filePath = Path.Combine(_rootPath, requestPath, file.FileName);
+
+
             using (FileStream filestream = File.Create(filePath))
             {
                 file.CopyTo(filestream);
@@ -104,10 +101,11 @@ namespace EDocument_Services.File_Service
         {
             var attachments = new List<Attachment>();
 
-            if (!Directory.Exists(_rootPath))
+            if (!Directory.Exists(Path.Combine(_rootPath, requestPath)))
             {
-                Directory.CreateDirectory(_rootPath);
+                Directory.CreateDirectory(Path.Combine(_rootPath, requestPath));
             }
+         
             foreach (var file in files)
             {
                 string filePath = Path.Combine(_rootPath, requestPath, file.FileName);

@@ -21,6 +21,9 @@ using System.Text.Json;
 
 using Models = EDocument_Data.Models;
 using EDocument_Data.DTOs.Attachments;
+using EDocument_Services.Mail_Service;
+using EDocument_Data.Consts;
+using System.Runtime.ConstrainedExecution;
 
 namespace EDocument_API.Controllers.V1
 {
@@ -39,6 +42,7 @@ namespace EDocument_API.Controllers.V1
         private readonly ILogger<RequestController> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRequestReviewerRepository _requestReviewerRepository;
+        private readonly IMailService _mailService;
         private readonly IFileService _fileService;
 
         public RequestController(
@@ -47,6 +51,7 @@ namespace EDocument_API.Controllers.V1
             IMapper mapper,
             IUnitOfWork unitOfWork,
             IRequestReviewerRepository RequestReviewerRepository,
+            IMailService mailService,
             IFileService fileService)
         {
             _userManager = userManager;
@@ -54,6 +59,7 @@ namespace EDocument_API.Controllers.V1
             _logger = logger;
             _unitOfWork = unitOfWork;
             _requestReviewerRepository = RequestReviewerRepository;
+            _mailService = mailService;
             _fileService = fileService;
         }
 
@@ -349,7 +355,9 @@ namespace EDocument_API.Controllers.V1
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var request = new Models.Request { Id = requestId, DefinedRequestId = poRequestCreateDto.DefinedRequestId };
+
             var definedRequestReviewers = await _requestReviewerRepository.GetDefinedRequestReviewersByIdAsync(poRequestCreateDto.DefinedRequestId);
+            request.Justification = poRequestCreateDto.Remarks;
             request.RequestReviewers = _mapper.Map<List<RequestReviewer>>(definedRequestReviewers);
             request.PoRequest = _mapper.Map<PoRequest>(poRequestCreateDto);
             request.PoRequest.RequestNumber = requestNo;
@@ -373,6 +381,55 @@ namespace EDocument_API.Controllers.V1
 
             await _requestReviewerRepository.BeginRequestCycle(poRequestCreateDto.DefinedRequestId, requestId);
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
+      
+
+            #region Send Emails
+            var creatorMailContent = new MailContent
+            {
+                Body=$"""
+                Dear {user.FullName},
+                    Kindly not that your Po Request  for {request.PoRequest.PoNumber} on eDocuement has been created successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with you request Status. 
+
+                    - Request Reference No.: {requestNo}
+                """,
+                IsHTMLBody=false,
+                Subject=$"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+                Cc="almuhammad@dpwsapps.com",
+                To= "almuhammad@dpwsapps.com"
+            };
+           
+            var reviewerMailContent =  new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has created Po Request for {request.PoRequest.PoNumber} on eDocuement and need to be reviewed from your side.
+
+                    Request Details:
+
+                    - PO Number:{request.PoRequest.PoNumber}
+                    - Invoice Number:{request.PoRequest.InvoiceNumber}
+                    - Vendor Name: {request.PoRequest.VendorName}
+                    - Vendor Number: {request.PoRequest.VendorNumber}
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+
+                    - Request Reference No.: {requestNo}
+                """,
+                IsHTMLBody = false,
+                Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+                Cc = "alaa.muhammad@dpwrold.com",
+                To = "almuhammad@dpwsapps.com"
+            };
+
+
+            _mailService.SendMailAsync(creatorMailContent);
+            _mailService.SendMailAsync(reviewerMailContent);
+
+
+
+            #endregion
+
+
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
         }
@@ -409,6 +466,8 @@ namespace EDocument_API.Controllers.V1
             var oldInvoiceAtachmentPath = request.PoRequest.InvoiceAttachmentPath;
             var oldAttachments = request.Attachments;
             var oldRequestNumber = request.PoRequest.RequestNumber;
+
+            request.Justification = poRequestUpdateDto.Remarks;
             request.PoRequest = _mapper.Map<PoRequest>(poRequestUpdateDto);
             request.PoRequest.RequestNumber = oldRequestNumber;
 
