@@ -27,10 +27,10 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
         {
             var user = await _userManager.FindByIdAsync(id);
 
-            if (user is null|| user.Department.ManagerId is null || GetUserEmailByUsername(user.Department.Manager.UserName).Result is null)  return null;
+            if (user is null|| user.Department.ManagerId is null || GetUserEmailById(user.Department.Manager.Id).Result is null)  return null;
 
             string managerId = user.Department.ManagerId;
-            string managerEmail = await GetUserEmailByUsername(user.Department.Manager.UserName) ??"";
+            string managerEmail = await GetUserEmailById(user.Department.Manager.Id) ??"";
 
             return (managerId, managerEmail);
         }
@@ -39,10 +39,10 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
         {
             var user = await _userManager.FindByIdAsync(id);
 
-            if (user is null || user.Manager.ManagerId is null || GetUserEmailByUsername(user.Manager.UserName).Result is null) return null;
+            if (user is null || user.Manager.ManagerId is null || GetUserEmailById(user.Manager.Id).Result is null) return null;
 
             string managerId = user.Manager.ManagerId;
-            string managerEmail = await GetUserEmailByUsername(user.Manager.UserName) ?? "";
+            string managerEmail = await GetUserEmailById(user.Manager.Id) ?? "";
 
             return (managerId, managerEmail);
         }
@@ -51,18 +51,18 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
         {
             var user = await _userManager.FindByIdAsync(id);
 
-            if (user is null || user.Section.HeadId is null || GetUserEmailByUsername(user.Section.Head.UserName).Result is null) return null;
+            if (user is null || user.Section.HeadId is null || GetUserEmailById(user.Section.Head.Id).Result is null) return null;
 
             string managerId = user.Section.HeadId;
-            string managerEmail = await GetUserEmailByUsername(user.Section.Head.UserName) ?? "";
+            string managerEmail = await GetUserEmailById(user.Section.Head.Id) ?? "";
 
             return (managerId, managerEmail);
         }
 
-        public async Task<string?> GetUserEmailByUsername(string username)
+        public async Task<string?> GetUserEmailById(string id)
         {
             var email = "";
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByIdAsync(id);
 
             if (user is null) return null;
      
@@ -79,5 +79,7 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
 
            return email;
         }
+
+
     }
 }

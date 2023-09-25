@@ -14,9 +14,9 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
     public interface IRequestReviewerRepository: IGenericRepository<RequestReviewer>
     {
 
-        Task<IEnumerable<DefinedRequestReviewer>> GetDefinedRequestReviewersByIdAsync(long definedRequestId);
+        Task<IEnumerable<DefinedRequestReviewer>> GetAllDefinedRequestReviewersAsync(long definedRequestId);
 
-        Task<List<ReviewersDetails>> GetRequestReviewersByIdAsync(long requestId);
+        Task<List<ReviewersDetails>> GetAllRequestReviewersAsync(long requestId);
 
         Task BeginRequestCycle(long definedRequestId, long requestId);
         Task ApproveRequestAsync(RequestReviewerWriteDto reviewingInfo,string reviewedBy);

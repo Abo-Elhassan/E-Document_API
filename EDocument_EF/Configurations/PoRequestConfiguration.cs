@@ -32,7 +32,7 @@ namespace EDocument_EF.Configurations
             .IsRequired();
             
             entity.Property(e => e.VendorNumber)
-            .IsRequired();
+            .IsRequired(false);
             
             entity.Property(e => e.InvoiceNumber)
             .IsRequired();

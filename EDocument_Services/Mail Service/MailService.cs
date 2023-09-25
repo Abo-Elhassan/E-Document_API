@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Mail;
 using EDocument_Data.Consts;
 using EDocument_Data.Models.Shared;
+using Bogus.DataSets;
 
 namespace EDocument_Services.Mail_Service
 {
@@ -24,11 +25,22 @@ namespace EDocument_Services.Mail_Service
 
         public async Task SendMailAsync(MailContent mailContent, IList<IFormFile>? attachments = null)
         {
+
+
             var email = new MailMessage();
 
-            email.From = new MailAddress(_mailSettings.Value.Email);
-            email.To.Add(mailContent.To);
-            email.CC.Add(mailContent.Cc);
+            email.From = new MailAddress(_mailSettings.Value.Email, _mailSettings.Value.DisplayName);
+            foreach (var address in mailContent.To.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                email.To.Add(address);
+            }
+
+            if (mailContent?.Cc != null)
+                foreach (var address in mailContent.Cc.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    email.To.Add(address);
+                }
+
             email.Subject = mailContent.Subject;
             email.Body = mailContent.Body;
             email.IsBodyHtml = mailContent.IsHTMLBody;

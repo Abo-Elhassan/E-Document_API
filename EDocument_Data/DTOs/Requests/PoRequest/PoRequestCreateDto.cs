@@ -17,21 +17,20 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
         public string PoDescription { get; init; }
         [Required]
         public  string VendorName { get; init; }
-        [Required]
-        public int VendorNumber { get; init; }
+        public int? VendorNumber { get; init; }
         [Required]
         public  string InvoiceNumber { get; init; }
         [Required]
-        [FileValidation(2 * 1024 * 1024, ".pdf", ".docx", ".xlsx", ".xls")]
+        [FileValidation(2 * 1024 * 1024, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip")]
         public  IFormFile PoAttachment { get; init; }
         [Required]
-        [FileValidation(2 * 1024 * 1024, ".pdf", ".docx", ".xlsx", ".xls")]
+        [FileValidation(2 * 1024 * 1024, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip")]
         public IFormFile InvoiceAttachment { get; init; }
 
-        [FileValidation(10 * 1024 * 1024,true, ".pdf", ".docx", ".xlsx", ".xls")]
+        [FileValidation(10 * 1024 * 1024,true, ".pdf", ".docx", ".xlsx", ".xls",".csv",".rar",".zip")]
         public List<IFormFile>? Attachments { get; set; }
 
-        public string Remarks { get; set; }
+        public string? Remarks { get; set; }
 
         [Required]
         public long DefinedRequestId { get; init; }

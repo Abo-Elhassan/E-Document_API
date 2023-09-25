@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace EDocument_Data.DTOs.Attachments
     {
         public string FileName { get; set; }
         public string FileUrl{ get; set; }
+        public IFormFile attachedFile { get; set; }
 
 
     }

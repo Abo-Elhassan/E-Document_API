@@ -5,6 +5,11 @@ using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using EDocument_Data.Consts;
 using System.Web;
+using EDocument_Data.Models;
+using Azure.Core;
+using EDocument_Services.Mail_Service;
+using System.Net.Mail;
+
 
 namespace EDocument_API.Controllers.V1
 {
@@ -17,12 +22,14 @@ namespace EDocument_API.Controllers.V1
     {
         private readonly IFileService _fileService;
         private readonly IWebHostEnvironment _environment;
+        private readonly IMailService _mailService;
         private readonly string _rootPath;
 
-        public DownloadController(IFileService fileService, IWebHostEnvironment environment)
+        public DownloadController(IFileService fileService, IWebHostEnvironment environment, IMailService mailService)
         {
             _fileService = fileService;
             _environment = environment;
+            _mailService = mailService;
             _rootPath = $@"{_environment?.WebRootPath}\Attachments\";
         }
         /// <summary>
@@ -51,11 +58,9 @@ namespace EDocument_API.Controllers.V1
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "File not found" });
             }
 
-
-           
-
-
         }
+
+
                       
     }
 }

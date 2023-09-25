@@ -29,8 +29,4 @@
     <ProjectReference Include="..\EDocument_EF\EDocument_EF.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="AutoMapper Service\Resolvers\" />
-  </ItemGroup>
-
 </Project>

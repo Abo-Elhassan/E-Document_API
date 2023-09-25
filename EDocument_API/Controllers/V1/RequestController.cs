@@ -24,6 +24,7 @@ using EDocument_Data.DTOs.Attachments;
 using EDocument_Services.Mail_Service;
 using EDocument_Data.Consts;
 using System.Runtime.ConstrainedExecution;
+using System.Text;
 
 namespace EDocument_API.Controllers.V1
 {
@@ -85,7 +86,7 @@ namespace EDocument_API.Controllers.V1
             if (request is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
-            reviewerDetails.ReviewersDetails = await _requestReviewerRepository.GetRequestReviewersByIdAsync(id);
+            reviewerDetails.ReviewersDetails = await _requestReviewerRepository.GetAllRequestReviewersAsync(id);
             reviewerDetails.CurrentStage = request.CurrentStage;
 
 
@@ -123,19 +124,10 @@ namespace EDocument_API.Controllers.V1
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
             var result = _mapper.Map<PoRequestReadDto>(poRequest);
-            //result.InvoiceAttachment = _mapper.Map<AttachmentReadDto>(poRequest.InvoiceAttachmentPath);
-            //result.PoAttachment = _mapper.Map<AttachmentReadDto>(poRequest.PoAttachmentPath);
-
-            result.InvoiceAttachment = new AttachmentReadDto {FileName= Path.GetFileName(poRequest.InvoiceAttachmentPath), FileUrl=_fileService.GetFileUrl(poRequest.InvoiceAttachmentPath)};
-            result.PoAttachment = new AttachmentReadDto { FileName = Path.GetFileName(poRequest.PoAttachmentPath), FileUrl = _fileService.GetFileUrl(poRequest.PoAttachmentPath) };
-
-            var attachments = new List<AttachmentReadDto>();
-
-            foreach (var attachment in poRequest.Request.Attachments)
-            {
-                attachments.Add(new AttachmentReadDto { FileName = Path.GetFileName(attachment.FilePath), FileUrl= _fileService.GetFileUrl(attachment.FilePath)});
-            }
-            result.Attachments = attachments;   
+            result.InvoiceAttachment= _mapper.Map<AttachmentReadDto>(poRequest.InvoiceAttachmentPath);
+            result.PoAttachment = _mapper.Map<AttachmentReadDto>(poRequest.PoAttachmentPath);
+            
+ 
             return Ok(new ApiResponse<PoRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
@@ -356,7 +348,7 @@ namespace EDocument_API.Controllers.V1
 
             var request = new Models.Request { Id = requestId, DefinedRequestId = poRequestCreateDto.DefinedRequestId };
 
-            var definedRequestReviewers = await _requestReviewerRepository.GetDefinedRequestReviewersByIdAsync(poRequestCreateDto.DefinedRequestId);
+            var definedRequestReviewers = await _requestReviewerRepository.GetAllDefinedRequestReviewersAsync(poRequestCreateDto.DefinedRequestId);
             request.Justification = poRequestCreateDto.Remarks;
             request.RequestReviewers = _mapper.Map<List<RequestReviewer>>(definedRequestReviewers);
             request.PoRequest = _mapper.Map<PoRequest>(poRequestCreateDto);
@@ -384,45 +376,67 @@ namespace EDocument_API.Controllers.V1
       
 
             #region Send Emails
+
+
             var creatorMailContent = new MailContent
             {
                 Body=$"""
                 Dear {user.FullName},
-                    Kindly not that your Po Request  for {request.PoRequest.PoNumber} on eDocuement has been created successfully and it's under reviewing now.
+                    Kindly not that your Po Request  for PO Number {request.PoRequest.PoNumber} on eDocuement has been created successfully and it's under reviewing now.
                     Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with you request Status. 
 
-                    - Request Reference No.: {requestNo}
+                    - eDocument Request Reference No.: {requestNo}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                
                 """,
                 IsHTMLBody=false,
                 Subject=$"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                Cc="almuhammad@dpwsapps.com",
-                To= "almuhammad@dpwsapps.com"
+                Cc = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com",
+                To = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com"
             };
-           
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+
+            var requestReviewers = await _requestReviewerRepository.GetAllRequestReviewersAsync(requestId);
+            var reviewersEmails = new StringBuilder();
+            //foreach (var reviewer in requestReviewers)
+            //{
+            //    reviewersEmails.Append(reviewer.r);
+            //}
+
             var reviewerMailContent =  new MailContent
             {
                 Body = $"""
                 Dears,
-                    Kindly note that {user.FullName} has created Po Request for {request.PoRequest.PoNumber} on eDocuement and need to be reviewed from your side.
+                    Kindly note that {user.FullName} has created Po Request for PO Number ({request.PoRequest.PoNumber}) on eDocuement and need to be reviewed from your side.
 
                     Request Details:
 
-                    - PO Number:{request.PoRequest.PoNumber}
-                    - Invoice Number:{request.PoRequest.InvoiceNumber}
-                    - Vendor Name: {request.PoRequest.VendorName}
-                    - Vendor Number: {request.PoRequest.VendorNumber}
+                    - PO Number:       {request.PoRequest.PoNumber}
+                    - Invoice Number:  {request.PoRequest.InvoiceNumber}
+                    - Vendor Name:     {request.PoRequest.VendorName}
+                    - Vendor Number:   {request.PoRequest.VendorNumber}
                     Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
 
-                    - Request Reference No.: {requestNo}
+                    - eDocument Request Reference No.: {requestNo}
+
+                Thanks,
+                
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
                 """,
                 IsHTMLBody = false,
                 Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                Cc = "alaa.muhammad@dpwrold.com",
-                To = "almuhammad@dpwsapps.com"
+                Cc = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com",
+                To = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com"
             };
 
 
-            _mailService.SendMailAsync(creatorMailContent);
+          
+
             _mailService.SendMailAsync(reviewerMailContent);
 
 
@@ -465,13 +479,10 @@ namespace EDocument_API.Controllers.V1
             var oldPoAttachmentPath = request.PoRequest.PoAttachmentPath;
             var oldInvoiceAtachmentPath = request.PoRequest.InvoiceAttachmentPath;
             var oldAttachments = request.Attachments;
-            var oldRequestNumber = request.PoRequest.RequestNumber;
 
             request.Justification = poRequestUpdateDto.Remarks;
-            request.PoRequest = _mapper.Map<PoRequest>(poRequestUpdateDto);
-            request.PoRequest.RequestNumber = oldRequestNumber;
-
-
+            _mapper.Map(poRequestUpdateDto, request);
+            _mapper.Map(poRequestUpdateDto, request.PoRequest);
 
             if (poRequestUpdateDto.PoAttachment == null)
             {
@@ -518,7 +529,7 @@ namespace EDocument_API.Controllers.V1
 
 
 
-
+            request.PoRequest.ModifiedAt = DateTime.Now;
             request.PoRequest.ModifiedBy = user?.FullName;
             request.ModifiedBy = user?.FullName;
 

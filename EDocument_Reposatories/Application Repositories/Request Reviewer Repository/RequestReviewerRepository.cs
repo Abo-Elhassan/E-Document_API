@@ -27,12 +27,12 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
         }
 
 
-        public async Task<IEnumerable<DefinedRequestReviewer>> GetDefinedRequestReviewersByIdAsync(long definedRequestId)
+        public async Task<IEnumerable<DefinedRequestReviewer>> GetAllDefinedRequestReviewersAsync(long definedRequestId)
         {
             return await _context.DefinedRequestReviewers.Where(rr => rr.DefinedRequestId == definedRequestId).AsNoTracking().ToListAsync();
         }
 
-        public async Task<List<ReviewersDetails>> GetRequestReviewersByIdAsync(long requestId)
+        public async Task<List<ReviewersDetails>> GetAllRequestReviewersAsync(long requestId)
         {
             var reviewersDetails = new List<ReviewersDetails>();
             var stages =  _context.RequestReviewers.Where(rr => rr.RequestId == requestId).AsEnumerable().DistinctBy(r=>r.StageNumber).Select(rr=>new { rr.StageNumber,rr.StageName, rr.Status,rr.ReviewedBy, rr.ReviewerNotes }).ToList();
@@ -75,7 +75,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             var firstReviewer = requestReviewers.FirstOrDefault(rr => rr.StageNumber == 1);
 
             request.CurrentStage=1;
-
+            request.Status = RequestStatus.Pending.ToString();
 
 
             if (request.RequestReviewers.Any(r => r.AssignedReviewerId == firstReviewer?.AssignedReviewerId && !r.StageNumber.Equals(1)))

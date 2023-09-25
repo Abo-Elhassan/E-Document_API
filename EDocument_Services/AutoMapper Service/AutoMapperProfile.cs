@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EDocument_Data.Consts;
 using EDocument_Data.DTOs.Attachments;
 using EDocument_Data.DTOs.Department;
 using EDocument_Data.DTOs.Requests;
@@ -7,12 +8,15 @@ using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.DTOs.Section;
 using EDocument_Data.DTOs.User;
 using EDocument_Data.Models;
+using EDocument_Services.AutoMapper_Service.Resolvers;
 using EDocument_Services.File_Service;
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace EDocument_Services.AutoMapper_Service
 {
@@ -44,11 +48,12 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<Request, RequestReadDto>();
             CreateMap<Attachment, AttachmentReadDto>()
-               .ForMember(x => x.FileName, y => y.MapFrom(z => Path.GetFileName(z.FilePath)));
+               .ForMember(x => x.FileName, y => y.MapFrom(z => Path.GetFileName(z.FilePath)))
+               .ForMember(x => x.FileUrl, y => y.MapFrom<AttachmentUrlResolver>());
 
             CreateMap<string, AttachmentReadDto>()
                  .ForMember(x => x.FileName, y => y.MapFrom(z => Path.GetFileName(z)))
-                .ForMember(x => x.FileUrl, y => y.MapFrom(z => z));
+                .ForMember(x => x.FileUrl, y => y.MapFrom<PathToUrlResolver>());
 
             CreateMap<RequestReviewer, RequestReviewerReadDto>()
                 .ForMember(x => x.AssignedReviewerFullName, y => y.MapFrom(z => z.Reviewer.FullName));
@@ -64,7 +69,10 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(x => x.Remarks, y => y.MapFrom(z => z.Request.Justification))
                 .ForMember(x => x.CreatorId, y => y.MapFrom(z => z.Request.CreatorId))
                 .ForMember(x => x.DefinedRequestId, y => y.MapFrom(z => z.Request.DefinedRequestId))
+                .ForMember(x => x.InvoiceAttachment, y => y.MapFrom(z => new AttachmentReadDto{FileName=Path.GetFileName(z.InvoiceAttachmentPath)}))
+                .ForMember(x => x.PoAttachment, y => y.MapFrom(z => new AttachmentReadDto { FileName = Path.GetFileName(z.PoAttachmentPath) }))
                 .ForMember(x => x.Attachments, y => y.MapFrom(z => z.Request.Attachments));
+              
 
              CreateMap<PoRequest, PoRequestReviewerReadDto>()
             .ForMember(x => x.Id, y => y.MapFrom(z => z.Request.Id))
@@ -73,13 +81,20 @@ namespace EDocument_Services.AutoMapper_Service
             .ForMember(x => x.Remarks, y => y.MapFrom(z => z.Request.Justification))
             .ForMember(x => x.CreatorId, y => y.MapFrom(z => z.Request.CreatorId))
             .ForMember(x => x.DefinedRequestId, y => y.MapFrom(z => z.Request.DefinedRequestId))
+            .ForMember(x => x.InvoiceAttachment, y => y.MapFrom(z => new AttachmentReadDto { FileName = Path.GetFileName(z.InvoiceAttachmentPath)}))
+            .ForMember(x => x.PoAttachment, y => y.MapFrom(z => new AttachmentReadDto { FileName = Path.GetFileName(z.PoAttachmentPath) }))
             .ForMember(x => x.Attachments, y => y.MapFrom(z => z.Request.Attachments))
             .ForMember(x => x.RequestReviewers, y => y.MapFrom(z => z.Request.RequestReviewers));
 
             CreateMap<PoRequestCreateDto, PoRequest>();
-            CreateMap<PoRequestUpdateDto, PoRequest>();
+            CreateMap<PoRequestUpdateDto, Request>()
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<PoRequestUpdateDto, PoRequest>()
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<DefinedRequestReviewer, RequestReviewer>();
           
         }
+
+        
     }
 }
