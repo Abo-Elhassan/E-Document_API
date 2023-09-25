@@ -157,7 +157,7 @@ namespace EDocument_API.Controllers.V1
             if (request is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
-            if (request.Status == RequestStatus.Approved.ToString())
+            if (request.Status == RequestStatus.Approved.ToString()|| request.Status==RequestStatus.Declined.ToString())
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete this request after as it has been already approved" });
 
@@ -376,8 +376,6 @@ namespace EDocument_API.Controllers.V1
       
 
             #region Send Emails
-
-
             var creatorMailContent = new MailContent
             {
                 Body=$"""
@@ -399,14 +397,9 @@ namespace EDocument_API.Controllers.V1
             };
 
             _mailService.SendMailAsync(creatorMailContent);
-
-
-            var requestReviewers = await _requestReviewerRepository.GetAllRequestReviewersAsync(requestId);
-            var reviewersEmails = new StringBuilder();
-            //foreach (var reviewer in requestReviewers)
-            //{
-            //    reviewersEmails.Append(reviewer.r);
-            //}
+        
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId,request.CurrentStage);
+    
 
             var reviewerMailContent =  new MailContent
             {
@@ -434,16 +427,9 @@ namespace EDocument_API.Controllers.V1
                 To = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com"
             };
 
-
-          
-
             _mailService.SendMailAsync(reviewerMailContent);
 
-
-
             #endregion
-
-
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
         }
@@ -538,6 +524,63 @@ namespace EDocument_API.Controllers.V1
             await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id);
 
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
+
+
+            #region Send Emails
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName},
+                    Kindly not that your Po Request  for PO Number {request.PoRequest.PoNumber} on eDocuement has been created successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with you request Status. 
+
+                    - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                
+                """,
+                IsHTMLBody = false,
+                Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+                Cc = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com",
+                To = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com"
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(id, request.CurrentStage);
+
+
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has created Po Request for PO Number ({request.PoRequest.PoNumber}) on eDocuement and need to be reviewed from your side.
+
+                    Request Details:
+
+                    - PO Number:       {request.PoRequest.PoNumber}
+                    - Invoice Number:  {request.PoRequest.InvoiceNumber}
+                    - Vendor Name:     {request.PoRequest.VendorName}
+                    - Vendor Number:   {request.PoRequest.VendorNumber}
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+
+                    - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
+
+                Thanks,
+                
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+                Cc = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com",
+                To = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com"
+            };
+
+            _mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }

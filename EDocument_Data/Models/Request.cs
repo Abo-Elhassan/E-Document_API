@@ -12,7 +12,7 @@ public partial class Request : BaseEntity
 {
     public long Id { get; set; }
 
-    public int? CurrentStage { get; set; }
+    public int CurrentStage { get; set; }
 
     public string Status { get; set; }
 

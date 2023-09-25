@@ -20,10 +20,12 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
     public class RequestReviewerRepository: GenericRepository<RequestReviewer>, IRequestReviewerRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public RequestReviewerRepository(ApplicationDbContext context):base(context) 
+        public RequestReviewerRepository(ApplicationDbContext context, IUserRepository userRepository):base(context) 
         {
             _context = context;
+            _userRepository = userRepository;
         }
 
 
@@ -66,6 +68,19 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             return reviewersDetails;
         }
 
+
+        public async  Task<string> GetAllRequestReviewersEmailsByStageNumberAsync(long requestId, int stageNumber)
+        {
+            var requestReviewersIds = await _context.RequestReviewers.Where(rr=>rr.RequestId == requestId && rr.StageNumber==stageNumber).Select(rr=>rr.AssignedReviewerId).ToListAsync();
+
+            var requestReviewersEmails = new StringBuilder();
+            foreach (var reviewerId in requestReviewersIds)
+            {
+                requestReviewersEmails.Append($"{await _userRepository.GetUserEmailById(reviewerId)};");
+            }
+
+            return requestReviewersEmails.ToString();
+        }
 
         public async Task BeginRequestCycle(long definedRequestId, long requestId)
         {
@@ -141,7 +156,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             _context.Requests.Update(request);
             _context.SaveChanges();
         }
-                                                                                
+
 
     }
 }

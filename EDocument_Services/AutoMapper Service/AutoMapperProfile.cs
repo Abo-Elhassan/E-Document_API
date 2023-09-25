@@ -88,6 +88,7 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<PoRequestCreateDto, PoRequest>();
             CreateMap<PoRequestUpdateDto, Request>()
+            .ForMember(x => x.Attachments, y => y.Ignore())
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<PoRequestUpdateDto, PoRequest>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));

@@ -21,6 +21,7 @@ using Microsoft.OpenApi.Models;
 using System.Net;
 using System.Reflection;
 using System.Threading.RateLimiting;
+using EDocument_Repositories.Application_Repositories.UserRepository;
 
 namespace EDocument_API.Shared
 {
@@ -107,6 +108,7 @@ namespace EDocument_API.Shared
                     ValidIssuer = configuration["JwtSettings:Issuer"],
                     ValidAudience = configuration["JwtSettings:Audience"],
                     IssuerSigningKey = AuthService.GetSymmetricSecurityKey()
+
                 };
             });
 
@@ -154,6 +156,7 @@ namespace EDocument_API.Shared
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRequestReviewerRepository, RequestReviewerRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             #endregion Repositories
 

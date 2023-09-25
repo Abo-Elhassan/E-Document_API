@@ -25,7 +25,7 @@ namespace EDocument_EF.Configurations
             .HasDefaultValue(1);
 
             entity.Property(e => e.Status)
-            .HasDefaultValue(RequestStatus.Pending)
+            .HasDefaultValue(RequestStatus.Pending.ToString())
             .HasMaxLength(50);
 
             entity.Property(e => e.CreatedAt)

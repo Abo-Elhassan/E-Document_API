@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "TT1OdTl0jMnDhEh/MYpxtsH9DlhHL9U+ysz5ZUlf220=",
+  "Hash": "2ltYccdfIAAIKMnZZTkt2dMBgkankHGrstaXhdPfn70=",
   "Source": "EDocument_API",
   "BasePath": "_content/EDocument_API",
   "Mode": "Default",
@@ -17,12 +17,12 @@
   ],
   "Assets": [
     {
-      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023092407501144\\Technical Documentation -  EXPRESS - Solve Duplicated Trucker Invoices.docx",
+      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023092407501144\\Technical Documentation -  CLMS.docx",
       "SourceId": "EDocument_API",
       "SourceType": "Discovered",
       "ContentRoot": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\",
       "BasePath": "_content/EDocument_API",
-      "RelativePath": "Attachments/PoRequest/2023092407501144/Technical Documentation -  EXPRESS - Solve Duplicated Trucker Invoices.docx",
+      "RelativePath": "Attachments/PoRequest/2023092407501144/Technical Documentation -  CLMS.docx",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -31,15 +31,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023092407501144\\Technical Documentation -  EXPRESS - Solve Duplicated Trucker Invoices.docx"
+      "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023092407501144\\Technical Documentation -  CLMS.docx"
     },
     {
-      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023092407501144\\Technical Documentation -  iLEAN - LEAN Application.docx",
+      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023092407501144\\Technical Documentation -  EXPRESS - Direct Delivery from IA.docx",
       "SourceId": "EDocument_API",
       "SourceType": "Discovered",
       "ContentRoot": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\",
       "BasePath": "_content/EDocument_API",
-      "RelativePath": "Attachments/PoRequest/2023092407501144/Technical Documentation -  iLEAN - LEAN Application.docx",
+      "RelativePath": "Attachments/PoRequest/2023092407501144/Technical Documentation -  EXPRESS - Direct Delivery from IA.docx",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -48,15 +48,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023092407501144\\Technical Documentation -  iLEAN - LEAN Application.docx"
+      "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023092407501144\\Technical Documentation -  EXPRESS - Direct Delivery from IA.docx"
     },
     {
-      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023092407501144\\Technical Documentation -  Online Payment Project - Import Invoices .docx",
+      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023092407501144\\Technical Documentation -  MTS - Seal Cut1.docx",
       "SourceId": "EDocument_API",
       "SourceType": "Discovered",
       "ContentRoot": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\",
       "BasePath": "_content/EDocument_API",
-      "RelativePath": "Attachments/PoRequest/2023092407501144/Technical Documentation -  Online Payment Project - Import Invoices .docx",
+      "RelativePath": "Attachments/PoRequest/2023092407501144/Technical Documentation -  MTS - Seal Cut1.docx",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -65,7 +65,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023092407501144\\Technical Documentation -  Online Payment Project - Import Invoices .docx"
+      "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023092407501144\\Technical Documentation -  MTS - Seal Cut1.docx"
     },
     {
       "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023092408082616\\Technical Documentation -  CLMS - PIR Bug Fixes .docx",
@@ -406,6 +406,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023092508422125\\Technical Documentation -  VAS - Smart Gate Modification.docx"
+    },
+    {
+      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023092512281585\\Technical Documentation -  EXPRESS - LG Check.docx",
+      "SourceId": "EDocument_API",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\",
+      "BasePath": "_content/EDocument_API",
+      "RelativePath": "Attachments/PoRequest/2023092512281585/Technical Documentation -  EXPRESS - LG Check.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023092512281585\\Technical Documentation -  EXPRESS - LG Check.docx"
+    },
+    {
+      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023092512281585\\Technical Documentation -  VAS - Export Inspection.docx",
+      "SourceId": "EDocument_API",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\",
+      "BasePath": "_content/EDocument_API",
+      "RelativePath": "Attachments/PoRequest/2023092512281585/Technical Documentation -  VAS - Export Inspection.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023092512281585\\Technical Documentation -  VAS - Export Inspection.docx"
     }
   ]
 }
