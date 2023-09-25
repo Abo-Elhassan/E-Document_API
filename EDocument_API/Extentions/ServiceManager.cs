@@ -102,11 +102,16 @@ namespace EDocument_API.Shared
             })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
+                    ClockSkew= TimeSpan.Zero,
+                    ValidateLifetime = true,
+                    ValidateIssuer = true,
                     ValidIssuer = configuration["JwtSettings:Issuer"],
+                    ValidateAudience = true,
                     ValidAudience = configuration["JwtSettings:Audience"],
+                    ValidateIssuerSigningKey = true,
                     IssuerSigningKey = AuthService.GetSymmetricSecurityKey()
 
                 };

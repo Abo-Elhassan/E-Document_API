@@ -112,7 +112,7 @@ namespace EDocument_API.Controllers.V1
         public async Task<ActionResult> GetPoRequestById(long id)
         {
             _logger.LogInformation($"Start GetPoRequestById from {nameof(RequestController)}");
-
+            var x = User.Identity.IsAuthenticated;
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             var poRequest = await _unitOfWork.Repository<PoRequest>().FindRequestAsync(
             requestId: id,
@@ -340,6 +340,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Procurement")]
         public async Task<ActionResult> Create([FromForm] PoRequestCreateDto poRequestCreateDto)
         {
+            
             _logger.LogInformation($"Start Create from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestCreateDto)} ");
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
