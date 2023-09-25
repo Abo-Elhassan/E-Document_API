@@ -11,7 +11,6 @@ namespace EDocument_Data.DTOs.Attachments
     {
         public string FileName { get; set; }
         public string FileUrl{ get; set; }
-        public IFormFile attachedFile { get; set; }
 
 
     }

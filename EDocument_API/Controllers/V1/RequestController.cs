@@ -126,8 +126,8 @@ namespace EDocument_API.Controllers.V1
             var result = _mapper.Map<PoRequestReadDto>(poRequest);
             result.InvoiceAttachment= _mapper.Map<AttachmentReadDto>(poRequest.InvoiceAttachmentPath);
             result.PoAttachment = _mapper.Map<AttachmentReadDto>(poRequest.PoAttachmentPath);
-            
- 
+
+
             return Ok(new ApiResponse<PoRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
