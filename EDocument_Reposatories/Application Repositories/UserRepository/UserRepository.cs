@@ -23,43 +23,43 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
             _roleManager = roleManager;
         }
 
-        public async Task<(string Id, string Email)?> FindDepartmentManagerById(string id)
+        public async Task<(string Id, string Email)?> FindDepartmentManagerByIdAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
 
-            if (user is null|| user.Department.ManagerId is null || GetUserEmailById(user.Department.Manager.Id).Result is null)  return null;
+            if (user is null|| user.Department.ManagerId is null || GetUserEmailByIdAsync(user.Department.Manager.Id).Result is null)  return null;
 
             string managerId = user.Department.ManagerId;
-            string managerEmail = await GetUserEmailById(user.Department.Manager.Id) ??"";
+            string managerEmail = await GetUserEmailByIdAsync(user.Department.Manager.Id) ??"";
 
             return (managerId, managerEmail);
         }
 
-        public async Task<(string Id, string Email)?> FindDirectManagerById(string id)
+        public async Task<(string Id, string Email)?> FindDirectManagerByIdAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
 
-            if (user is null || user.Manager.ManagerId is null || GetUserEmailById(user.Manager.Id).Result is null) return null;
+            if (user is null || user.Manager.ManagerId is null || GetUserEmailByIdAsync(user.Manager.Id).Result is null) return null;
 
             string managerId = user.Manager.ManagerId;
-            string managerEmail = await GetUserEmailById(user.Manager.Id) ?? "";
+            string managerEmail = await GetUserEmailByIdAsync(user.Manager.Id) ?? "";
 
             return (managerId, managerEmail);
         }
 
-        public async Task<(string Id, string Email)?> FindSectionHeadById(string id)
+        public async Task<(string Id, string Email)?> FindSectionHeadByIdAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
 
-            if (user is null || user.Section.HeadId is null || GetUserEmailById(user.Section.Head.Id).Result is null) return null;
+            if (user is null || user.Section.HeadId is null || GetUserEmailByIdAsync(user.Section.Head.Id).Result is null) return null;
 
             string managerId = user.Section.HeadId;
-            string managerEmail = await GetUserEmailById(user.Section.Head.Id) ?? "";
+            string managerEmail = await GetUserEmailByIdAsync(user.Section.Head.Id) ?? "";
 
             return (managerId, managerEmail);
         }
 
-        public async Task<string?> GetUserEmailById(string id)
+        public async Task<string?> GetUserEmailByIdAsync(string id)
         {
             var email = "";
             var user = await _userManager.FindByIdAsync(id);

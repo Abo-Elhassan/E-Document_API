@@ -1,54 +1,52 @@
-﻿using EDocument_Data.Consts.Enums;
+﻿using AutoMapper;
+using EDocument_Data.Consts.Enums;
+using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.Models;
-using EDocument_Data.Models.Shared;
 using EDocument_EF;
 using EDocument_Reposatories.Generic_Reposatories;
 using EDocument_Repositories.Application_Repositories.UserRepository;
-using EDocument_Services.Helpers;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repository
 {
-    public class RequestReviewerRepository: GenericRepository<RequestReviewer>, IRequestReviewerRepository
+    public class RequestReviewerRepository : GenericRepository<RequestReviewer>, IRequestReviewerRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public RequestReviewerRepository(ApplicationDbContext context, IUserRepository userRepository):base(context) 
+        public RequestReviewerRepository(ApplicationDbContext context, IUserRepository userRepository, IMapper mapper) : base(context)
         {
             _context = context;
             _userRepository = userRepository;
+            _mapper = mapper;
         }
-
 
         public async Task<IEnumerable<DefinedRequestReviewer>> GetAllDefinedRequestReviewersAsync(long definedRequestId)
         {
+
+          
             return await _context.DefinedRequestReviewers.Where(rr => rr.DefinedRequestId == definedRequestId).AsNoTracking().ToListAsync();
         }
 
         public async Task<List<ReviewersDetails>> GetAllRequestReviewersAsync(long requestId)
         {
             var reviewersDetails = new List<ReviewersDetails>();
-            var stages =  _context.RequestReviewers.Where(rr => rr.RequestId == requestId).AsEnumerable().DistinctBy(r=>r.StageNumber).Select(rr=>new { rr.StageNumber,rr.StageName, rr.Status,rr.ReviewedBy, rr.ReviewerNotes }).ToList();
+            var stages = _context.RequestReviewers.Where(rr => rr.RequestId == requestId).AsEnumerable().DistinctBy(r => r.StageNumber).Select(rr => new { rr.StageNumber, rr.StageName, rr.Status, rr.ReviewedBy, rr.ReviewerNotes }).ToList();
 
-            var availableReviewers =  await _context.RequestReviewers.Include(rr => rr.Reviewer).AsNoTracking().Where(rr => rr.RequestId == requestId).ToListAsync();
+            var availableReviewers = await _context.RequestReviewers.Include(rr => rr.Reviewer).AsNoTracking().Where(rr => rr.RequestId == requestId).ToListAsync();
 
             foreach (var stage in stages)
             {
-                var stageDetails = new ReviewersDetails 
-                { 
+                var stageDetails = new ReviewersDetails
+                {
                     StageNumber = stage.StageNumber,
-                    StageTitle = stage.StageName, 
-                    Status = (RequestStatus)Enum.Parse(typeof(RequestStatus),stage.Status),
-                    ReviewedBy = stage.ReviewedBy, 
+                    StageTitle = stage.StageName,
+                    Status = (RequestStatus)Enum.Parse(typeof(RequestStatus), stage.Status),
+                    ReviewedBy = stage.ReviewedBy,
                     ReviewerNotes = stage.ReviewerNotes
                 };
                 var assignedReviewers = new List<string>();
@@ -60,23 +58,21 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                         assignedReviewers.Add(reviewer.Reviewer.FullName);
                     }
                 }
-                stageDetails.AssignedReviewers= assignedReviewers;
+                stageDetails.AssignedReviewers = assignedReviewers;
                 reviewersDetails.Add(stageDetails);
-
             }
 
             return reviewersDetails;
         }
 
-
-        public async  Task<string> GetAllRequestReviewersEmailsByStageNumberAsync(long requestId, int stageNumber)
+        public async Task<string> GetAllRequestReviewersEmailsByStageNumberAsync(long requestId, int stageNumber)
         {
-            var requestReviewersIds = await _context.RequestReviewers.Where(rr=>rr.RequestId == requestId && rr.StageNumber==stageNumber).Select(rr=>rr.AssignedReviewerId).ToListAsync();
+            var requestReviewersIds = await _context.RequestReviewers.Where(rr => rr.RequestId == requestId && rr.StageNumber == stageNumber).Select(rr => rr.AssignedReviewerId).ToListAsync();
 
             var requestReviewersEmails = new StringBuilder();
             foreach (var reviewerId in requestReviewersIds)
             {
-                requestReviewersEmails.Append($"{await _userRepository.GetUserEmailById(reviewerId)};");
+                requestReviewersEmails.Append($"{await _userRepository.GetUserEmailByIdAsync(reviewerId)};");
             }
 
             return requestReviewersEmails.ToString();
@@ -84,31 +80,52 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
         public async Task BeginRequestCycle(long definedRequestId, long requestId)
         {
-            var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr => dr.DefinedRequest).FirstOrDefaultAsync(r => r.Id == requestId );
-            var requestReviewers =  request.RequestReviewers;
-            
-            var firstReviewer = requestReviewers.FirstOrDefault(rr => rr.StageNumber == 1);
+            var definedRequestReviewers = await GetAllDefinedRequestReviewersAsync(definedRequestId);
+          
+
+
+            var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr => dr.DefinedRequest).FirstOrDefaultAsync(r => r.Id == requestId);
+            _mapper.Map(definedRequestReviewers, request?.RequestReviewers);
+            var firstReviewer = request?.RequestReviewers.FirstOrDefault(rr => rr.StageNumber == 1);
 
             request.CurrentStage=1;
-            request.Status = RequestStatus.Pending.ToString();
+            request.Status=RequestStatus.Pending.ToString();
 
-
-            if (request.RequestReviewers.Any(r => r.AssignedReviewerId == firstReviewer?.AssignedReviewerId && !r.StageNumber.Equals(1)))
+            if (firstReviewer != null)
             {
-                request.CurrentStage++;
-                firstReviewer.Status = RequestStatus.Approved.ToString();
-                firstReviewer.ModifiedBy = "E-Documnet";
+                switch (firstReviewer.ReviewerType)
+                {
+                    case ReviewerType.DirectManager:
+                        firstReviewer.AssignedReviewerId = _userRepository.FindDirectManagerByIdAsync(firstReviewer.AssignedReviewerId)?.Result.Value.Id;
+                        break;
 
+                    case ReviewerType.SectionHead:
+                        firstReviewer.AssignedReviewerId = _userRepository.FindSectionHeadByIdAsync(firstReviewer.AssignedReviewerId)?.Result.Value.Id;
+                        break;
+
+                    case ReviewerType.DepartmentManager:
+                        firstReviewer.AssignedReviewerId = _userRepository.FindDepartmentManagerByIdAsync(firstReviewer.AssignedReviewerId)?.Result.Value.Id;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                if (request.RequestReviewers.Any(r => r.AssignedReviewerId == firstReviewer?.AssignedReviewerId && !r.StageNumber.Equals(1)))
+                {
+                    request.CurrentStage++;
+                    firstReviewer.Status = RequestStatus.Approved.ToString();
+                    firstReviewer.ModifiedBy = "E-Documnet";
+                }
             }
 
-
             _context.SaveChanges();
-
         }
 
-        public  async Task ApproveRequestAsync(RequestReviewerWriteDto reviewingInfo, string reviewedBy)
+
+        public async Task ApproveRequestAsync(RequestReviewerWriteDto reviewingInfo, string reviewedBy)
         {
-            var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr=>dr.DefinedRequest).FirstOrDefaultAsync(r=> r.Id == reviewingInfo.RequestId && r.RequestReviewers.All(rr=>rr.StageNumber==r.CurrentStage));
+            var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr => dr.DefinedRequest).FirstOrDefaultAsync(r => r.Id == reviewingInfo.RequestId && r.RequestReviewers.All(rr => rr.StageNumber == r.CurrentStage));
 
             foreach (var reviewer in request!.RequestReviewers)
             {
@@ -118,9 +135,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 reviewer.ModifiedBy = reviewedBy;
             }
 
-           
-
-            if (request.CurrentStage ==request.DefinedRequest.ReviewersNumber)
+            if (request.CurrentStage == request.DefinedRequest.ReviewersNumber)
             {
                 request.Status = RequestStatus.Approved.ToString();
             }
@@ -133,9 +148,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
             _context.Requests.Update(request);
             _context.SaveChanges();
-            
         }
-
 
         public async Task DeclineRequestAsync(RequestReviewerWriteDto reviewingInfo, string reviewedBy)
         {
@@ -150,13 +163,11 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             }
 
             request.Status = RequestStatus.Declined.ToString();
-            request.CurrentStage = 0; 
+            request.CurrentStage = 0;
             request.ModifiedBy = reviewedBy;
 
             _context.Requests.Update(request);
             _context.SaveChanges();
         }
-
-
     }
 }

@@ -17,7 +17,8 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
         public string PoDescription { get; init; }
         [Required]
         public  string VendorName { get; init; }
-        public int? VendorNumber { get; init; }
+        [Required]
+        public int VendorNumber { get; init; }
         [Required]
         public  string InvoiceNumber { get; init; }
         [Required]

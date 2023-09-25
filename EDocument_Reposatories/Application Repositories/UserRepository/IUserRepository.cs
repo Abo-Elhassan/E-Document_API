@@ -10,10 +10,10 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
 {
     public interface IUserRepository: IGenericRepository<User>
     {
-        Task<(string Id, string Email)?> FindDirectManagerById(string id);
-        Task<(string Id, string Email)?> FindSectionHeadById(string id);
-        Task<(string Id, string Email)?> FindDepartmentManagerById(string id);
-        Task<string?> GetUserEmailById(string id);
+        Task<(string Id, string Email)?> FindDirectManagerByIdAsync(string id);
+        Task<(string Id, string Email)?> FindSectionHeadByIdAsync(string id);
+        Task<(string Id, string Email)?> FindDepartmentManagerByIdAsync(string id);
+        Task<string?> GetUserEmailByIdAsync(string id);
 
 
     }

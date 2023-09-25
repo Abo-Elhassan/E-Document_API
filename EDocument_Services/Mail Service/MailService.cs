@@ -38,7 +38,7 @@ namespace EDocument_Services.Mail_Service
             if (mailContent?.Cc != null)
                 foreach (var address in mailContent.Cc.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    email.To.Add(address);
+                    email.CC.Add(address);
                 }
 
             email.Subject = mailContent.Subject;

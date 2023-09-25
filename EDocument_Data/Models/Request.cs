@@ -30,7 +30,7 @@ public partial class Request : BaseEntity
 
     public virtual ICollection<RequestApplicationRole> RequestApplicationRoles { get; set; } = new HashSet<RequestApplicationRole>();
     public virtual ICollection<RequestReviewer> RequestReviewers { get; set; } = new HashSet<RequestReviewer>();
-    public virtual CarRequest CarRequest { get; set; } 
+    public virtual VehicleRequest VehicleRequest { get; set; } 
     public virtual TravelDeskRequest TravelDeskRequest { get; set; } 
     public virtual ApplicationUserRequest ApplicationUserRequest { get; set; } 
     public virtual DomainAccountRequest DomainAccountRequest { get; set; }

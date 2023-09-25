@@ -9,7 +9,8 @@ using EDocument_Data.Models;
 using Azure.Core;
 using EDocument_Services.Mail_Service;
 using System.Net.Mail;
-
+using EDocument_EF;
+using Microsoft.EntityFrameworkCore;
 
 namespace EDocument_API.Controllers.V1
 {
@@ -23,13 +24,15 @@ namespace EDocument_API.Controllers.V1
         private readonly IFileService _fileService;
         private readonly IWebHostEnvironment _environment;
         private readonly IMailService _mailService;
+        private readonly ApplicationDbContext _context;
         private readonly string _rootPath;
 
-        public DownloadController(IFileService fileService, IWebHostEnvironment environment, IMailService mailService)
+        public DownloadController(IFileService fileService, IWebHostEnvironment environment, IMailService mailService, ApplicationDbContext context)
         {
             _fileService = fileService;
             _environment = environment;
             _mailService = mailService;
+            _context = context;
             _rootPath = $@"{_environment?.WebRootPath}\Attachments\";
         }
         /// <summary>
@@ -43,9 +46,11 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<PhysicalFileResult>))]
         [HttpGet("{fileName}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult Download(string fileName)
         {
+
+
             var decodedFileName = HttpUtility.UrlDecode(fileName);
             string filePath = Path.Combine(_rootPath, decodedFileName);
 

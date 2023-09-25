@@ -29,7 +29,7 @@ namespace EDocument_EF
         public virtual DbSet<RequestApplicationRole> RequestApplicationRoles => Set<RequestApplicationRole>();
         public virtual DbSet<ApplicationUserRequest> ApplicationUserRequests => Set<ApplicationUserRequest>();
         public virtual DbSet<DomainAccountRequest> DomainAccountRequests => Set<DomainAccountRequest>();
-        public virtual DbSet<CarRequest> CarRequests => Set<CarRequest>();
+        public virtual DbSet<VehicleRequest> VehicleRequests => Set<VehicleRequest>();
         public virtual DbSet<TravelDeskRequest> TravelDeskRequests => Set<TravelDeskRequest>();
 
         //public virtual DbSet<JobPlanRequest> JobPlanRequests => Set<JobPlanRequest>();
@@ -56,7 +56,7 @@ namespace EDocument_EF
             builder.ApplyConfiguration(new DefinedApplicationConfiguration());
             builder.ApplyConfiguration(new ApplicationUserRequestConfiguration());
             builder.ApplyConfiguration(new DomainAccountRequestConfiguration());
-            builder.ApplyConfiguration(new CarRequestConfiguration());
+            builder.ApplyConfiguration(new VehicleRequestConfiguration());
             builder.ApplyConfiguration(new TravelDeskRequestConfiguration());
             //builder.ApplyConfiguration(new JobPlanRequestConfiguration());
             builder.ApplyConfiguration(new PoRequestConfiguration());

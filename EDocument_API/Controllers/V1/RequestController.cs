@@ -25,6 +25,7 @@ using EDocument_Services.Mail_Service;
 using EDocument_Data.Consts;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace EDocument_API.Controllers.V1
 {
@@ -79,7 +80,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize]
         public async Task<ActionResult> GetRequestReviewersById(long id)
         {
-            _logger.LogInformation($"Start GetRequestReviewersById from {nameof(RequestController)}");
+            _logger.LogInformation($"Start GetRequestReviewersById from {nameof(RequestController)} for request id = {id}");
             var reviewerDetails = new ReviewersDetailsDto();
             (int CurrentStage, List<ReviewersDetails> ReviewersDetails) response;
             var request = await _unitOfWork.Repository<Models.Request>().GetByIdAsync(id);
@@ -111,8 +112,8 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Finance,Procurement")]
         public async Task<ActionResult> GetPoRequestById(long id)
         {
-            _logger.LogInformation($"Start GetPoRequestById from {nameof(RequestController)}");
-            var x = User.Identity.IsAuthenticated;
+            _logger.LogInformation($"Start GetPoRequestById from {nameof(RequestController)} for request id = {id}");
+
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             var poRequest = await _unitOfWork.Repository<PoRequest>().FindRequestAsync(
             requestId: id,
@@ -144,7 +145,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Procurement")]
         public async Task<ActionResult> DeletePoRequest(long id)
         {
-            _logger.LogInformation($"Start DeletePoRequest from {nameof(RequestController)}");
+            _logger.LogInformation($"Start DeletePoRequest from {nameof(RequestController)} for request id = {id}");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var includes = new string[] { "PoRequest", "Attachments", "RequestReviewers" };
 
@@ -194,7 +195,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Procurement")]
         public async Task<ActionResult> GetCreatorPoRequestsFiltered(FilterWriteDto? filterDto)
         {
-            _logger.LogInformation($"Start GetCreatorPoRequestsFiltered from {nameof(RequestController)}");
+            _logger.LogInformation($"Start GetCreatorPoRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             string? userCondition = null;
 
@@ -262,7 +263,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Finance")]
         public async Task<ActionResult> GetReviewerPoRequestsFiltered(FilterWriteDto? filterDto)
         {
-            _logger.LogInformation($"Start GetReviewerPoRequestsFiltered from {nameof(RequestController)}");
+            _logger.LogInformation($"Start GetReviewerPoRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             string? userCondition = null;
 
@@ -349,9 +350,7 @@ namespace EDocument_API.Controllers.V1
 
             var request = new Models.Request { Id = requestId, DefinedRequestId = poRequestCreateDto.DefinedRequestId };
 
-            var definedRequestReviewers = await _requestReviewerRepository.GetAllDefinedRequestReviewersAsync(poRequestCreateDto.DefinedRequestId);
             request.Justification = poRequestCreateDto.Remarks;
-            request.RequestReviewers = _mapper.Map<List<RequestReviewer>>(definedRequestReviewers);
             request.PoRequest = _mapper.Map<PoRequest>(poRequestCreateDto);
             request.PoRequest.RequestNumber = requestNo;
             request.PoRequest.PoAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{requestId}", poRequestCreateDto.PoAttachment);
@@ -374,61 +373,59 @@ namespace EDocument_API.Controllers.V1
 
             await _requestReviewerRepository.BeginRequestCycle(poRequestCreateDto.DefinedRequestId, requestId);
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
-      
+
 
             #region Send Emails
-            var creatorMailContent = new MailContent
-            {
-                Body=$"""
-                Dear {user.FullName},
-                    Kindly not that your Po Request  for PO Number {request.PoRequest.PoNumber} on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with you request Status. 
+            //var creatorMailContent = new MailContent
+            //{
+            //    Body = $"""
+            //    Dear {user.FullName.Split(" ")[0]},
+            //        Kindly not that your Po Request  for PO Number {request.PoRequest.PoNumber} on eDocuement has been created successfully and it's under reviewing now.
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with you request Status. 
 
-                    - eDocument Request Reference No.: {requestNo}
+            //        - eDocument Request Reference No.: {requestNo}
 
-                Thanks,
+            //    Thanks,
 
-                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
-                
-                """,
-                IsHTMLBody=false,
-                Subject=$"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                Cc = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com",
-                To = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com"
-            };
+            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
 
-            _mailService.SendMailAsync(creatorMailContent);
-        
-            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId,request.CurrentStage);
-    
+            //    """,
+            //    IsHTMLBody = false,
+            //    Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+            //    To = user.Email
+            //};
 
-            var reviewerMailContent =  new MailContent
-            {
-                Body = $"""
-                Dears,
-                    Kindly note that {user.FullName} has created Po Request for PO Number ({request.PoRequest.PoNumber}) on eDocuement and need to be reviewed from your side.
+            //_mailService.SendMailAsync(creatorMailContent);
 
-                    Request Details:
 
-                    - PO Number:       {request.PoRequest.PoNumber}
-                    - Invoice Number:  {request.PoRequest.InvoiceNumber}
-                    - Vendor Name:     {request.PoRequest.VendorName}
-                    - Vendor Number:   {request.PoRequest.VendorNumber}
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
 
-                    - eDocument Request Reference No.: {requestNo}
+            //var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId,request.CurrentStage);
+            //var reviewerMailContent =  new MailContent
+            //{
+            //    Body = $"""
+            //    Dears,
+            //        Kindly note that {user.FullName} has created Po Request for PO Number ({request.PoRequest.PoNumber}) on eDocuement and need to be reviewed from your side.
 
-                Thanks,
-                
-                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
-                """,
-                IsHTMLBody = false,
-                Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                Cc = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com",
-                To = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com"
-            };
+            //        Request Details:
 
-            _mailService.SendMailAsync(reviewerMailContent);
+            //        - PO Number:       {request.PoRequest.PoNumber}
+            //        - Invoice Number:  {request.PoRequest.InvoiceNumber}
+            //        - Vendor Name:     {request.PoRequest.VendorName}
+            //        - Vendor Number:   {request.PoRequest.VendorNumber}
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+
+            //        - eDocument Request Reference No.: {requestNo}
+
+            //    Thanks,
+
+            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+            //    """,
+            //    IsHTMLBody = false,
+            //    Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+            //    To = reviewersEmails
+            //};
+
+            //_mailService.SendMailAsync(reviewerMailContent);
 
             #endregion
 
@@ -454,7 +451,7 @@ namespace EDocument_API.Controllers.V1
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Models.Request, bool>> requestRxpression = (r => r.Id == id);
 
-            _unitOfWork.Complete();
+ 
             var request = await _unitOfWork.Repository<Models.Request>().FindAsync(requestRxpression, new string[] { "PoRequest" ,"Attachments"});
 
             if (request == null)
@@ -522,64 +519,61 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id);
+            await _requestReviewerRepository.BeginRequestCycle( request.DefinedRequestId,request.Id);
 
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
 
             #region Send Emails
-            var creatorMailContent = new MailContent
-            {
-                Body = $"""
-                Dear {user.FullName},
-                    Kindly not that your Po Request  for PO Number {request.PoRequest.PoNumber} on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with you request Status. 
+            //var creatorMailContent = new MailContent
+            //{
+            //    Body = $"""
+            //    Dear {user.FullName.Split(" ")[0]},
+            //        Kindly not that your Po Request  for PO Number {request.PoRequest.PoNumber} on eDocuement has been created successfully and it's under reviewing now.
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with you request Status. 
 
-                    - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
+            //        - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
 
-                Thanks,
+            //    Thanks,
 
-                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
-                
-                """,
-                IsHTMLBody = false,
-                Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                Cc = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com",
-                To = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com"
-            };
+            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
 
-            _mailService.SendMailAsync(creatorMailContent);
+            //    """,
+            //    IsHTMLBody = false,
+            //    Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+            //    To = user.Email
+            //};
 
-            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(id, request.CurrentStage);
+            //_mailService.SendMailAsync(creatorMailContent);
 
 
-            var reviewerMailContent = new MailContent
-            {
-                Body = $"""
-                Dears,
-                    Kindly note that {user.FullName} has created Po Request for PO Number ({request.PoRequest.PoNumber}) on eDocuement and need to be reviewed from your side.
+            //var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(id, request.CurrentStage);
+            //var reviewerMailContent = new MailContent
+            //{
+            //    Body = $"""
+            //    Dears,
+            //        Kindly note that {user.FullName} has created Po Request for PO Number ({request.PoRequest.PoNumber}) on eDocuement and need to be reviewed from your side.
 
-                    Request Details:
+            //        Request Details:
 
-                    - PO Number:       {request.PoRequest.PoNumber}
-                    - Invoice Number:  {request.PoRequest.InvoiceNumber}
-                    - Vendor Name:     {request.PoRequest.VendorName}
-                    - Vendor Number:   {request.PoRequest.VendorNumber}
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+            //        - PO Number:       {request.PoRequest.PoNumber}
+            //        - Invoice Number:  {request.PoRequest.InvoiceNumber}
+            //        - Vendor Name:     {request.PoRequest.VendorName}
+            //        - Vendor Number:   {request.PoRequest.VendorNumber}
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
 
-                    - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
+            //        - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
 
-                Thanks,
-                
-                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
-                """,
-                IsHTMLBody = false,
-                Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                Cc = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com",
-                To = "almuhammad@dpwsapps.com;rhosny@dpwsapps.com"
-            };
+            //    Thanks,
 
-            _mailService.SendMailAsync(reviewerMailContent);
+            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+            //    """,
+            //    IsHTMLBody = false,
+            //    Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+            //    To = reviewersEmails
+            //};
+
+            //_mailService.SendMailAsync(reviewerMailContent);
 
             #endregion
 
@@ -605,6 +599,38 @@ namespace EDocument_API.Controllers.V1
 
             await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user!.FullName);
 
+            #region Send Emails
+
+         
+            //Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
+            //var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PoRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
+
+
+            //var requestCreator = request.Creator;
+            //var requestCreatorDirectManager = request.Creator.Manager;
+            //var requestCreatorDepartmentManager = request.Creator.Department.Manager;
+            //var creatorMailContent = new MailContent
+            //{
+            //    Body = $"""
+            //    Dear {requestCreator.FullName.Split(" ")[0]},
+            //        Kindly not that your Po Request for PO Number {request.PoRequest.PoNumber} on eDocuement has been approved successfully by {user.FullName}.
+            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+
+            //        - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
+
+            //    Thanks,
+
+            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+            //    """,
+            //    IsHTMLBody = false,
+            //    Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+            //    Cc = $"{requestCreatorDirectManager.Email};{requestCreatorDepartmentManager.Email}",
+            //    To = requestCreator.Email
+            //};
+
+            //_mailService.SendMailAsync(creatorMailContent);
+            #endregion
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -628,6 +654,38 @@ namespace EDocument_API.Controllers.V1
 
             await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user!.FullName);
 
+            #region Send Emails
+
+
+            //Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
+            //var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PoRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
+
+
+            //var requestCreator = request.Creator;
+            //var requestCreatorDirectManager = request.Creator.Manager;
+            //var requestCreatorDepartmentManager = request.Creator.Department.Manager;
+            //var creatorMailContent = new MailContent
+            //{
+            //    Body = $"""
+            //    Dear {requestCreator.FullName.Split(" ")[0]},
+            //        Kindly not that your Po Request for PO Number {request.PoRequest.PoNumber} on eDocuement has been declined by {user.FullName}.
+            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+
+            //        - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
+
+            //    Thanks,
+
+            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+            //    """,
+            //    IsHTMLBody = false,
+            //    Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+            //    Cc = $"{requestCreatorDirectManager.Email};{requestCreatorDepartmentManager.Email}",
+            //    To = requestCreator.Email
+            //};
+
+            //_mailService.SendMailAsync(creatorMailContent);
+            #endregion
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -635,6 +693,9 @@ namespace EDocument_API.Controllers.V1
         #endregion PO Request
 
         #endregion Procurement
+
+
+
 
 
 
