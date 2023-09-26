@@ -113,17 +113,26 @@ namespace EDocument_Reposatories.Generic_Reposatories
             }
         }
 
-        public virtual IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[]? includes = null)
+        public virtual IEnumerable<T> FindAll(Expression<Func<T, bool>>? criteria = null, string[]? includes = null)
         {
             IQueryable<T> query = _context.Set<T>();
 
             if (includes != null)
+            {
                 foreach (var item in includes)
                 {
                     query = query.Include(item);
                 }
+            }
 
-            return query.Where(criteria).ToList();
+
+            if (criteria != null)
+            {
+                query = query.Where(criteria);
+            }
+
+
+            return  query.ToList();
         }
 
         public virtual (int TotalCount, IEnumerable<T> PaginatedData) FindAll(Expression<Func<T, bool>>? criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
@@ -414,17 +423,26 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return result;
         }
 
-        public virtual async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, string[]? includes = null)
+        public virtual async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>>? criteria = null, string[]? includes = null)
         {
             IQueryable<T> query = _context.Set<T>();
 
             if (includes != null)
+            {
                 foreach (var item in includes)
                 {
                     query = query.Include(item);
                 }
+            }
 
-            return await query.Where(criteria).ToListAsync();
+
+            if (criteria != null)
+            {
+                query = query.Where(criteria);
+            }
+               
+
+            return await query.ToListAsync();
         }
         public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllAsync(Expression<Func<T, bool>>? criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {

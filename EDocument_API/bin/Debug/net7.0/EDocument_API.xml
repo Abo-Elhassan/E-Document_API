@@ -73,7 +73,7 @@
              </remarks>
              <returns>List of All Reviewer PO Requests</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.RequestController.Create(EDocument_Data.DTOs.Requests.PoRequest.PoRequestCreateDto)">
+        <member name="M:EDocument_API.Controllers.V1.RequestController.CreatePoRequest(EDocument_Data.DTOs.Requests.PoRequest.PoRequestCreateDto)">
              <summary>
              Create PO Request
              </summary>
@@ -83,7 +83,7 @@
              </remarks>
              <returns> message</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.RequestController.Update(System.Int64,EDocument_Data.DTOs.Requests.PoRequest.PoRequestUpdateDto)">
+        <member name="M:EDocument_API.Controllers.V1.RequestController.UpdatePoRequest(System.Int64,EDocument_Data.DTOs.Requests.PoRequest.PoRequestUpdateDto)">
              <summary>
              Update PO Request
              </summary>
@@ -105,6 +105,87 @@
              <returns> message</returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.RequestController.DeclinePoRequest(EDocument_Data.DTOs.Requests.RequestReviewer.RequestReviewerWriteDto)">
+             <summary>
+             Decline PO Request
+             </summary>
+             <param name="requestReviewerWriteDto">Decline Po Request</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetVehicleRequestById(System.Int64)">
+             <summary>
+             Get PO Requests By Id
+             </summary>
+             <param name="id">request id</param>
+             <remarks>
+            
+             </remarks>
+             <returns>PO Request</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.DeleteVehicleRequest(System.Int64)">
+             <summary>
+             Delete PO Requests By Id
+             </summary>
+             <param name="id">request id</param>
+             <remarks>
+            
+             </remarks>
+             <returns>message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetCreatorVehicleRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
+             <summary>
+             Get All Vehicle Requests By Creator With Filter
+             </summary>
+             <param name="filterDto">filter information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All Created Vehicle Requests</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetReviewerVehicleRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
+             <summary>
+             Get All PO Requests By Reviewer With Filter
+             </summary>
+             <param name="filterDto">filter information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All Reviewer PO Requests</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.CreateVehicleRequest(EDocument_Data.DTOs.Requests.VehicleRequest.VehicleRequestCreateDto)">
+             <summary>
+             Create PO Request
+             </summary>
+             <param name="poRequestCreateDto">Po request Informarion</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.UpdateVehicleRequest(System.Int64,EDocument_Data.DTOs.Requests.VehicleRequest.VehicleRequestUpdateDto)">
+             <summary>
+             Update PO Request
+             </summary>
+             <param name="id">Po request Id</param>
+             <param name="poRequestUpdateDto">Po request Informarion</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.ApproveVehicleRequest(EDocument_Data.DTOs.Requests.RequestReviewer.RequestReviewerWriteDto)">
+             <summary>
+             Approve PO Request
+             </summary>
+             <param name="requestReviewerWriteDto">Approve Po Request</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.DeclineVehicleRequest(EDocument_Data.DTOs.Requests.RequestReviewer.RequestReviewerWriteDto)">
              <summary>
              Decline PO Request
              </summary>

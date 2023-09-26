@@ -4,7 +4,7 @@ using EDocument_Data;
 
 namespace EDocument_Data.DTOs.User
 {
-    public class LockedUserDto
+    public class LockedUserReadDto
     {
         public string Id { get; init; }
         public string UserName { get; init; }

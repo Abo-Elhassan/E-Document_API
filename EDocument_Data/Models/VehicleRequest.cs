@@ -17,7 +17,7 @@ namespace EDocument_Data.Models
 
         public DateTime DepartureDate { get; set; }
 
-        public DateTime RetrunDate { get; set; }
+        public DateTime ReturnDate { get; set; }
 
         public string LuggageDescription { get; set; }
 

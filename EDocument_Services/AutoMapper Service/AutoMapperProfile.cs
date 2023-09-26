@@ -5,6 +5,7 @@ using EDocument_Data.DTOs.Department;
 using EDocument_Data.DTOs.Requests;
 using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
+using EDocument_Data.DTOs.Requests.VehicleRequest;
 using EDocument_Data.DTOs.Section;
 using EDocument_Data.DTOs.User;
 using EDocument_Data.Models;
@@ -18,17 +19,13 @@ namespace EDocument_Services.AutoMapper_Service
         {
             CreateMap<CreateUserDto, User>();
             CreateMap<UserWriteDto, User>();
-            CreateMap<User, SearchUserDto>();
-            CreateMap<User, LockedUserDto>();
+            CreateMap<User, UserReadSearchDto>()
+                .ForMember(dest => dest.Department, src => src.MapFrom(opts => opts.Department.DepartmentName))
+                .ForMember(dest => dest.Section, src => src.MapFrom(opts => opts.Section.SectionName));
+            CreateMap<User, LockedUserReadDto>();
             CreateMap<User, UserReadDto>()
-                .ForMember(
-                dest => dest.DepartmentName,
-                src => src.MapFrom(
-                    opts => opts.Department.DepartmentName))
-                .ForMember(
-                dest => dest.SectionName,
-                src => src.MapFrom(
-                    opts => opts.Section.SectionName))
+                .ForMember( dest => dest.DepartmentName,src => src.MapFrom(opts => opts.Department.DepartmentName))
+                .ForMember(  dest => dest.SectionName, src => src.MapFrom( opts => opts.Section.SectionName))
                 .ForMember(dest => dest.Roles, opt => opt.Ignore()).ReverseMap();
             CreateMap<Department, DepartmentReadDto>();
 
@@ -81,6 +78,17 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<DefinedRequestReviewer, RequestReviewer>()
                 .ForMember(dest => dest.RequestId, src => src.Ignore())
                 .ForMember(dest => dest.Status, src => src.MapFrom(opts => RequestStatus.Pending.ToString()));
+
+
+
+            CreateMap<VehicleRequest, VehicleRequestReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Justification))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments)); 
         }
     }
 }

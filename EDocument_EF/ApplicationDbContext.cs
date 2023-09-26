@@ -1036,7 +1036,9 @@ namespace EDocument_EF
             #region Add Roles Permissions
             builder.Entity<DefinedRequestRole>().HasData(
              new DefinedRequestRole { RoleId = "6826ac7e-b4ae-47ff-8bf6-cc904db43d84", DefinedRequestId = 1, Permission = RequestPermission.Request },
-             new DefinedRequestRole { RoleId = "121c1742-99e7-4b61-ab2f-f748876e2975", DefinedRequestId = 1, Permission = RequestPermission.Review }
+             new DefinedRequestRole { RoleId = "121c1742-99e7-4b61-ab2f-f748876e2975", DefinedRequestId = 1, Permission = RequestPermission.Review },
+              new DefinedRequestRole { RoleId = "04cd21f1-113b-477e-a517-7dcb1ea8a024", DefinedRequestId = 3, Permission = RequestPermission.Request },
+              new DefinedRequestRole { RoleId = "04cd21f1-113b-477e-a517-7dcb1ea8a024", DefinedRequestId = 3, Permission = RequestPermission.Review }
             );
             #endregion
 

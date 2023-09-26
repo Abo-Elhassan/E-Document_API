@@ -16,7 +16,9 @@ namespace EDocument_EF.Configurations
 
             entity.HasKey(e => e.RequestNumber);
 
-          
+            entity.Property(e => e.RequestNumber)
+            .ValueGeneratedNever();
+
 
             entity.Property(e => e.BeneficiaryId)
             .IsRequired()
@@ -32,12 +34,11 @@ namespace EDocument_EF.Configurations
             .IsRequired()
             .HasMaxLength(200);
 
-            entity.Property(e => e.BeneficiaryPostion)
+            entity.Property(e => e.BeneficiaryPosition)
             .HasMaxLength(200);
 
-            entity.Property(e => e.BeneficiaryPhone)
-            .HasMaxLength(50)
-            .IsRequired();
+            entity.Property(e => e.BeneficiaryPhoneNumber)
+            .HasMaxLength(50);
 
             entity.Property(e => e.BeneficiaryExtention)
             .HasMaxLength(50);
@@ -53,7 +54,7 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.DepartureDate)
             .HasColumnType("smalldatetime");
 
-            entity.Property(e => e.RetrunDate)
+            entity.Property(e => e.ReturnDate)
             .HasColumnType("smalldatetime");
 
             entity.Property(e => e.LuggageDescription)

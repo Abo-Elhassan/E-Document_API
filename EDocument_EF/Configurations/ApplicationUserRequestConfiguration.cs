@@ -30,12 +30,11 @@ namespace EDocument_EF.Configurations
             .IsRequired()
             .HasMaxLength(200);
 
-            entity.Property(e => e.BeneficiaryPostion)
+            entity.Property(e => e.BeneficiaryPosition)
             .HasMaxLength(200);
 
-            entity.Property(e => e.BeneficiaryPhone)
-            .HasMaxLength(50)
-            .IsRequired();
+            entity.Property(e => e.BeneficiaryPhoneNumber)
+            .HasMaxLength(50);
 
             entity.Property(e => e.BeneficiaryExtention)
             .HasMaxLength(50);

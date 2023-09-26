@@ -14,14 +14,15 @@ namespace EDocument_EF.Configurations
 
             entity.ToTable(nameof(DefinedRequestRole));
 
-            entity.HasKey(e => new { e.RoleId, e.DefinedRequestId });
+            entity.HasKey(e => new { e.RoleId, e.DefinedRequestId ,e.Permission});
       
 
             entity.Property(e => e.RoleId)
             .HasMaxLength(450);
 
             entity.Property(e => e.Permission)
-            .HasConversion<string>();
+            .HasConversion<string>()
+            .HasMaxLength(450);
 
             entity.Property(e => e.CreatedAt)
            .HasColumnType("smalldatetime");

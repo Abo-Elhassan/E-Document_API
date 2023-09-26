@@ -47,6 +47,9 @@ namespace EDocument_API.Controllers.V1
             _unitOfWork = unitOfWork;
         }
 
+
+
+
         /// <summary>
         /// Get All Users With Filter
         /// </summary>
@@ -58,8 +61,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<UserReadDto>>))]
         [HttpPost("Filter")]
-        [Authorize(Roles = "Finance,Procurement")]
-        public async Task<ActionResult> GetFiltered(FilterWriteDto filterDto)
+        public async Task<ActionResult> GetFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetFiltered from {nameof(UserController)}");
             var includes = new string[] { nameof(Department), nameof(Section) };
@@ -67,7 +69,7 @@ namespace EDocument_API.Controllers.V1
             (int TotalCount, IEnumerable<User> PaginatedData) result;
 
 
-            if (filterDto.Filters!=null)
+            if (filterDto?.Filters!=null)
             {
                 result = await _unitOfWork.Repository<User>().FindAllAsync(
                 filters: filterDto?.Filters,
@@ -80,13 +82,13 @@ namespace EDocument_API.Controllers.V1
                 );
 
             }
-            else if (filterDto.FilterValue != null)
+            else if (filterDto?.FilterValue != null)
             {
                 result = await _unitOfWork.Repository<User>().FindAllAsync(
                 filterValue: filterDto?.FilterValue,
                 includes: includes,
-                skip: (filterDto?.PageNo - 1) * filterDto?.PageSize,
-                take: filterDto?.PageSize,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
                 orderBy: filterDto?.orderBy,
                 orderByDirection: filterDto?.orderByDirection,
                 dateFilters: filterDto?.dateFilters
@@ -97,8 +99,8 @@ namespace EDocument_API.Controllers.V1
                 result = await _unitOfWork.Repository<User>().FindAllAsync(
                 filters: filterDto?.Filters,
                 includes: includes,
-                skip: (filterDto?.PageNo - 1) * filterDto?.PageSize,
-                take: filterDto?.PageSize,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
                 orderBy: filterDto?.orderBy,
                 orderByDirection: filterDto?.orderByDirection,
                 dateFilters: filterDto?.dateFilters
@@ -137,8 +139,6 @@ namespace EDocument_API.Controllers.V1
 
 
 
-
-
         /// <summary>
         /// Get All Filtered Users by Id/FullName
         /// </summary>
@@ -147,29 +147,56 @@ namespace EDocument_API.Controllers.V1
         ///
         /// </remarks>
         /// <returns>List of Filtered Users</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<SearchUserDto>>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<UserReadSearchDto>>))]
         [HttpGet("Search")]
         public async Task<ActionResult> Search(string? searchValue)
         {
             _logger.LogInformation($"Start Search from {nameof(UserController)} for searchValue = {searchValue} ");
 
-
-            var users = new List<SearchUserDto>();
+ 
+            var users = new List<UserReadSearchDto>();
             if (string.IsNullOrEmpty(searchValue))
             {
-                users = await _userManager.Users.Select(u=>new SearchUserDto { Id = u.Id, FullName = u.FullName }).ToListAsync();
+                users = await _userManager.Users.Include(t=>t.Department).Include(t=>t.Section).Select(u=>new UserReadSearchDto 
+                {
+                    Id = u.Id,
+                    FullName = u.FullName,
+                    Email =u.Email ,
+                    PhoneNumber = u.PhoneNumber,
+                    Postion=u.Position,
+                    Department=u.Department.DepartmentName,
+                    Section=u.Section.SectionName
+                }).ToListAsync();
                
             }
             else if (int.TryParse(searchValue, out int result) || searchValue.Contains("Exp-"))
             {
-                users = await _userManager.Users.Where(u => u.Id.Contains(searchValue)).Select(u => new SearchUserDto { Id = u.Id, FullName = u.FullName }).ToListAsync();
+                users = await _userManager.Users.Include(t => t.Department).Include(t => t.Section).Where(u => u.Id.Contains(searchValue)).Select(u => new UserReadSearchDto
+                {
+                    Id = u.Id,
+                    FullName = u.FullName,
+                    Email = u.Email,
+                    PhoneNumber = u.PhoneNumber,
+                    Postion = u.Position,
+                    Department = u.Department.DepartmentName,
+                    Section = u.Section.SectionName
+                }).ToListAsync();
 
             }
             else
             {
-                users = await _userManager.Users.Where(u => u.FullName.Contains(searchValue)).Select(u => new SearchUserDto { Id = u.Id, FullName = u.FullName }).ToListAsync();
+                users = await _userManager.Users.Include(t => t.Department).Include(t => t.Section).Where(u => u.FullName.Contains(searchValue)).Select(u => new UserReadSearchDto
+                {
+                    Id = u.Id,
+                    FullName = u.FullName,
+                    Email = u.Email,
+                    PhoneNumber = u.PhoneNumber,
+                    Postion = u.Position,
+                    Department = u.Department.DepartmentName,
+                    Section = u.Section.SectionName
+                }).ToListAsync();
             }
-            return Ok(new ApiResponse<List<SearchUserDto>> { StatusCode = (int)HttpStatusCode.OK, Details = users });
+            return Ok(new ApiResponse<List<UserReadSearchDto>> { StatusCode = (int)HttpStatusCode.OK, Details = users });
         }
 
 
@@ -257,6 +284,15 @@ namespace EDocument_API.Controllers.V1
             if (user == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"user: ({userRoleDto.UserId}) not found" });
 
+            foreach (var role in userRoleDto.Roles)
+            {
+                if (!_roleManager.RoleExistsAsync(role).Result)
+                {
+                    return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Role: '{role}' not found" });
+                }
+            }
+
+
             var userRoles = await _userManager.GetRolesAsync(user);
 
             var removeResult = await _userManager.RemoveFromRolesAsync(user, userRoles);
@@ -305,16 +341,16 @@ namespace EDocument_API.Controllers.V1
         /// </remarks>
         /// <returns>List of locked users</returns>
 
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<LockedUserDto>>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<LockedUserReadDto>>))]
         [HttpGet("Locked")]
         public async Task<ActionResult> GetLockedUsers()
         {
             _logger.LogInformation($"Start GetLockedUsers from {nameof(UserController)}");
             var lockedUsers = await _userManager.Users.Where(u => u.LockoutEnabled).ToListAsync();
 
-            var dispalyedLockedUsers = _mapper.Map<List<User>, List<LockedUserDto>>(lockedUsers);
+            var dispalyedLockedUsers = _mapper.Map<List<User>, List<LockedUserReadDto>>(lockedUsers);
 
-            return Ok(new ApiResponse<List<LockedUserDto>> { StatusCode = (int)HttpStatusCode.OK, Details = dispalyedLockedUsers });
+            return Ok(new ApiResponse<List<LockedUserReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = dispalyedLockedUsers });
         }
 
         /// <summary>
