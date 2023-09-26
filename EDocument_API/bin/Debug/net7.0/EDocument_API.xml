@@ -116,17 +116,17 @@
         </member>
         <member name="M:EDocument_API.Controllers.V1.RequestController.GetVehicleRequestById(System.Int64)">
              <summary>
-             Get PO Requests By Id
+             Get Vehicle Requests By Id
              </summary>
              <param name="id">request id</param>
              <remarks>
             
              </remarks>
-             <returns>PO Request</returns>
+             <returns>Vehicle Request</returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.RequestController.DeleteVehicleRequest(System.Int64)">
              <summary>
-             Delete PO Requests By Id
+             Delete Vehicle Requests By Id
              </summary>
              <param name="id">request id</param>
              <remarks>
@@ -146,19 +146,19 @@
         </member>
         <member name="M:EDocument_API.Controllers.V1.RequestController.GetReviewerVehicleRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
              <summary>
-             Get All PO Requests By Reviewer With Filter
+             Get All Vehicle Requests By Reviewer With Filter
              </summary>
              <param name="filterDto">filter information</param>
              <remarks>
             
              </remarks>
-             <returns>List of All Reviewer PO Requests</returns>
+             <returns>List of All Reviewer Vehicle Requests</returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.RequestController.CreateVehicleRequest(EDocument_Data.DTOs.Requests.VehicleRequest.VehicleRequestCreateDto)">
              <summary>
-             Create PO Request
+             Create Vehicle Request
              </summary>
-             <param name="poRequestCreateDto">Po request Informarion</param>
+             <param name="poRequestCreateDto">Vehicle request Informarion</param>
              <remarks>
             
              </remarks>
@@ -166,10 +166,10 @@
         </member>
         <member name="M:EDocument_API.Controllers.V1.RequestController.UpdateVehicleRequest(System.Int64,EDocument_Data.DTOs.Requests.VehicleRequest.VehicleRequestUpdateDto)">
              <summary>
-             Update PO Request
+             Update Vehicle Request
              </summary>
              <param name="id">Po request Id</param>
-             <param name="poRequestUpdateDto">Po request Informarion</param>
+             <param name="poRequestUpdateDto">Vehicle request Informarion</param>
              <remarks>
             
              </remarks>
@@ -177,9 +177,9 @@
         </member>
         <member name="M:EDocument_API.Controllers.V1.RequestController.ApproveVehicleRequest(EDocument_Data.DTOs.Requests.RequestReviewer.RequestReviewerWriteDto)">
              <summary>
-             Approve PO Request
+             Approve Vehicle Request
              </summary>
-             <param name="requestReviewerWriteDto">Approve Po Request</param>
+             <param name="requestReviewerWriteDto">Approve Vehicle Request</param>
              <remarks>
             
              </remarks>
@@ -187,9 +187,9 @@
         </member>
         <member name="M:EDocument_API.Controllers.V1.RequestController.DeclineVehicleRequest(EDocument_Data.DTOs.Requests.RequestReviewer.RequestReviewerWriteDto)">
              <summary>
-             Decline PO Request
+             Decline Vehicle Request
              </summary>
-             <param name="requestReviewerWriteDto">Decline Po Request</param>
+             <param name="requestReviewerWriteDto">Decline Vehicle Request</param>
              <remarks>
             
              </remarks>

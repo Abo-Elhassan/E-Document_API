@@ -42,12 +42,12 @@ namespace EDocument_Data.DTOs.Requests.VehicleRequest
         public string DestinationAddress { get; init; }
         public DateTime DepartureDate { get; init; }
         public DateTime ReturnDate { get; init; }
-        public string LuggageDescription { get; init; }
-        public string VehicleType { get; set; }
+        public string? LuggageDescription { get; init; }
+        public string? VehicleType { get; set; }
 
         public List<AttachmentReadDto> Attachments { get; set; }
 
-        public string CreatedBy { get; init; }
+        public string? CreatedBy { get; init; }
         public DateTime? CreatedAt { get; init; }
         public DateTime? ModifiedAt { get; init; }
 

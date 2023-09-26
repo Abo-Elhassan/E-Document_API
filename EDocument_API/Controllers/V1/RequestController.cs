@@ -161,7 +161,7 @@ namespace EDocument_API.Controllers.V1
 
             if (request.Status == RequestStatus.Approved.ToString()|| request.Status==RequestStatus.Declined.ToString())
             {
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete this request after as it has been already approved" });
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
 
             }
             else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
@@ -702,13 +702,13 @@ namespace EDocument_API.Controllers.V1
         #region Vehicle Request
 
         /// <summary>
-        /// Get PO Requests By Id
+        /// Get Vehicle Requests By Id
         /// </summary>
         /// <param name="id">request id</param>
         /// <remarks>
         ///
         /// </remarks>
-        /// <returns>PO Request</returns>
+        /// <returns>Vehicle Request</returns>
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<VehicleRequestReadDto>))]
         [HttpGet("Vehicle/{id}")]
@@ -728,15 +728,14 @@ namespace EDocument_API.Controllers.V1
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
             var result = _mapper.Map<VehicleRequestReadDto>(poRequest);
-            //result.InvoiceAttachment = _mapper.Map<AttachmentReadDto>(poRequest.InvoiceAttachmentPath);
-            //result.PoAttachment = _mapper.Map<AttachmentReadDto>(poRequest.PoAttachmentPath);
+
 
 
             return Ok(new ApiResponse<VehicleRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
         /// <summary>
-        /// Delete PO Requests By Id
+        /// Delete Vehicle Requests By Id
         /// </summary>
         /// <param name="id">request id</param>
         /// <remarks>
@@ -750,7 +749,7 @@ namespace EDocument_API.Controllers.V1
         {
             _logger.LogInformation($"Start DeletePoRequest from {nameof(RequestController)} for request id = {id}");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            var includes = new string[] { "PoRequest", "Attachments", "RequestReviewers" };
+            var includes = new string[] { "VehicleRequest", "Attachments", "RequestReviewers" };
 
             var request = await _unitOfWork.Repository<Models.Request>().FindRequestAsync(
             requestId: id,
@@ -763,7 +762,7 @@ namespace EDocument_API.Controllers.V1
 
             if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
             {
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete this request after as it has been already approved" });
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
 
             }
             else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
@@ -772,14 +771,14 @@ namespace EDocument_API.Controllers.V1
 
             }
 
-            request.PoRequest.ModifiedBy = user?.FullName;
+            request.VehicleRequest.ModifiedBy = user?.FullName;
             request.ModifiedBy = user?.FullName;
             _unitOfWork.Complete();
 
             _unitOfWork.Repository<Models.Request>().Delete(request);
             _unitOfWork.Complete();
 
-            _fileService.DeleteFolder($@"PoRequest\{id}");
+            _fileService.DeleteFolder($@"VehicleRequest\{id}");
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
         }
@@ -852,13 +851,13 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
-        /// Get All PO Requests By Reviewer With Filter
+        /// Get All Vehicle Requests By Reviewer With Filter
         /// </summary>
         /// <param name="filterDto">filter information</param>
         /// <remarks>
         ///
         /// </remarks>
-        /// <returns>List of All Reviewer PO Requests</returns>
+        /// <returns>List of All Reviewer Vehicle Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<VehicleRequestReviewerReadDto>>))]
         [HttpPost("Vehicle/AssignedToMe")]
         [Authorize]
@@ -929,9 +928,9 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
-        /// Create PO Request
+        /// Create Vehicle Request
         /// </summary>
-        /// <param name="poRequestCreateDto">Po request Informarion</param>
+        /// <param name="poRequestCreateDto">Vehicle request Informarion</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -1034,10 +1033,10 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
-        /// Update PO Request
+        /// Update Vehicle Request
         /// </summary>
         /// <param name="id">Po request Id</param>
-        /// <param name="poRequestUpdateDto">Po request Informarion</param>
+        /// <param name="poRequestUpdateDto">Vehicle request Informarion</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -1183,9 +1182,9 @@ namespace EDocument_API.Controllers.V1
 
 
         /// <summary>
-        /// Approve PO Request
+        /// Approve Vehicle Request
         /// </summary>
-        /// <param name="requestReviewerWriteDto">Approve Po Request</param>
+        /// <param name="requestReviewerWriteDto">Approve Vehicle Request</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -1237,9 +1236,9 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
-        /// Decline PO Request
+        /// Decline Vehicle Request
         /// </summary>
-        /// <param name="requestReviewerWriteDto">Decline Po Request</param>
+        /// <param name="requestReviewerWriteDto">Decline Vehicle Request</param>
         /// <remarks>
         ///
         /// </remarks>
