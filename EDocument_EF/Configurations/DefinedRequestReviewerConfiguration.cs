@@ -11,13 +11,14 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<DefinedRequestReviewer> entity)
         {
-            entity.HasKey(e => new { e.DefinedRequestId, e.AssignedReviewerId });
+            entity.HasKey(e => e.Id);
 
             entity.ToTable(nameof(DefinedRequestReviewer));
 
 
             entity.Property(e => e.AssignedReviewerId)
-            .HasMaxLength(50);
+            .HasMaxLength(50)
+            .IsRequired(false);
 
             entity.Property(e => e.DelegatedReviewerId)
             .IsRequired(false)

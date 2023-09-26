@@ -14,7 +14,7 @@ namespace EDocument_Data.Consts.Enums
         Procurement,
         IT,
         Security,
-        Adminstration,
+        Administration,
         Store,
         CustomerService,
         OperationCT,

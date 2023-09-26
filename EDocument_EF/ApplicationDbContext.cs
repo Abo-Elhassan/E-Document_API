@@ -1013,33 +1013,33 @@ namespace EDocument_EF
             #endregion Section
 
             #region Defined Request
-            builder.Entity<DefinedRequest>().HasData(
-                new DefinedRequest { Id = 1, RequestName = "PO", RouteName = "/Procurement/PO/", ReviewersNumber = 1, DepartmentId = 16 }
-                );
+            //builder.Entity<DefinedRequest>().HasData(
+            //    new DefinedRequest { Id = 1, RequestName = "PO", RouteName = "/Procurement/PO/", ReviewersNumber = 1, DepartmentId = 16 }
+            //    );
             #endregion
 
             #region Defined Request Reviewers
-            builder.Entity<DefinedRequestReviewer>().HasData(
-                new DefinedRequestReviewer { DefinedRequestId = 1, AssignedReviewerId = "51124", StageName = "Finance Reviewer", StageNumber = 1, ReviewerType = ReviewerType.Basic }
-                );
+            //builder.Entity<DefinedRequestReviewer>().HasData(
+            //    new DefinedRequestReviewer { DefinedRequestId = 1, AssignedReviewerId = "51124", StageName = "Finance Reviewer", StageNumber = 1, ReviewerType = ReviewerType.Basic }
+            //    );
             #endregion
 
             #region Add Users Roles
 
-            builder.Entity<IdentityUserRole<string>>().HasData(
-              new IdentityUserRole<string> { UserId = "51188", RoleId = "6826ac7e-b4ae-47ff-8bf6-cc904db43d84" },
-              new IdentityUserRole<string> { UserId = "51124", RoleId = "121c1742-99e7-4b61-ab2f-f748876e2975" }
-              );
+            //builder.Entity<IdentityUserRole<string>>().HasData(
+            //  new IdentityUserRole<string> { UserId = "51188", RoleId = "6826ac7e-b4ae-47ff-8bf6-cc904db43d84" },
+            //  new IdentityUserRole<string> { UserId = "51124", RoleId = "121c1742-99e7-4b61-ab2f-f748876e2975" }
+            //  );
 
             #endregion
 
             #region Add Roles Permissions
-            builder.Entity<DefinedRequestRole>().HasData(
-             new DefinedRequestRole { RoleId = "6826ac7e-b4ae-47ff-8bf6-cc904db43d84", DefinedRequestId = 1, Permission = RequestPermission.Request },
-             new DefinedRequestRole { RoleId = "121c1742-99e7-4b61-ab2f-f748876e2975", DefinedRequestId = 1, Permission = RequestPermission.Review },
-              new DefinedRequestRole { RoleId = "04cd21f1-113b-477e-a517-7dcb1ea8a024", DefinedRequestId = 3, Permission = RequestPermission.Request },
-              new DefinedRequestRole { RoleId = "04cd21f1-113b-477e-a517-7dcb1ea8a024", DefinedRequestId = 3, Permission = RequestPermission.Review }
-            );
+            //builder.Entity<DefinedRequestRole>().HasData(
+            // new DefinedRequestRole { RoleId = "6826ac7e-b4ae-47ff-8bf6-cc904db43d84", DefinedRequestId = 1, Permission = RequestPermission.Request },
+            // new DefinedRequestRole { RoleId = "121c1742-99e7-4b61-ab2f-f748876e2975", DefinedRequestId = 1, Permission = RequestPermission.Review },
+            //  new DefinedRequestRole { RoleId = "04cd21f1-113b-477e-a517-7dcb1ea8a024", DefinedRequestId = 3, Permission = RequestPermission.Request },
+            //  new DefinedRequestRole { RoleId = "04cd21f1-113b-477e-a517-7dcb1ea8a024", DefinedRequestId = 3, Permission = RequestPermission.Review }
+            //);
             #endregion
 
             #endregion Seeding
