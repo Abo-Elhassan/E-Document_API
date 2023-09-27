@@ -158,7 +158,7 @@
              <summary>
              Create Vehicle Request
              </summary>
-             <param name="poRequestCreateDto">Vehicle request Informarion</param>
+             <param name="vehicleRequestCreateDto">Vehicle request Informarion</param>
              <remarks>
             
              </remarks>
@@ -169,7 +169,7 @@
              Update Vehicle Request
              </summary>
              <param name="id">Po request Id</param>
-             <param name="poRequestUpdateDto">Vehicle request Informarion</param>
+             <param name="vehicleRequestUpdateDto">Vehicle request Informarion</param>
              <remarks>
             
              </remarks>
@@ -233,6 +233,16 @@
              </remarks>
              <returns>List of Sections</returns>
         </member>
+        <member name="M:EDocument_API.Controllers.V1.UserController.GetUserRolesById(System.String)">
+             <summary>
+             Get User By Id
+             </summary>
+             <param name="id">user information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All Users</returns>
+        </member>
         <member name="M:EDocument_API.Controllers.V1.UserController.GetFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
              <summary>
              Get All Users With Filter
@@ -274,7 +284,7 @@
              </remarks>
              <returns>message</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.UserController.ManageUserRoles(EDocument_Data.DTOs.User.UserRoleDto)">
+        <member name="M:EDocument_API.Controllers.V1.UserController.ManageUserRoles(EDocument_Data.DTOs.User.UserRoleWriteDto)">
              <summary>
              Add/Edit User Roles
              </summary>

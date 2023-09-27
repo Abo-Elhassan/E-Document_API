@@ -45,6 +45,9 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<RequestReviewer, RequestReviewerReadDto>()
               .ForMember(dest => dest.AssignedReviewerId, src => src.MapFrom(opts => opts.AssignedReviewerId));
+            CreateMap<DefinedRequestReviewer, RequestReviewer>()
+              .ForMember(dest => dest.RequestId, src => src.Ignore())
+              .ForMember(dest => dest.Status, src => src.MapFrom(opts => RequestStatus.Pending.ToString()));
 
             CreateMap<PoRequest, PoRequestReadDto>()
                 .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
@@ -75,9 +78,7 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<PoRequestUpdateDto, PoRequest>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-            CreateMap<DefinedRequestReviewer, RequestReviewer>()
-                .ForMember(dest => dest.RequestId, src => src.Ignore())
-                .ForMember(dest => dest.Status, src => src.MapFrom(opts => RequestStatus.Pending.ToString()));
+
 
 
 
@@ -99,6 +100,13 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
                 .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments))
                 .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<VehicleRequestCreateDto, VehicleRequest>();
+            CreateMap<VehicleRequestUpdateDto, Request>()
+                .ForMember(dest => dest.Attachments, src => src.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<VehicleRequestUpdateDto, VehicleRequest>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

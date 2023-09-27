@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
@@ -62,7 +63,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 reviewersDetails.Add(stageDetails);
             }
 
-            return reviewersDetails;
+            return reviewersDetails.OrderBy(r=>r.StageNumber).ToList();
         }
 
         public async Task<string> GetAllRequestReviewersEmailsByStageNumberAsync(long requestId, int stageNumber)
@@ -84,7 +85,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
           
 
 
-            var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr => dr.DefinedRequest).FirstOrDefaultAsync(r => r.Id == requestId);
+            var request = await _context.Requests.Include(r => r.RequestReviewers).FirstOrDefaultAsync(r => r.Id == requestId);
             _mapper.Map(definedRequestReviewers, request?.RequestReviewers);
             var firstReviewer = request?.RequestReviewers.FirstOrDefault(rr => rr.StageNumber == 1);
 
@@ -96,15 +97,15 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 switch (firstReviewer.ReviewerType)
                 {
                     case ReviewerType.DirectManager:
-                        firstReviewer.AssignedReviewerId = _userRepository.FindDirectManagerByIdAsync(firstReviewer.AssignedReviewerId)?.Result.Value.Id;
+                        firstReviewer.AssignedReviewerId = _userRepository.FindDirectManagerByIdAsync(request.CreatorId)?.Result.Value.Id;
                         break;
 
                     case ReviewerType.SectionHead:
-                        firstReviewer.AssignedReviewerId = _userRepository.FindSectionHeadByIdAsync(firstReviewer.AssignedReviewerId)?.Result.Value.Id;
+                        firstReviewer.AssignedReviewerId = _userRepository.FindSectionHeadByIdAsync(request.CreatorId)?.Result.Value.Id;
                         break;
 
                     case ReviewerType.DepartmentManager:
-                        firstReviewer.AssignedReviewerId = _userRepository.FindDepartmentManagerByIdAsync(firstReviewer.AssignedReviewerId)?.Result.Value.Id;
+                        firstReviewer.AssignedReviewerId = _userRepository.FindDepartmentManagerByIdAsync(request.CreatorId)?.Result.Value.Id;
                         break;
 
                     default:

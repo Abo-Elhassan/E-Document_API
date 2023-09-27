@@ -9,7 +9,7 @@ namespace EDocument_Data.Models.Shared
 {
     public class BaseRequest : BaseEntity
     {
-        public long RequestNumber { get; set; }
+        public string RequestNumber { get; set; }
 
         public string BeneficiaryId { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using EDocument_Data.DTOs;
 using EDocument_Data.DTOs.Filter;
 using EDocument_Data.DTOs.Requests;
@@ -48,7 +49,44 @@ namespace EDocument_API.Controllers.V1
         }
 
 
+        /// <summary>
+        /// Get User By Id
+        /// </summary>
+        /// <param name="id">user information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All Users</returns>
 
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<UserRoleReadDto>))]
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetUserRolesById(string id)
+        {
+            _logger.LogInformation($"Start GetUserRolesById from {nameof(UserController)}");
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "User Not found" });
+
+
+            var roles = await _roleManager.Roles.ToListAsync();
+
+            var userRoles = new UserRoleReadDto
+            {
+                UserId = id,
+                Roles = roles.Select(role => new RoleReadDto
+                {
+                    RoleId = role.Id,
+                    RoleName = role.Name!,
+                    IsGranted = _userManager.IsInRoleAsync(user, role.Name!).Result
+                }).ToList()
+            };
+         
+
+            return Ok(new ApiResponse<UserRoleReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = userRoles });
+
+        }
 
         /// <summary>
         /// Get All Users With Filter
@@ -69,7 +107,7 @@ namespace EDocument_API.Controllers.V1
             (int TotalCount, IEnumerable<User> PaginatedData) result;
 
 
-            if (filterDto?.Filters!=null)
+            if (filterDto?.Filters != null)
             {
                 result = await _unitOfWork.Repository<User>().FindAllAsync(
                 filters: filterDto?.Filters,
@@ -117,24 +155,20 @@ namespace EDocument_API.Controllers.V1
             foreach (var user in users)
             {
                 var mappedUser = _mapper.Map<User>(user);
-                user.Roles = roles.Select(role => new RoleReadDto
-                {
-                    RoleId = role.Id,
-                    RoleName = role.Name!,
-                    IsGranted = _userManager.IsInRoleAsync(mappedUser, role.Name!).Result
-                }).ToList();
+                var userRoles = await _userManager.GetRolesAsync(mappedUser);
+                user.Roles = string.Join(",", userRoles);
             }
 
             var response = new FilterReadDto<UserReadDto>
-            {
-                TotalCount = totalCount,
-                TotalPages = totalPages,
-                CurrentPage = filterDto?.PageNo ?? 1,
-                PageSize = users.Count,
-                PaginatedData = users
-            };
+                {
+                    TotalCount = totalCount,
+                    TotalPages = totalPages,
+                    CurrentPage = filterDto?.PageNo ?? 1,
+                    PageSize = users.Count,
+                    PaginatedData = users
+                };
+                         
             return Ok(new ApiResponse<FilterReadDto<UserReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
-        
         }
 
 
@@ -275,7 +309,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Role")]
-        public async Task<ActionResult> ManageUserRoles(UserRoleDto userRoleDto)
+        public async Task<ActionResult> ManageUserRoles(UserRoleWriteDto userRoleDto)
         {
             _logger.LogInformation($"Start ManageUserRoles from {nameof(UserController)} for {JsonSerializer.Serialize(userRoleDto)} ");
 

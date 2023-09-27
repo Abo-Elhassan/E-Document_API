@@ -23,27 +23,27 @@ namespace EDocument_Data.DTOs.Requests.VehicleRequest
         public string Justification { get; init; }
         public string CreatorId { get; init; }
 
-        public long RequestNumber { get; set; }
+        public long RequestNumber { get; init; }
 
-        public string BeneficiaryId { get; set; }
+        public string BeneficiaryId { get; init; }
 
-        public string BeneficiaryName { get; set; }
+        public string BeneficiaryName { get; init; }
 
-        public string BeneficiaryEmail { get; set; }
+        public string BeneficiaryEmail { get; init; }
 
-        public string BeneficiaryPosition { get; set; }
+        public string BeneficiaryPosition { get; init; }
 
-        public string BeneficiaryDepartment { get; set; }
+        public string BeneficiaryDepartment { get; init; }
 
-        public string BeneficiaryPhoneNumber { get; set; }
+        public string BeneficiaryPhoneNumber { get; init; }
 
-        public string BeneficiaryExtention { get; set; }
+        public string BeneficiaryExtention { get; init; }
         public string DepartureAddress { get; init; }
         public string DestinationAddress { get; init; }
         public DateTime DepartureDate { get; init; }
         public DateTime ReturnDate { get; init; }
         public string? LuggageDescription { get; init; }
-        public string? VehicleType { get; set; }
+        public string? VehicleType { get; init; }
 
         public List<AttachmentReadDto> Attachments { get; set; }
 

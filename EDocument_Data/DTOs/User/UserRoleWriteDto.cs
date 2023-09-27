@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EDocument_Data.DTOs.User
 {
-    public class UserRoleDto
+    public class UserRoleWriteDto
     {
         [Required]
         public required string UserId { get; init; }

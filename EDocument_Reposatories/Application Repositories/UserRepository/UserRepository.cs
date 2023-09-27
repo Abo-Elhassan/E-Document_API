@@ -2,6 +2,7 @@
 using EDocument_EF;
 using EDocument_Reposatories.Generic_Reposatories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +26,9 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
 
         public async Task<(string Id, string Email)?> FindDepartmentManagerByIdAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.Users.Include(x=>x.Department).FirstOrDefaultAsync(u=>u.Id==id);
 
-            if (user is null|| user.Department.ManagerId is null || GetUserEmailByIdAsync(user.Department.Manager.Id).Result is null)  return null;
+            if (user is null|| user.Department.ManagerId is null || GetUserEmailByIdAsync(user.Department.ManagerId).Result is null)  return null;
 
             string managerId = user.Department.ManagerId;
             string managerEmail = await GetUserEmailByIdAsync(user.Department.Manager.Id) ??"";
@@ -39,9 +40,9 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
         {
             var user = await _userManager.FindByIdAsync(id);
 
-            if (user is null || user.Manager.ManagerId is null || GetUserEmailByIdAsync(user.Manager.Id).Result is null) return null;
+            if (user is null || GetUserEmailByIdAsync(user.Manager.Id).Result is null) return null;
 
-            string managerId = user.Manager.ManagerId;
+            string managerId = user.ManagerId;
             string managerEmail = await GetUserEmailByIdAsync(user.Manager.Id) ?? "";
 
             return (managerId, managerEmail);
@@ -49,9 +50,9 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
 
         public async Task<(string Id, string Email)?> FindSectionHeadByIdAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.Users.Include(x => x.Section).FirstOrDefaultAsync(u => u.Id == id);
 
-            if (user is null || user.Section.HeadId is null || GetUserEmailByIdAsync(user.Section.Head.Id).Result is null) return null;
+            if (user is null || user.Section.HeadId is null || GetUserEmailByIdAsync(user.Section.HeadId).Result is null) return null;
 
             string managerId = user.Section.HeadId;
             string managerEmail = await GetUserEmailByIdAsync(user.Section.Head.Id) ?? "";

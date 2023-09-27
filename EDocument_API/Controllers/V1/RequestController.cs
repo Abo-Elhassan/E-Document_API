@@ -343,7 +343,7 @@ namespace EDocument_API.Controllers.V1
         public async Task<ActionResult> CreatePoRequest([FromForm] PoRequestCreateDto poRequestCreateDto)
         {
             
-            _logger.LogInformation($"Start Create from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestCreateDto)} ");
+            _logger.LogInformation($"Start CreatePoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestCreateDto)} ");
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
             var requestNo = $"PO-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
@@ -364,7 +364,6 @@ namespace EDocument_API.Controllers.V1
 
             request.CreatorId = user?.Id;
             request.PoRequest.CreatedBy = user?.FullName;
-            request.CurrentStage = 1;
             request.CreatedBy = user?.FullName;
             request.PoRequest.CreatedBy = user?.FullName;
 
@@ -448,7 +447,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Procurement")]
         public async Task<ActionResult> UpdatePoRequest(long id, [FromForm]PoRequestUpdateDto poRequestUpdateDto)
         {
-            _logger.LogInformation($"Start Update from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestUpdateDto)} ");
+            _logger.LogInformation($"Start UpdatePoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestUpdateDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Models.Request, bool>> requestRxpression = (r => r.Id == id);
 
@@ -595,7 +594,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Finance")]
         public async Task<ActionResult> ApprovePoRequest(RequestReviewerWriteDto requestReviewerWriteDto)
         {
-            _logger.LogInformation($"Start Approve from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            _logger.LogInformation($"Start ApprovePoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user!.FullName);
@@ -649,7 +648,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Finance")]
         public async Task<ActionResult> DeclinePoRequest(RequestReviewerWriteDto requestReviewerWriteDto)
         {
-            _logger.LogInformation($"Start Decline from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            _logger.LogInformation($"Start DeclinePoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
 
@@ -715,7 +714,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize]
         public async Task<ActionResult> GetVehicleRequestById(long id)
         {
-            _logger.LogInformation($"Start GetPoRequestById from {nameof(RequestController)} for request id = {id}");
+            _logger.LogInformation($"Start GetVehicleRequestById from {nameof(RequestController)} for request id = {id}");
 
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             var poRequest = await _unitOfWork.Repository<VehicleRequest>().FindRequestAsync(
@@ -747,7 +746,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize]
         public async Task<ActionResult> DeleteVehicleRequest(long id)
         {
-            _logger.LogInformation($"Start DeletePoRequest from {nameof(RequestController)} for request id = {id}");
+            _logger.LogInformation($"Start DeleteVehicleRequest from {nameof(RequestController)} for request id = {id}");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var includes = new string[] { "VehicleRequest", "Attachments", "RequestReviewers" };
 
@@ -863,7 +862,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize]
         public async Task<ActionResult> GetReviewerVehicleRequestsFiltered(FilterWriteDto? filterDto)
         {
-            _logger.LogInformation($"Start GetReviewerPoRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            _logger.LogInformation($"Start GetReviewerVehicleRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             string? userCondition = null;
 
@@ -930,7 +929,7 @@ namespace EDocument_API.Controllers.V1
         /// <summary>
         /// Create Vehicle Request
         /// </summary>
-        /// <param name="poRequestCreateDto">Vehicle request Informarion</param>
+        /// <param name="vehicleRequestCreateDto">Vehicle request Informarion</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -939,39 +938,37 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Vehicle/Create")]
         [Authorize]
-        public async Task<ActionResult> CreateVehicleRequest([FromForm] VehicleRequestCreateDto poRequestCreateDto)
+        public async Task<ActionResult> CreateVehicleRequest([FromForm] VehicleRequestCreateDto vehicleRequestCreateDto)
         {
 
-            _logger.LogInformation($"Start Create from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestCreateDto)} ");
+            _logger.LogInformation($"Start CreateVehicleRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(vehicleRequestCreateDto)} ");
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
-            var requestNo = $"PO-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
+            var requestNo = $"Vehicle-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            var request = new Models.Request { Id = requestId, DefinedRequestId = poRequestCreateDto.DefinedRequestId };
+            var request = new Models.Request { Id = requestId, DefinedRequestId = vehicleRequestCreateDto.DefinedRequestId };
 
-            request.Justification = poRequestCreateDto.Remarks;
-            //request.PoRequest = _mapper.Map<VehicleRequest>(poRequestCreateDto);
-            //request.PoRequest.RequestNumber = requestNo;
-            //request.PoRequest.PoAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{requestId}", poRequestCreateDto.PoAttachment);
-            //request.PoRequest.InvoiceAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{requestId}", poRequestCreateDto.InvoiceAttachment);
+            request.Justification = vehicleRequestCreateDto.Justification;
+            request.VehicleRequest = _mapper.Map<VehicleRequest>(vehicleRequestCreateDto);
+            request.VehicleRequest.RequestNumber = requestNo;
 
-            if (poRequestCreateDto.Attachments != null && poRequestCreateDto.Attachments.Count > 0)
+
+            if (vehicleRequestCreateDto.Attachments != null && vehicleRequestCreateDto.Attachments.Count > 0)
             {
-                request.Attachments = _fileService.UploadAttachments(requestId, $@"PoRequest\{requestId}", poRequestCreateDto.Attachments, user.FullName);
+                request.Attachments = _fileService.UploadAttachments(requestId, $@"VehicleRequest\{requestId}", vehicleRequestCreateDto.Attachments, user.FullName);
             }
-
+            
             request.CreatorId = user?.Id;
-            request.PoRequest.CreatedBy = user?.FullName;
-            request.CurrentStage = 1;
+            request.VehicleRequest.CreatedBy = user?.FullName;
             request.CreatedBy = user?.FullName;
-            request.PoRequest.CreatedBy = user?.FullName;
+            request.VehicleRequest.CreatedBy = user?.FullName;
 
             _unitOfWork.Repository<Models.Request>().Add(request);
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(poRequestCreateDto.DefinedRequestId, requestId);
+            await _requestReviewerRepository.BeginRequestCycle(vehicleRequestCreateDto.DefinedRequestId, requestId);
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
 
@@ -980,7 +977,7 @@ namespace EDocument_API.Controllers.V1
             //{
             //    Body = $"""
             //    Dear {user.FullName.Split(" ")[0]},
-            //        Kindly not that your Po Request  for PO Number {request.PoRequest.PoNumber} on eDocuement has been created successfully and it's under reviewing now.
+            //        Kindly not that your Vehicle Request on eDocuement has been created successfully and it's under reviewing now.
             //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with you request Status. 
 
             //        - eDocument Request Reference No.: {requestNo}
@@ -991,7 +988,7 @@ namespace EDocument_API.Controllers.V1
 
             //    """,
             //    IsHTMLBody = false,
-            //    Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+            //    Subject = $"Vehicle Request No. {requestNo} on eDocuement",
             //    To = user.Email
             //};
 
@@ -1004,14 +1001,8 @@ namespace EDocument_API.Controllers.V1
             //{
             //    Body = $"""
             //    Dears,
-            //        Kindly note that {user.FullName} has created Po Request for PO Number ({request.PoRequest.PoNumber}) on eDocuement and need to be reviewed from your side.
+            //        Kindly note that {user.FullName} has created Vehicle Request for on eDocuement and need to be reviewed from your side.
 
-            //        Request Details:
-
-            //        - PO Number: {request.PoRequest.PoNumber}
-            //        - Invoice Number: {request.PoRequest.InvoiceNumber}
-            //        - Vendor Name: {request.PoRequest.VendorName}
-            //        - Vendor Number: {request.PoRequest.VendorNumber}
             //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
 
             //        - eDocument Request Reference No.: {requestNo}
@@ -1021,7 +1012,7 @@ namespace EDocument_API.Controllers.V1
             //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
             //    """,
             //    IsHTMLBody = false,
-            //    Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+            //    Subject = $"Vehicle Request No. {requestNo} on eDocuement",
             //    To = reviewersEmails
             //};
 
@@ -1036,7 +1027,7 @@ namespace EDocument_API.Controllers.V1
         /// Update Vehicle Request
         /// </summary>
         /// <param name="id">Po request Id</param>
-        /// <param name="poRequestUpdateDto">Vehicle request Informarion</param>
+        /// <param name="vehicleRequestUpdateDto">Vehicle request Informarion</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -1045,14 +1036,14 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Vehicle/Update/{id}")]
         [Authorize]
-        public async Task<ActionResult> UpdateVehicleRequest(long id, [FromForm] VehicleRequestUpdateDto poRequestUpdateDto)
+        public async Task<ActionResult> UpdateVehicleRequest(long id, [FromForm] VehicleRequestUpdateDto vehicleRequestUpdateDto)
         {
-            _logger.LogInformation($"Start Update from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestUpdateDto)} ");
+            _logger.LogInformation($"Start UpdateVehicleRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(vehicleRequestUpdateDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Models.Request, bool>> requestRxpression = (r => r.Id == id);
 
 
-            var request = await _unitOfWork.Repository<Models.Request>().FindAsync(requestRxpression, new string[] { "PoRequest", "Attachments" });
+            var request = await _unitOfWork.Repository<Models.Request>().FindAsync(requestRxpression, new string[] { "VehicleRequest", "Attachments" });
 
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
@@ -1060,37 +1051,17 @@ namespace EDocument_API.Controllers.V1
             if (request.Status != RequestStatus.Declined.ToString())
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update request information during reviewing proccess" });
 
-            var oldPoAttachmentPath = request.PoRequest.PoAttachmentPath;
-            var oldInvoiceAtachmentPath = request.PoRequest.InvoiceAttachmentPath;
             var oldAttachments = request.Attachments;
 
-            request.Justification = poRequestUpdateDto.Remarks;
-            _mapper.Map(poRequestUpdateDto, request);
-            _mapper.Map(poRequestUpdateDto, request.PoRequest);
-
-            if (poRequestUpdateDto.PoAttachment == null)
-            {
-                request.PoRequest.PoAttachmentPath = oldPoAttachmentPath;
-            }
-            else
-            {
-                _fileService.DeleteFile(oldPoAttachmentPath);
-                request.PoRequest.PoAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{request.Id}", poRequestUpdateDto.PoAttachment);
-            }
-
-            if (poRequestUpdateDto.InvoiceAttachment == null)
-            {
-                request.PoRequest.InvoiceAttachmentPath = oldInvoiceAtachmentPath;
-            }
-            else
-            {
-                _fileService.DeleteFile(oldInvoiceAtachmentPath);
-                request.PoRequest.InvoiceAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{request.Id}", poRequestUpdateDto.InvoiceAttachment);
-            }
+            request.Justification = vehicleRequestUpdateDto.Justification;
+            _mapper.Map(vehicleRequestUpdateDto, request);
+            _mapper.Map(vehicleRequestUpdateDto, request.VehicleRequest);
 
 
 
-            if (poRequestUpdateDto.Attachments == null || poRequestUpdateDto.Attachments.Count == 0)
+
+
+            if (vehicleRequestUpdateDto.Attachments == null || vehicleRequestUpdateDto.Attachments.Count == 0)
             {
                 request.Attachments = oldAttachments;
             }
@@ -1108,13 +1079,13 @@ namespace EDocument_API.Controllers.V1
                     _fileService.DeleteFile(oldAttachment.FilePath);
                 }
 
-                request.Attachments = _fileService.UploadAttachments(request.Id, $@"PoRequest\{request.Id}", poRequestUpdateDto.Attachments, user.FullName);
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"VehicleRequest\{request.Id}", vehicleRequestUpdateDto.Attachments, user.FullName);
             }
 
 
 
-            request.PoRequest.ModifiedAt = DateTime.Now;
-            request.PoRequest.ModifiedBy = user?.FullName;
+            request.VehicleRequest.ModifiedAt = DateTime.Now;
+            request.VehicleRequest.ModifiedBy = user?.FullName;
             request.ModifiedBy = user?.FullName;
 
             var result = _unitOfWork.Complete();
@@ -1129,10 +1100,10 @@ namespace EDocument_API.Controllers.V1
             //{
             //    Body = $"""
             //    Dear {user.FullName.Split(" ")[0]},
-            //        Kindly not that your Po Request  for PO Number {request.PoRequest.PoNumber} on eDocuement has been created successfully and it's under reviewing now.
+            //        Kindly not that your Vehicle Request on eDocuement has been created successfully and it's under reviewing now.
             //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with you request Status. 
 
-            //        - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
+            //        - eDocument Request Reference No.: {requestNo}
 
             //    Thanks,
 
@@ -1140,36 +1111,31 @@ namespace EDocument_API.Controllers.V1
 
             //    """,
             //    IsHTMLBody = false,
-            //    Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+            //    Subject = $"Vehicle Request No. {requestNo} on eDocuement",
             //    To = user.Email
             //};
 
             //_mailService.SendMailAsync(creatorMailContent);
 
 
-            //var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(id, request.CurrentStage);
-            //var reviewerMailContent = new MailContent
+
+            //var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId,request.CurrentStage);
+            //var reviewerMailContent =  new MailContent
             //{
             //    Body = $"""
             //    Dears,
-            //        Kindly note that {user.FullName} has created Po Request for PO Number ({request.PoRequest.PoNumber}) on eDocuement and need to be reviewed from your side.
+            //        Kindly note that {user.FullName} has created Vehicle Request for on eDocuement and need to be reviewed from your side.
 
-            //        Request Details:
-
-            //        - PO Number: {request.PoRequest.PoNumber}
-            //        - Invoice Number: {request.PoRequest.InvoiceNumber}
-            //        - Vendor Name: {request.PoRequest.VendorName}
-            //        - Vendor Number: {request.PoRequest.VendorNumber}
             //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
 
-            //        - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
+            //        - eDocument Request Reference No.: {requestNo}
 
             //    Thanks,
 
             //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
             //    """,
             //    IsHTMLBody = false,
-            //    Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
+            //    Subject = $"Vehicle Request No. {requestNo} on eDocuement",
             //    To = reviewersEmails
             //};
 
@@ -1194,42 +1160,68 @@ namespace EDocument_API.Controllers.V1
         [Authorize]
         public async Task<ActionResult> ApproveVehicleRequest(RequestReviewerWriteDto requestReviewerWriteDto)
         {
-            _logger.LogInformation($"Start Approve from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            _logger.LogInformation($"Start ApproveVehicleRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user!.FullName);
 
             #region Send Emails
-
-
             //Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
-            //var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PoRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
-
-
-            //var requestCreator = request.Creator;
-            //var requestCreatorDirectManager = request.Creator.Manager;
-            //var requestCreatorDepartmentManager = request.Creator.Department.Manager;
-            //var creatorMailContent = new MailContent
+            //var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "VehicleRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
+            //if (request?.Status==RequestStatus.Approved.ToString())
             //{
-            //    Body = $"""
+            //    var requestCreator = request.Creator;
+            //    var requestCreatorDirectManager = request.Creator.Manager;
+            //    var requestCreatorDepartmentManager = request.Creator.Department.Manager;
+            //    var creatorMailContent = new MailContent
+            //    {
+            //        Body = $"""
             //    Dear {requestCreator.FullName.Split(" ")[0]},
-            //        Kindly not that your Po Request for PO Number {request.PoRequest.PoNumber} on eDocuement has been approved successfully by {user.FullName}.
+            //        Kindly not that your Vehicle Request {request.VehicleRequest.RequestNumber} on eDocuement has been approved successfully.
             //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
 
-            //        - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
+            //        - eDocument Request Reference No.: {request.VehicleRequest.RequestNumber}
 
             //    Thanks,
 
             //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
 
             //    """,
-            //    IsHTMLBody = false,
-            //    Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-            //    Cc = $"{requestCreatorDirectManager.Email};{requestCreatorDepartmentManager.Email}",
-            //    To = requestCreator.Email
-            //};
+            //        IsHTMLBody = false,
+            //        Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
+            //        To = requestCreator.Email
+            //    };
 
-            //_mailService.SendMailAsync(creatorMailContent);
+            //    _mailService.SendMailAsync(creatorMailContent);
+            //}
+            //else
+            //{
+            //    var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestReviewerWriteDto.RequestId, request.CurrentStage);
+            //    var reviewerMailContent = new MailContent
+            //    {
+            //        Body = $"""
+            //        Dears,
+            //            Kindly note that {user.FullName} has created Vehicle Request for on eDocuement and need to be reviewed from your side.
+
+            //            Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+
+            //            - eDocument Request Reference No.: {request.VehicleRequest.RequestNumber}
+
+            //        Thanks,
+
+            //        “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+            //        """,
+            //        IsHTMLBody = false,
+            //        Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
+            //        To = reviewersEmails
+            //    };
+
+            //    _mailService.SendMailAsync(reviewerMailContent);
+            //}
+
+
+
+
             #endregion
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
@@ -1248,7 +1240,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize]
         public async Task<ActionResult> DeclineVehicleRequest(RequestReviewerWriteDto requestReviewerWriteDto)
         {
-            _logger.LogInformation($"Start Decline from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            _logger.LogInformation($"Start DeclineVehicleRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
 
@@ -1258,7 +1250,7 @@ namespace EDocument_API.Controllers.V1
 
 
             //Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
-            //var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PoRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
+            //var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "VehicleRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
 
 
             //var requestCreator = request.Creator;
@@ -1268,10 +1260,10 @@ namespace EDocument_API.Controllers.V1
             //{
             //    Body = $"""
             //    Dear {requestCreator.FullName.Split(" ")[0]},
-            //        Kindly not that your Po Request for PO Number {request.PoRequest.PoNumber} on eDocuement has been declined by {user.FullName}.
+            //        Kindly not that your Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
             //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
 
-            //        - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
+            //        - eDocument Request Reference No.: {request.VehicleRequest.RequestNumber}
 
             //    Thanks,
 
@@ -1279,8 +1271,7 @@ namespace EDocument_API.Controllers.V1
 
             //    """,
             //    IsHTMLBody = false,
-            //    Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-            //    Cc = $"{requestCreatorDirectManager.Email};{requestCreatorDepartmentManager.Email}",
+            //    Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
             //    To = requestCreator.Email
             //};
 

@@ -23,6 +23,6 @@ namespace EDocument_Data.DTOs.User
         public  string? SectionName { get; init; }
         public  string? Company { get; init; }
 
-        public  List<RoleReadDto> Roles { get; set; }
+        public  string? Roles { get; set; }
     }
 }

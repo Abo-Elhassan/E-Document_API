@@ -10,28 +10,37 @@ namespace EDocument_Data.DTOs.Requests.VehicleRequest
 {
     public class VehicleRequestCreateDto
     {
+        [Required] 
+        public  string BeneficiaryId { get; init; }
         [Required]
-        [RegularExpression("^(SOK.PO.)[0-9]{2}-[0-9]+$")]
-        public  string PoNumber { get; init; }
+        public  string BeneficiaryName { get; init; }
 
-        public string PoDescription { get; init; }
+        public  string? BeneficiaryEmail { get; init; }
         [Required]
-        public  string VendorName { get; init; }
+        public string BeneficiaryPosition { get; init; }
         [Required]
-        public int VendorNumber { get; init; }
+        public string BeneficiaryDepartment { get; init; }
+
+        public string? BeneficiaryPhoneNumber { get; init; }
+
+        public string? BeneficiaryExtention { get; init; }
         [Required]
-        public  string InvoiceNumber { get; init; }
+        public string DepartureAddress { get; init; }
         [Required]
-        [FileValidation(2 * 1024 * 1024, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip")]
-        public  IFormFile PoAttachment { get; init; }
+        public string DestinationAddress { get; init; }
         [Required]
-        [FileValidation(2 * 1024 * 1024, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip")]
-        public IFormFile InvoiceAttachment { get; init; }
+        public DateTime DepartureDate { get; init; }
+        [Required]
+        public DateTime ReturnDate { get; init; }
+        [Required]
+        public string LuggageDescription { get; init; }
+        [Required]
+        public string VehicleType { get; init; }
 
         [FileValidation(10 * 1024 * 1024,true, ".pdf", ".docx", ".xlsx", ".xls",".csv",".rar",".zip")]
         public List<IFormFile>? Attachments { get; set; }
-
-        public string? Remarks { get; set; }
+        [Required]
+        public string Justification { get; set; }
 
         [Required]
         public long DefinedRequestId { get; init; }
