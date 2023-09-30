@@ -52,14 +52,14 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(200);
           
 
-            entity.Property(e => e.PaymentMethod).HasConversion<string>()
+            entity.Property(e => e.PaymentMethod)
             .HasMaxLength(50);
 
 
             entity.Property(e => e.CostAllocation)
             .IsRequired();
 
-            entity.Property(e => e.Currency).HasConversion<string>()
+            entity.Property(e => e.Currency)
             .IsRequired()
             .HasMaxLength(50);
 

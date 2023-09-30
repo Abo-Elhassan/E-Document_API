@@ -15,11 +15,11 @@ namespace EDocument_Data.Models
         public string RequestType { get; set; }
         public string BeneficiaryNationality { get; set; }
         public float CostAllocation { get; set; }
-        public Currency Currency { get; set; }
+        public string Currency { get; set; }
         public DateTime? CheckIn { get; set; }
         public DateTime? CheckOut { get; set; }
         public string MissionAddress { get; set; }
-        public PaymentMethod? PaymentMethod { get; set; }
+        public string PaymentMethod { get; set; }
         public string FlightOrigin { get; set; }
         public string FlightDestination { get; set; }
         public DateTime? DepartureDate { get; set; }

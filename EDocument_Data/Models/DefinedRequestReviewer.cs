@@ -10,7 +10,7 @@ namespace EDocument_Data.Models;
 
 public  class DefinedRequestReviewer : BaseEntity
 {
-    public long Id { get; set; }
+    public long Key { get; set; }
     public long DefinedRequestId { get; set; }
 
     public string AssignedReviewerId { get; set; }

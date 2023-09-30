@@ -16,17 +16,6 @@ namespace EDocument_Data.DTOs.Requests.VehicleRequest
 
         [Required]
         public string BeneficiaryId { get; init; }
-        [Required]
-        public string BeneficiaryName { get; init; }
-
-        public string? BeneficiaryEmail { get; init; }
-        [Required]
-        public string BeneficiaryPosition { get; init; }
-        [Required]
-        public string BeneficiaryDepartment { get; init; }
-
-        public string? BeneficiaryPhoneNumber { get; init; }
-
         public string? BeneficiaryExtention { get; init; }
         [Required]
         public string DepartureAddress { get; init; }

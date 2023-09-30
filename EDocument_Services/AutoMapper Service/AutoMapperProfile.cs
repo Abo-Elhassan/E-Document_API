@@ -5,10 +5,12 @@ using EDocument_Data.DTOs.Department;
 using EDocument_Data.DTOs.Requests;
 using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
+using EDocument_Data.DTOs.Requests.TravelDeskRequest;
 using EDocument_Data.DTOs.Requests.VehicleRequest;
 using EDocument_Data.DTOs.Section;
 using EDocument_Data.DTOs.User;
 using EDocument_Data.Models;
+using EDocument_Services.AutoMapper_Service.Converter;
 using EDocument_Services.AutoMapper_Service.Resolvers;
 
 namespace EDocument_Services.AutoMapper_Service
@@ -30,6 +32,13 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<Department, DepartmentReadDto>();
 
             CreateMap<Section, SectionReadDto>();
+
+            CreateMap<RequestStatus, string>()
+                .ConvertUsing(src => Enum.GetName(typeof(RequestStatus), src));
+            CreateMap<string, RequestStatus>()
+                .ConvertUsing(src => Enum.Parse<RequestStatus>(src));
+
+
 
             CreateMap<Request, RequestReadDto>();
             CreateMap<Attachment, AttachmentReadDto>()
@@ -106,6 +115,70 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.Attachments, src => src.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<VehicleRequestUpdateDto, VehicleRequest>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<User, VehicleRequest>()
+                .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
+                .ForMember(dest => dest.BeneficiaryName, src => src.MapFrom(opts => opts.FullName))
+                .ForMember(dest => dest.BeneficiaryEmail, src => src.MapFrom(opts => opts.Email))
+                .ForMember(dest => dest.BeneficiaryPosition, src => src.MapFrom(opts => opts.Position))
+                .ForMember(dest => dest.BeneficiaryDepartment, src => src.MapFrom(opts => opts.Department.DepartmentName))
+                .ForMember(dest => dest.BeneficiaryPhoneNumber, src => src.MapFrom(opts => opts.PhoneNumber));
+
+
+            CreateMap<User, TravelDeskRequest>()
+                .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
+                .ForMember(dest => dest.BeneficiaryName, src => src.MapFrom(opts => opts.FullName))
+                .ForMember(dest => dest.BeneficiaryEmail, src => src.MapFrom(opts => opts.Email))
+                .ForMember(dest => dest.BeneficiaryPosition, src => src.MapFrom(opts => opts.Position))
+                .ForMember(dest => dest.BeneficiaryDepartment, src => src.MapFrom(opts => opts.Department.DepartmentName))
+                .ForMember(dest => dest.BeneficiaryPhoneNumber, src => src.MapFrom(opts => opts.PhoneNumber));
+
+
+
+            CreateMap<List<TravelDeskRequisition>, string>()
+                .ConvertUsing(src => string.Join(",", src.Select(item => item.ToString())));
+
+            CreateMap<string, List<TravelDeskRequisition>>()
+              .ConvertUsing<StringToTravelDeskRequisitionListConverter>();
+
+            CreateMap<Currency, string>()
+                .ConvertUsing(src => Enum.GetName(typeof(Currency), src));
+            CreateMap<string, Currency>()
+                .ConvertUsing(src => Enum.Parse<Currency>(src));
+
+
+            CreateMap<PaymentMethod, string>()
+                .ConvertUsing(src => Enum.GetName(typeof(PaymentMethod), src));
+            CreateMap<string, PaymentMethod>()
+                .ConvertUsing(src => Enum.Parse<PaymentMethod>(src));
+
+
+
+            CreateMap<TravelDeskRequest, TravelDeskRequestReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Justification))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
+
+            CreateMap<TravelDeskRequest, TravelDeskRequestReviewerReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Justification))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments))
+                .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<TravelDeskRequestCreateDto, TravelDeskRequest>();
+            CreateMap<TravelDeskRequestUpdateDto, Request>()
+                .ForMember(dest => dest.Attachments, src => src.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<TravelDeskRequestUpdateDto, TravelDeskRequest>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }

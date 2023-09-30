@@ -11,7 +11,7 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<DefinedRequestReviewer> entity)
         {
-            entity.HasKey(e => e.Id);
+            entity.HasKey(e => e.Key);
 
             entity.ToTable(nameof(DefinedRequestReviewer));
 

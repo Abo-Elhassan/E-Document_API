@@ -195,6 +195,87 @@
              </remarks>
              <returns> message</returns>
         </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetTravelDeskRequestById(System.Int64)">
+             <summary>
+             Get TravelDesk Requests By Id
+             </summary>
+             <param name="id">request id</param>
+             <remarks>
+            
+             </remarks>
+             <returns>TravelDesk Request</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.DeleteTravelDeskRequest(System.Int64)">
+             <summary>
+             Delete TravelDesk Requests By Id
+             </summary>
+             <param name="id">request id</param>
+             <remarks>
+            
+             </remarks>
+             <returns>message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetCreatorTravelDeskRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
+             <summary>
+             Get All TravelDesk Requests By Creator With Filter
+             </summary>
+             <param name="filterDto">filter information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All Created TravelDesk Requests</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetReviewerTravelDeskRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
+             <summary>
+             Get All TravelDesk Requests By Reviewer With Filter
+             </summary>
+             <param name="filterDto">filter information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All Reviewer TravelDesk Requests</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.CreateTravelDeskRequest(EDocument_Data.DTOs.Requests.TravelDeskRequest.TravelDeskRequestCreateDto)">
+             <summary>
+             Create TravelDesk Request
+             </summary>
+             <param name="travelDeskRequestCreateDto">TravelDesk request Informarion</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.UpdateTravelDeskRequest(System.Int64,EDocument_Data.DTOs.Requests.TravelDeskRequest.TravelDeskRequestUpdateDto)">
+             <summary>
+             Update TravelDesk Request
+             </summary>
+             <param name="id">Po request Id</param>
+             <param name="travelDeskRequestUpdateDto">TravelDesk request Informarion</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.ApproveTravelDeskRequest(EDocument_Data.DTOs.Requests.RequestReviewer.RequestReviewerWriteDto)">
+             <summary>
+             Approve TravelDesk Request
+             </summary>
+             <param name="requestReviewerWriteDto">Approve TravelDesk Request</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.DeclineTravelDeskRequest(EDocument_Data.DTOs.Requests.RequestReviewer.RequestReviewerWriteDto)">
+             <summary>
+             Decline TravelDesk Request
+             </summary>
+             <param name="requestReviewerWriteDto">Decline TravelDesk Request</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
         <member name="M:EDocument_API.Controllers.V1.RoleController.Get">
              <summary>
              Get All E-Document Roles
