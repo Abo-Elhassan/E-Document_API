@@ -50,16 +50,54 @@ namespace EDocument_API.Controllers.V1
 
 
         /// <summary>
-        /// Get User By Id
+        /// Get User By user Id
         /// </summary>
         /// <param name="id">user information</param>
         /// <remarks>
         ///
         /// </remarks>
-        /// <returns>List of All Users</returns>
+        /// <returns>User Details</returns>
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<UserReadSearchDto>))]
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetUserById(string id)
+        {
+            _logger.LogInformation($"Start GetUserById from {nameof(UserController)} for userId = {id}");
+
+
+            var userDetails = await _userManager.Users.Include(t => t.Department).Include(t => t.Section).Select(u => new UserReadSearchDto
+            {
+                Id = u.Id,
+                FullName = u.FullName,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber,
+                Postion = u.Position,
+                Department = u.Department.DepartmentName,
+                Section = u.Section.SectionName
+            }).FirstOrDefaultAsync(u => u.Id == id);
+
+            if(userDetails == null) return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "User not found" });
+
+
+            return Ok(new ApiResponse<UserReadSearchDto> { StatusCode = (int)HttpStatusCode.OK, Details = userDetails });
+        }
+
+           
+
+      
+
+
+        /// <summary>
+        /// Get User Roles By user Id
+        /// </summary>
+        /// <param name="id">user roles information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All User roles</returns>
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<UserRoleReadDto>))]
-        [HttpGet("{id}")]
+        [HttpGet("Role/{id}")]
         public async Task<ActionResult> GetUserRolesById(string id)
         {
             _logger.LogInformation($"Start GetUserRolesById from {nameof(UserController)}");
@@ -173,6 +211,9 @@ namespace EDocument_API.Controllers.V1
 
 
 
+     
+
+
         /// <summary>
         /// Get All Filtered Users by Id/FullName
         /// </summary>
@@ -182,26 +223,26 @@ namespace EDocument_API.Controllers.V1
         /// </remarks>
         /// <returns>List of Filtered Users</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<UserReadSearchDto>>))]
-        [HttpGet("Search")]
+        [HttpGet("Search/{searchValue}")]
         public async Task<ActionResult> Search(string? searchValue)
         {
             _logger.LogInformation($"Start Search from {nameof(UserController)} for searchValue = {searchValue} ");
 
- 
+
             var users = new List<UserReadSearchDto>();
             if (string.IsNullOrEmpty(searchValue))
             {
-                users = await _userManager.Users.Include(t=>t.Department).Include(t=>t.Section).Select(u=>new UserReadSearchDto 
+                users = await _userManager.Users.Include(t => t.Department).Include(t => t.Section).Select(u => new UserReadSearchDto
                 {
                     Id = u.Id,
                     FullName = u.FullName,
-                    Email =u.Email ,
+                    Email = u.Email,
                     PhoneNumber = u.PhoneNumber,
-                    Postion=u.Position,
-                    Department=u.Department.DepartmentName,
-                    Section=u.Section.SectionName
+                    Postion = u.Position,
+                    Department = u.Department.DepartmentName,
+                    Section = u.Section.SectionName
                 }).ToListAsync();
-               
+
             }
             else if (int.TryParse(searchValue, out int result) || searchValue.Contains("Exp-"))
             {
@@ -281,7 +322,7 @@ namespace EDocument_API.Controllers.V1
         {
             _logger.LogInformation($"Start Update from {nameof(UserController)} for {JsonSerializer.Serialize(userWriteDto.UserName)} ");
 
-            var user = _userManager.FindByIdAsync(id);
+            var user =await _userManager.FindByIdAsync(id);
 
             if (user == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"User '{id}' not found" });

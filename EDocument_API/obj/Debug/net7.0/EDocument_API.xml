@@ -233,15 +233,25 @@
              </remarks>
              <returns>List of Sections</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.UserController.GetUserRolesById(System.String)">
+        <member name="M:EDocument_API.Controllers.V1.UserController.GetUserById(System.String)">
              <summary>
-             Get User By Id
+             Get User By user Id
              </summary>
              <param name="id">user information</param>
              <remarks>
             
              </remarks>
-             <returns>List of All Users</returns>
+             <returns>User Details</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.UserController.GetUserRolesById(System.String)">
+             <summary>
+             Get User Roles By user Id
+             </summary>
+             <param name="id">user roles information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All User roles</returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.UserController.GetFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
              <summary>

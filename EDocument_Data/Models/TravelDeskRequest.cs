@@ -12,7 +12,7 @@ namespace EDocument_Data.Models
 {
     public class TravelDeskRequest : BaseRequest
     {
-        public List<TravelDeskRequisition> RequestTypes { get; set; }
+        public string RequestType { get; set; }
         public string BeneficiaryNationality { get; set; }
         public float CostAllocation { get; set; }
         public Currency Currency { get; set; }

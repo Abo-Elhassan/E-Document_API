@@ -92,12 +92,6 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.AccessFailedCount)
                 .HasDefaultValue(value: 0);
 
-            //entity.Ignore(e => e.EmailConfirmed);
-            //entity.Ignore(e => e.PhoneNumberConfirmed);
-            //entity.Ignore(e => e.TwoFactorEnabled);
-            //entity.Ignore(e => e.LockoutEnd);
-
-
             entity.HasOne(d => d.Department).WithMany(p => p.Employees)
             .HasForeignKey(d => d.DepartmentId)
             .OnDelete(DeleteBehavior.Restrict)

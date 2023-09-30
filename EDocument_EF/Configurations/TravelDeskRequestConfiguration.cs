@@ -46,20 +46,11 @@ namespace EDocument_EF.Configurations
             .IsRequired()
             .HasMaxLength(50);
 
-            entity.Property(item => item.RequestTypes)
-            .HasConversion(
-                requestTypes => string.Join(',', requestTypes.Select(r => r.ToString())),
-                requestTypeString => requestTypeString.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .Select(s => Enum.Parse<TravelDeskRequisition>(s))
-                .ToList()
-            )
+            entity.Property(item => item.RequestType)
+
             .IsRequired()
-            .HasMaxLength(200)
-            .Metadata.SetValueComparer(new ValueComparer<List<TravelDeskRequisition>>(
-                 (c1, c2) => c1.SequenceEqual(c2),
-                 c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                 c => c.ToList()
-            ));
+            .HasMaxLength(200);
+          
 
             entity.Property(e => e.PaymentMethod).HasConversion<string>()
             .HasMaxLength(50);
