@@ -82,10 +82,6 @@ namespace EDocument_API.Controllers.V1
             return Ok(new ApiResponse<UserReadSearchDto> { StatusCode = (int)HttpStatusCode.OK, Details = userDetails });
         }
 
-           
-
-      
-
 
         /// <summary>
         /// Get User Roles By user Id
@@ -100,7 +96,7 @@ namespace EDocument_API.Controllers.V1
         [HttpGet("Role/{id}")]
         public async Task<ActionResult> GetUserRolesById(string id)
         {
-            _logger.LogInformation($"Start GetUserRolesById from {nameof(UserController)}");
+            _logger.LogInformation($"Start GetUserRolesById from {nameof(UserController)}  for userId = {id}");
 
             var user = await _userManager.FindByIdAsync(id);
 
@@ -139,7 +135,7 @@ namespace EDocument_API.Controllers.V1
         [HttpPost("Filter")]
         public async Task<ActionResult> GetFiltered(FilterWriteDto? filterDto)
         {
-            _logger.LogInformation($"Start GetFiltered from {nameof(UserController)}");
+            _logger.LogInformation($"Start GetFiltered from {nameof(UserController)}  with filter: {JsonSerializer.Serialize(filterDto)}");
             var includes = new string[] { nameof(Department), nameof(Section) };
 
             (int TotalCount, IEnumerable<User> PaginatedData) result;
@@ -208,10 +204,6 @@ namespace EDocument_API.Controllers.V1
                          
             return Ok(new ApiResponse<FilterReadDto<UserReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
         }
-
-
-
-     
 
 
         /// <summary>
