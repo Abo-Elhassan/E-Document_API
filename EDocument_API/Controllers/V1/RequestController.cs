@@ -1312,9 +1312,9 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<TravelDeskRequestEditReadDto>))]
         [HttpGet("TravelDesk/{id}")]
         [Authorize]
-        public async Task<ActionResult> GetTravelDeskRequestForEditById(long id)
+        public async Task<ActionResult> GetTravelDeskRequestById(long id)
         {
-            _logger.LogInformation($"Start GetTravelDeskRequestForEditById from {nameof(RequestController)} for request id = {id}");
+            _logger.LogInformation($"Start GetTravelDeskRequestById from {nameof(RequestController)} for request id = {id}");
 
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             var travelDeskRequest = await _unitOfWork.Repository<TravelDeskRequest>().FindRequestAsync(
@@ -1333,38 +1333,7 @@ namespace EDocument_API.Controllers.V1
             return Ok(new ApiResponse<TravelDeskRequestEditReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
-        /// <summary>
-        /// Get TravelDesk Requests By for Details Id
-        /// </summary>
-        /// <param name="id">request id</param>
-        /// <remarks>
-        ///
-        /// </remarks>
-        /// <returns>TravelDesk Request</returns>
 
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<TravelDeskRequestDetailsReadDto>))]
-        [HttpGet("TravelDesk/Details/{id}")]
-        [Authorize]
-        public async Task<ActionResult> GetTravelDeskRequestForDetailsById(long id)
-        {
-            _logger.LogInformation($"Start GetTravelDeskRequestForDetailsById from {nameof(RequestController)} for request id = {id}");
-
-            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
-            var travelDeskRequest = await _unitOfWork.Repository<TravelDeskRequest>().FindRequestAsync(
-            requestId: id,
-            expression: "Request.Id==@0",
-            includes: includes
-            );
-
-            if (travelDeskRequest is null)
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
-
-            var result = _mapper.Map<TravelDeskRequestDetailsReadDto>(travelDeskRequest);
-
-
-
-            return Ok(new ApiResponse<TravelDeskRequestDetailsReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
-        }
 
         /// <summary>
         /// Delete TravelDesk Requests By Id
