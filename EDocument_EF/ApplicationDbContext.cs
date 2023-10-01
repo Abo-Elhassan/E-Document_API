@@ -1,5 +1,6 @@
 ﻿using EDocument_Data.Consts.Enums;
 using EDocument_Data.Models;
+using EDocument_Data.Models.Audit;
 using EDocument_Data.Models.Shared;
 using EDocument_EF.Configurations;
 using Microsoft.AspNetCore.Identity;
@@ -36,6 +37,29 @@ namespace EDocument_EF
         public virtual DbSet<VoucherRequest> VoucherRequests => Set<VoucherRequest>();
 
         public virtual DbSet<PoRequest> PoRequests => Set<PoRequest>();
+
+
+        #region Audit Tables
+
+        public virtual DbSet<AuditDefinedRequest> AuditDefinedRequests => Set<AuditDefinedRequest>();
+        public virtual DbSet<AuditDefinedRequestReviewer> AuditDefinedRequestReviewers => Set<AuditDefinedRequestReviewer>();
+        public virtual DbSet<AuditDefinedApplicationRole> AuditDefinedApplicationRoles => Set<AuditDefinedApplicationRole>();
+        public virtual DbSet<AuditDefinedRequestRole> AuditDefinedRequestRoles => Set<AuditDefinedRequestRole>();
+        public virtual DbSet<AuditDepartment> AuditDepartments => Set<AuditDepartment>();
+        public virtual DbSet<AuditSection> AuditSections => Set<AuditSection>();
+        public virtual DbSet<AuditUser> AuditUsers => Set<AuditUser>();
+        public virtual DbSet<AuditRole> AuditRoles => Set<AuditRole>();
+        public virtual DbSet<AuditRequest> AuditRequests => Set<AuditRequest>();
+        public virtual DbSet<AuditAttachment> AuditAttachments => Set<AuditAttachment>();
+        public virtual DbSet<AuditRequestReviewer> AuditRequestReviewers => Set<AuditRequestReviewer>();
+        public virtual DbSet<AuditDefinedApplication> AuditDefinedApplications => Set<AuditDefinedApplication>();
+        public virtual DbSet<AuditRequestApplicationRole> AuditRequestApplicationRoles => Set<AuditRequestApplicationRole>();
+        public virtual DbSet<AuditApplicationUserRequest> AuditApplicationUserRequests => Set<AuditApplicationUserRequest>();
+        public virtual DbSet<AuditDomainAccountRequest> AuditDomainAccountRequests => Set<AuditDomainAccountRequest>();
+        public virtual DbSet<AuditVehicleRequest> AuditVehicleRequests => Set<AuditVehicleRequest>();
+        public virtual DbSet<AuditTravelDeskRequest> AuditTravelDeskRequests => Set<AuditTravelDeskRequest>();   
+        public virtual DbSet<AuditVoucherRequest> AuditVoucherRequests => Set<AuditVoucherRequest>();
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -148,41 +172,62 @@ namespace EDocument_EF
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin", "security");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserToken", "security");
 
+            #region Audit
+            builder.Entity<AuditDefinedRequest>().ToTable(nameof(AuditDefinedRequest), "audit");
+            builder.Entity<AuditDefinedRequestReviewer>().ToTable(nameof(AuditDefinedRequestReviewer), "audit");
+            builder.Entity<AuditDefinedApplicationRole>().ToTable(nameof(AuditDefinedApplicationRole), "audit");
+            builder.Entity<AuditDefinedRequestRole>().ToTable(nameof(AuditDefinedRequestRole), "audit");
+            builder.Entity<AuditDepartment>().ToTable(nameof(AuditDepartment), "audit");
+            builder.Entity<AuditSection>().ToTable(nameof(AuditSection), "audit");
+            builder.Entity<AuditUser>().ToTable(nameof(AuditUser), "audit");
+            builder.Entity<AuditRole>().ToTable(nameof(AuditRole), "audit");
+            builder.Entity<AuditRequest>().ToTable(nameof(AuditRequest), "audit");
+            builder.Entity<AuditAttachment>().ToTable(nameof(AuditAttachment), "audit");
+            builder.Entity<AuditRequestReviewer>().ToTable(nameof(AuditRequestReviewer), "audit");
+            builder.Entity<AuditDefinedApplication>().ToTable(nameof(AuditDefinedApplication), "audit");
+            builder.Entity<AuditRequestApplicationRole>().ToTable(nameof(AuditRequestApplicationRole), "audit");
+            builder.Entity<AuditApplicationUserRequest>().ToTable(nameof(AuditApplicationUserRequest), "audit");
+            builder.Entity<AuditDomainAccountRequest>().ToTable(nameof(AuditDomainAccountRequest), "audit");
+            builder.Entity<AuditVehicleRequest>().ToTable(nameof(AuditVehicleRequest), "audit");
+            builder.Entity<AuditTravelDeskRequest>().ToTable(nameof(AuditTravelDeskRequest), "audit");
+            builder.Entity<AuditVoucherRequest>().ToTable(nameof(AuditVoucherRequest), "audit");
+
+            #endregion
             #region Seeding
 
-           #region Roles
-          //  var SuperAdminId = Guid.NewGuid().ToString();
-          //  var HRId = Guid.NewGuid().ToString();
-          //  var FinanceId = Guid.NewGuid().ToString();
-          //  var ProcurementId = Guid.NewGuid().ToString();
-          //  var ITId = Guid.NewGuid().ToString();
-          //  var SecurityId = Guid.NewGuid().ToString();
-          //  var AdminstrationId = Guid.NewGuid().ToString();
-          //  var StoreId = Guid.NewGuid().ToString();
-          //  var CustomerServiceId = Guid.NewGuid().ToString();
-          //  var OperationBGCId = Guid.NewGuid().ToString();
-          //  var OperationCTId = Guid.NewGuid().ToString();
-          //  var EngineeringId = Guid.NewGuid().ToString();
-          //  var CommercialId = Guid.NewGuid().ToString();
-          //  var CommunicationsId = Guid.NewGuid().ToString();
-          //  var InfoFortId = Guid.NewGuid().ToString();
-          //  builder.Entity<Role>().HasData(
-          //   new Role { Id = SuperAdminId, Name = ApplicationRole.SuperAdmin.ToString(), NormalizedName = ApplicationRole.SuperAdmin.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = HRId, Name = ApplicationRole.HR.ToString(), NormalizedName = ApplicationRole.HR.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = FinanceId, Name = ApplicationRole.Finance.ToString(), NormalizedName = ApplicationRole.Finance.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = ProcurementId, Name = ApplicationRole.Procurement.ToString(), NormalizedName = ApplicationRole.Procurement.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = ITId, Name = ApplicationRole.IT.ToString(), NormalizedName = ApplicationRole.IT.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = SecurityId, Name = ApplicationRole.Security.ToString(), NormalizedName = ApplicationRole.Security.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = AdminstrationId, Name = ApplicationRole.Adminstration.ToString(), NormalizedName = ApplicationRole.Adminstration.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = StoreId, Name = ApplicationRole.Store.ToString(), NormalizedName = ApplicationRole.Store.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = CustomerServiceId, Name = ApplicationRole.CustomerService.ToString(), NormalizedName = ApplicationRole.CustomerService.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = OperationBGCId, Name = ApplicationRole.OperationBGC.ToString(), NormalizedName = ApplicationRole.OperationBGC.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = OperationCTId, Name = ApplicationRole.OperationCT.ToString(), NormalizedName = ApplicationRole.OperationCT.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = EngineeringId, Name = ApplicationRole.Engineering.ToString(), NormalizedName = ApplicationRole.Engineering.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = CommercialId, Name = ApplicationRole.Commercial.ToString(), NormalizedName = ApplicationRole.Commercial.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = CommunicationsId, Name = ApplicationRole.Communications.ToString(), NormalizedName = ApplicationRole.Communications.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
-          //new Role { Id = InfoFortId, Name = ApplicationRole.InfoFort.ToString(), NormalizedName = ApplicationRole.InfoFort.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() }
-          //   );
+            #region Roles
+            //  var SuperAdminId = Guid.NewGuid().ToString();
+            //  var HRId = Guid.NewGuid().ToString();
+            //  var FinanceId = Guid.NewGuid().ToString();
+            //  var ProcurementId = Guid.NewGuid().ToString();
+            //  var ITId = Guid.NewGuid().ToString();
+            //  var SecurityId = Guid.NewGuid().ToString();
+            //  var AdminstrationId = Guid.NewGuid().ToString();
+            //  var StoreId = Guid.NewGuid().ToString();
+            //  var CustomerServiceId = Guid.NewGuid().ToString();
+            //  var OperationBGCId = Guid.NewGuid().ToString();
+            //  var OperationCTId = Guid.NewGuid().ToString();
+            //  var EngineeringId = Guid.NewGuid().ToString();
+            //  var CommercialId = Guid.NewGuid().ToString();
+            //  var CommunicationsId = Guid.NewGuid().ToString();
+            //  var InfoFortId = Guid.NewGuid().ToString();
+            //  builder.Entity<Role>().HasData(
+            //   new Role { Id = SuperAdminId, Name = ApplicationRole.SuperAdmin.ToString(), NormalizedName = ApplicationRole.SuperAdmin.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = HRId, Name = ApplicationRole.HR.ToString(), NormalizedName = ApplicationRole.HR.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = FinanceId, Name = ApplicationRole.Finance.ToString(), NormalizedName = ApplicationRole.Finance.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = ProcurementId, Name = ApplicationRole.Procurement.ToString(), NormalizedName = ApplicationRole.Procurement.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = ITId, Name = ApplicationRole.IT.ToString(), NormalizedName = ApplicationRole.IT.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = SecurityId, Name = ApplicationRole.Security.ToString(), NormalizedName = ApplicationRole.Security.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = AdminstrationId, Name = ApplicationRole.Adminstration.ToString(), NormalizedName = ApplicationRole.Adminstration.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = StoreId, Name = ApplicationRole.Store.ToString(), NormalizedName = ApplicationRole.Store.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = CustomerServiceId, Name = ApplicationRole.CustomerService.ToString(), NormalizedName = ApplicationRole.CustomerService.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = OperationBGCId, Name = ApplicationRole.OperationBGC.ToString(), NormalizedName = ApplicationRole.OperationBGC.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = OperationCTId, Name = ApplicationRole.OperationCT.ToString(), NormalizedName = ApplicationRole.OperationCT.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = EngineeringId, Name = ApplicationRole.Engineering.ToString(), NormalizedName = ApplicationRole.Engineering.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = CommercialId, Name = ApplicationRole.Commercial.ToString(), NormalizedName = ApplicationRole.Commercial.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = CommunicationsId, Name = ApplicationRole.Communications.ToString(), NormalizedName = ApplicationRole.Communications.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() },
+            //new Role { Id = InfoFortId, Name = ApplicationRole.InfoFort.ToString(), NormalizedName = ApplicationRole.InfoFort.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString() }
+            //   );
 
             #endregion Roles
 
