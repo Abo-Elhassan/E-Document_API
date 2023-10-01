@@ -24,7 +24,7 @@ namespace EDocument_Data.DTOs.Requests.TravelDeskRequest
         public string BeneficiaryPhoneNumber { get; init; }
         public string BeneficiaryExtention { get; init; }
         public string BeneficiaryNationality { get; init; }
-        public List<TravelDeskRequisition> RequestType { get; init; }
+
         public float CostAllocation { get; init; }
         public Currency Currency { get; init; }
         public DateTime? CheckIn { get; init; }
@@ -45,11 +45,23 @@ namespace EDocument_Data.DTOs.Requests.TravelDeskRequest
     
     }
 
-    public class TravelDeskRequestReviewerReadDto : TravelDeskRequestReadDto
+    public class TravelDeskRequestReviewerReadDto : TravelDeskRequestDetailsReadDto
     {
         public int? ReviewerStage { get; set; }
         public RequestStatus? ReviewerStatus { get; set; }
         public List<RequestReviewerReadDto>? RequestReviewers { get; set; }
 
+ 
+
     }
+    public class TravelDeskRequestEditReadDto : TravelDeskRequestReadDto
+    {
+        public List<TravelDeskRequisition> RequestType { get; init; }
+    }
+
+    public class TravelDeskRequestDetailsReadDto : TravelDeskRequestReadDto
+    {
+        public string RequestType { get; init; }
+    }
+
 }

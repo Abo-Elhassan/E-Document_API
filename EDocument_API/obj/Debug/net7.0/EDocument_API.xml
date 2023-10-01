@@ -195,9 +195,19 @@
              </remarks>
              <returns> message</returns>
         </member>
-        <member name="M:EDocument_API.Controllers.V1.RequestController.GetTravelDeskRequestById(System.Int64)">
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetTravelDeskRequestForEditById(System.Int64)">
              <summary>
-             Get TravelDesk Requests By Id
+             Get TravelDesk Requests By for Edit Id
+             </summary>
+             <param name="id">request id</param>
+             <remarks>
+            
+             </remarks>
+             <returns>TravelDesk Request</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetTravelDeskRequestForDetailsById(System.Int64)">
+             <summary>
+             Get TravelDesk Requests By for Details Id
              </summary>
              <param name="id">request id</param>
              <remarks>

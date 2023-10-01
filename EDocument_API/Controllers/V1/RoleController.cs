@@ -27,12 +27,14 @@ namespace EDocument_API.Controllers.V1
         private readonly RoleManager<Role> _roleManager;
         private readonly ILogger<RoleController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public RoleController(RoleManager<Role> roleManager, ILogger<RoleController> logger, ApplicationDbContext context)
+        public RoleController(RoleManager<Role> roleManager, ILogger<RoleController> logger, ApplicationDbContext context, UserManager<User> userManager)
         {
             _roleManager = roleManager;
             _logger = logger;
             _context = context;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace EDocument_API.Controllers.V1
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Role '{name}' already exists" });
 
 
-            var createResult = await _roleManager.CreateAsync(new Role { Id = Guid.NewGuid().ToString(), Name = name.ToLower() });
+            var createResult = await _roleManager.CreateAsync(new Role { Id = Guid.NewGuid().ToString(), Name = name.ToLower(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = _userManager.FindByNameAsync(User?.Identity?.Name)?.Result?.FullName});
             if (!createResult.Succeeded)
                 return BadRequest(new ApiResponse<IEnumerable<dynamic>> { StatusCode = (int)HttpStatusCode.BadRequest, Details = createResult.Errors });
 
@@ -101,7 +103,8 @@ namespace EDocument_API.Controllers.V1
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Role '{name}' not found" });
 
             var role = await _roleManager.FindByNameAsync(name);
-
+            role.ModifiedAt = DateTime.Now;
+            _context.SaveChanges();
             var deleteResult = await _roleManager.DeleteAsync(role);
             if (!deleteResult.Succeeded)
              return BadRequest(new ApiResponse<IEnumerable<dynamic>> { StatusCode = (int)HttpStatusCode.BadRequest, Details = deleteResult.Errors });

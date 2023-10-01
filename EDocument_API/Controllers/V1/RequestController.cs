@@ -1301,7 +1301,7 @@ namespace EDocument_API.Controllers.V1
         #region TravelDesk Request
 
         /// <summary>
-        /// Get TravelDesk Requests By Id
+        /// Get TravelDesk Requests By for Edit Id
         /// </summary>
         /// <param name="id">request id</param>
         /// <remarks>
@@ -1309,12 +1309,12 @@ namespace EDocument_API.Controllers.V1
         /// </remarks>
         /// <returns>TravelDesk Request</returns>
 
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<TravelDeskRequestReadDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<TravelDeskRequestEditReadDto>))]
         [HttpGet("TravelDesk/{id}")]
         [Authorize]
-        public async Task<ActionResult> GetTravelDeskRequestById(long id)
+        public async Task<ActionResult> GetTravelDeskRequestForEditById(long id)
         {
-            _logger.LogInformation($"Start GetTravelDeskRequestById from {nameof(RequestController)} for request id = {id}");
+            _logger.LogInformation($"Start GetTravelDeskRequestForEditById from {nameof(RequestController)} for request id = {id}");
 
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
             var travelDeskRequest = await _unitOfWork.Repository<TravelDeskRequest>().FindRequestAsync(
@@ -1326,11 +1326,44 @@ namespace EDocument_API.Controllers.V1
             if (travelDeskRequest is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
-            var result = _mapper.Map<TravelDeskRequestReadDto>(travelDeskRequest);
+            var result = _mapper.Map<TravelDeskRequestEditReadDto>(travelDeskRequest);
 
 
 
-            return Ok(new ApiResponse<TravelDeskRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+            return Ok(new ApiResponse<TravelDeskRequestEditReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+        }
+
+        /// <summary>
+        /// Get TravelDesk Requests By for Details Id
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>TravelDesk Request</returns>
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<TravelDeskRequestDetailsReadDto>))]
+        [HttpGet("TravelDesk/Details/{id}")]
+        [Authorize]
+        public async Task<ActionResult> GetTravelDeskRequestForDetailsById(long id)
+        {
+            _logger.LogInformation($"Start GetTravelDeskRequestForDetailsById from {nameof(RequestController)} for request id = {id}");
+
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            var travelDeskRequest = await _unitOfWork.Repository<TravelDeskRequest>().FindRequestAsync(
+            requestId: id,
+            expression: "Request.Id==@0",
+            includes: includes
+            );
+
+            if (travelDeskRequest is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            var result = _mapper.Map<TravelDeskRequestDetailsReadDto>(travelDeskRequest);
+
+
+
+            return Ok(new ApiResponse<TravelDeskRequestDetailsReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
         /// <summary>
@@ -1391,7 +1424,7 @@ namespace EDocument_API.Controllers.V1
         ///
         /// </remarks>
         /// <returns>List of All Created TravelDesk Requests</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<TravelDeskRequestReadDto>>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<TravelDeskRequestDetailsReadDto>>))]
         [HttpPost("TravelDesk/Inbox")]
         [Authorize]
         public async Task<ActionResult> GetCreatorTravelDeskRequestsFiltered(FilterWriteDto? filterDto)
@@ -1436,9 +1469,9 @@ namespace EDocument_API.Controllers.V1
             var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
 
-            var requests = _mapper.Map<List<TravelDeskRequestReadDto>>(result.PaginatedData);
+            var requests = _mapper.Map<List<TravelDeskRequestDetailsReadDto>>(result.PaginatedData);
 
-            var response = new FilterReadDto<TravelDeskRequestReadDto>
+            var response = new FilterReadDto<TravelDeskRequestDetailsReadDto>
             {
                 TotalCount = totalCount,
                 TotalPages = totalPages,
@@ -1446,7 +1479,7 @@ namespace EDocument_API.Controllers.V1
                 PageSize = requests.Count,
                 PaginatedData = requests
             };
-            return Ok(new ApiResponse<FilterReadDto<TravelDeskRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+            return Ok(new ApiResponse<FilterReadDto<TravelDeskRequestDetailsReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
         }
 
         /// <summary>

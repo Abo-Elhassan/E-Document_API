@@ -155,7 +155,17 @@ namespace EDocument_Services.AutoMapper_Service
 
 
 
-            CreateMap<TravelDeskRequest, TravelDeskRequestReadDto>()
+            CreateMap<TravelDeskRequest, TravelDeskRequestEditReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Justification))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
+
+
+            CreateMap<TravelDeskRequest, TravelDeskRequestDetailsReadDto>()
                 .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
                 .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
                 .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
