@@ -16,7 +16,7 @@ namespace EDocument_Data.Models.Audit
         public string? ModifiedBy { get; set; }
 
         public string TransactionType { get; set; }
-        public string Status { get; set; }
+        public string DataStatus { get; set; }
         public DateTime TimeStamp { get; set; }
     }
 }

@@ -1032,7 +1032,7 @@ namespace EDocument_API.Controllers.V1
         /// <summary>
         /// Update Vehicle Request
         /// </summary>
-        /// <param name="id">Po request Id</param>
+        /// <param name="id">Vehicle request Id</param>
         /// <param name="vehicleRequestUpdateDto">Vehicle request Informarion</param>
         /// <remarks>
         ///
@@ -1637,7 +1637,7 @@ namespace EDocument_API.Controllers.V1
         /// <summary>
         /// Update TravelDesk Request
         /// </summary>
-        /// <param name="id">Po request Id</param>
+        /// <param name="id">Travel Desk request Id</param>
         /// <param name="travelDeskRequestUpdateDto">TravelDesk request Informarion</param>
         /// <remarks>
         ///

@@ -14,36 +14,6 @@ namespace EDocument_EF.Migrations
             migrationBuilder.EnsureSchema(
                 name: "audit");
 
-            migrationBuilder.AddColumn<DateTime>(
-                name: "CreatedAt",
-                schema: "security",
-                table: "Role",
-                type: "datetime2",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "CreatedBy",
-                schema: "security",
-                table: "Role",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "ModifiedAt",
-                schema: "security",
-                table: "Role",
-                type: "datetime2",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "ModifiedBy",
-                schema: "security",
-                table: "Role",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
             migrationBuilder.CreateTable(
                 name: "AuditApplicationUserRequest",
                 schema: "audit",
@@ -55,8 +25,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RequestNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BeneficiaryId = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -87,8 +57,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -110,8 +80,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -133,8 +103,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -158,8 +128,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -185,8 +155,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -208,8 +178,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -232,8 +202,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -255,8 +225,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RequestNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BeneficiaryId = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -290,7 +260,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -312,8 +283,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -340,7 +311,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -359,8 +331,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Id = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -387,8 +359,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -421,8 +393,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RequestNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BeneficiaryId = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -461,8 +433,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Id = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -500,8 +472,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RequestNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BeneficiaryId = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -538,8 +510,8 @@ namespace EDocument_EF.Migrations
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Transaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -553,7 +525,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50000",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "79b9ada8-c09e-4713-878e-5c9103b605d5", "ef9566e4-c105-4471-ac59-c8f6c1513e60" });
+                values: new object[] { "08058637-5c78-4ee0-bf46-5289ce5a1d2a", "2115898c-b373-4dd3-942e-7afe6efbe475" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -561,7 +533,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50128",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "e6c2365b-ed7e-4268-8aaf-e39a790ea025", "a8f772b2-47d2-4b45-95e6-4a0ff8d6c5be" });
+                values: new object[] { "20fdd9e6-15fc-49a7-8b19-2448ed21bbf9", "227bba2b-b407-41be-9524-2b91048537af" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -569,7 +541,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50136",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "435bf1a4-b252-4988-92a5-e83a684fe5bb", "6cdf9a9f-2ed6-440d-a920-9ec6148107ce" });
+                values: new object[] { "9e4b7600-9e8e-4995-8294-d56d4ab91972", "9303e964-b5b0-4923-bf3b-1167d1a12567" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -577,7 +549,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50140",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "50f6a7f5-4712-48e6-9e6a-a6bc79bf4029", "01549ccc-8930-4f56-b170-d60fb88879c0" });
+                values: new object[] { "a343e06b-466d-4a56-b20b-0939f6bde527", "9a1ceef9-bb1f-41ca-a6eb-45bc95d8d757" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -585,7 +557,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50141",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "842884cc-7fd6-4f31-a326-ced177494353", "51cb3804-73b5-4c3d-81a5-53664f0b32f6" });
+                values: new object[] { "0e69d77a-bece-4fd5-8353-a3ea90ce46c6", "0d694f20-68d4-474a-85f0-cad6e322aa11" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -593,7 +565,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50263",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "543459e6-bae1-4108-a2e2-b85672b07081", "cac19094-e5ac-4a83-a4ac-c1b38e06b639" });
+                values: new object[] { "8e837158-4181-4d63-b995-c2d0cfb14797", "2f383b06-7418-4b37-a4a9-09976907bdd9" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -601,7 +573,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50269",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "9e157227-0c71-437f-9fdd-735d5a65d157", "10363024-0a7f-4069-98cd-8a3d921324de" });
+                values: new object[] { "8a68c06e-2632-4056-8352-8c5f34dc88aa", "3022d57b-ee8f-4c90-b006-ab6f100ebdd0" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -609,7 +581,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50279",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "a1d8a39b-bac6-472e-91de-fa3a28859273", "b7551f24-f790-4fb8-8159-04445b09b34d" });
+                values: new object[] { "5c662483-b2b4-4303-93dc-d1ab8de84ff9", "f86c3b61-a8e8-4f5e-987a-c8a519c37284" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -617,7 +589,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50354",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "bd13bb0f-1260-4c77-97ec-37f35da9d159", "ec492cb3-c49b-43ba-8bb0-df87c10b6145" });
+                values: new object[] { "90855e54-a200-45c4-bab3-5f6194483d00", "b59c1a3c-1c63-4c6c-81ef-2e2bae14313f" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -625,7 +597,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50562",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "c2e834e1-82b0-475c-b888-e3c75ca2f733", "c50c6994-56ff-4da1-b9fe-ec4ebefd731e" });
+                values: new object[] { "7ff6a734-6b38-4768-a2b8-5e1e28bd6152", "1ddabcbe-352b-4c7d-b2be-68dc73aef846" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -633,7 +605,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50670",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "c38b4853-f15e-4c4b-8cd0-c448400c8079", "e3b982e5-3717-42c9-8ad4-dfb90950ae13" });
+                values: new object[] { "e1e43d6e-4aa9-4d1d-96b0-9de9d7e6f431", "eeeec46d-9eb7-4784-a1ba-bea2a0ef5826" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -641,7 +613,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50844",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "639f07de-3fec-409a-a748-9e6c459b2bce", "ed16b4ba-0dc1-4236-bc17-235bf6ba1b51" });
+                values: new object[] { "be4969d3-c125-47c8-8f61-a0f1729d6e84", "d1ebd188-8c51-4c0b-a362-03b0a79f6072" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -649,7 +621,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50882",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "8e06ce94-2f95-40fc-a704-be3b580662a2", "ff7ebfcc-05e6-47be-a727-ada04682e5b4" });
+                values: new object[] { "d9a0491f-51c9-426c-b544-83de16a80b36", "95875c11-ea31-4c7a-b846-53eca1eb23dc" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -657,7 +629,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50962",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "adc71158-0e48-4122-8383-f7a44ac0485a", "7783f836-5972-4b21-a1bb-d21612f052ca" });
+                values: new object[] { "3a9d0231-c45e-4e32-b9dd-9348b1a7e541", "50a51e20-4c69-4f0d-97cc-cac4255ab84e" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -665,7 +637,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51090",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "9e731e9f-0300-4a3c-9801-be6be76e65f2", "c4ef663b-c911-4534-b8cf-2094545e5f97" });
+                values: new object[] { "3ca49d77-f2de-4240-95e5-d8c55f0fa1e9", "50603250-1867-4f4e-9b19-cb56e1520c84" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -673,7 +645,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51124",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "5353b510-b1a8-4f39-b24f-c37813768a7a", "90394299-4d87-488b-b6c2-379a33bf9f72" });
+                values: new object[] { "c83c4fd0-27db-4bfc-9136-3d509b449841", "55f99da3-494c-4c79-a982-f1b5cff02337" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -681,7 +653,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51126",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "82ae1aff-0e94-4385-bca6-883b35e6d1e1", "71770385-7453-4591-bcdc-bc5b37d54a32" });
+                values: new object[] { "f067707d-6738-4240-8e9f-365f92787e66", "af616dc1-3c87-4b8b-913e-7b1415a28312" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -689,7 +661,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51188",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "cb9d239b-6761-4e34-8d84-f6eb73d8dc9f", "86afe343-70ec-43e2-98ff-8711a95e6361" });
+                values: new object[] { "88074d8c-f0dc-49df-8767-9aadff185df4", "c8e88d79-8d90-488f-b5a4-2b0450658ab4" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -697,7 +669,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51229",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "d7d017fa-6206-4031-9b2b-710bd5d8a374", "b1718289-6c3e-4343-bbed-f91fb260dfce" });
+                values: new object[] { "ae93a9ef-ccf9-4ab3-ba05-ded041592bae", "d57f2a46-154a-4fd0-b57a-32ab5274a9ce" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -705,7 +677,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51330",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "bc7a7474-be33-4330-bc5f-4b36c9a915ab", "cb02bc91-e1de-4e0a-9fae-285d23033fb1" });
+                values: new object[] { "44a8dcb1-37d9-4139-9620-162be1b386b2", "4067c183-f52f-4dd7-a0da-7d9ad1ed1248" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -713,7 +685,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51331",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "31886f40-ebeb-4cff-b977-e5914f41ed1e", "ba297dab-1430-4036-a617-4fb7b7fab219" });
+                values: new object[] { "8fa5f6e0-8cdc-4c43-a183-f3d33db6c65b", "48b01c3d-fe95-40b8-843e-99b2ce95444c" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -721,7 +693,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51449",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "b1152b64-34f4-45d9-9e21-6f23e666b4de", "b11ebee6-81f8-4f76-bbbd-db02a3ef6c43" });
+                values: new object[] { "d215bffd-bfcd-4833-84ad-961c8205fbed", "203c9bad-ceba-443c-922d-df68c0fd7ae8" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -729,7 +701,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51509",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "7f47dbd8-a2c3-4d89-9165-a3bdfea241a4", "91148a7f-f7d4-4b0f-90b8-6509b0cc928f" });
+                values: new object[] { "5a0e33e4-eeb3-4aef-aaf8-ea2a158502f6", "b36e2663-69da-4d7b-a0ce-ee1820c8bbc4" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -737,7 +709,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51520",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "4bda5dc5-19dd-4872-8d55-47a6cf9f08f3", "cff9a1e4-2fc5-4a38-b782-3e97c861ee31" });
+                values: new object[] { "135c8667-b22c-4e8c-88f0-0debd0ff68e5", "1b3f1fd0-52ec-4013-93f8-842d3c59f009" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -745,7 +717,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51529",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "ee44b2bd-9bca-47a6-b0bf-ae269c9d5685", "b11e329b-482a-488c-b559-6b561a1ec64f" });
+                values: new object[] { "0b02eab9-3fb0-46e6-a0ab-fa3d6757b9eb", "074fa243-fc73-4473-be60-d4d34c5166b6" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -753,7 +725,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51572",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "b589e5c3-711e-4f20-ad00-3b263c8dcf21", "184974d5-9a9b-44e3-90da-503dd9dc1e96" });
+                values: new object[] { "d9769687-7427-4632-921b-eb1271d59ab1", "1518219d-b054-4c2d-8b92-63628e66a31e" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -761,7 +733,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51573",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "81876c9e-927c-47b2-8313-bebe7452f8c4", "01002d77-cec3-4e68-89a9-51db129df5de" });
+                values: new object[] { "8faf76f3-4e71-4492-afcb-646dd49f796c", "6f8c9d1a-19af-4e10-b42f-00003a78393a" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -769,7 +741,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51583",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "ff43862f-b181-4bc8-8179-034f77b8924d", "b551a17d-6ae1-4807-8514-300ce8c8a9ad" });
+                values: new object[] { "0c62b0aa-d590-45d3-971b-596406232aaa", "7d16ac0e-5aac-4d72-9cf8-e42d41bf376e" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -777,7 +749,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51659",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "cb996563-8897-487b-a55a-a65b98ea5630", "66c0b89a-aa18-41c7-95fd-ae3aed7b7ff2" });
+                values: new object[] { "4222d63c-2131-4e7a-9c32-b3486764bfd1", "6bf3f026-4fef-4778-873f-71a64f524371" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -785,7 +757,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51668",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "3eb66f1d-0902-41ab-be20-81dbace9c196", "a14d8722-2652-4b6d-a550-c05f31177db7" });
+                values: new object[] { "de3637c4-aefa-4be7-b079-bdadff880525", "01b5da8f-ca29-4f16-aa20-48f6a2f8f7f6" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -793,7 +765,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "90008",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "162d2e90-5a96-4f22-8afe-b91bad72df2f", "00bdd3bf-d287-49c7-ad91-ddadee1e86d0" });
+                values: new object[] { "b237d382-049a-4ea2-a20d-6c25098df559", "ff4db77c-b9f9-4fba-aaa2-72fbe072ce01" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -801,7 +773,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "90010",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "3f101204-9a51-45b5-a908-5b7913f02782", "5a663790-02e1-4451-996b-977f8d7beb97" });
+                values: new object[] { "0239bebb-79ab-4447-bf2a-66592f1fd18c", "b536237a-795a-400c-82bb-e74f6841660e" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -809,7 +781,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "90015",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "402bf159-9deb-4c3c-add8-aeb2c4964f78", "4a99af8e-7d0c-4c4a-8897-26bea5c25b70" });
+                values: new object[] { "c9831840-2567-47aa-82fa-95c5160ba10e", "960f5d16-4130-4961-b4d6-041d71b3865e" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -817,7 +789,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "Exp-16",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "80906d82-d129-4317-a68a-e533de33b6f5", "89b5c30c-1bf0-4bd2-b430-299f42e63fa0" });
+                values: new object[] { "d81d2d17-2897-4f1d-a693-65d4b9f7c3e7", "218e66d7-278e-42b0-871a-774b58a68da1" });
         }
 
         /// <inheritdoc />
@@ -895,33 +867,13 @@ namespace EDocument_EF.Migrations
                 name: "AuditVoucherRequest",
                 schema: "audit");
 
-            migrationBuilder.DropColumn(
-                name: "CreatedAt",
-                schema: "security",
-                table: "Role");
-
-            migrationBuilder.DropColumn(
-                name: "CreatedBy",
-                schema: "security",
-                table: "Role");
-
-            migrationBuilder.DropColumn(
-                name: "ModifiedAt",
-                schema: "security",
-                table: "Role");
-
-            migrationBuilder.DropColumn(
-                name: "ModifiedBy",
-                schema: "security",
-                table: "Role");
-
             migrationBuilder.UpdateData(
                 schema: "security",
                 table: "User",
                 keyColumn: "Id",
                 keyValue: "50000",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "6e833270-334f-497d-84f6-9a0230479385", "effdbefb-b420-4eb3-a210-937a8d14418b" });
+                values: new object[] { "e2f3dcc4-b7b2-41e6-b87d-6ee3cb5dabb0", "f411b4cd-f08f-453a-bcf5-b69d9a77bc86" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -929,7 +881,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50128",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "d02b74a8-cd31-47d0-a6a0-568f9080381b", "11dfd60f-fa1f-415f-bead-b3ada92a02c8" });
+                values: new object[] { "f649a7cc-d82d-4e21-be82-b1a1074fa434", "0c6b2b22-b0c2-4cc2-b98c-23e4e24f9d02" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -937,7 +889,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50136",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "9763194e-7a83-4ca6-ade2-057cfce3ac88", "46f1865c-1c0b-4ba8-9a63-a59b0e71b5bf" });
+                values: new object[] { "1a97108b-929d-4fc4-85d8-7d95732f5c06", "1b46e5de-05aa-4f71-a30a-040696c7b564" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -945,7 +897,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50140",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "c0f2ace4-44d9-4825-96e2-fed338f58765", "b5f91818-9330-47dd-bc48-5ef91cbf0a1a" });
+                values: new object[] { "9c827687-a1e1-4edd-90f2-8b2edd18073d", "07cde5ec-ea9b-4999-8e6c-e415d08946c7" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -953,7 +905,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50141",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "0817d1c4-4a5d-4217-b20a-eb031af93d50", "b5d665b6-7898-4361-b4f9-61c50ea9057c" });
+                values: new object[] { "b5724a81-138f-48ae-96c9-6e8c1307f2cc", "9eec858e-e0cb-4e71-9a39-c18b4b5f1db5" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -961,7 +913,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50263",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "d4e3c581-fa12-4c14-93be-dded021c4f18", "37aedeff-ed8e-497c-a0a6-a766c69f9c07" });
+                values: new object[] { "6aa3c4f7-bc0c-4865-a994-4994c7c6668b", "c18a8375-235c-4db2-997d-487918ec4dbe" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -969,7 +921,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50269",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "365f5ba9-746f-4d4b-859b-1d9948662e0b", "cf988fe4-959e-42e2-995d-331b435cdd2b" });
+                values: new object[] { "336e6eed-7cce-40d2-9adb-8b63b7ff1f33", "14e00e81-dfd2-446d-a8fd-5c35dab2405d" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -977,7 +929,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50279",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "c7dbf5d4-856f-4d77-977a-d6af522c0941", "db9344c9-615c-44f8-8b1a-ce31c2f32ef2" });
+                values: new object[] { "c446e475-7a02-47d7-9305-8df04486767b", "91764a9f-aa71-4929-86e1-0a5e86a3bf16" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -985,7 +937,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50354",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "9b28f30f-9ba5-4229-8af8-fe82d746a44b", "a1633cf7-c5df-4f92-910c-7696f1926d5e" });
+                values: new object[] { "42db05d2-abc7-4440-9310-46782bb1484f", "919d9a8b-f277-498d-a38f-90a8e8e815fe" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -993,7 +945,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50562",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "b48a73c1-d164-4ba2-8316-bee7e15306bb", "6e1ef730-640d-4e44-879c-35db7c023e10" });
+                values: new object[] { "9515aabe-adf9-44c0-b833-b20d35b65156", "e4cada1b-e7cc-4887-8822-aa7aae8efce8" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1001,7 +953,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50670",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "eb1bf4c7-845b-4d22-90df-af5f7de3a07b", "71736f2a-cb6a-4c0c-abbe-45481c0c0719" });
+                values: new object[] { "63e49300-8c05-4301-ba26-e9a7eac2a50d", "8063db78-eb41-4934-a8af-094031bb207e" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1009,7 +961,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50844",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "1aa3e95e-8986-4da3-8103-46b9b3f88a72", "1a13259c-6592-4f8e-a9ad-f3ce393e865b" });
+                values: new object[] { "67b4cbfa-0022-4a5f-b7c6-2e91c39279e0", "aed8dc31-032d-4038-a2d0-234701512dd7" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1017,7 +969,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50882",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "80b9ada1-f6d3-4e18-9636-1a09772534a8", "f2048106-4bc8-4126-9062-abc2b779e905" });
+                values: new object[] { "ba237ec9-9048-49d5-9543-64b495ce8c19", "154906f0-3bcb-477a-aa5e-e6f88a9f8789" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1025,7 +977,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "50962",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "840ce4ae-3114-47a2-a4fe-687042f00f81", "765903e6-b009-4c5b-8d2d-214eb575818b" });
+                values: new object[] { "776e5ab9-2c6d-4065-8997-c39f43e4d1a5", "b798e70d-a871-4c31-b115-b3f8f1bfc677" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1033,7 +985,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51090",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "dddcb8e6-a012-44bd-8fba-2d02dc11db69", "bcb6cd08-bbbb-497d-ae70-c750ae9ece98" });
+                values: new object[] { "1c25579d-dc66-4421-a602-60992433f26d", "eb9dcb9c-83ca-4667-a3d4-53d1f5481f9a" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1041,7 +993,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51124",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "0e6866f4-b560-42ca-8a4a-ea9441e3be5a", "4a5fedcf-3a1b-4327-982a-2398fd5f6601" });
+                values: new object[] { "d7b44f15-d8df-44d4-9e68-e69da6499149", "df193a9d-fcd3-40b3-a7fa-126c5368b660" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1049,7 +1001,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51126",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "696d6fc2-29f7-4c6b-8bd2-f412a6bddc48", "fcb480b5-7f09-49b7-b257-a9e7cbd99389" });
+                values: new object[] { "fd817568-7232-4114-b151-4687579aea16", "9173e652-91b8-4811-8b93-47c73c36e9ae" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1057,7 +1009,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51188",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "29c6f27c-758e-4bdc-a495-f7ba3a933cb2", "c3625f05-7e93-4f00-8d16-824b5510104c" });
+                values: new object[] { "cbc4012f-a16c-4af7-913b-d39a10c6010c", "e6f55ae1-dd27-4e18-93cd-f9f286077eec" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1065,7 +1017,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51229",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "783e5e6c-3cc8-4d24-b0f6-5c86af5595b4", "4d61514b-10e8-456b-a364-9236fb864dca" });
+                values: new object[] { "22c301a0-b7bf-4392-b737-de846b663028", "01d17b3d-2bf3-408d-b511-74461509353c" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1073,7 +1025,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51330",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "ea472237-19b0-4924-9548-45fed826548b", "b6dc0b07-efd3-47f5-ab2a-b0105e7b8cf7" });
+                values: new object[] { "b74385c2-69cb-4293-a219-e8bb73575bfc", "36b8cf7b-823f-4f31-a36e-256953ac782c" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1081,7 +1033,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51331",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "6053bb81-c485-4a51-aae0-09cb3ab00b4f", "163ac9a6-5883-44a8-92e5-2eceb4177181" });
+                values: new object[] { "1464badb-8720-4806-aceb-85ba3cf865ad", "e11e3b6a-e9e7-440c-8338-02c8005830b3" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1089,7 +1041,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51449",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "601f18ae-8ac6-41eb-afe6-3231b47a0bc9", "524cfd37-7e68-4552-8832-a7ae73dbae87" });
+                values: new object[] { "ce4f7c29-6323-4e4d-8c41-be4396f1d171", "e4f99629-78ab-4d86-9ad4-bb79704a44b7" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1097,7 +1049,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51509",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "e1801ffc-0792-405e-b66f-4a66b34bb486", "5d68b9d1-b698-4c68-8421-40ec1ffc4f7a" });
+                values: new object[] { "7f731001-4c9b-4117-94a1-43508244ad5c", "a661ee9b-91e2-4971-aebb-55082b56eb17" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1105,7 +1057,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51520",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "4f91b40e-bca8-4f1a-a901-00bb36aa0bc8", "1a526b08-81ee-4741-b126-2d78e7035016" });
+                values: new object[] { "28794ebb-0324-4a7a-9515-31620bb09fca", "5fda1d53-686d-4214-8ceb-2a019f038c75" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1113,7 +1065,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51529",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "10b98a2c-53d3-4a58-b046-7273e320a293", "3a4cf9d3-2f1c-4891-931b-f9a30d4133fe" });
+                values: new object[] { "2e9dc171-9ca8-43cf-a8ee-bd6218e39fb0", "019b939b-c8ad-453a-9e0b-68bf37dbfab5" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1121,7 +1073,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51572",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "3a33a368-8dda-4239-af99-bcc664051cc1", "0544074d-f11f-4cd3-99e0-1d6b183f4d57" });
+                values: new object[] { "084e545a-a716-402f-9943-963d06e560f4", "b3bf96ff-82cc-482b-bd0b-fc501280dd41" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1129,7 +1081,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51573",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "533a0f04-2991-4a09-a077-eb0ea2953492", "8e7c25aa-75b9-47a9-9f0e-ad1d69a362da" });
+                values: new object[] { "ed70b31e-0101-43fa-a387-f96c006abdec", "5b6e5a65-b209-4df4-9f39-92d69542de97" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1137,7 +1089,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51583",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "ac048eb1-3b72-44bb-b526-ccb0184c5adc", "1d730c87-e30d-4a83-b133-81585ea0497d" });
+                values: new object[] { "e1007f7e-13e3-46f7-8ad1-3222cd2a6ccd", "3b20cc7f-bc7e-4365-893a-9bdf491fd7e2" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1145,7 +1097,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51659",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "a9fcecc5-6ab9-421a-a9d4-025747f011e6", "34b2c43a-8113-47ed-9336-17f750e456a9" });
+                values: new object[] { "abfa2a94-ba55-4335-83aa-407e9adccd69", "cdcf9494-6419-4b12-8ceb-2ac026f5c379" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1153,7 +1105,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "51668",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "1a33fc55-6058-4a77-b433-a6c0cfede61b", "5eb2735c-3382-4ce9-8310-08037d6bea18" });
+                values: new object[] { "d1109ea2-2787-46fb-af51-cc55108b8950", "eeed3e2b-fd5e-4093-85ea-8069f3162de9" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1161,7 +1113,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "90008",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "8b22c1f8-8c2d-4b83-99ec-a82a73c2f017", "830e8fdc-479d-438d-ad04-e65acc8c70a3" });
+                values: new object[] { "fc555293-b308-4c86-b27b-57c8c685e7e8", "33069eb0-1d3e-4f65-86fb-75d4e12d5ce2" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1169,7 +1121,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "90010",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "b87e84a1-92e1-4e06-925b-09be7b8117c3", "fdd0b23d-03db-455f-883c-456a8d4e52a7" });
+                values: new object[] { "19486832-0e60-4c34-975e-5ae315a251e2", "004aa81a-7127-4fb1-b183-ac1dfd2d28f7" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1177,7 +1129,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "90015",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "4453ab6e-3700-4421-983f-9895760fd3b3", "c2ea7429-216c-4fe7-83cb-d3d1872fbefe" });
+                values: new object[] { "11188e8d-c9dc-4b89-8efc-290d236b68e3", "9bd076f3-8264-4fb5-bb76-87926f0ffa64" });
 
             migrationBuilder.UpdateData(
                 schema: "security",
@@ -1185,7 +1137,7 @@ namespace EDocument_EF.Migrations
                 keyColumn: "Id",
                 keyValue: "Exp-16",
                 columns: new[] { "ConcurrencyStamp", "SecurityStamp" },
-                values: new object[] { "b75ab0ac-bdd3-46a3-80a0-615dca596b26", "04d99087-1643-4113-bec9-c4a1ea4da742" });
+                values: new object[] { "70ac9e33-6edf-49e9-b61b-18bbb3e39906", "be1b410b-72ef-4799-9a6c-87104e2174f9" });
         }
     }
 }

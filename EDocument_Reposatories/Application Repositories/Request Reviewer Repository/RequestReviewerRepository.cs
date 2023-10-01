@@ -126,9 +126,9 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
         public async Task ApproveRequestAsync(RequestReviewerWriteDto reviewingInfo, string reviewedBy)
         {
-            var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr => dr.DefinedRequest).FirstOrDefaultAsync(r => r.Id == reviewingInfo.RequestId && r.RequestReviewers.All(rr => rr.StageNumber == r.CurrentStage));
-
-            foreach (var reviewer in request!.RequestReviewers)
+            var requestReviewers = await _context.RequestReviewers.Include(r => r.Request).Include(dr => dr.Request.DefinedRequest).Where(rr => rr.RequestId== reviewingInfo.RequestId &&rr.StageNumber == rr.Request.CurrentStage).ToListAsync();
+          
+            foreach (var reviewer in requestReviewers)
             {
                 reviewer.ReviewedBy = reviewedBy;
                 reviewer.Status = RequestStatus.Approved.ToString();
@@ -136,26 +136,25 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 reviewer.ModifiedBy = reviewedBy;
             }
 
-            if (request.CurrentStage == request.DefinedRequest.ReviewersNumber)
+            if (requestReviewers[0].Request.CurrentStage == requestReviewers[0].Request.DefinedRequest.ReviewersNumber)
             {
-                request.Status = RequestStatus.Approved.ToString();
+                requestReviewers[0].Request.Status = RequestStatus.Approved.ToString();
             }
             else
             {
-                request.CurrentStage = request.CurrentStage++;
+                requestReviewers[0].Request.CurrentStage = requestReviewers[0].Request.CurrentStage+1;
             }
 
-            request.ModifiedBy = reviewedBy;
+            requestReviewers[0].Request.ModifiedBy = reviewedBy;
 
-            _context.Requests.Update(request);
+            _context.RequestReviewers.UpdateRange(requestReviewers);
             _context.SaveChanges();
         }
 
         public async Task DeclineRequestAsync(RequestReviewerWriteDto reviewingInfo, string reviewedBy)
         {
-            var request = await _context.Requests.Include(r => r.RequestReviewers).Include(dr => dr.DefinedRequest).FirstOrDefaultAsync(r => r.Id == reviewingInfo.RequestId && r.RequestReviewers.All(rr => rr.StageNumber == r.CurrentStage));
-
-            foreach (var reviewer in request!.RequestReviewers)
+            var requestReviewers = await _context.RequestReviewers.Include(r => r.Request).Include(dr => dr.Request.DefinedRequest).Where(rr => rr.RequestId == reviewingInfo.RequestId && rr.StageNumber == rr.Request.CurrentStage).ToListAsync();
+            foreach (var reviewer in requestReviewers)
             {
                 reviewer.ReviewedBy = reviewedBy;
                 reviewer.Status = RequestStatus.Declined.ToString();
@@ -163,11 +162,11 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 reviewer.ModifiedBy = reviewedBy;
             }
 
-            request.Status = RequestStatus.Declined.ToString();
-            request.CurrentStage = 0;
-            request.ModifiedBy = reviewedBy;
+            requestReviewers[0].Request.Status = RequestStatus.Declined.ToString();
+            requestReviewers[0].Request.CurrentStage = 0;
+            requestReviewers[0].Request.ModifiedBy = reviewedBy;
 
-            _context.Requests.Update(request);
+            _context.RequestReviewers.UpdateRange(requestReviewers);
             _context.SaveChanges();
         }
     }
