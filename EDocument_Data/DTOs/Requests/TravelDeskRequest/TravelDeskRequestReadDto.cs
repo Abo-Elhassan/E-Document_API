@@ -25,8 +25,7 @@ namespace EDocument_Data.DTOs.Requests.TravelDeskRequest
         public string BeneficiaryExtention { get; init; }
         public string BeneficiaryNationality { get; init; }
 
-        public float CostAllocation { get; init; }
-        public Currency Currency { get; init; }
+        public string CostAllocation { get; init; }
         public DateTime? CheckIn { get; init; }
         public DateTime? CheckOut { get; init; }
         public string MissionAddress { get; init; }

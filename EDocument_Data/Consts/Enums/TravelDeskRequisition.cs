@@ -8,7 +8,7 @@ namespace EDocument_Data.Consts.Enums
 {
     public enum TravelDeskRequisition
     {
-        Accomodation,
+        Accommodation,
         FlightTicket,
         Visa
     }

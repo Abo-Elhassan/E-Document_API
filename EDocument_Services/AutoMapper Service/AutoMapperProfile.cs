@@ -174,15 +174,6 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.CreatedBy, src => src.Ignore())
                 .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
-
-
-
-
-            CreateMap<List<TravelDeskRequisition>, string>()
-                .ConvertUsing(src => string.Join(",", src.Select(item => item.ToString())));
-
-
-
             CreateMap<string, List<TravelDeskRequisition>>()
               .ConvertUsing<StringToTravelDeskRequisitionListConverter>();
 

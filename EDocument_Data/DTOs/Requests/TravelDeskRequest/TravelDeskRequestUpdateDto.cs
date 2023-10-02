@@ -22,11 +22,10 @@ namespace EDocument_Data.DTOs.Requests.TravelDeskRequest
         [Required]
         public string BeneficiaryNationality { get; init; }
         [Required]
-        public List<TravelDeskRequisition> RequestType { get; init; }
+        public string RequestType { get; init; }
+
         [Required]
-        public float CostAllocation { get; init; }
-        [Required]
-        public Currency Currency { get; init; }
+        public string CostAllocation { get; init; }
         public DateTime? CheckIn { get; init; }
         public DateTime? CheckOut { get; init; }
         public string? MissionAddress { get; init; }

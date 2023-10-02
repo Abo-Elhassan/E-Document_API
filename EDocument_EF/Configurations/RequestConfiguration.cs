@@ -12,7 +12,7 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<Request> entity)
         {
-            entity.ToTable(nameof(Request));
+            entity.ToTable(nameof(Request) , tb=>tb.HasTrigger("TR_AuditRequest"));
 
             entity.Property(e => e.Id)
             .ValueGeneratedNever();

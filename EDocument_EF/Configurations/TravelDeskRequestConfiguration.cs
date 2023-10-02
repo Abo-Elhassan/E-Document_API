@@ -59,9 +59,6 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.CostAllocation)
             .IsRequired();
 
-            entity.Property(e => e.Currency)
-            .IsRequired()
-            .HasMaxLength(50);
 
             entity.Property(e => e.FlightOrigin)
             .HasMaxLength(50);

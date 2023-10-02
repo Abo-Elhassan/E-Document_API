@@ -6,13 +6,11 @@ using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
-using EDocument_EF;
 using EDocument_Repositories.Application_Repositories.Request_Reviewer_Repository;
 using EDocument_UnitOfWork;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Win32;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Mime;
@@ -23,7 +21,6 @@ using EDocument_Data.DTOs.Attachments;
 using EDocument_Services.Mail_Service;
 using EDocument_Data.DTOs.Requests.VehicleRequest;
 using EDocument_Data.DTOs.Requests.TravelDeskRequest;
-using EDocument_Data.DTOs.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace EDocument_API.Controllers.V1
@@ -454,9 +451,6 @@ namespace EDocument_API.Controllers.V1
 
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
-
-            if (request.Status != RequestStatus.Declined.ToString())
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update request information during reviewing proccess" });
 
             var oldPoAttachmentPath = request.PoRequest.PoAttachmentPath;
             var oldInvoiceAtachmentPath = request.PoRequest.InvoiceAttachmentPath;
@@ -1061,8 +1055,6 @@ namespace EDocument_API.Controllers.V1
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
 
-            if (request.Status != RequestStatus.Declined.ToString())
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update request information during reviewing proccess" });
 
             var oldAttachments = request.Attachments;
 
@@ -1664,9 +1656,6 @@ namespace EDocument_API.Controllers.V1
 
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
-
-            if (request.Status != RequestStatus.Declined.ToString())
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update request information during reviewing proccess" });
 
             var oldAttachments = request.Attachments;
 
