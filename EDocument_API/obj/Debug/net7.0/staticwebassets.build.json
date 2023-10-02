@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "PTuclkWP4Ne0f/H9ACtg8Mm4qfmJ3VAtj0Zsno2xq3U=",
+  "Hash": "ty+IbkYgS0WUMDXVKSdJXNONFlNnZ/TNjcGi/9tXBFU=",
   "Source": "EDocument_API",
   "BasePath": "_content/EDocument_API",
   "Mode": "Default",
@@ -765,12 +765,12 @@
       "OriginalItemSpec": "wwwroot\\Attachments\\TravelDeskRequest\\2023093001511959\\Transit_List.xlsx"
     },
     {
-      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\TravelDeskRequest\\2023100111282815\\VGM_List.xlsx",
+      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\TravelDeskRequest\\2023100111282815\\Reefer_List.xlsx",
       "SourceId": "EDocument_API",
       "SourceType": "Discovered",
       "ContentRoot": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\",
       "BasePath": "_content/EDocument_API",
-      "RelativePath": "Attachments/TravelDeskRequest/2023100111282815/VGM_List.xlsx",
+      "RelativePath": "Attachments/TravelDeskRequest/2023100111282815/Reefer_List.xlsx",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -779,7 +779,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\Attachments\\TravelDeskRequest\\2023100111282815\\VGM_List.xlsx"
+      "OriginalItemSpec": "wwwroot\\Attachments\\TravelDeskRequest\\2023100111282815\\Reefer_List.xlsx"
     },
     {
       "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\VehicleRequest\\2023092711241573\\Technical Documentation -  VAS - CFS Line Hold-Fix.docx",
