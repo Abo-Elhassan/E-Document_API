@@ -1938,7 +1938,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpDelete("Refund/{id}")]
-        [Authorize]
+        [Authorize(Roles ="CustomerService")]
         public async Task<ActionResult> DeleteRefundRequest(long id)
         {
             _logger.LogInformation($"Start DeleteRefundRequest from {nameof(RequestController)} for request id = {id}");
@@ -1988,7 +1988,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>List of All Created Refund Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<RefundRequestReadDto>>))]
         [HttpPost("Refund/Inbox")]
-        [Authorize]
+        [Authorize(Roles = "CustomerService")]
         public async Task<ActionResult> GetCreatorRefundRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetCreatorRefundRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -2128,7 +2128,7 @@ namespace EDocument_API.Controllers.V1
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Refund/Create")]
-        [Authorize]
+        [Authorize(Roles = "CustomerService")]
         public async Task<ActionResult> CreateRefundRequest([FromForm] RefundRequestCreateDto refundRequestCreateDto)
         {
 
@@ -2230,7 +2230,7 @@ namespace EDocument_API.Controllers.V1
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Refund/Update/{id}")]
-        [Authorize]
+        [Authorize(Roles = "CustomerService")]
         public async Task<ActionResult> UpdateRefundRequest(long id, [FromForm] RefundRequestUpdateDto refundRequestUpdateDto)
         {
             _logger.LogInformation($"Start UpdateRefundRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(refundRequestUpdateDto)} ");
@@ -2284,8 +2284,7 @@ namespace EDocument_API.Controllers.V1
             request.ModifiedBy = user?.FullName;
 
             var result = _unitOfWork.Complete();
-            await _requestReviewerRepository.NominateReviewer(request.Id, refundRequestUpdateDto.ConcernedEmployeeId);
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, refundRequestUpdateDto.ConcernedEmployeeId);
 
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
