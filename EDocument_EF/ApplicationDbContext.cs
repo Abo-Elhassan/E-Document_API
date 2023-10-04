@@ -38,6 +38,8 @@ namespace EDocument_EF
 
         public virtual DbSet<PoRequest> PoRequests => Set<PoRequest>();
 
+        public virtual DbSet<RefundRequest> RefundRequests => Set<RefundRequest>();
+
 
         #region Audit Tables
 
@@ -85,6 +87,7 @@ namespace EDocument_EF
             //builder.ApplyConfiguration(new JobPlanRequestConfiguration());
             builder.ApplyConfiguration(new PoRequestConfiguration());
             builder.ApplyConfiguration(new VoucherRequestConfiguration());
+            builder.ApplyConfiguration(new RefundRequestConfiguration());
         }
 
         public override int SaveChanges()
@@ -992,7 +995,7 @@ namespace EDocument_EF
                                                      }
     );
 
-            #endregion User
+           #endregion User
 
             #region Department
 

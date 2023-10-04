@@ -818,7 +818,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return await query.FirstOrDefaultAsync();
         }
 
-        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string userId, string userCondition, string[]? includes = null, Dictionary<string, string>? filters = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string? userId = null, string? userCondition = null, string[]? includes = null, Dictionary<string, string>? filters = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var ColumnName = "";
             var ColumnValue = "";
@@ -844,7 +844,10 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
             #region Permission Filter
 
-            query = query.Where(userCondition, userId);
+            if (userId != null && userCondition != null)
+            {
+                query = query.Where(userCondition, userId);
+            }        
 
             #endregion Permission Filter
 
@@ -937,7 +940,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return result;
         }
 
-        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string userId, string userCondition, string[]? includes = null, string? filterValue = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string? userId = null, string? userCondition = null, string[]? includes = null, string? filterValue = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var dynamicFilter = "";
             (int TotalCount, IEnumerable<T> PaginatedData) result;
@@ -961,7 +964,11 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
             #region Permission Filter
 
-            query = query.Where(userCondition, userId);
+            if (userId != null && userCondition != null)
+            {
+                query = query.Where(userCondition, userId);
+            }
+
 
             #endregion Permission Filter
 

@@ -16,7 +16,7 @@ public partial class Request : BaseEntity
 
     public string Status { get; set; }
 
-    public string Justification { get; set; }
+    public string Notes { get; set; }
 
     public string CreatorId { get; set; }
 
@@ -35,7 +35,8 @@ public partial class Request : BaseEntity
     public virtual ApplicationUserRequest ApplicationUserRequest { get; set; } 
     public virtual DomainAccountRequest DomainAccountRequest { get; set; }
     public virtual VoucherRequest VoucherRequest { get; set; } 
-    public virtual PoRequest PoRequest { get; set; } 
+    public virtual PoRequest PoRequest { get; set; }
+    public virtual RefundRequest RefundRequest { get; set; }
     //public virtual ICollection<JobPlanRequest> JobPlanRequests { get; set; } = new HashSet<JobPlanRequest>();
 
 }

@@ -60,6 +60,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<UserReadSearchDto>))]
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult> GetUserById(string id)
         {
             _logger.LogInformation($"Start GetUserById from {nameof(UserController)} for userId = {id}");
@@ -94,6 +95,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<UserRoleReadDto>))]
         [HttpGet("Role/{id}")]
+        [Authorize(Roles ="SysAdmin")]
         public async Task<ActionResult> GetUserRolesById(string id)
         {
             _logger.LogInformation($"Start GetUserRolesById from {nameof(UserController)}  for userId = {id}");
@@ -133,6 +135,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<UserReadDto>>))]
         [HttpPost("Filter")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> GetFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetFiltered from {nameof(UserController)}  with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -216,6 +219,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>List of Filtered Users</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<UserReadSearchDto>>))]
         [HttpGet("Search/{searchValue}")]
+        [Authorize]
         public async Task<ActionResult> Search(string? searchValue)
         {
             _logger.LogInformation($"Start Search from {nameof(UserController)} for searchValue = {searchValue} ");
@@ -278,6 +282,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Create")]
+       // [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> Create(CreateUserDto createUserDto)
         {
             _logger.LogInformation($"Start create user from {nameof(UserController)} for {JsonSerializer.Serialize(createUserDto.UserName)} ");
@@ -310,6 +315,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("{id}")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> Update(string id, UserWriteDto userWriteDto)
         {
             _logger.LogInformation($"Start Update from {nameof(UserController)} for {JsonSerializer.Serialize(userWriteDto.UserName)} ");
@@ -342,6 +348,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Role")]
+      //  [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> ManageUserRoles(UserRoleWriteDto userRoleDto)
         {
             _logger.LogInformation($"Start ManageUserRoles from {nameof(UserController)} for {JsonSerializer.Serialize(userRoleDto)} ");
@@ -410,6 +417,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<LockedUserReadDto>>))]
         [HttpGet("Locked")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> GetLockedUsers()
         {
             _logger.LogInformation($"Start GetLockedUsers from {nameof(UserController)}");
@@ -431,6 +439,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Locked/{id}")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> UnlockUser(string id)
         {
             _logger.LogInformation($"Start UnlockUser from {nameof(UserController)} for '{id}'");

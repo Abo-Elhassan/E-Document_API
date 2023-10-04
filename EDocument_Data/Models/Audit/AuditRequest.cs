@@ -14,7 +14,7 @@ public partial class AuditRequest : AuditBaseEntity
 
     public string Status { get; set; }
 
-    public string Justification { get; set; }
+    public string Notes { get; set; }
 
     public string CreatorId { get; set; }
 

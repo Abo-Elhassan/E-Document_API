@@ -76,15 +76,15 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("RequestNumber")
                         .HasColumnType("nvarchar(max)");
@@ -109,8 +109,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("FilePath")
                         .IsRequired()
@@ -120,8 +120,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<long>("RequestId")
                         .HasColumnType("bigint");
@@ -135,11 +135,11 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditApplicationUserRequest", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<string>("BeneficiaryDepartment")
                         .HasColumnType("nvarchar(max)");
@@ -191,18 +191,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditApplicationUserRequest", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditAttachment", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -236,18 +236,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditAttachment", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditDefinedApplication", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<string>("ApplicationName")
                         .HasColumnType("nvarchar(max)");
@@ -281,18 +281,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditDefinedApplication", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditDefinedApplicationRole", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -326,18 +326,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditDefinedApplicationRole", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditDefinedRequest", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -377,18 +377,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditDefinedRequest", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditDefinedRequestReviewer", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<string>("AssignedReviewerId")
                         .HasColumnType("nvarchar(max)");
@@ -434,18 +434,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditDefinedRequestReviewer", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditDefinedRequestRole", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -479,18 +479,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditDefinedRequestRole", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditDepartment", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -527,18 +527,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditDepartment", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditDomainAccountRequest", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<string>("BeneficiaryDepartment")
                         .HasColumnType("nvarchar(max)");
@@ -599,18 +599,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditDomainAccountRequest", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditRequest", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -634,13 +634,13 @@ namespace EDocument_EF.Migrations
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Justification")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
@@ -653,18 +653,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditRequest", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditRequestApplicationRole", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<long>("ApplicationId")
                         .HasColumnType("bigint");
@@ -698,18 +698,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditRequestApplicationRole", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditRequestReviewer", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<string>("AssignedReviewerId")
                         .HasColumnType("nvarchar(max)");
@@ -758,18 +758,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditRequestReviewer", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditRole", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
@@ -809,18 +809,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditRole", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditSection", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -857,18 +857,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditSection", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditTravelDeskRequest", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<string>("BeneficiaryDepartment")
                         .HasColumnType("nvarchar(max)");
@@ -962,18 +962,18 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditTravelDeskRequest", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditUser", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -1069,18 +1069,18 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditUser", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditVehicleRequest", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<string>("BeneficiaryDepartment")
                         .HasColumnType("nvarchar(max)");
@@ -1150,18 +1150,18 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("VehicleType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditVehicleRequest", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditVoucherRequest", b =>
                 {
-                    b.Property<decimal>("Key")
+                    b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Key"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<string>("BeneficiaryName")
                         .HasColumnType("nvarchar(max)");
@@ -1213,7 +1213,7 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("VoucherType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Key");
+                    b.HasKey("AuditId");
 
                     b.ToTable("AuditVoucherRequest", "audit");
                 });
@@ -1240,15 +1240,15 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -1269,15 +1269,15 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<long>("RequestedApplicationId")
                         .HasColumnType("bigint");
@@ -1306,8 +1306,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<long>("DepartmentId")
                         .HasColumnType("bigint");
@@ -1316,8 +1316,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("RequestName")
                         .IsRequired()
@@ -1355,8 +1355,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<long>("DefinedRequestId")
                         .HasColumnType("bigint");
@@ -1372,8 +1372,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("ReviewerType")
                         .IsRequired()
@@ -1413,15 +1413,15 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("RoleId", "DefinedRequestId", "Permission");
 
@@ -1439,8 +1439,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("DepartmentIcon")
                         .HasColumnType("nvarchar(max)");
@@ -1458,8 +1458,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -1645,8 +1645,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("DisplayName")
                         .HasMaxLength(50)
@@ -1660,8 +1660,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("OU")
                         .HasMaxLength(50)
@@ -1688,8 +1688,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("InvoiceAttachmentPath")
                         .IsRequired()
@@ -1703,8 +1703,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("PoAttachmentPath")
                         .IsRequired()
@@ -1739,6 +1739,90 @@ namespace EDocument_EF.Migrations
                     b.ToTable("PoRequest", (string)null);
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.RefundRequest", b =>
+                {
+                    b.Property<string>("RequestNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Amount")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ConcernedEmployeeId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ConcernedEmployeeName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CreditNote")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CustomerMobileNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("DocumentNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("RefundDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefundSubject")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("RefundType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("RelatedContainers")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ShipmentType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("RequestNumber");
+
+                    b.HasIndex("RequestId")
+                        .IsUnique();
+
+                    b.ToTable("RefundRequest", (string)null);
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.Request", b =>
                 {
                     b.Property<long>("Id")
@@ -1748,8 +1832,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("CreatorId")
                         .IsRequired()
@@ -1764,15 +1848,15 @@ namespace EDocument_EF.Migrations
                     b.Property<long>("DefinedRequestId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Justification")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .ValueGeneratedOnAdd()
@@ -1807,15 +1891,15 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("RequestId", "ApplicationId", "RoleId");
 
@@ -1839,15 +1923,15 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("ReviewedBy")
                         .HasMaxLength(200)
@@ -1930,8 +2014,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<long?>("DepartmentId")
                         .HasColumnType("bigint");
@@ -1944,8 +2028,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("SectionName")
                         .HasColumnType("nvarchar(max)");
@@ -2146,12 +2230,9 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("EDocument_Data.Models.TravelDeskRequest", b =>
                 {
-                    b.Property<string>("BeneficiaryId")
+                    b.Property<string>("RequestNumber")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<long>("RequestId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("BeneficiaryDepartment")
                         .HasMaxLength(200)
@@ -2162,6 +2243,11 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("BeneficiaryExtention")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("BeneficiaryId")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -2197,9 +2283,9 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
+                        .HasMaxLength(200)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<DateTime?>("DepartureDate")
                         .HasColumnType("smalldatetime");
@@ -2226,16 +2312,16 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
+                        .HasMaxLength(200)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<string>("PaymentMethod")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("RequestNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("RequestType")
                         .IsRequired()
@@ -2245,7 +2331,7 @@ namespace EDocument_EF.Migrations
                     b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("smalldatetime");
 
-                    b.HasKey("BeneficiaryId", "RequestId");
+                    b.HasKey("RequestNumber");
 
                     b.HasIndex("RequestId")
                         .IsUnique();
@@ -2276,8 +2362,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<long?>("DepartmentId")
                         .HasColumnType("bigint");
@@ -2323,8 +2409,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(200)
@@ -2390,7 +2476,7 @@ namespace EDocument_EF.Migrations
                             Id = "50269",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "61fe391b-b334-4535-944e-1c8317a03c73",
+                            ConcurrencyStamp = "3ea9547b-57ba-4d00-b95a-d375ff428c38",
                             DepartmentId = 1L,
                             Email = "admin_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2403,7 +2489,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Administration",
-                            SecurityStamp = "780f443a-ba81-4032-872a-114b286f2742",
+                            SecurityStamp = "2400160b-7cac-46ee-b269-02b0fd05aa14",
                             TwoFactorEnabled = false,
                             UserName = "admin_manager"
                         },
@@ -2412,7 +2498,7 @@ namespace EDocument_EF.Migrations
                             Id = "90010",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "c60e0238-a973-4b1a-99f5-788e7b04a3db",
+                            ConcurrencyStamp = "0a46d9f3-acc6-49a9-b83a-3085bbff64bf",
                             DepartmentId = 2L,
                             Email = "freightforwarding_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2425,7 +2511,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Freight Forwarding",
-                            SecurityStamp = "e231021d-f921-4d6a-b58a-43a13c55e29e",
+                            SecurityStamp = "06c0e67a-de82-4854-ac84-a7856e7795be",
                             TwoFactorEnabled = false,
                             UserName = "ff_manager"
                         },
@@ -2434,7 +2520,7 @@ namespace EDocument_EF.Migrations
                             Id = "51330",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "44af7b9d-48d6-4a28-8e4e-a910e0ee7666",
+                            ConcurrencyStamp = "e8535588-d832-4459-a21c-c7c532fd8af3",
                             DepartmentId = 3L,
                             Email = "businesstransformation_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2447,7 +2533,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Business Transformation",
-                            SecurityStamp = "325b1d8c-2fe2-4c0a-9800-1ab0e4219d58",
+                            SecurityStamp = "04f50e9b-8369-4b17-80a2-0d8db56ec90d",
                             TwoFactorEnabled = false,
                             UserName = "bt_manager"
                         },
@@ -2456,7 +2542,7 @@ namespace EDocument_EF.Migrations
                             Id = "51573",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "f889d92b-a05a-467b-8909-f5068df1047d",
+                            ConcurrencyStamp = "ac5e348d-d9f9-48db-950f-4912c32aeb6b",
                             DepartmentId = 4L,
                             Email = "commercial_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2469,7 +2555,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Commercial",
-                            SecurityStamp = "c3c6106d-b841-47e2-822d-02dcfba80840",
+                            SecurityStamp = "d621e171-fee4-4395-8e33-7fd4df12169c",
                             TwoFactorEnabled = false,
                             UserName = "commercial_manager"
                         },
@@ -2478,7 +2564,7 @@ namespace EDocument_EF.Migrations
                             Id = "51668",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "47527223-690e-4d3f-8858-21569d5d44c3",
+                            ConcurrencyStamp = "a00585ba-8d10-48d6-bb3c-81d942735f48",
                             DepartmentId = 5L,
                             Email = "communications_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2491,7 +2577,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Communications",
-                            SecurityStamp = "ffc33912-0dcc-4b1b-80b3-71d263de21e8",
+                            SecurityStamp = "640aa347-dfdb-4a6d-b020-5bb86fb22446",
                             TwoFactorEnabled = false,
                             UserName = "communications_manager"
                         },
@@ -2500,7 +2586,7 @@ namespace EDocument_EF.Migrations
                             Id = "51229",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "8ef52389-ddeb-4b98-ae17-c3768a97a2ea",
+                            ConcurrencyStamp = "67558471-51d7-41d1-b2ae-4cc226471a0c",
                             DepartmentId = 6L,
                             Email = "customerservice_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2513,7 +2599,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Customer Service",
-                            SecurityStamp = "cf67ab80-8741-431a-8adb-9d4eca445f76",
+                            SecurityStamp = "9cd4208a-edc5-467a-a130-2e7b7093a1b4",
                             TwoFactorEnabled = false,
                             UserName = "cs_manager"
                         },
@@ -2522,7 +2608,7 @@ namespace EDocument_EF.Migrations
                             Id = "Exp-16",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "f0824d67-0b3e-4fb9-866a-cb294fe069bb",
+                            ConcurrencyStamp = "e3f85627-f449-43d8-af88-144057fb2e57",
                             DepartmentId = 7L,
                             Email = "executivemanagement_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2535,7 +2621,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Executive Management",
-                            SecurityStamp = "d9a9ffc8-fc9d-4a4c-a45b-85686a71c5f1",
+                            SecurityStamp = "f23ad7d8-cfb7-4fbc-b3f1-bc959b9731f0",
                             TwoFactorEnabled = false,
                             UserName = "em_manager"
                         },
@@ -2544,7 +2630,7 @@ namespace EDocument_EF.Migrations
                             Id = "51124",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "0b62ce76-eb43-48b1-afea-6b2fdc483240",
+                            ConcurrencyStamp = "8b09a6d5-3d7e-4451-bc08-be943d25b2b6",
                             DepartmentId = 8L,
                             Email = "finance_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2557,7 +2643,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Finance",
-                            SecurityStamp = "276a10e1-0ea6-40d1-9347-1c18730ae1cb",
+                            SecurityStamp = "ecf10d86-fa79-472a-92fc-df7d9e084bbf",
                             TwoFactorEnabled = false,
                             UserName = "finance_manager"
                         },
@@ -2566,7 +2652,7 @@ namespace EDocument_EF.Migrations
                             Id = "50962",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "9905469d-edff-4d68-8220-c1aae468ddc6",
+                            ConcurrencyStamp = "a8098eca-5dc5-4851-9ce6-36bdc3bcb089",
                             DepartmentId = 9L,
                             Email = "governmentalrelation_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2579,7 +2665,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Governmental Relation",
-                            SecurityStamp = "7038192f-f69a-458d-97a0-ab7059c53216",
+                            SecurityStamp = "f6d81fff-bc70-4297-95f2-5336bc387503",
                             TwoFactorEnabled = false,
                             UserName = "gr_manager"
                         },
@@ -2588,7 +2674,7 @@ namespace EDocument_EF.Migrations
                             Id = "51572",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "89d7b451-677c-4dbe-88d3-f9ed1b815294",
+                            ConcurrencyStamp = "e2e1629a-4511-44e8-8948-be7f4d4c1d2a",
                             DepartmentId = 10L,
                             Email = "hc-ds_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2601,7 +2687,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of HC - DUBUY Sales",
-                            SecurityStamp = "6b237a1b-87a6-4bd9-bbf6-0378a623830b",
+                            SecurityStamp = "d1b1c5cd-c328-4a4b-8e7e-6b4305434334",
                             TwoFactorEnabled = false,
                             UserName = "hc-ds_manager"
                         },
@@ -2610,7 +2696,7 @@ namespace EDocument_EF.Migrations
                             Id = "50140",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "11925ec1-40f9-4f04-b65a-3af0d5624053",
+                            ConcurrencyStamp = "ecfced50-78bf-4711-b761-ce6890345701",
                             DepartmentId = 11L,
                             Email = "hc-ssp_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2623,7 +2709,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of HC - Samsung SDS project",
-                            SecurityStamp = "c816957d-be57-4159-84d9-e160cbce6ce9",
+                            SecurityStamp = "ddf84de4-6261-4b8b-ab77-dccef1e97341",
                             TwoFactorEnabled = false,
                             UserName = "hc-ssp_manager"
                         },
@@ -2632,7 +2718,7 @@ namespace EDocument_EF.Migrations
                             Id = "51331",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "63c9f19e-1426-4408-8788-46f1c8c93e83",
+                            ConcurrencyStamp = "3f00fe3c-ce60-4f97-b2d7-7187d2fcaba0",
                             DepartmentId = 12L,
                             Email = "it_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2645,7 +2731,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of IT",
-                            SecurityStamp = "ff04993a-8681-4ce3-9959-3e05a69cf4df",
+                            SecurityStamp = "7b834605-7925-4f71-87a7-b6eaa0bffee8",
                             TwoFactorEnabled = false,
                             UserName = "it_manager"
                         },
@@ -2654,7 +2740,7 @@ namespace EDocument_EF.Migrations
                             Id = "50354",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "46a6617c-b4b5-43fa-960d-3a5fc921a1be",
+                            ConcurrencyStamp = "075954d8-1d49-4a46-a142-399935f4cb4d",
                             DepartmentId = 13L,
                             Email = "ops-bgc_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2667,7 +2753,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of OPS-Cargo & Bulk",
-                            SecurityStamp = "d7d4343b-f085-46be-aa1c-3b40474ec77b",
+                            SecurityStamp = "0b29c08b-b96b-4c27-aa3d-fdcf05cac9f2",
                             TwoFactorEnabled = false,
                             UserName = "ops-bgc_manager"
                         },
@@ -2676,7 +2762,7 @@ namespace EDocument_EF.Migrations
                             Id = "50141",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "dd254bcb-b096-4885-9ee0-daa5d85be604",
+                            ConcurrencyStamp = "02488f6f-05d4-45f1-bcaf-37be548fefce",
                             DepartmentId = 14L,
                             Email = "ops-ct_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2689,7 +2775,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of OPS-Containers",
-                            SecurityStamp = "0ee40091-7bc8-4d24-b444-aa655769a21d",
+                            SecurityStamp = "25207812-f939-46b2-94f4-f39775094d56",
                             TwoFactorEnabled = false,
                             UserName = "ops-ct_manager"
                         },
@@ -2698,7 +2784,7 @@ namespace EDocument_EF.Migrations
                             Id = "50279",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "56f451b0-5472-460a-a407-00ca297fd063",
+                            ConcurrencyStamp = "c25e6bd7-89bb-43db-9c9d-485428c5bfaa",
                             DepartmentId = 15L,
                             Email = "people_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2711,7 +2797,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of People",
-                            SecurityStamp = "41e064b2-a74b-4155-91cf-3c4b14daf213",
+                            SecurityStamp = "7b3d462c-782f-44ae-a11e-ad493f9a1601",
                             TwoFactorEnabled = false,
                             UserName = "people_manager"
                         },
@@ -2720,7 +2806,7 @@ namespace EDocument_EF.Migrations
                             Id = "51188",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "36f3a1bc-d990-4916-976c-08988ed75b3e",
+                            ConcurrencyStamp = "1ab42740-64fd-4a06-a051-21e1247081ab",
                             DepartmentId = 16L,
                             Email = "procurement_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2733,7 +2819,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Procurment",
-                            SecurityStamp = "9047dd71-8a2a-46d5-91e3-8b626fdadfda",
+                            SecurityStamp = "76025ec0-851a-4da6-8bb2-549d11f7a8a9",
                             TwoFactorEnabled = false,
                             UserName = "procurment_manager"
                         },
@@ -2742,7 +2828,7 @@ namespace EDocument_EF.Migrations
                             Id = "51659",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "cd5c924f-893b-405e-8315-f1b6597cff80",
+                            ConcurrencyStamp = "20389da3-0f0a-4db5-b5fe-9a64cdf72011",
                             DepartmentId = 17L,
                             Email = "projectsfacilitymanager_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2755,7 +2841,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Projects & Facility Management",
-                            SecurityStamp = "1c23f09d-85ee-44c0-8cb5-feeac84d8833",
+                            SecurityStamp = "983ce519-2f1e-4739-b468-a4a9e40958da",
                             TwoFactorEnabled = false,
                             UserName = "projects_manager"
                         },
@@ -2764,7 +2850,7 @@ namespace EDocument_EF.Migrations
                             Id = "50882",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "c5f2b154-089e-41e3-abac-f8d9e9d65672",
+                            ConcurrencyStamp = "9709419e-c4a6-4403-9aa2-d3b00ae6d7fc",
                             DepartmentId = 18L,
                             Email = "qhse_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2777,7 +2863,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of QHSE",
-                            SecurityStamp = "34768724-a84d-45b4-aa65-f681a27cbef9",
+                            SecurityStamp = "9903bd8f-cd5a-4b01-8d05-4c2c0f0d4575",
                             TwoFactorEnabled = false,
                             UserName = "qhse_manager"
                         },
@@ -2786,7 +2872,7 @@ namespace EDocument_EF.Migrations
                             Id = "50263",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "641debf5-6b4d-4c3d-85ef-cfec1f78956a",
+                            ConcurrencyStamp = "8841c42d-9f59-4f08-9af6-6bc9776aacdd",
                             DepartmentId = 19L,
                             Email = "security_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2799,7 +2885,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Security",
-                            SecurityStamp = "43964926-7fd4-48bf-b158-57a1f753c77c",
+                            SecurityStamp = "f29d505b-2c67-47be-b02b-8074ba2b0c5a",
                             TwoFactorEnabled = false,
                             UserName = "security_manager"
                         },
@@ -2808,7 +2894,7 @@ namespace EDocument_EF.Migrations
                             Id = "50000",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "a35df5d1-ca74-4867-b1ae-4ecb60f435a0",
+                            ConcurrencyStamp = "9f1a5198-15b4-432e-a7df-398a6315c700",
                             DepartmentId = 20L,
                             Email = "stores_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2821,7 +2907,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Stores",
-                            SecurityStamp = "e82848b9-7688-4bb9-8c60-99be1a084641",
+                            SecurityStamp = "ccae08fb-aa6b-4006-9164-1d62d68b8f2d",
                             TwoFactorEnabled = false,
                             UserName = "stores_manager"
                         },
@@ -2830,7 +2916,7 @@ namespace EDocument_EF.Migrations
                             Id = "50136",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "71f620f3-03c5-47eb-a270-c18622aecfc6",
+                            ConcurrencyStamp = "5893211f-ad69-4233-a2bf-ef6be55d6ccc",
                             DepartmentId = 21L,
                             Email = "engineering_manager@dpworld.com",
                             EmailConfirmed = false,
@@ -2843,7 +2929,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Head of Engineering",
-                            SecurityStamp = "d6e1724e-bbe3-442d-92dd-420d8c6dc80e",
+                            SecurityStamp = "dfed7ec4-0500-4473-9442-f84658218077",
                             TwoFactorEnabled = false,
                             UserName = "engineering_manager"
                         },
@@ -2852,7 +2938,7 @@ namespace EDocument_EF.Migrations
                             Id = "51509",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "bae32e50-ea3a-4344-8e22-e0d2a7b6092c",
+                            ConcurrencyStamp = "70e1faed-d5d4-4912-9ce1-bf63e244f338",
                             DepartmentId = 4L,
                             Email = "commercial-ct_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -2865,7 +2951,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Commercial / Containers Section Head",
-                            SecurityStamp = "9d72ccac-db8b-4d66-9ce2-f64433fe08dc",
+                            SecurityStamp = "9a3c58cb-1957-412b-a3bf-e1a5bbd174b7",
                             TwoFactorEnabled = false,
                             UserName = "commercial-ct_sec_head"
                         },
@@ -2874,7 +2960,7 @@ namespace EDocument_EF.Migrations
                             Id = "51583",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "2700b61e-e50a-49dc-bb5a-5ccb66b4655a",
+                            ConcurrencyStamp = "f073fefe-2960-45d2-a5cf-86df0f4fd4fe",
                             DepartmentId = 4L,
                             Email = "commercial-bgc_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -2887,7 +2973,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "CommercialBulk / GC Section Head",
-                            SecurityStamp = "e132eab4-010c-4566-806c-4de335bed0da",
+                            SecurityStamp = "b4123d9b-07dd-4c17-8119-5fad6218ffeb",
                             TwoFactorEnabled = false,
                             UserName = "commercial-bgc_sec_head"
                         },
@@ -2896,7 +2982,7 @@ namespace EDocument_EF.Migrations
                             Id = "90015",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "ed62853c-2109-4c95-b52e-2d8d81e85f1a",
+                            ConcurrencyStamp = "e8084d68-7e77-4555-aeec-717acfbd5f5c",
                             DepartmentId = 10L,
                             Email = "hc-ssp_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -2909,7 +2995,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "HC - Samsung SDS project  Section Head",
-                            SecurityStamp = "b0d34517-357b-48a9-a6a9-4380e3dc3083",
+                            SecurityStamp = "bc0c362d-0b1b-4baa-9e27-15ab490b8d88",
                             TwoFactorEnabled = false,
                             UserName = "hc-ssp_sec_head"
                         },
@@ -2918,7 +3004,7 @@ namespace EDocument_EF.Migrations
                             Id = "90008",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "32e5e7af-f25a-457f-963d-466a573be9a4",
+                            ConcurrencyStamp = "5d71c3d3-1297-4cfe-9dcc-d67fe0953f1b",
                             DepartmentId = 11L,
                             Email = "hc-ds_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -2931,7 +3017,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "HC - DUBUY Sales Section Head",
-                            SecurityStamp = "6d940719-76ca-4684-96ee-972e9c31d8e1",
+                            SecurityStamp = "f7b646c0-29e7-4573-be22-23f2304ee6cc",
                             TwoFactorEnabled = false,
                             UserName = "hc-ds_sec_head"
                         },
@@ -2940,7 +3026,7 @@ namespace EDocument_EF.Migrations
                             Id = "51520",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "e8b4966e-3674-4b41-9694-20b25e96e57f",
+                            ConcurrencyStamp = "65975ad3-b705-490c-be49-5b24b6da29f5",
                             DepartmentId = 18L,
                             Email = "qhse_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -2953,7 +3039,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "QHSE Section HEad",
-                            SecurityStamp = "55c51619-38bf-4d0d-b620-29a19739bee9",
+                            SecurityStamp = "4c772a39-4222-451a-98a7-f090dd0e2b93",
                             TwoFactorEnabled = false,
                             UserName = "qhse_sec_head"
                         },
@@ -2962,7 +3048,7 @@ namespace EDocument_EF.Migrations
                             Id = "51449",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "98bd3099-c1cf-4ca4-b5f4-1d70b8b4647c",
+                            ConcurrencyStamp = "4f25355d-8ca1-4e6e-8039-e6b15f440c90",
                             DepartmentId = 13L,
                             Email = "ops-cg_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -2975,7 +3061,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "OPS-Cargo & Bulk Section Head",
-                            SecurityStamp = "36ece510-2a92-4a32-8385-c5c775de2066",
+                            SecurityStamp = "c0687894-04ad-4b2b-af15-19de8d672e41",
                             TwoFactorEnabled = false,
                             UserName = "ops-cg_sec_head"
                         },
@@ -2984,7 +3070,7 @@ namespace EDocument_EF.Migrations
                             Id = "50844",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "bd860409-17c2-4a35-91f5-7eb7a3953cf0",
+                            ConcurrencyStamp = "92a24322-b40d-4f5e-a8c3-7ed732a800c0",
                             DepartmentId = 13L,
                             Email = "ops-dri_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -2997,7 +3083,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "OPS-DRI Section Head",
-                            SecurityStamp = "bc93f1f1-3eec-45e2-b44f-85cd24e759a4",
+                            SecurityStamp = "90ea25e1-e63a-4a59-8f6a-88ff8f38ab64",
                             TwoFactorEnabled = false,
                             UserName = "ops-dri_sec_head"
                         },
@@ -3006,7 +3092,7 @@ namespace EDocument_EF.Migrations
                             Id = "50670",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "0d5d0fd0-7629-4faf-9bea-163583da9588",
+                            ConcurrencyStamp = "8f61d8cb-6697-4e81-82a3-f44dfd174e60",
                             DepartmentId = 14L,
                             Email = "ops-ct_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -3019,7 +3105,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "OPS-Containers Section Head",
-                            SecurityStamp = "e26ca3f7-4464-4a5d-8a94-d8ed6d8c3a3b",
+                            SecurityStamp = "0c08e244-209e-4b6c-adc9-8e7f8199e0f3",
                             TwoFactorEnabled = false,
                             UserName = "ops-ct_sec_head"
                         },
@@ -3028,7 +3114,7 @@ namespace EDocument_EF.Migrations
                             Id = "50128",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "6dcc0f30-5549-4536-bb53-fc17e9878ff4",
+                            ConcurrencyStamp = "f9969691-2e5f-4728-82fa-1902a6766ff1",
                             DepartmentId = 14L,
                             Email = "ops-cfs_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -3041,7 +3127,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "OPS-CFS Section Head",
-                            SecurityStamp = "b548b893-83f7-445d-8e26-cd1809a2bd49",
+                            SecurityStamp = "936b260a-dfc5-46eb-8a0f-9744e41253ab",
                             TwoFactorEnabled = false,
                             UserName = "ops-cfs_sec_head"
                         },
@@ -3050,7 +3136,7 @@ namespace EDocument_EF.Migrations
                             Id = "51126",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "5fe8f454-4681-40ae-ace8-2c2d9ed419fb",
+                            ConcurrencyStamp = "42fb68ea-c126-46d4-963c-64b5aa18d6d0",
                             DepartmentId = 21L,
                             Email = "tec-workshop_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -3063,7 +3149,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "TEC-Workshop Section Head",
-                            SecurityStamp = "2e9b2c72-845a-4069-b9d4-1dce331c4354",
+                            SecurityStamp = "36198217-4f73-4d7b-bd1a-e570564da0bf",
                             TwoFactorEnabled = false,
                             UserName = "tec-workshop_sec_head"
                         },
@@ -3072,7 +3158,7 @@ namespace EDocument_EF.Migrations
                             Id = "51090",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "b1827637-11f4-40d6-8f12-1e5080f6d978",
+                            ConcurrencyStamp = "63f9ac26-47d2-4b7d-94e2-2fda942778f7",
                             DepartmentId = 21L,
                             Email = "tec-crane_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -3085,7 +3171,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "TEC-Crane Section Head",
-                            SecurityStamp = "b5d7c4a6-56b0-4482-b366-7bcd41779d4b",
+                            SecurityStamp = "ac815506-1037-4ec3-8d5e-7f899f3cf0b2",
                             TwoFactorEnabled = false,
                             UserName = "tec-crane_sec_head"
                         },
@@ -3094,7 +3180,7 @@ namespace EDocument_EF.Migrations
                             Id = "50562",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "7acf357b-872b-49df-9269-f72f4033f086",
+                            ConcurrencyStamp = "a1bc0171-7c3d-4497-80b2-934fb2add0f7",
                             Email = "tec-planning_sec_head@dpworld.com",
                             EmailConfirmed = false,
                             FullName = "Ahmed Zaki",
@@ -3106,7 +3192,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "TEC-Planning Section Head",
-                            SecurityStamp = "fc5be05c-bcb9-4525-8165-6b4978d7dc73",
+                            SecurityStamp = "26845b98-876c-4458-ac39-511a6e7658b1",
                             TwoFactorEnabled = false,
                             UserName = "tec-planning_sec_head"
                         },
@@ -3115,7 +3201,7 @@ namespace EDocument_EF.Migrations
                             Id = "51529",
                             AccessFailedCount = 0,
                             Company = "DP World",
-                            ConcurrencyStamp = "08157787-ba23-4376-b22a-0e2daf5a3aa9",
+                            ConcurrencyStamp = "691b7cb7-cc80-4894-b38e-abe84c4ff954",
                             DepartmentId = 21L,
                             Email = "projects_sec_head@dpworld.com",
                             EmailConfirmed = false,
@@ -3128,7 +3214,7 @@ namespace EDocument_EF.Migrations
                             PhoneNumber = "01002234498",
                             PhoneNumberConfirmed = false,
                             Position = "Projects Section Head",
-                            SecurityStamp = "0e4c2132-c708-4998-94b4-923c22d94283",
+                            SecurityStamp = "f0f5828c-68e6-4b8b-829d-5e4bb28bf135",
                             TwoFactorEnabled = false,
                             UserName = "projects_sec_head"
                         });
@@ -3173,8 +3259,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("DepartureAddress")
                         .IsRequired()
@@ -3197,8 +3283,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<long>("RequestId")
                         .HasColumnType("bigint");
@@ -3231,8 +3317,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -3244,8 +3330,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("VendorName")
                         .HasColumnType("nvarchar(max)");
@@ -3530,6 +3616,18 @@ namespace EDocument_EF.Migrations
                     b.Navigation("Request");
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.RefundRequest", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.Request", "Request")
+                        .WithOne("RefundRequest")
+                        .HasForeignKey("EDocument_Data.Models.RefundRequest", "RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_RefundRequest_Request");
+
+                    b.Navigation("Request");
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.Request", b =>
                 {
                     b.HasOne("EDocument_Data.Models.User", "Creator")
@@ -3774,6 +3872,8 @@ namespace EDocument_EF.Migrations
                     b.Navigation("DomainAccountRequest");
 
                     b.Navigation("PoRequest");
+
+                    b.Navigation("RefundRequest");
 
                     b.Navigation("RequestApplicationRoles");
 

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
@@ -78,8 +77,17 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
             return requestReviewersEmails.ToString();
         }
+        public async Task NominateReviewer(long requestId, string reviewerId)
+        {
+           var nominatedReviewer =await  _context.RequestReviewers.FirstOrDefaultAsync(rr=>rr.ReviewerType==ReviewerType.NominatedReviewer&&rr.RequestId== requestId);
+            if (nominatedReviewer!=null) 
+            {
+                nominatedReviewer.AssignedReviewerId = reviewerId;
+            }
+            _context.SaveChanges();
+        }
 
-        public async Task BeginRequestCycle(long definedRequestId, long requestId)
+        public async Task BeginRequestCycle(long definedRequestId, long requestId, string? nominatedEmployeeId = null)
         {
             var definedRequestReviewers = await GetAllDefinedRequestReviewersAsync(definedRequestId);
           
@@ -107,6 +115,10 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                     case ReviewerType.DepartmentManager:
                         firstReviewer.AssignedReviewerId = _userRepository.FindDepartmentManagerByIdAsync(request.CreatorId)?.Result.Value.Id;
                         break;
+                    case ReviewerType.NominatedReviewer:
+                        if (nominatedEmployeeId != null)
+                            firstReviewer.AssignedReviewerId = nominatedEmployeeId;
+                        break;
 
                     default:
                         break;
@@ -122,7 +134,6 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
             _context.SaveChanges();
         }
-
 
         public async Task ApproveRequestAsync(RequestReviewerWriteDto reviewingInfo, string reviewedBy)
         {
@@ -169,5 +180,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             _context.RequestReviewers.UpdateRange(requestReviewers);
             _context.SaveChanges();
         }
+
+
     }
 }

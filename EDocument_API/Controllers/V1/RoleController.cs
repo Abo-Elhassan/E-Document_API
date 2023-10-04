@@ -3,6 +3,7 @@ using EDocument_Data.DTOs.User;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_EF;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<RoleWriteDto>>))]
         [HttpGet]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> Get()
         {
             _logger.LogInformation($"Start Get from {nameof(RoleController)}");
@@ -67,6 +69,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<string>>))]
         [HttpPost("{name}")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> Add(string name)
         {
             _logger.LogInformation($"Start Add from {nameof(RoleController)} for {name}");
@@ -95,6 +98,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<string>>))]
         [HttpDelete("{name}")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> Delete(string name)
         {
             _logger.LogInformation($"Start Delete from {nameof(RoleController)} for role = {name}");

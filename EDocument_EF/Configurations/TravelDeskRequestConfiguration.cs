@@ -15,9 +15,13 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<TravelDeskRequest> entity)
         {
-            entity.HasKey(e => new { e.BeneficiaryId, e.RequestId });
+            entity.HasKey(e => e.RequestNumber);
 
             entity.ToTable(nameof(TravelDeskRequest));
+
+            entity.Property(e => e.RequestNumber)
+            .HasMaxLength(50)
+            .ValueGeneratedNever();
 
             entity.Property(e => e.BeneficiaryId)
             .IsRequired()
@@ -91,11 +95,11 @@ namespace EDocument_EF.Configurations
             .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
-            .HasMaxLength(50)
+            .HasMaxLength(200)
             .IsUnicode(false);
 
             entity.Property(e => e.ModifiedBy)
-            .HasMaxLength(50)
+            .HasMaxLength(200)
             .IsUnicode(false);
 
             entity.HasOne(d => d.Request).WithOne(p => p.TravelDeskRequest)

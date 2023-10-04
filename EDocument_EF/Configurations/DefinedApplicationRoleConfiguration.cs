@@ -14,7 +14,7 @@ namespace EDocument_EF.Configurations
             entity.ToTable(nameof(DefinedApplicationRole));
 
             entity.Property(e => e.Id)
-            .UseIdentityColumn();
+            .UseIdentityColumn(1, 1);
 
             entity.Property(e => e.RoleName)
             .IsRequired()
@@ -27,10 +27,10 @@ namespace EDocument_EF.Configurations
             .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
 
             entity.Property(e => e.ModifiedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
 
             entity.HasOne(d => d.RequestedApplication).WithMany(p => p.DefinedApplicationRoles)
             .HasForeignKey(d => d.RequestedApplicationId)

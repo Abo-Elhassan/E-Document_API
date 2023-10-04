@@ -22,6 +22,8 @@ using EDocument_Services.Mail_Service;
 using EDocument_Data.DTOs.Requests.VehicleRequest;
 using EDocument_Data.DTOs.Requests.TravelDeskRequest;
 using Microsoft.EntityFrameworkCore;
+using EDocument_Data.DTOs.Requests.RefundRequest;
+using EDocument_Data.Consts;
 
 namespace EDocument_API.Controllers.V1
 {
@@ -346,7 +348,7 @@ namespace EDocument_API.Controllers.V1
 
             var request = new Models.Request { Id = requestId, DefinedRequestId = poRequestCreateDto.DefinedRequestId };
 
-            request.Justification = poRequestCreateDto.Remarks;
+            request.Notes = poRequestCreateDto.Remarks;
             request.PoRequest = _mapper.Map<PoRequest>(poRequestCreateDto);
             request.PoRequest.RequestNumber = requestNo;
             request.PoRequest.PoAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{requestId}", poRequestCreateDto.PoAttachment);
@@ -456,7 +458,7 @@ namespace EDocument_API.Controllers.V1
             var oldInvoiceAtachmentPath = request.PoRequest.InvoiceAttachmentPath;
             var oldAttachments = request.Attachments;
 
-            request.Justification = poRequestUpdateDto.Remarks;
+            request.Notes = poRequestUpdateDto.Remarks;
             _mapper.Map(poRequestUpdateDto, request);
             _mapper.Map(poRequestUpdateDto, request.PoRequest);
 
@@ -544,7 +546,7 @@ namespace EDocument_API.Controllers.V1
             //{
             //    Body = $"""
             //    Dears,
-            //        Kindly note that {user.FullName} has created Po Request for PO Number ({request.PoRequest.PoNumber}) on eDocuement and need to be reviewed from your side.
+            //        Kindly note that {user.FullName} has updated Po Request for PO Number ({request.PoRequest.PoNumber}) on eDocuement and need to be reviewed from your side.
 
             //        Request Details:
 
@@ -945,8 +947,7 @@ namespace EDocument_API.Controllers.V1
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var request = new Models.Request { Id = requestId, DefinedRequestId = vehicleRequestCreateDto.DefinedRequestId };
-
-            request.Justification = vehicleRequestCreateDto.Justification;
+            request.Notes = vehicleRequestCreateDto.Justification;
             request.VehicleRequest = _mapper.Map<VehicleRequest>(vehicleRequestCreateDto);
             request.VehicleRequest.RequestNumber = requestNo;
             _mapper.Map(beneficiaryUser, request.VehicleRequest);
@@ -1058,13 +1059,10 @@ namespace EDocument_API.Controllers.V1
 
             var oldAttachments = request.Attachments;
 
-            request.Justification = vehicleRequestUpdateDto.Justification;
+            request.Notes = vehicleRequestUpdateDto.Justification;
             _mapper.Map(vehicleRequestUpdateDto, request);
             _mapper.Map(vehicleRequestUpdateDto, request.VehicleRequest);
             _mapper.Map(beneficiaryUser, request.VehicleRequest);
-
-
-
 
 
             if (vehicleRequestUpdateDto.Attachments == null || vehicleRequestUpdateDto.Attachments.Count == 0)
@@ -1131,7 +1129,7 @@ namespace EDocument_API.Controllers.V1
             //{
             //    Body = $"""
             //    Dears,
-            //        Kindly note that {user.FullName} has created Vehicle Request for on eDocuement and need to be reviewed from your side.
+            //        Kindly note that {user.FullName} has updated Vehicle Request for on eDocuement and need to be reviewed from your side.
 
             //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
 
@@ -1548,8 +1546,7 @@ namespace EDocument_API.Controllers.V1
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var request = new Models.Request { Id = requestId, DefinedRequestId = travelDeskRequestCreateDto.DefinedRequestId };
-
-            request.Justification = travelDeskRequestCreateDto.Justification;
+            request.Notes = travelDeskRequestCreateDto.Justification;
             request.TravelDeskRequest = _mapper.Map<TravelDeskRequest>(travelDeskRequestCreateDto);
             _mapper.Map(beneficiaryUser, request.TravelDeskRequest);
             request.TravelDeskRequest.RequestNumber = requestNo;
@@ -1658,8 +1655,7 @@ namespace EDocument_API.Controllers.V1
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
 
             var oldAttachments = request.Attachments;
-
-            request.Justification = travelDeskRequestUpdateDto.Justification;
+            request.Notes = travelDeskRequestUpdateDto.Justification;
             _mapper.Map(travelDeskRequestUpdateDto, request);
             _mapper.Map(travelDeskRequestUpdateDto, request.TravelDeskRequest);
             _mapper.Map(beneficiaryUser, request.TravelDeskRequest);
@@ -1732,7 +1728,7 @@ namespace EDocument_API.Controllers.V1
             //{
             //    Body = $"""
             //    Dears,
-            //        Kindly note that {user.FullName} has created TravelDesk Request for on eDocuement and need to be reviewed from your side.
+            //        Kindly note that {user.FullName} has updated TravelDesk Request for on eDocuement and need to be reviewed from your side.
 
             //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
 
@@ -1893,8 +1889,604 @@ namespace EDocument_API.Controllers.V1
 
         #endregion Administration
 
+        #region Customer Service
+
+        #region Refund Request
+
+        /// <summary>
+        /// Get Refund Requests By for Edit Id
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>Refund Request</returns>
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<RefundRequestReadDto>))]
+        [HttpGet("Refund/{id}")]
+        [Authorize]
+        public async Task<ActionResult> GetRefundRequestById(long id)
+        {
+            _logger.LogInformation($"Start GetRefundRequestById from {nameof(RequestController)} for request id = {id}");
+
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            var refundRequest = await _unitOfWork.Repository<RefundRequest>().FindRequestAsync(
+            requestId: id,
+            expression: "Request.Id==@0",
+            includes: includes
+            );
+
+            if (refundRequest is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            var result = _mapper.Map<RefundRequestReadDto>(refundRequest);
 
 
+
+            return Ok(new ApiResponse<RefundRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+        }
+
+
+
+        /// <summary>
+        /// Delete Refund Requests By Id
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpDelete("Refund/{id}")]
+        [Authorize]
+        public async Task<ActionResult> DeleteRefundRequest(long id)
+        {
+            _logger.LogInformation($"Start DeleteRefundRequest from {nameof(RequestController)} for request id = {id}");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var includes = new string[] { "RefundRequest", "Attachments", "RequestReviewers" };
+
+            var request = await _unitOfWork.Repository<Models.Request>().FindRequestAsync(
+            requestId: id,
+            expression: "Id==@0",
+            includes: includes
+                );
+
+            if (request is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
+
+            }
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
+
+            }
+
+            request.RefundRequest.ModifiedBy = user?.FullName;
+            request.ModifiedBy = user?.FullName;
+            _unitOfWork.Complete();
+
+            _unitOfWork.Repository<Models.Request>().Delete(request);
+            _unitOfWork.Complete();
+
+            _fileService.DeleteFolder($@"RefundRequest\{id}");
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
+        }
+
+
+        /// <summary>
+        /// Get All Refund Requests By Creator With Filter
+        /// </summary>
+        /// <param name="filterDto">filter information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All Created Refund Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<RefundRequestReadDto>>))]
+        [HttpPost("Refund/Inbox")]
+        [Authorize]
+        public async Task<ActionResult> GetCreatorRefundRequestsFiltered(FilterWriteDto? filterDto)
+        {
+            _logger.LogInformation($"Start GetCreatorRefundRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+  
+
+            (int TotalCount, IEnumerable<RefundRequest> PaginatedData) result;
+
+ 
+
+            if (!string.IsNullOrEmpty(filterDto?.FilterValue))
+            {
+                result = await _unitOfWork.Repository<RefundRequest>().FindAllRequestsAsync(
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<RefundRequest>().FindAllRequestsAsync(
+                filters: filterDto?.Filters,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+
+            var totalCount = result.TotalCount;
+            var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
+
+            var requests = _mapper.Map<List<RefundRequestReadDto>>(result.PaginatedData);
+
+            var response = new FilterReadDto<RefundRequestReadDto>
+            {
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto?.PageNo ?? 1,
+                PageSize = requests.Count,
+                PaginatedData = requests
+            };
+            return Ok(new ApiResponse<FilterReadDto<RefundRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+        }
+
+        /// <summary>
+        /// Get All Refund Requests By Reviewer With Filter
+        /// </summary>
+        /// <param name="filterDto">filter information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All Reviewer Refund Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<RefundRequestReviewerReadDto>>))]
+        [HttpPost("Refund/AssignedToMe")]
+        [Authorize]
+        public async Task<ActionResult> GetReviewerRefundRequestsFiltered(FilterWriteDto? filterDto)
+        {
+            _logger.LogInformation($"Start GetReviewerRefundRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            string? userCondition = null;
+
+            (int TotalCount, IEnumerable<RefundRequest> PaginatedData) result;
+
+            userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
+
+
+
+            if (!string.IsNullOrEmpty(filterDto?.FilterValue))
+            {
+                result = await _unitOfWork.Repository<RefundRequest>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<RefundRequest>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filters: filterDto?.Filters,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+
+            var totalCount = result.TotalCount;
+            var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
+
+            var requests = _mapper.Map<List<RefundRequestReviewerReadDto>>(result.PaginatedData);
+
+            foreach (var request in requests)
+            {
+                var reviewer = request.RequestReviewers?.FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                request.ReviewerStatus = reviewer?.Status;
+                request.ReviewerStage = reviewer?.StageNumber;
+            }
+
+
+            var response = new FilterReadDto<RefundRequestReviewerReadDto>
+            {
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto?.PageNo ?? 1,
+                PageSize = requests.Count,
+                PaginatedData = requests
+            };
+            return Ok(new ApiResponse<FilterReadDto<RefundRequestReviewerReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+        }
+
+        /// <summary>
+        /// Create Refund Request
+        /// </summary>
+        /// <param name="refundRequestCreateDto">Refund request Informarion</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPost("Refund/Create")]
+        [Authorize]
+        public async Task<ActionResult> CreateRefundRequest([FromForm] RefundRequestCreateDto refundRequestCreateDto)
+        {
+
+            _logger.LogInformation($"Start CreateRefundRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(refundRequestCreateDto)} ");
+
+           
+
+            var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
+
+            var requestNo = $"Refund-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var request = new Models.Request { Id = requestId, DefinedRequestId = refundRequestCreateDto.DefinedRequestId };
+            request.Notes = refundRequestCreateDto.Notes;
+            request.RefundRequest = _mapper.Map<RefundRequest>(refundRequestCreateDto);
+            request.RefundRequest.RequestNumber = requestNo;
+
+
+            if (refundRequestCreateDto.Attachments != null && refundRequestCreateDto.Attachments.Count > 0)
+            {
+                request.Attachments = _fileService.UploadAttachments(requestId, $@"RefundRequest\{requestId}", refundRequestCreateDto.Attachments, user.FullName);
+            }
+
+            request.CreatorId = user?.Id;
+            request.RefundRequest.CreatedBy = user?.FullName;
+            request.CreatedBy = user?.FullName;
+            request.RefundRequest.CreatedBy = user?.FullName;
+
+            _unitOfWork.Repository<Models.Request>().Add(request);
+
+            var result = _unitOfWork.Complete();
+
+            await _requestReviewerRepository.BeginRequestCycle(refundRequestCreateDto.DefinedRequestId, requestId, refundRequestCreateDto.ConcernedEmployeeId);
+
+            if (result < 1)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
+
+
+            #region Send Emails
+            //var creatorMailContent = new MailContent
+            //{
+            //    Body = $"""
+            //    Dear {user.FullName.Split(" ")[0]},
+            //        Kindly not that your Refund Request on eDocuement has been created successfully and it's under reviewing now.
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with you request Status. 
+
+            //        - eDocument Request Reference No.: {requestNo}
+
+            //    Thanks,
+
+            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+            //    """,
+            //    IsHTMLBody = false,
+            //    Subject = $"Refund Request No. {requestNo} on eDocuement",
+            //    To = user.Email
+            //};
+
+            //_mailService.SendMailAsync(creatorMailContent);
+
+
+
+            //var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId,request.CurrentStage);
+            //var reviewerMailContent =  new MailContent
+            //{
+            //    Body = $"""
+            //    Dears,
+            //        Kindly note that {user.FullName} has created Refund Request for on eDocuement and need to be reviewed from your side.
+
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+
+            //        - eDocument Request Reference No.: {requestNo}
+
+            //    Thanks,
+
+            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+            //    """,
+            //    IsHTMLBody = false,
+            //    Subject = $"Refund Request No. {requestNo} on eDocuement",
+            //    To = reviewersEmails
+            //};
+
+            //_mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
+        }
+
+        /// <summary>
+        /// Update Refund Request
+        /// </summary>
+        /// <param name="id">Travel Desk request Id</param>
+        /// <param name="refundRequestUpdateDto">Refund request Informarion</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("Refund/Update/{id}")]
+        [Authorize]
+        public async Task<ActionResult> UpdateRefundRequest(long id, [FromForm] RefundRequestUpdateDto refundRequestUpdateDto)
+        {
+            _logger.LogInformation($"Start UpdateRefundRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(refundRequestUpdateDto)} ");
+
+          
+
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            Expression<Func<Models.Request, bool>> requestRxpression = (r => r.Id == id);
+
+
+            var request = await _unitOfWork.Repository<Models.Request>().FindAsync(requestRxpression, new string[] { "RefundRequest", "Attachments" });
+
+            if (request == null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
+
+            var oldAttachments = request.Attachments;
+            request.Notes = refundRequestUpdateDto.Notes;
+            _mapper.Map(refundRequestUpdateDto, request);
+            _mapper.Map(refundRequestUpdateDto, request.RefundRequest);
+
+
+
+
+
+
+            if (refundRequestUpdateDto.Attachments == null || refundRequestUpdateDto.Attachments.Count == 0)
+            {
+                request.Attachments = oldAttachments;
+            }
+            else
+            {
+
+                foreach (var attachment in request.Attachments)
+                {
+                    attachment.ModifiedAt = DateTime.Now;
+                    attachment.ModifiedBy = user.FullName;
+                }
+
+                foreach (var oldAttachment in oldAttachments)
+                {
+                    _fileService.DeleteFile(oldAttachment.FilePath);
+                }
+
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"RefundRequest\{request.Id}", refundRequestUpdateDto.Attachments, user.FullName);
+            }
+
+
+
+            request.RefundRequest.ModifiedAt = DateTime.Now;
+            request.RefundRequest.ModifiedBy = user?.FullName;
+            request.ModifiedBy = user?.FullName;
+
+            var result = _unitOfWork.Complete();
+            await _requestReviewerRepository.NominateReviewer(request.Id, refundRequestUpdateDto.ConcernedEmployeeId);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id);
+
+            if (result < 1)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
+
+
+            #region Send Emails
+            //var creatorMailContent = new MailContent
+            //{
+            //    Body = $"""
+            //    Dear {user.FullName.Split(" ")[0]},
+            //        Kindly not that your Refund Request on eDocuement has been created successfully and it's under reviewing now.
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with you request Status. 
+
+            //        - eDocument Request Reference No.: {requestNo}
+
+            //    Thanks,
+
+            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+            //    """,
+            //    IsHTMLBody = false,
+            //    Subject = $"Refund Request No. {requestNo} on eDocuement",
+            //    To = user.Email
+            //};
+
+            //_mailService.SendMailAsync(creatorMailContent);
+
+
+
+            //var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId,request.CurrentStage);
+            //var reviewerMailContent =  new MailContent
+            //{
+            //    Body = $"""
+            //    Dears,
+            //        Kindly note that {user.FullName} has updated Refund Request for on eDocuement and need to be reviewed from your side.
+
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+
+            //        - eDocument Request Reference No.: {requestNo}
+
+            //    Thanks,
+
+            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+            //    """,
+            //    IsHTMLBody = false,
+            //    Subject = $"Refund Request No. {requestNo} on eDocuement",
+            //    To = reviewersEmails
+            //};
+
+            //_mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
+        }
+
+
+        /// <summary>
+        /// Approve Refund Request
+        /// </summary>
+        /// <param name="approveRefundRequestDto">Approve Refund Request</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("Refund/Approve")]
+        [Authorize]
+        public async Task<ActionResult> ApproveRefundRequest(ApproveRefundRequestDto approveRefundRequestDto)
+        {
+            _logger.LogInformation($"Start ApproveRefundRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(approveRefundRequestDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == approveRefundRequestDto.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "RefundRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
+
+            if (request!=null && request?.CurrentStage==2)
+            {
+                request.RefundRequest.CreditNote = approveRefundRequestDto.CreditNote;
+                request.RefundRequest.Amount = approveRefundRequestDto.Amount;
+
+                request.ModifiedBy = user?.FullName;
+                request.RefundRequest.ModifiedBy = user?.FullName;
+            }
+            await _requestReviewerRepository.ApproveRequestAsync(_mapper.Map<RequestReviewerWriteDto>(approveRefundRequestDto), user!.FullName);
+
+            #region Send Emails
+           
+            //if (request?.Status==RequestStatus.Approved.ToString())
+            //{
+            //    var requestCreator = request.Creator;
+            //    var requestCreatorDepartmentManager = request.Creator.Department.Manager;
+            //    var creatorMailContent = new MailContent
+            //    {
+            //        Body = $"""
+            //    Dear {requestCreator.FullName.Split(" ")[0]},
+            //        Kindly not that your Refund Request {request.RefundRequest.RequestNumber} on eDocuement has been approved successfully.
+            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+
+            //        - eDocument Request Reference No.: {request.RefundRequest.RequestNumber}
+
+            //    Thanks,
+
+            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+            //    """,
+            //        IsHTMLBody = false,
+            //        Subject = $"Refund Request No. {request.RefundRequest.RequestNumber} on eDocuement",
+            //        Cc = requestCreatorDepartmentManager.Email,
+            //        To = requestCreator.Email
+            //    };
+
+            //    _mailService.SendMailAsync(creatorMailContent);
+            //}
+            //else
+            //{
+            //    var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestReviewerWriteDto.RequestId, request.CurrentStage);
+            //    var reviewerMailContent = new MailContent
+            //    {
+            //        Body = $"""
+            //        Dears,
+            //            Kindly note that {user.FullName} has created Refund Request for on eDocuement and need to be reviewed from your side.
+
+            //            Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+
+            //            - eDocument Request Reference No.: {request.RefundRequest.RequestNumber}
+
+            //        Thanks,
+
+            //        “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+            //        """,
+            //        IsHTMLBody = false,
+            //        Subject = $"Refund Request No. {request.RefundRequest.RequestNumber} on eDocuement",
+            //        To = reviewersEmails
+            //    };
+
+            //    _mailService.SendMailAsync(reviewerMailContent);
+            //}
+
+            #endregion
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+
+        /// <summary>
+        /// Decline Refund Request
+        /// </summary>
+        /// <param name="requestReviewerWriteDto">Decline Refund Request</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("Refund/Decline")]
+        [Authorize]
+        public async Task<ActionResult> DeclineRefundRequest(RequestReviewerWriteDto requestReviewerWriteDto)
+        {
+            _logger.LogInformation($"Start DeclineRefundRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+
+            await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user!.FullName);
+
+            #region Send Emails
+
+
+            //Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
+            //var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "RefundRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
+
+
+            //var requestCreator = request.Creator;
+            //var requestCreatorDepartmentManager = request.Creator.Department.Manager;
+            //var creatorMailContent = new MailContent
+            //{
+            //    Body = $"""
+            //    Dear {requestCreator.FullName.Split(" ")[0]},
+            //        Kindly not that your Refund Request No. {request.RefundRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
+            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+
+            //        - eDocument Request Reference No.: {request.RefundRequest.RequestNumber}
+
+            //    Thanks,
+
+            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+            //    """,
+            //    IsHTMLBody = false,
+            //    Subject = $"Refund Request No. {request.RefundRequest.RequestNumber} on eDocuement",
+            //    Cc = requestCreatorDepartmentManager.Email,
+            //    To = requestCreator.Email
+            //};
+
+            //_mailService.SendMailAsync(creatorMailContent);
+            #endregion
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+
+        #endregion Refund Request
+
+        #endregion Customer Service
 
 
     }

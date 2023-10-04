@@ -5,6 +5,7 @@ using EDocument_Data.DTOs.Section;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_Reposatories.Generic_Reposatories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +46,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<SectionReadDto>>))]
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> Get()
         {
             _logger.LogInformation($"Start Get from {nameof(SectionController)}");

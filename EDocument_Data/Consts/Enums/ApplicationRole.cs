@@ -8,7 +8,7 @@ namespace EDocument_Data.Consts.Enums
 {
     public enum ApplicationRole
     {
-        SuperAdmin,
+        SysAdmin,
         HR,
         Finance,
         Procurement,

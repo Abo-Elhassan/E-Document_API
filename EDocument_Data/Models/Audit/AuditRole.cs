@@ -16,7 +16,7 @@ namespace EDocument_Data.Models.Audit
         [Key]
         [Column(TypeName = "numeric(18,0)")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public decimal Key { get; set; }
+        public decimal AuditId { get; set; }
         public DateTime? CreatedAt { get; set; }
 
         public DateTime? ModifiedAt { get; set; }

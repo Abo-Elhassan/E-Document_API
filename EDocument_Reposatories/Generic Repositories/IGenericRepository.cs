@@ -64,8 +64,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
         Task<T?> FindRequestAsync(long requestId, string expression, string[]? includes = null);
 
-        Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string userId, string userCondition, string[]? includes = null, Dictionary<string, string>? filters = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
-        Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string userId, string userCondition, string[]? includes = null, string? filterValue = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
+        Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string? userId=null, string? userCondition = null, string[]? includes = null, Dictionary<string, string>? filters = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
+        Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string? userId = null, string? userCondition = null, string[]? includes = null, string? filterValue = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null);
 
     }
 }

@@ -32,10 +32,10 @@ namespace EDocument_EF.Configurations
             .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
 
             entity.Property(e => e.ModifiedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
 
             entity.HasOne(d => d.Department).WithMany(p => p.Sections)
             .HasForeignKey(d => d.DepartmentId)

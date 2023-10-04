@@ -17,6 +17,7 @@ namespace EDocument_EF.Configurations
             entity.HasKey(e => e.RequestNumber);
 
             entity.Property(e => e.RequestNumber)
+          //  .HasMaxLength(50)
             .ValueGeneratedNever();
 
 
@@ -71,10 +72,10 @@ namespace EDocument_EF.Configurations
             .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
 
             entity.Property(e => e.ModifiedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
 
 
 

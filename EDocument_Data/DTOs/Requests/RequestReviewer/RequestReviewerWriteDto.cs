@@ -11,6 +11,6 @@ namespace EDocument_Data.DTOs.Requests.RequestReviewer
     {
         [Required]
         public long RequestId { get; set; }
-        public string ReviewedNotes { get; set; }
+        public string? ReviewedNotes { get; set; }
     }
 }

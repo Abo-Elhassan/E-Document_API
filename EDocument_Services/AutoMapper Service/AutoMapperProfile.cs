@@ -4,6 +4,7 @@ using EDocument_Data.DTOs.Attachments;
 using EDocument_Data.DTOs.Department;
 using EDocument_Data.DTOs.Requests;
 using EDocument_Data.DTOs.Requests.PoRequest;
+using EDocument_Data.DTOs.Requests.RefundRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.DTOs.Requests.TravelDeskRequest;
 using EDocument_Data.DTOs.Requests.VehicleRequest;
@@ -78,7 +79,7 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
                 .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
                 .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
-                .ForMember(dest => dest.Remarks, src => src.MapFrom(opts => opts.Request.Justification))
+                .ForMember(dest => dest.Remarks, src => src.MapFrom(opts => opts.Request.Notes))
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
                 .ForMember(dest => dest.InvoiceAttachment, src => src.MapFrom(opts => new AttachmentReadDto { FileName = Path.GetFileName(opts.InvoiceAttachmentPath) }))
@@ -91,7 +92,7 @@ namespace EDocument_Services.AutoMapper_Service
            .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
            .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
            .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
-           .ForMember(dest => dest.Remarks, src => src.MapFrom(opts => opts.Request.Justification))
+           .ForMember(dest => dest.Remarks, src => src.MapFrom(opts => opts.Request.Notes))
            .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
            .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
            .ForMember(dest => dest.InvoiceAttachment, src => src.MapFrom(opts => new AttachmentReadDto { FileName = Path.GetFileName(opts.InvoiceAttachmentPath) }))
@@ -102,6 +103,9 @@ namespace EDocument_Services.AutoMapper_Service
 
 
             CreateMap<PoRequestCreateDto, PoRequest>();
+
+
+
             CreateMap<PoRequestUpdateDto, Request>()
                 .ForMember(dest => dest.Attachments, src => src.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
@@ -118,7 +122,7 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
                 .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
                 .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
-                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Justification))
+                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Notes))
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
                 .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
@@ -129,15 +133,16 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
                 .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
                 .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
-                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Justification))
+                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Notes))
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
                 .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments))
                 .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
 
 
-
             CreateMap<VehicleRequestCreateDto, VehicleRequest>();
+
+            
             CreateMap<VehicleRequestUpdateDto, Request>()
                 .ForMember(dest => dest.Attachments, src => src.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
@@ -201,7 +206,7 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
                 .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
                 .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
-                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Justification))
+                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Notes))
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
                 .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
@@ -214,7 +219,7 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
                 .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
                 .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
-                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Justification))
+                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Notes))
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
                 .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
@@ -225,7 +230,7 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
                 .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
                 .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
-                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Justification))
+                .ForMember(dest => dest.Justification, src => src.MapFrom(opts => opts.Request.Notes))
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
                 .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments))
@@ -234,11 +239,49 @@ namespace EDocument_Services.AutoMapper_Service
 
 
             CreateMap<TravelDeskRequestCreateDto, TravelDeskRequest>();
+
+
+
             CreateMap<TravelDeskRequestUpdateDto, Request>()
                 .ForMember(dest => dest.Attachments, src => src.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<TravelDeskRequestUpdateDto, TravelDeskRequest>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+
+
+            CreateMap<ApproveRefundRequestDto, RequestReviewerWriteDto>();
+
+            CreateMap<RefundRequest, RefundRequestReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+           .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
+
+
+
+            CreateMap<RefundRequest, RefundRequestReviewerReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+           .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments))
+           .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<RefundRequestCreateDto, RefundRequest>();
+
+            CreateMap<RefundRequestUpdateDto, Request>()
+                .ForMember(dest => dest.Attachments, src => src.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<RefundRequestUpdateDto, RefundRequest>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+
         }
     }
 }

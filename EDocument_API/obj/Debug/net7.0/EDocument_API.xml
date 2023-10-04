@@ -276,6 +276,87 @@
              </remarks>
              <returns> message</returns>
         </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetRefundRequestById(System.Int64)">
+             <summary>
+             Get Refund Requests By for Edit Id
+             </summary>
+             <param name="id">request id</param>
+             <remarks>
+            
+             </remarks>
+             <returns>Refund Request</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.DeleteRefundRequest(System.Int64)">
+             <summary>
+             Delete Refund Requests By Id
+             </summary>
+             <param name="id">request id</param>
+             <remarks>
+            
+             </remarks>
+             <returns>message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetCreatorRefundRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
+             <summary>
+             Get All Refund Requests By Creator With Filter
+             </summary>
+             <param name="filterDto">filter information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All Created Refund Requests</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.GetReviewerRefundRequestsFiltered(EDocument_Data.DTOs.Filter.FilterWriteDto)">
+             <summary>
+             Get All Refund Requests By Reviewer With Filter
+             </summary>
+             <param name="filterDto">filter information</param>
+             <remarks>
+            
+             </remarks>
+             <returns>List of All Reviewer Refund Requests</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.CreateRefundRequest(EDocument_Data.DTOs.Requests.RefundRequest.RefundRequestCreateDto)">
+             <summary>
+             Create Refund Request
+             </summary>
+             <param name="refundRequestCreateDto">Refund request Informarion</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.UpdateRefundRequest(System.Int64,EDocument_Data.DTOs.Requests.RefundRequest.RefundRequestUpdateDto)">
+             <summary>
+             Update Refund Request
+             </summary>
+             <param name="id">Travel Desk request Id</param>
+             <param name="refundRequestUpdateDto">Refund request Informarion</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.ApproveRefundRequest(EDocument_Data.DTOs.Requests.RefundRequest.ApproveRefundRequestDto)">
+             <summary>
+             Approve Refund Request
+             </summary>
+             <param name="approveRefundRequestDto">Approve Refund Request</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.RequestController.DeclineRefundRequest(EDocument_Data.DTOs.Requests.RequestReviewer.RequestReviewerWriteDto)">
+             <summary>
+             Decline Refund Request
+             </summary>
+             <param name="requestReviewerWriteDto">Decline Refund Request</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
         <member name="M:EDocument_API.Controllers.V1.RoleController.Get">
              <summary>
              Get All E-Document Roles

@@ -46,7 +46,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<PhysicalFileResult>))]
         [HttpGet("{fileName}")]
-       // [Authorize]
+        [Authorize]
         public IActionResult Download(string fileName)
         {
 
