@@ -2,6 +2,7 @@
 using EDocument_Data.Consts;
 using EDocument_Data.DTOs.Attachments;
 using EDocument_Data.Models;
+using EDocument_Services.File_Service;
 using Microsoft.AspNetCore.Hosting;
 using System.Web;
 
@@ -9,30 +10,18 @@ namespace EDocument_Services.AutoMapper_Service.Resolvers
 {
     public class AttachmentUrlResolver : IValueResolver<Attachment, AttachmentReadDto, string>
     {
-        private readonly IWebHostEnvironment _environment;
-        private readonly string _rootPath;
+        private readonly IFileService _fileService;
 
-        public AttachmentUrlResolver(IWebHostEnvironment environment)
+        public AttachmentUrlResolver(IFileService fileService )
         {
-            _environment = environment;
-            _rootPath = $@"{_environment?.WebRootPath}\Attachments\";
+           
+            _fileService = fileService;
         }
 
         public string Resolve(Attachment source, AttachmentReadDto destination, string destMember, ResolutionContext context)
         {
-            if (System.IO.File.Exists(source.FilePath))
-            {
-                var fileName = source.FilePath.Replace(_rootPath, "");
-
-                var encodedFilePath = HttpUtility.UrlEncode(fileName);
-
-                var downloadUrl = $"{ApplicationConsts.ApiOrigin}/Download/{encodedFilePath}";
-                return downloadUrl;
-            }
-            else
-            {
-                return null;
-            }
+            return _fileService.GetFileUrl(source.FilePath);
+           
         }
     }
 }

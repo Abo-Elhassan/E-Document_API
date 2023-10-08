@@ -61,7 +61,7 @@ namespace EDocument_API.Controllers.V1
         /// <summary>
         /// Add new E-Docuement role
         /// </summary>
-        /// <param name="role">roleId and roleName</param>
+        /// <param name="name">roleId and roleName</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -108,6 +108,7 @@ namespace EDocument_API.Controllers.V1
 
             var role = await _roleManager.FindByNameAsync(name);
             role.ModifiedAt = DateTime.Now;
+            role.ModifiedBy =  _userManager.FindByNameAsync(User?.Identity?.Name)?.Result?.FullName;
             _context.SaveChanges();
             var deleteResult = await _roleManager.DeleteAsync(role);
             if (!deleteResult.Succeeded)

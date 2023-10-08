@@ -2,6 +2,7 @@
 using Azure;
 using EDocument_Data.Consts.Enums;
 using EDocument_Data.Models;
+using EDocument_Data.Models.Audit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -17,7 +18,8 @@ namespace EDocument_EF.Configurations
         {
             entity.HasKey(e => e.RequestNumber);
 
-            entity.ToTable(nameof(TravelDeskRequest));
+          
+            entity.ToTable(nameof(TravelDeskRequest), tb => tb.HasTrigger($"TR_{nameof(AuditTravelDeskRequest)}"));
 
             entity.Property(e => e.RequestNumber)
             .HasMaxLength(50)
@@ -51,9 +53,8 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50);
 
             entity.Property(item => item.RequestType)
-
             .IsRequired()
-            .HasMaxLength(200);
+            .HasMaxLength(50);
           
 
             entity.Property(e => e.PaymentMethod)
@@ -61,8 +62,12 @@ namespace EDocument_EF.Configurations
 
 
             entity.Property(e => e.CostAllocation)
+            .HasMaxLength(200)
             .IsRequired();
 
+
+            entity.Property(e => e.MissionAddress)
+            .HasMaxLength(200);
 
             entity.Property(e => e.FlightOrigin)
             .HasMaxLength(50);

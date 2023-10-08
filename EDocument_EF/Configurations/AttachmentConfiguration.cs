@@ -1,5 +1,6 @@
 ﻿
 using EDocument_Data.Models;
+using EDocument_Data.Models.Audit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -11,8 +12,8 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<Attachment> entity)
         {
-
-            entity.ToTable(nameof(Attachment));
+            entity.ToTable(nameof(Attachment), tb => tb.HasTrigger($"TR_{nameof(AuditAttachment)}"));
+         
 
             entity.Property(e => e.Id)
             .UseIdentityColumn(1, 1);

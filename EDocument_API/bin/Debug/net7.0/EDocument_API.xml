@@ -330,7 +330,7 @@
              <summary>
              Update Refund Request
              </summary>
-             <param name="id">Travel Desk request Id</param>
+             <param name="id">Refund request Id</param>
              <param name="refundRequestUpdateDto">Refund request Informarion</param>
              <remarks>
             
@@ -370,7 +370,7 @@
              <summary>
              Add new E-Docuement role
              </summary>
-             <param name="role">roleId and roleName</param>
+             <param name="name">roleId and roleName</param>
              <remarks>
             
              </remarks>

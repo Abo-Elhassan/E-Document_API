@@ -66,7 +66,7 @@ namespace EDocument_Services.File_Service
             {
                 var fileName = filePath.Replace(_rootPath, "");
 
-                var encodedFilePath= HttpUtility.UrlEncode(fileName);               
+                var encodedFilePath = HttpUtility.UrlEncode(fileName);               
 
                 var downloadUrl = $"{ApplicationConsts.ApiOrigin}/Download/{encodedFilePath}";
                 return downloadUrl;

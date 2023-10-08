@@ -1,5 +1,6 @@
 ﻿
 using EDocument_Data.Models;
+using EDocument_Data.Models.Audit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -13,7 +14,8 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<Section> entity)
         {
-            entity.ToTable(nameof(Section));
+            
+            entity.ToTable(nameof(Section), tb => tb.HasTrigger($"TR_{nameof(AuditSection)}"));
 
             entity.Property(e => e.Id)
             .ValueGeneratedNever();

@@ -14,6 +14,7 @@ namespace EDocument_EF.Configurations
 
             entity.ToTable(nameof(JobPlanRequest));
 
+
             entity.Property(e => e.Action).HasConversion<string>()
             .IsRequired()
             .HasMaxLength(50);

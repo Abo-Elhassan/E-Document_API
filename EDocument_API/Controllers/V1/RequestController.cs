@@ -2221,7 +2221,7 @@ namespace EDocument_API.Controllers.V1
         /// <summary>
         /// Update Refund Request
         /// </summary>
-        /// <param name="id">Travel Desk request Id</param>
+        /// <param name="id">Refund request Id</param>
         /// <param name="refundRequestUpdateDto">Refund request Informarion</param>
         /// <remarks>
         ///

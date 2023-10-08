@@ -1,5 +1,6 @@
 ﻿
 using EDocument_Data.Models;
+using EDocument_Data.Models.Audit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -13,7 +14,7 @@ namespace EDocument_EF.Configurations
         {
             entity.HasKey(e => new { e.BeneficiaryId, e.RequestId });
 
-            entity.ToTable(nameof(ApplicationUserRequest));
+            entity.ToTable(nameof(ApplicationUserRequest), tb => tb.HasTrigger($"TR_{nameof(AuditApplicationUserRequest)}"));
 
             entity.Property(e => e.BeneficiaryId)
             .IsRequired()
