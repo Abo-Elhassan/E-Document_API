@@ -4,6 +4,45 @@
         <name>EDocument_API</name>
     </assembly>
     <members>
+        <member name="M:EDocument_API.Controllers.V1.DefinedRequestController.GetAll(EDocument_Data.DTOs.Filter.FilterWriteDto)">
+             <summary>
+             Get All Defined Requests
+             </summary>
+             <remarks>
+            
+             </remarks>
+             <returns>List of Defined Requests</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.DefinedRequestController.GetById(System.Int64)">
+             <summary>
+             Get Defined Request Details
+             </summary>
+             <param name="id">defined request id</param>
+             <remarks>
+            
+             </remarks>
+             <returns>Defined Request Details</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.DefinedRequestController.Delete(System.Int64)">
+             <summary>
+             Delete Defined Request 
+             </summary>
+             <param name="id">defined request id</param>
+             <remarks>
+            
+             </remarks>
+             <returns>message</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.DefinedRequestController.Create(EDocument_Data.DTOs.DefinedRequest.DefinedRequestCreateDto)">
+             <summary>
+             Create Defined Request
+             </summary>
+             <param name="definedRequestCreateDto">Defined request Information</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
         <member name="M:EDocument_API.Controllers.V1.DepartmentController.Get">
              <summary>
              Get All Departments
@@ -12,6 +51,17 @@
             
              </remarks>
              <returns>List of Departmens</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.DepartmentController.Update(System.Int64,System.String)">
+             <summary>
+             Update Department manager
+             </summary>
+             <param name="id">department id</param>
+             <param name="managerId">department manager id</param>
+             <remarks>
+            
+             </remarks>
+             <returns>message</returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.DownloadController.Download(System.String)">
              <summary>
@@ -394,6 +444,17 @@
             
              </remarks>
              <returns>List of Sections</returns>
+        </member>
+        <member name="M:EDocument_API.Controllers.V1.SectionController.Update(System.Int64,System.String)">
+             <summary>
+             Update section head
+             </summary>
+             <param name="id">section id</param>
+             <param name="headId">section head id</param>
+             <remarks>
+            
+             </remarks>
+             <returns>message</returns>
         </member>
         <member name="M:EDocument_API.Controllers.V1.UserController.GetUserById(System.String)">
              <summary>

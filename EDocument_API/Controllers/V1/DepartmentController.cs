@@ -4,6 +4,7 @@ using EDocument_Data.DTOs.Role;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_Reposatories.Generic_Reposatories;
+using EDocument_UnitOfWork;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -24,15 +25,17 @@ namespace EDocument_API.Controllers.V1
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ApiResponse<string>))]
     public class DepartmentController : ControllerBase
     {
-        private readonly IGenericRepository<Department> _repository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<DepartmentController> _logger;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
 
-        public DepartmentController(IGenericRepository<Department> repository, ILogger<DepartmentController> logger, IMapper mapper)
+        public DepartmentController(IUnitOfWork unitOfWork, ILogger<DepartmentController> logger, IMapper mapper, UserManager<User> userManager)
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
             _logger = logger;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
 
@@ -50,10 +53,44 @@ namespace EDocument_API.Controllers.V1
         public async Task<ActionResult> Get()
         {
             _logger.LogInformation($"Start Get from {nameof(DepartmentController)}");
-            var departments = await _repository.GetAllAsync();
+            var departments = await _unitOfWork.Repository<Department>().GetAllAsync();
             var displayedDepartments = _mapper.Map<List<DepartmentReadDto>>(departments); 
 
             return Ok(new ApiResponse<List<DepartmentReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = displayedDepartments });
+        }
+
+        /// <summary>
+        /// Update Department manager
+        /// </summary>
+        /// <param name="id">department id</param>
+        /// <param name="managerId">department manager id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>message</returns>
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("{id}/{managerId}")]
+        [Authorize(Roles ="SysAdmin")]
+        public async Task<ActionResult> Update(long id,string managerId)
+        {
+            _logger.LogInformation($"Start Update from {nameof(DepartmentController)}");
+            var department = await _unitOfWork.Repository<Department>().GetByIdAsync(id);
+
+            if (department == null) 
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Department not found" });
+
+            var manager = await _userManager.FindByIdAsync(managerId);
+
+            if (manager == null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Manager Id not found" });
+
+            department.ManagerId = managerId;
+            department.ModifiedBy = _userManager.FindByNameAsync(User?.Identity?.Name)?.Result?.FullName;
+
+            _unitOfWork.Complete();
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Department manager has been updated successfully" });
         }
     }
 }

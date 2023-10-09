@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Attachments;
+using EDocument_Data.DTOs.DefinedRequest;
 using EDocument_Data.DTOs.Department;
 using EDocument_Data.DTOs.Requests;
 using EDocument_Data.DTOs.Requests.PoRequest;
@@ -46,6 +47,25 @@ namespace EDocument_Services.AutoMapper_Service
                 .ConvertUsing(src => Enum.Parse<RequestStatus>(src));
 
 
+            CreateMap<DefinedRequestCreateDto, DefinedRequest>();
+
+            CreateMap<DefinedRequestUpdateDto, DefinedRequest>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<DefinedRequest, DefinedRequestReadDto>()
+                 .ForMember(dest => dest.DepartmentName, src => src.MapFrom(opts => opts.Department.DepartmentName));
+
+
+            CreateMap<DefinedRequestRole, DefinedRequestRoleDto>()
+                 .ReverseMap()
+                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<DefinedRequestRoleDto, Role>()
+                 .ForMember(dest => dest.Name, src => src.MapFrom(opts => opts.RoleName))
+                    .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.RoleId));
+            CreateMap<DefinedRequestReviewer, DefinedRequestReviewerDto>()
+                 .ReverseMap()
+                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
 
 

@@ -40,10 +40,10 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
         {
             var user = await _userManager.FindByIdAsync(id);
 
-            if (user is null || GetUserEmailByIdAsync(user.Manager.Id).Result is null) return null;
+            if (user is null || GetUserEmailByIdAsync(user.ManagerId).Result is null) return null;
 
             string managerId = user.ManagerId;
-            string managerEmail = await GetUserEmailByIdAsync(user.Manager.Id) ?? "";
+            string managerEmail = await GetUserEmailByIdAsync(user.ManagerId) ?? "";
 
             return (managerId, managerEmail);
         }

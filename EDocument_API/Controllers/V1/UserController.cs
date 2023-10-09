@@ -282,7 +282,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Create")]
-       // [Authorize(Roles = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> Create(CreateUserDto createUserDto)
         {
             _logger.LogInformation($"Start create user from {nameof(UserController)} for {JsonSerializer.Serialize(createUserDto.UserName)} ");
@@ -348,7 +348,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Role")]
-      //  [Authorize(Roles = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> ManageUserRoles(UserRoleWriteDto userRoleDto)
         {
             _logger.LogInformation($"Start ManageUserRoles from {nameof(UserController)} for {JsonSerializer.Serialize(userRoleDto)} ");

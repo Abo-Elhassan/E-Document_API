@@ -24,6 +24,7 @@ using EDocument_Data.DTOs.Requests.TravelDeskRequest;
 using Microsoft.EntityFrameworkCore;
 using EDocument_Data.DTOs.Requests.RefundRequest;
 using EDocument_Data.Consts;
+using EDocument_Data.DTOs.DefinedRequest;
 
 namespace EDocument_API.Controllers.V1
 {
@@ -703,7 +704,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<VehicleRequestReadDto>))]
         [HttpGet("Vehicle/{id}")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> GetVehicleRequestById(long id)
         {
             _logger.LogInformation($"Start GetVehicleRequestById from {nameof(RequestController)} for request id = {id}");
@@ -735,7 +736,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpDelete("Vehicle/{id}")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> DeleteVehicleRequest(long id)
         {
             _logger.LogInformation($"Start DeleteVehicleRequest from {nameof(RequestController)} for request id = {id}");
@@ -785,7 +786,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>List of All Created Vehicle Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<VehicleRequestReadDto>>))]
         [HttpPost("Vehicle/Inbox")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> GetCreatorVehicleRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetCreatorVehicleRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -851,7 +852,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>List of All Reviewer Vehicle Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<VehicleRequestReviewerReadDto>>))]
         [HttpPost("Vehicle/AssignedToMe")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> GetReviewerVehicleRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetReviewerVehicleRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -929,7 +930,7 @@ namespace EDocument_API.Controllers.V1
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Vehicle/Create")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> CreateVehicleRequest([FromForm] VehicleRequestCreateDto vehicleRequestCreateDto)
         {
 
@@ -1036,7 +1037,7 @@ namespace EDocument_API.Controllers.V1
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Vehicle/Update/{id}")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> UpdateVehicleRequest(long id, [FromForm] VehicleRequestUpdateDto vehicleRequestUpdateDto)
         {
             _logger.LogInformation($"Start UpdateVehicleRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(vehicleRequestUpdateDto)} ");
@@ -1242,7 +1243,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns> message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Vehicle/Decline")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> DeclineVehicleRequest(RequestReviewerWriteDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start DeclineVehicleRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
@@ -1301,7 +1302,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<TravelDeskRequestEditReadDto>))]
         [HttpGet("TravelDesk/{id}")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> GetTravelDeskRequestById(long id)
         {
             _logger.LogInformation($"Start GetTravelDeskRequestById from {nameof(RequestController)} for request id = {id}");
@@ -1335,7 +1336,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpDelete("TravelDesk/{id}")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> DeleteTravelDeskRequest(long id)
         {
             _logger.LogInformation($"Start DeleteTravelDeskRequest from {nameof(RequestController)} for request id = {id}");
@@ -1385,7 +1386,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>List of All Created TravelDesk Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<TravelDeskRequestDetailsReadDto>>))]
         [HttpPost("TravelDesk/Inbox")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> GetCreatorTravelDeskRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetCreatorTravelDeskRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -1451,7 +1452,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>List of All Reviewer TravelDesk Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<TravelDeskRequestReviewerReadDto>>))]
         [HttpPost("TravelDesk/AssignedToMe")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> GetReviewerTravelDeskRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetReviewerTravelDeskRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -1529,7 +1530,7 @@ namespace EDocument_API.Controllers.V1
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("TravelDesk/Create")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> CreateTravelDeskRequest([FromForm] TravelDeskRequestCreateDto travelDeskRequestCreateDto)
         {
 
@@ -1635,7 +1636,7 @@ namespace EDocument_API.Controllers.V1
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("TravelDesk/Update/{id}")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> UpdateTravelDeskRequest(long id, [FromForm] TravelDeskRequestUpdateDto travelDeskRequestUpdateDto)
         {
             _logger.LogInformation($"Start UpdateTravelDeskRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(travelDeskRequestUpdateDto)} ");
@@ -1761,7 +1762,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns> message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("TravelDesk/Approve")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> ApproveTravelDeskRequest(RequestReviewerWriteDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start ApproveTravelDeskRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
@@ -1841,7 +1842,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns> message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("TravelDesk/Decline")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> DeclineTravelDeskRequest(RequestReviewerWriteDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start DeclineTravelDeskRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
@@ -1904,7 +1905,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<RefundRequestReadDto>))]
         [HttpGet("Refund/{id}")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> GetRefundRequestById(long id)
         {
             _logger.LogInformation($"Start GetRefundRequestById from {nameof(RequestController)} for request id = {id}");
@@ -2050,7 +2051,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>List of All Reviewer Refund Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<RefundRequestReviewerReadDto>>))]
         [HttpPost("Refund/AssignedToMe")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> GetReviewerRefundRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetReviewerRefundRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -2352,7 +2353,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns> message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Refund/Approve")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> ApproveRefundRequest(ApproveRefundRequestDto approveRefundRequestDto)
         {
             _logger.LogInformation($"Start ApproveRefundRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(approveRefundRequestDto)} ");
@@ -2439,7 +2440,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns> message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Refund/Decline")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> DeclineRefundRequest(RequestReviewerWriteDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start DeclineRefundRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");

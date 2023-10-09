@@ -26,7 +26,7 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50);
 
             entity.Property(e => e.NormalizedUserName)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(50);
 
             entity.Property(e => e.Email)
@@ -36,7 +36,7 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(200);
 
             entity.Property(e => e.PhoneNumber)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(50);
 
             entity.Property(e => e.Company)
@@ -78,7 +78,7 @@ namespace EDocument_EF.Configurations
                 .HasDefaultValue(true);
 
             entity.Property(e => e.EmailConfirmed)
-                .HasDefaultValue(value: false);
+                .HasDefaultValue(false);
 
             entity.Property(e => e.PhoneNumberConfirmed)
                 .HasDefaultValue(false);

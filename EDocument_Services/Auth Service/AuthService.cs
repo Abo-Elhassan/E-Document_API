@@ -71,6 +71,8 @@ namespace EDocument_Services.Auth_Service
 
         public async Task<ActionResult> AuthenticatUserAsync(LoginWriteDto loginWriteDto)
         {
+
+         
             var user = await _context.Users
                             .Include(u => u.Department)
                             .Include(u => u.Section)

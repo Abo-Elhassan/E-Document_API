@@ -35,6 +35,7 @@ namespace EDocument_Data.DTOs.Requests.RefundRequest
         public List<AttachmentReadDto> Attachments { get; set; }
 
         public string CreatedBy { get; init; }
+        public string ModifiedBy { get; init; }
         public DateTime? CreatedAt { get; init; }
         public DateTime? ModifiedAt { get; init; }
 
