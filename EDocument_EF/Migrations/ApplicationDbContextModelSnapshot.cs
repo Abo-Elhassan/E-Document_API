@@ -1447,10 +1447,7 @@ namespace EDocument_EF.Migrations
             modelBuilder.Entity("EDocument_Data.Models.DefinedRequest", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                        .HasColumnType("bigint");                
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("smalldatetime");

@@ -1,5 +1,7 @@
 ﻿using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Attachments;
+using EDocument_Data.DTOs.DefinedRequestReviewer;
+using EDocument_Data.DTOs.DefinedRequestRole;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
 using System;
 using System.Collections.Generic;
@@ -31,9 +33,9 @@ namespace EDocument_Data.DTOs.DefinedRequest
         public required string DepartmentName { get; init; }
 
 
-        public required List<DefinedRequestReviewerDto> DefinedRequestReviewers { get; init; }
+        public required List<DefinedRequestReviewerReadDto> DefinedRequestReviewers { get; init; }
 
-        public required List<DefinedRequestRoleDto> DefinedRequestRoles { get; init; }
+        public required List<DefinedRequestRoleReadDto> DefinedRequestRoles { get; init; }
 
         public string CreatedBy { get; init; }
         public string ModifiedBy { get; init; }

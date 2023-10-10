@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EDocument_Data.DTOs.DefinedRequestReviewer;
+using EDocument_Data.DTOs.DefinedRequestRole;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,9 +24,8 @@ namespace EDocument_Data.DTOs.DefinedRequest
 
         public required long DepartmentId { get; init; }
         [Required]
-
-        public required List<DefinedRequestReviewerDto> DefinedRequestReviewers { get; init; }
+        public required List<DefinedRequestReviewerCreateDto> DefinedRequestReviewers { get; init; }
         [Required]
-        public required List<DefinedRequestRoleDto> DefinedRequestRoles { get; init; } 
+        public required List<DefinedRequestRoleCreateDto> DefinedRequestRoles { get; init; } 
     }
 }

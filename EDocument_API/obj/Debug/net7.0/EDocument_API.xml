@@ -43,6 +43,17 @@
              </remarks>
              <returns> message</returns>
         </member>
+        <member name="M:EDocument_API.Controllers.V1.DefinedRequestController.Update(System.Int64,EDocument_Data.DTOs.DefinedRequest.DefinedRequestUpdateDto)">
+             <summary>
+             Update Defined Request
+             </summary>
+             <param name="id">Defined request id</param>
+             <param name="definedRequestUpdateDto">Defined request Information</param>
+             <remarks>
+            
+             </remarks>
+             <returns> message</returns>
+        </member>
         <member name="M:EDocument_API.Controllers.V1.DepartmentController.Get">
              <summary>
              Get All Departments

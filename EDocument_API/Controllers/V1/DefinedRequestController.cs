@@ -55,7 +55,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>List of Defined Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<DefinedRequestReadDto>>))]
         [HttpPost]
-       // [Authorize(Roles ="SysAdmin")]
+        [Authorize(Roles ="SysAdmin")]
         public async Task<ActionResult> GetAll(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetAll from {nameof(DefinedRequestController)}");
@@ -124,12 +124,12 @@ namespace EDocument_API.Controllers.V1
         /// <returns>Defined Request Details</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<DefinedRequestReadDto>))]
         [HttpGet("{id}")]
-      //  [Authorize(Roles = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> GetById(long id)
         {
             _logger.LogInformation($"Start GetById from {nameof(DefinedRequestController)}");
             var includes = new string[] { "DefinedRequestReviewers", "DefinedRequestRoles", "Department" };
-            Expression<Func<DefinedRequest, bool>> expression = (r => r.Id == id);
+           Expression<Func<DefinedRequest, bool>> expression = (r => r.Id == id);
             var definedRequest = await _unitOfWork.Repository<DefinedRequest>().FindAsync(expression, includes);
             if (definedRequest == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Defined request not found" });
@@ -151,7 +151,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<DefinedRequestReadDto>))]
         [HttpDelete("{id}")]
-       // [Authorize(Roles = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> Delete(long id)
         {
             _logger.LogInformation($"Start Delete from {nameof(DefinedRequestController)}");
@@ -178,16 +178,28 @@ namespace EDocument_API.Controllers.V1
         /// <returns> message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Create")]
-       // [Authorize(Roles = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> Create(DefinedRequestCreateDto definedRequestCreateDto)
         {
 
             _logger.LogInformation($"Start Create from {nameof(DefinedRequestController)} for {JsonSerializer.Serialize(definedRequestCreateDto)} ");
-
+            var definedRequestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
             var newDefinedRequest = _mapper.Map<DefinedRequest>(definedRequestCreateDto);
-            newDefinedRequest.Id = 5;
+
+
+            newDefinedRequest.Id = definedRequestId;
+            foreach (var item in newDefinedRequest.DefinedRequestReviewers)
+            {
+                item.DefinedRequestId = definedRequestId;
+            }
+
+            foreach (var item in newDefinedRequest.DefinedRequestRoles)
+            {
+                item.DefinedRequestId = definedRequestId;
+            }
+
+
             newDefinedRequest.CreatedBy = user?.FullName;
 
             foreach (var item in newDefinedRequest.DefinedRequestReviewers)
@@ -210,6 +222,66 @@ namespace EDocument_API.Controllers.V1
    
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully" });
+        }
+
+
+        /// <summary>
+        /// Update Defined Request
+        /// </summary>
+        /// <param name="id">Defined request id</param>
+        /// <param name="definedRequestUpdateDto">Defined request Information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("Update/{id}")]
+        [Authorize(Roles = "SysAdmin")]
+        public async Task<ActionResult> Update(long id, DefinedRequestUpdateDto definedRequestUpdateDto)
+        {
+
+            _logger.LogInformation($"Start Update from {nameof(DefinedRequestController)} for {JsonSerializer.Serialize(definedRequestUpdateDto)} ");
+        
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            Expression<Func<DefinedRequest, bool>> expression = (r => r.Id == id);
+            var includes = new string[] { "DefinedRequestReviewers", "DefinedRequestRoles" };
+
+            var definedRequest = await _unitOfWork.Repository<DefinedRequest>().FindAsync(expression, includes);
+
+
+            if (definedRequest == null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Defined request not found" });
+
+            _mapper.Map(definedRequestUpdateDto, definedRequest);
+            _mapper.Map(definedRequestUpdateDto.DefinedRequestReviewers, definedRequest.DefinedRequestReviewers);
+            _mapper.Map(definedRequestUpdateDto.DefinedRequestRoles, definedRequest.DefinedRequestRoles);
+
+
+            definedRequest.ModifiedBy = user?.FullName;
+
+            foreach (var item in definedRequest.DefinedRequestReviewers)
+            {
+                item.ModifiedBy = user?.FullName;
+                item.ModifiedAt = DateTime.Now;
+            }
+
+            foreach (var item in definedRequest.DefinedRequestRoles)
+            {
+                item.ModifiedBy = user?.FullName;
+                item.ModifiedAt = DateTime.Now;
+            }
+
+            _unitOfWork.Repository<DefinedRequest>().Update(definedRequest);
+
+            var result = _unitOfWork.Complete();
+
+            if (result < 1)
+                BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Updating request has been failed" });
+
+
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
 
     }

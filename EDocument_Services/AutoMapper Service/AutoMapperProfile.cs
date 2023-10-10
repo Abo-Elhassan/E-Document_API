@@ -2,6 +2,8 @@
 using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Attachments;
 using EDocument_Data.DTOs.DefinedRequest;
+using EDocument_Data.DTOs.DefinedRequestReviewer;
+using EDocument_Data.DTOs.DefinedRequestRole;
 using EDocument_Data.DTOs.Department;
 using EDocument_Data.DTOs.Requests;
 using EDocument_Data.DTOs.Requests.PoRequest;
@@ -56,14 +58,28 @@ namespace EDocument_Services.AutoMapper_Service
                  .ForMember(dest => dest.DepartmentName, src => src.MapFrom(opts => opts.Department.DepartmentName));
 
 
-            CreateMap<DefinedRequestRole, DefinedRequestRoleDto>()
-                 .ReverseMap()
-                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
-            CreateMap<DefinedRequestRoleDto, Role>()
-                 .ForMember(dest => dest.Name, src => src.MapFrom(opts => opts.RoleName))
-                    .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.RoleId));
-            CreateMap<DefinedRequestReviewer, DefinedRequestReviewerDto>()
+            CreateMap<DefinedRequestRoleCreateDto, DefinedRequestRole>();
+
+            CreateMap<DefinedRequestRoleUpdateDto, DefinedRequestRole>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<DefinedRequestRole, DefinedRequestRoleReadDto>()
+             .ForMember(dest => dest.RoleName, src => src.MapFrom(opts => opts.Role.Name));
+
+
+
+            CreateMap<DefinedRequestReviewerCreateDto, DefinedRequestReviewer>();
+
+            CreateMap<DefinedRequestReviewerUpdateDto, DefinedRequestReviewer>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<DefinedRequestReviewer, DefinedRequestReviewerReadDto>();
+
+
+
+
+            CreateMap<DefinedRequestReviewerCreateDto, DefinedRequestReviewer>()
                  .ReverseMap()
                  .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 

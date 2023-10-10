@@ -16,7 +16,7 @@ namespace EDocument_EF.Configurations
           
 
             entity.Property(e => e.Id)
-            .UseIdentityColumn(1, 1);
+            .ValueGeneratedNever();
 
             entity.Property(e => e.RequestName)
             .IsRequired()
