@@ -22,6 +22,7 @@ namespace EDocument_Data.DTOs.User
         public  long? SectionId { get; init; }
         public  string? SectionName { get; init; }
         public  string? Company { get; init; }
+        public bool LockoutEnabled { get; init; }
 
         public  string? Roles { get; set; }
     }

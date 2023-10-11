@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Drawing.Printing;
 using System.Net;
 using System.Net.Mime;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace EDocument_API.Controllers.V1
@@ -48,6 +49,23 @@ namespace EDocument_API.Controllers.V1
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Check if user is authenticated 
+        /// </summary>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>message (True, False)</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpGet("IsAuthenticated")]
+        public ActionResult IsUserAuthenticated()
+        {
+            _logger.LogInformation($"Start IsUserAuthenticated from {nameof(UserController)} for userName = {User?.Identity?.Name}");
+
+           var isAuthenticated =  User?.Identity?.IsAuthenticated;
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = isAuthenticated.ToString() });
+        }
 
         /// <summary>
         /// Get User By user Id
@@ -375,8 +393,9 @@ namespace EDocument_API.Controllers.V1
                 var AddResult = await _userManager.AddToRolesAsync(user, userRoleDto.Roles);
                 if (AddResult.Succeeded)
                 {
-                    user.ModifiedAt = DateTime.Now;
+                  
                     user.ModifiedBy = _userManager.FindByNameAsync(User?.Identity?.Name)?.Result?.FullName;
+                    _unitOfWork.Repository<User>().Update(user);
                     _unitOfWork.Complete();
                     return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "User roles has been updated successfully" });
                 }
@@ -439,24 +458,62 @@ namespace EDocument_API.Controllers.V1
         ///
         /// </remarks>
         /// <returns> message</returns>
-
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
-        [HttpPost("Locked/{id}")]
+        [HttpPut("Unlock/{id}")]
         [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> UnlockUser(string id)
         {
             _logger.LogInformation($"Start UnlockUser from {nameof(UserController)} for '{id}'");
             var user = await _userManager.FindByIdAsync(id);
+    
+            if (user == null)
+            {
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"user: ({id}) not found" });
+            }
+
+
+            await _userManager.ResetAccessFailedCountAsync(user);
+            await _userManager.SetLockoutEndDateAsync(user, null);
+            await _userManager.SetLockoutEnabledAsync(user, false);
+
+            user.ModifiedBy = _userManager.FindByNameAsync(User?.Identity?.Name)?.Result?.FullName;
+            _unitOfWork.Repository<User>().Update(user);
+            _unitOfWork.Complete();
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"user: ({id}) has been unlocked successfully" });
+        }
+
+        /// <summary>
+        /// Lock user
+        /// </summary>
+        /// <param name="id">user id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("lock/{id}")]
+        [Authorize(Roles = "SysAdmin")]
+        public async Task<ActionResult> LockUser(string id)
+        {
+            _logger.LogInformation($"Start LockUser from {nameof(UserController)} for '{id}'");
+            var user = await _userManager.FindByIdAsync(id);
+         
 
             if (user == null)
             {
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"user: ({id}) not found" });
             }
-            await _userManager.ResetAccessFailedCountAsync(user);
-            await _userManager.SetLockoutEndDateAsync(user, null);
-            await _userManager.SetLockoutEnabledAsync(user, false);
+    
+            await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+            await _userManager.SetLockoutEnabledAsync(user, true);
 
-            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"user: ({id}) has been unlocked successfully" });
+            user.ModifiedBy = _userManager.FindByNameAsync(User?.Identity?.Name)?.Result?.FullName;
+            _unitOfWork.Repository<User>().Update(user);
+            _unitOfWork.Complete();
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"user: ({id}) has been locked successfully" });
         }
+
     }
 }

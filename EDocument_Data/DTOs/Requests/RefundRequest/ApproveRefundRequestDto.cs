@@ -11,7 +11,7 @@ namespace EDocument_Data.DTOs.Requests.RefundRequest
     {
         [Required]
         public long RequestId { get; set; }
-        public string? CreditNote { get; set; }
+        public long CreditNote { get; set; }
         public string? Amount { get; set; }
         public string? ReviewedNotes { get; set; }
     }

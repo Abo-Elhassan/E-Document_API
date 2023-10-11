@@ -37,6 +37,7 @@ public partial class Request : BaseEntity
     public virtual VoucherRequest VoucherRequest { get; set; } 
     public virtual PoRequest PoRequest { get; set; }
     public virtual RefundRequest RefundRequest { get; set; }
+    public virtual DiscountRequest DiscountRequest { get; set; }
     //public virtual ICollection<JobPlanRequest> JobPlanRequests { get; set; } = new HashSet<JobPlanRequest>();
 
 }

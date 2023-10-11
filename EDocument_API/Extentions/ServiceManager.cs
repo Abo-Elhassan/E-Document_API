@@ -50,7 +50,7 @@ namespace EDocument_API.Shared
                 options.Password.RequiredLength = 8;
                 options.User.RequireUniqueEmail = true;
                 options.Lockout.MaxFailedAccessAttempts = 3;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10000);
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.MaxValue;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
 

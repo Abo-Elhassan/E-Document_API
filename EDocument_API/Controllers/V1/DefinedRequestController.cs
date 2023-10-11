@@ -183,6 +183,18 @@ namespace EDocument_API.Controllers.V1
         {
 
             _logger.LogInformation($"Start Create from {nameof(DefinedRequestController)} for {JsonSerializer.Serialize(definedRequestCreateDto)} ");
+
+            foreach (var item in definedRequestCreateDto.DefinedRequestReviewers)
+            {
+                if (item?.AssignedReviewerId!=null)
+                {
+                    var requestReviewer = await _userManager.FindByIdAsync(item?.AssignedReviewerId);
+                    if(requestReviewer==null)
+                        return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Reviewer Id: '{item?.AssignedReviewerId}' not found as user" });
+                }
+               
+            }
+
             var definedRequestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var newDefinedRequest = _mapper.Map<DefinedRequest>(definedRequestCreateDto);
@@ -241,7 +253,17 @@ namespace EDocument_API.Controllers.V1
         {
 
             _logger.LogInformation($"Start Update from {nameof(DefinedRequestController)} for {JsonSerializer.Serialize(definedRequestUpdateDto)} ");
-        
+
+            foreach (var item in definedRequestUpdateDto.DefinedRequestReviewers)
+            {
+                if (item?.AssignedReviewerId != null)
+                {
+                    var requestReviewer = await _userManager.FindByIdAsync(item?.AssignedReviewerId);
+                    if (requestReviewer == null)
+                        return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Reviewer Id: '{item?.AssignedReviewerId}' not found as user" });
+                }
+
+            }
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             Expression<Func<DefinedRequest, bool>> expression = (r => r.Id == id);

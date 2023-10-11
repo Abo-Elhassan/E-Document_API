@@ -40,6 +40,8 @@ namespace EDocument_EF
 
         public virtual DbSet<RefundRequest> RefundRequests => Set<RefundRequest>();
 
+        public virtual DbSet<DiscountRequest> DiscountRequests => Set<DiscountRequest>();
+
 
         #region Audit Tables
 
@@ -64,6 +66,8 @@ namespace EDocument_EF
         public virtual DbSet<AuditPoRequest> AuditPoRequests => Set<AuditPoRequest>();
 
         public virtual DbSet<AuditRefundRequest> AuditRefundRequests => Set<AuditRefundRequest>();
+
+        public virtual DbSet<AuditDiscountRequest> AuditDiscountRequests => Set<AuditDiscountRequest>();
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -91,6 +95,7 @@ namespace EDocument_EF
             builder.ApplyConfiguration(new PoRequestConfiguration());
             builder.ApplyConfiguration(new VoucherRequestConfiguration());
             builder.ApplyConfiguration(new RefundRequestConfiguration());
+            builder.ApplyConfiguration(new DiscountRequestConfiguration());
         }
 
         public override int SaveChanges()
@@ -200,37 +205,38 @@ namespace EDocument_EF
             builder.Entity<AuditVoucherRequest>().ToTable(nameof(AuditVoucherRequest), "audit");
             builder.Entity<AuditPoRequest>().ToTable(nameof(AuditPoRequest), "audit");
             builder.Entity<AuditRefundRequest>().ToTable(nameof(AuditRefundRequest), "audit");
+            builder.Entity<AuditDiscountRequest>().ToTable(nameof(AuditDiscountRequest), "audit");
 
             #endregion
 
             #region Seeding
 
             #region Roles
-          //  var BasicId = Guid.NewGuid().ToString();
-          //  var SuperAdminId = Guid.NewGuid().ToString();
-          //  var HRId = Guid.NewGuid().ToString();
-          //  var FinanceId = Guid.NewGuid().ToString();
-          //  var ProcurementId = Guid.NewGuid().ToString();
-          //  var ITId = Guid.NewGuid().ToString();
-          //  var StoreId = Guid.NewGuid().ToString();
-          //  var CustomerServiceId = Guid.NewGuid().ToString();
-          //  var EngineeringId = Guid.NewGuid().ToString();
-          //  var CommercialId = Guid.NewGuid().ToString();
-          //  var InfoFortId = Guid.NewGuid().ToString();
+            //  var BasicId = Guid.NewGuid().ToString();
+            //  var SuperAdminId = Guid.NewGuid().ToString();
+            //  var HRId = Guid.NewGuid().ToString();
+            //  var FinanceId = Guid.NewGuid().ToString();
+            //  var ProcurementId = Guid.NewGuid().ToString();
+            //  var ITId = Guid.NewGuid().ToString();
+            //  var StoreId = Guid.NewGuid().ToString();
+            //  var CustomerServiceId = Guid.NewGuid().ToString();
+            //  var EngineeringId = Guid.NewGuid().ToString();
+            //  var CommercialId = Guid.NewGuid().ToString();
+            //  var InfoFortId = Guid.NewGuid().ToString();
 
-          //  builder.Entity<Role>().HasData(
-          //   new Role { Id = BasicId, Name = ApplicationRole.Basic.ToString(), NormalizedName = ApplicationRole.Basic.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
-          //new Role { Id = SuperAdminId, Name = ApplicationRole.SysAdmin.ToString(), NormalizedName = ApplicationRole.SysAdmin.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
-          //new Role { Id = HRId, Name = ApplicationRole.HR.ToString(), NormalizedName = ApplicationRole.HR.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
-          //new Role { Id = FinanceId, Name = ApplicationRole.Finance.ToString(), NormalizedName = ApplicationRole.Finance.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
-          //new Role { Id = ProcurementId, Name = ApplicationRole.Procurement.ToString(), NormalizedName = ApplicationRole.Procurement.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
-          //new Role { Id = ITId, Name = ApplicationRole.IT.ToString(), NormalizedName = ApplicationRole.IT.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
-          //new Role { Id = StoreId, Name = ApplicationRole.Store.ToString(), NormalizedName = ApplicationRole.Store.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
-          //new Role { Id = CustomerServiceId, Name = ApplicationRole.CustomerService.ToString(), NormalizedName = ApplicationRole.CustomerService.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
-          //new Role { Id = EngineeringId, Name = ApplicationRole.Engineering.ToString(), NormalizedName = ApplicationRole.Engineering.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
-          //new Role { Id = CommercialId, Name = ApplicationRole.Commercial.ToString(), NormalizedName = ApplicationRole.Commercial.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
-          //new Role { Id = InfoFortId, Name = ApplicationRole.InfoFort.ToString(), NormalizedName = ApplicationRole.InfoFort.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" }
-          //   );
+            //  builder.Entity<Role>().HasData(
+            //   new Role { Id = BasicId, Name = ApplicationRole.Basic.ToString(), NormalizedName = ApplicationRole.Basic.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
+            //new Role { Id = SuperAdminId, Name = ApplicationRole.SysAdmin.ToString(), NormalizedName = ApplicationRole.SysAdmin.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
+            //new Role { Id = HRId, Name = ApplicationRole.HR.ToString(), NormalizedName = ApplicationRole.HR.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
+            //new Role { Id = FinanceId, Name = ApplicationRole.Finance.ToString(), NormalizedName = ApplicationRole.Finance.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
+            //new Role { Id = ProcurementId, Name = ApplicationRole.Procurement.ToString(), NormalizedName = ApplicationRole.Procurement.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
+            //new Role { Id = ITId, Name = ApplicationRole.IT.ToString(), NormalizedName = ApplicationRole.IT.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
+            //new Role { Id = StoreId, Name = ApplicationRole.Store.ToString(), NormalizedName = ApplicationRole.Store.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
+            //new Role { Id = CustomerServiceId, Name = ApplicationRole.CustomerService.ToString(), NormalizedName = ApplicationRole.CustomerService.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
+            //new Role { Id = EngineeringId, Name = ApplicationRole.Engineering.ToString(), NormalizedName = ApplicationRole.Engineering.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
+            //new Role { Id = CommercialId, Name = ApplicationRole.Commercial.ToString(), NormalizedName = ApplicationRole.Commercial.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" },
+            //new Role { Id = InfoFortId, Name = ApplicationRole.InfoFort.ToString(), NormalizedName = ApplicationRole.InfoFort.ToString().ToUpper(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = "E-Document" }
+            //   );
 
             #endregion Roles
 

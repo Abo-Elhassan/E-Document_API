@@ -52,9 +52,6 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.DocumentNumber)
             .IsRequired()
             .HasMaxLength(50);
-
-            entity.Property(e => e.CreditNote)
-            .HasMaxLength(200);
             
             
             entity.Property(e => e.Amount)

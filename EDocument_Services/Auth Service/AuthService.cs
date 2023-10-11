@@ -59,7 +59,7 @@ namespace EDocument_Services.Auth_Service
                 issuer: _jwtSettings.Value.Issuer,
                 audience: _jwtSettings.Value.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(_jwtSettings.Value.DurationInMinutes),
+                expires: DateTime.Now.AddDays(_jwtSettings.Value.DurationInDays),
                 signingCredentials: signingCredentials);
 
             return jwtSecurityToken;
@@ -183,7 +183,7 @@ namespace EDocument_Services.Auth_Service
                 Company = user?.Company,
                 IsEmployee = user?.IsEmployee ?? true,
                 Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                TokenExpiryDate = DateTime.Parse(DateTime.Now.AddMinutes(_jwtSettings.Value.DurationInMinutes).ToString("yyyy-MM-dd HH:mm:ss")),
+                TokenExpiryDate = DateTime.Parse(DateTime.Now.AddDays(_jwtSettings.Value.DurationInDays).ToString("yyyy-MM-dd HH:mm:ss")),
                 Roles = userRoles,
                 MenuContents = GetMenuContents(user).Result
             };

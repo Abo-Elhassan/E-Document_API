@@ -18,7 +18,7 @@ namespace EDocument_Data.Models
         public string RelatedContainers { get; set; }
         public string ConcernedEmployeeId { get; set; }
         public string ConcernedEmployeeName { get; set; }
-        public string CreditNote { get; set; }
+        public long CreditNote { get; set; }
         public string Amount { get; set; }
         public Request Request { get; set; }
     }
