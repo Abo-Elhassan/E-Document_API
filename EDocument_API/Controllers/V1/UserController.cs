@@ -393,7 +393,7 @@ namespace EDocument_API.Controllers.V1
                 var AddResult = await _userManager.AddToRolesAsync(user, userRoleDto.Roles);
                 if (AddResult.Succeeded)
                 {
-                  
+                    user.Roles = String.Join(",", userRoleDto.Roles);
                     user.ModifiedBy = _userManager.FindByNameAsync(User?.Identity?.Name)?.Result?.FullName;
                     _unitOfWork.Repository<User>().Update(user);
                     _unitOfWork.Complete();

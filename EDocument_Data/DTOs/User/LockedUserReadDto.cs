@@ -13,6 +13,6 @@ namespace EDocument_Data.DTOs.User
         public string Email { get; init; }
         public string Position { get; init; }
         public string Company { get; init; }
-        public bool IsEmployee { get; set; }
+        public bool HasLDAP { get; set; }
     }
 }

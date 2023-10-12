@@ -2162,7 +2162,9 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(refundRequestCreateDto.DefinedRequestId, requestId, refundRequestCreateDto.ConcernedEmployeeId);
+            await _requestReviewerRepository.BeginRequestCycle(refundRequestCreateDto.DefinedRequestId, requestId);
+
+            await _requestReviewerRepository.NominateReviewer( requestId, refundRequestCreateDto.ConcernedEmployeeId, user?.FullName);
 
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
@@ -2285,7 +2287,8 @@ namespace EDocument_API.Controllers.V1
             request.ModifiedBy = user?.FullName;
 
             var result = _unitOfWork.Complete();
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, refundRequestUpdateDto.ConcernedEmployeeId);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id);
+            await _requestReviewerRepository.NominateReviewer(request.Id, refundRequestUpdateDto.ConcernedEmployeeId, user?.FullName);
 
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });

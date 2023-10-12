@@ -8,6 +8,7 @@ namespace EDocument_Data.Models.Audit;
 
 public  class AuditDefinedRequestReviewer : AuditBaseEntity
 {
+    public long Key { get; set; }
     public long DefinedRequestId { get; set; }
 
     public string AssignedReviewerId { get; set; }

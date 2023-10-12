@@ -13,9 +13,11 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<RequestReviewer> entity)
         {
-            entity.HasKey(e => new { e.RequestId, e.AssignedReviewerId });
+            // entity.HasKey(e => new { e.RequestId, e.AssignedReviewerId });
+            entity.HasKey(e => e.Key);
+            entity.Property(e => e.Key)
+            .ValueGeneratedNever();
 
-            
             entity.ToTable(nameof(RequestReviewer), tb => tb.HasTrigger($"TR_{nameof(AuditRequestReviewer)}"));
 
             entity.Property(e => e.AssignedReviewerId)

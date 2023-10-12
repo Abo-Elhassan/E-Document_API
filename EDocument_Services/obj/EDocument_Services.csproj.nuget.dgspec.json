@@ -221,6 +221,10 @@
             "System.DirectoryServices": {
               "target": "Package",
               "version": "[7.0.1, )"
+            },
+            "System.DirectoryServices.AccountManagement": {
+              "target": "Package",
+              "version": "[7.0.1, )"
             }
           },
           "imports": [

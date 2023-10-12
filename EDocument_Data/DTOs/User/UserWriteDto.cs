@@ -31,11 +31,7 @@ namespace EDocument_Data.DTOs.User
         public required string PhoneNumber { get; init; }
 
         [Required]
-        public bool IsEmployee { get; init; }
-
-        [Required]
-        public bool IsActive { get; init; }
-
+        public bool HasLDAP { get; init; }
 
         [StringLength(200)]
         public string? Company { get; init; }

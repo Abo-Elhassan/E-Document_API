@@ -20,7 +20,7 @@ namespace EDocument_Data.DTOs.User
         public string Department { get; init; }
         public string Section { get; init; }
         public string Company { get; init; }
-        public bool IsEmployee { get; init; }
+        public bool HasLDAP { get; set; }
         public  List<string> Roles { get; init; }
         public  ICollection<MenuContent> MenuContents { get; init; } = new HashSet<MenuContent>();
         public  string Token { get; init; }

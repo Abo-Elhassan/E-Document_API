@@ -77,24 +77,33 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
             return requestReviewersEmails.ToString();
         }
-        public async Task NominateReviewer(long requestId, string reviewerId)
+        public async Task NominateReviewer(long requestId, string reviewerId,string naminatedBy)
         {
            var nominatedReviewer =await  _context.RequestReviewers.FirstOrDefaultAsync(rr=>rr.ReviewerType==ReviewerType.NominatedReviewer&&rr.RequestId== requestId);
             if (nominatedReviewer!=null) 
             {
                 nominatedReviewer.AssignedReviewerId = reviewerId;
+                nominatedReviewer.ModifiedBy = naminatedBy;
             }
+            _context.Update(nominatedReviewer);
             _context.SaveChanges();
         }
 
-        public async Task BeginRequestCycle(long definedRequestId, long requestId, string? nominatedEmployeeId = null)
+        public async Task BeginRequestCycle(long definedRequestId, long requestId)
         {
             var definedRequestReviewers = await GetAllDefinedRequestReviewersAsync(definedRequestId);
           
 
 
-            var request = await _context.Requests.Include(r => r.RequestReviewers).FirstOrDefaultAsync(r => r.Id == requestId);
+            var request = await _context.Requests.FirstOrDefaultAsync(r => r.Id == requestId);
             _mapper.Map(definedRequestReviewers, request?.RequestReviewers);
+            foreach (var item in request?.RequestReviewers)
+            {
+                item.Key= Guid.NewGuid().ToString();
+                item.RequestId = requestId;
+                item.CreatedBy = "E-Document";
+            }
+
             var firstReviewer = request?.RequestReviewers.FirstOrDefault(rr => rr.StageNumber == 1);
 
             request.CurrentStage=1;
@@ -115,10 +124,6 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                     case ReviewerType.DepartmentManager:
                         firstReviewer.AssignedReviewerId = _userRepository.FindDepartmentManagerByIdAsync(request.CreatorId)?.Result.Value.Id;
                         break;
-                    case ReviewerType.NominatedReviewer:
-                        if (nominatedEmployeeId != null)
-                            firstReviewer.AssignedReviewerId = nominatedEmployeeId;
-                        break;
 
                     default:
                         break;
@@ -131,7 +136,8 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                     firstReviewer.ModifiedBy = "E-Documnet";
                 }
             }
-
+            _context.AddRange(request?.RequestReviewers);
+            _context.Update(request);
             _context.SaveChanges();
         }
 

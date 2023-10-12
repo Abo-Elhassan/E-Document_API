@@ -90,7 +90,7 @@ namespace EDocument_Services.Auth_Service
                 return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"User: ({loginWriteDto.UserName}) is locked, Please Contact DPWS IT Team" });
             }
 
-            var result = user.IsEmployee ? AuthenticatEmpolyeeAsync(loginWriteDto, user, isLockedOut).Result : AuthenticatGuestAsync(loginWriteDto, user, isLockedOut).Result;
+            var result = user.HasLDAP ? AuthenticatEmpolyeeAsync(loginWriteDto, user, isLockedOut).Result : AuthenticatGuestAsync(loginWriteDto, user, isLockedOut).Result;
             _context.SaveChangesAsync();
 
             return result;
@@ -98,14 +98,14 @@ namespace EDocument_Services.Auth_Service
 
         private async Task<ActionResult> AuthenticatEmpolyeeAsync(LoginWriteDto loginWriteDto, User user, bool isLockedOut)
         {
-            try
-            {
-                //Path to your LDAP directory server
-                //Authentication adAuth = new Authentication(ApplicationConsts.ADPath);
-                //if (!adAuth.IsAuthenticated(ApplicationConsts.ADDomain, loginWriteDto.UserName, loginWriteDto.Password))
-                //{
-                //    return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Usermame or Password is incorrect" });
-                //}
+       
+               //var result =  Authentication.IsUserAuthenticated(ApplicationConsts.ADDomain, loginWriteDto.UserName, loginWriteDto.Password);
+               // if (!result.IsAuthenticated)
+               // {
+            
+               // return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = result.Message });
+               // }
+
                 await _userManager.ResetAccessFailedCountAsync(user);
 
                 var userRoles = await _userManager.GetRolesAsync(user);
@@ -119,11 +119,7 @@ namespace EDocument_Services.Auth_Service
                 user.LastLogin = DateTime.Now;
 
                 return new OkObjectResult(new ApiResponse<LoginReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = userDetails });
-            }
-            catch (COMException)
-            {
-                return await HandleWrongLoginAttempt(user, isLockedOut);
-            }
+         
         }
 
         private async Task<ActionResult> AuthenticatGuestAsync(LoginWriteDto loginWriteDto, User user, bool isLockedOut)
@@ -156,11 +152,11 @@ namespace EDocument_Services.Auth_Service
                 await _userManager.AccessFailedAsync(user);
             }
 
-            if (accessFailedCount == 2)
+            if (accessFailedCount == 2&& !user.HasLDAP)
             {
                 await _userManager.SetLockoutEnabledAsync(user, true);
 
-                return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"User: ({user.UserName}) is locked, Please Contact DPWS IT Team" });
+                return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"User: ({user.UserName}) is locked on E-Document, Please Contact DPWS IT Team" });
             }
 
             return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Usermame or Password is incorrect, you have another {3 - (accessFailedCount + 1)} attempts" });
@@ -181,7 +177,7 @@ namespace EDocument_Services.Auth_Service
                 Department = user?.Department?.DepartmentName ?? "",
                 Section = user?.Section?.SectionName ?? "",
                 Company = user?.Company,
-                IsEmployee = user?.IsEmployee ?? true,
+                HasLDAP = user?.HasLDAP ?? true,
                 Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
                 TokenExpiryDate = DateTime.Parse(DateTime.Now.AddDays(_jwtSettings.Value.DurationInDays).ToString("yyyy-MM-dd HH:mm:ss")),
                 Roles = userRoles,
@@ -215,51 +211,83 @@ namespace EDocument_Services.Auth_Service
                         var displayedRequest = new DisplayedRequest();
                         var requestDdl = new List<RequestDdlContent>();
 
-                        displayedRequest.DefinedRequestId = request.DefinedRequestId;
-                        displayedRequest.DefinedRequestName = request.RequestName;
+                        if (!displayedRequests.Any(r=>r.DefinedRequestId == request.DefinedRequestId))
+                        {
+                            displayedRequest.DefinedRequestId = request.DefinedRequestId;
+                            displayedRequest.DefinedRequestName = request.RequestName;
 
-                        if (request.Permission == RequestPermission.All)
-                        {
-                            requestDdl = new List<RequestDdlContent>
+                            if (request.Permission == RequestPermission.All)
                             {
-                                new RequestDdlContent
+                                requestDdl = new List<RequestDdlContent>
                                 {
-                                    DisplayName = "Inbox",
-                                    RouteName = $"{request.RouteName}Inbox",
-                                },
-                                 new RequestDdlContent
-                                {
-                                    DisplayName = "AssignedToMe",
-                                    RouteName = $"{request.RouteName}AssignedToMe",
-                                }
-                            };
-                        }
-                        else if (request.Permission == RequestPermission.Request)
-                        {
-                            requestDdl = new List<RequestDdlContent>
+                                    new RequestDdlContent
+                                    {
+                                        DisplayName = "Inbox",
+                                        RouteName = $"{request.RouteName}Inbox",
+                                    },
+                                     new RequestDdlContent
+                                    {
+                                        DisplayName = "Assigned To Me",
+                                        RouteName = $"{request.RouteName}AssignedToMe",
+                                    }
+                                };
+                            }
+                            else if (request.Permission == RequestPermission.Request)
                             {
-                                new RequestDdlContent
+                                requestDdl = new List<RequestDdlContent>
                                 {
-                                    DisplayName = "Inbox",
-                                    RouteName = $"{request.RouteName}Inbox",
-                                }
-                            };
+                                    new RequestDdlContent
+                                    {
+                                        DisplayName = "Inbox",
+                                        RouteName = $"{request.RouteName}Inbox",
+                                    }
+                                };
+                            }
+                            else
+                            {
+                                requestDdl = new List<RequestDdlContent>
+                                {
+                                     new RequestDdlContent
+                                    {
+                                        DisplayName = "Assigned To Me",
+                                        RouteName = $"{request.RouteName}AssignedToMe",
+                                    }
+                                };
+                            }
                         }
                         else
                         {
-                            requestDdl = new List<RequestDdlContent>
+                            var commondisplayedRequest = displayedRequests.FirstOrDefault(r => r.DefinedRequestId == request.DefinedRequestId);
+                            if (request.Permission == RequestPermission.Request)
                             {
-                                 new RequestDdlContent
+                                commondisplayedRequest.RequestDdl.Add(new RequestDdlContent
                                 {
-                                    DisplayName = "AssignedToMe",
+                                    DisplayName = "Inbox",
+                                    RouteName = $"{request.RouteName}Inbox",
+                                });
+                              
+                            }
+                            else
+                            {
+
+                                commondisplayedRequest.RequestDdl.Add(new RequestDdlContent
+                                {
+                                    DisplayName = "Assigned To Me",
                                     RouteName = $"{request.RouteName}AssignedToMe",
-                                }
-                            };
+                                });
+                               
+                            }
                         }
 
-                        displayedRequest.RequestDdl = requestDdl;
 
-                        displayedRequests.Add(displayedRequest);
+                       
+
+                        displayedRequest.RequestDdl = requestDdl;
+                        if (displayedRequest.RequestDdl.Count>0 && displayedRequest.DefinedRequestName!=null)
+                        {
+                            displayedRequests.Add(displayedRequest);
+                        }
+                      
 
                         menuContent.DisplayedRequests = displayedRequests;
                     }

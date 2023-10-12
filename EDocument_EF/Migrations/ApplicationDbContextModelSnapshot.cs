@@ -418,6 +418,9 @@ namespace EDocument_EF.Migrations
                     b.Property<DateTime?>("DelegatedUntil")
                         .HasColumnType("datetime2");
 
+                    b.Property<long>("Key")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -536,6 +539,51 @@ namespace EDocument_EF.Migrations
                     b.HasKey("AuditId");
 
                     b.ToTable("AuditDepartment", "audit");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditDiscountRequest", b =>
+                {
+                    b.Property<decimal>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(18,0)");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DataStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("RequestNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AuditId");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("AuditDiscountRequest", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditDomainAccountRequest", b =>
@@ -871,6 +919,9 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -1149,15 +1200,12 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("HasLDAP")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Id")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsEmployee")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastLogin")
                         .HasColumnType("datetime2");
@@ -1193,6 +1241,9 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Position")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Roles")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("SectionId")
@@ -1627,6 +1678,52 @@ namespace EDocument_EF.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.DiscountRequest", b =>
+                {
+                    b.Property<string>("RequestNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("AgreementName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CustomerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HasCommercialAgreement")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("MyProperty")
+                        .HasColumnType("int");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("RequestNumber");
+
+                    b.HasIndex("RequestId")
+                        .IsUnique();
+
+                    b.ToTable("DiscountRequest", null, t =>
+                        {
+                            t.HasTrigger("TR_AuditDiscountRequest");
+                        });
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.DomainAccountRequest", b =>
                 {
                     b.Property<string>("BeneficiaryId")
@@ -1945,8 +2042,8 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("EDocument_Data.Models.RequestReviewer", b =>
                 {
-                    b.Property<long>("RequestId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AssignedReviewerId")
                         .HasMaxLength(50)
@@ -1965,6 +2062,9 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("ReviewedBy")
                         .HasMaxLength(200)
@@ -1990,9 +2090,11 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasDefaultValue("Pending");
 
-                    b.HasKey("RequestId", "AssignedReviewerId");
+                    b.HasKey("Key");
 
                     b.HasIndex("AssignedReviewerId");
+
+                    b.HasIndex("RequestId");
 
                     b.ToTable("RequestReviewer", null, t =>
                         {
@@ -2244,12 +2346,7 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<bool>("IsEmployee")
+                    b.Property<bool>("HasLDAP")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastLogin")
@@ -2295,6 +2392,10 @@ namespace EDocument_EF.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<string>("Position")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Roles")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -2625,6 +2726,17 @@ namespace EDocument_EF.Migrations
                     b.Navigation("Request");
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditDiscountRequest", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.Request", "Request")
+                        .WithMany()
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Request");
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.DefinedApplication", b =>
                 {
                     b.HasOne("EDocument_Data.Models.User", "ApplicationOwner")
@@ -2711,6 +2823,18 @@ namespace EDocument_EF.Migrations
                         .HasConstraintName("FK_Department_User");
 
                     b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.DiscountRequest", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.Request", "Request")
+                        .WithOne("DiscountRequest")
+                        .HasForeignKey("EDocument_Data.Models.DiscountRequest", "RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_DiscountRequest_Request");
+
+                    b.Navigation("Request");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.DomainAccountRequest", b =>
@@ -2806,7 +2930,6 @@ namespace EDocument_EF.Migrations
                         .WithMany("RequestReviewers")
                         .HasForeignKey("AssignedReviewerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
                         .HasConstraintName("FK_RequestReviewer_User");
 
                     b.HasOne("EDocument_Data.Models.Request", "Request")
@@ -2989,6 +3112,8 @@ namespace EDocument_EF.Migrations
                     b.Navigation("ApplicationUserRequest");
 
                     b.Navigation("Attachments");
+
+                    b.Navigation("DiscountRequest");
 
                     b.Navigation("DomainAccountRequest");
 

@@ -68,7 +68,7 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
             if (user is null) return null;
      
 
-            if (user.IsEmployee)
+            if (user.HasLDAP)
             {
                 email = $"{user.UserName}@dpwsapps.com";
                 

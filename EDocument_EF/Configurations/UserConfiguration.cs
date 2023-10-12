@@ -42,6 +42,9 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.Company)
             .HasMaxLength(200);
 
+            entity.Property(e => e.Roles)
+            .HasMaxLength(200);
+
             entity.Property(e => e.ManagerId)
             .IsRequired(false)
             .HasMaxLength(50);
@@ -73,9 +76,6 @@ namespace EDocument_EF.Configurations
 
             entity.Property(e => e.ModifiedBy)
             .HasMaxLength(200);
-
-            entity.Property(e => e.IsActive)
-                .HasDefaultValue(true);
 
             entity.Property(e => e.EmailConfirmed)
                 .HasDefaultValue(false);

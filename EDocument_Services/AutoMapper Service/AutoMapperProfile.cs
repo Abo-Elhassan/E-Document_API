@@ -106,8 +106,12 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<RequestReviewer, RequestReviewerReadDto>()
               .ForMember(dest => dest.AssignedReviewerId, src => src.MapFrom(opts => opts.AssignedReviewerId));
             CreateMap<DefinedRequestReviewer, RequestReviewer>()
-              .ForMember(dest => dest.RequestId, src => src.Ignore())
-              .ForMember(dest => dest.Status, src => src.MapFrom(opts => RequestStatus.Pending.ToString()));
+              .ForMember(dest => dest.RequestId, src =>src.Ignore())
+              .ForMember(dest => dest.Status, src => src.MapFrom(opts => RequestStatus.Pending.ToString()))
+              .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+              .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+              .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+              .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
 
 

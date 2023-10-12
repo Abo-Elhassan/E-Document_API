@@ -31,9 +31,9 @@ public partial class AuditUser:IdentityUser
 
     public string Company { get; set; }
 
-    public bool IsEmployee { get; set; }
+    public string Roles { get; set; }
 
-    public bool IsActive { get; set; }
+    public bool HasLDAP { get; set; }
 
     public DateTime? LastLogin { get; set; }
 
