@@ -97,9 +97,6 @@ namespace EDocument_Services.Auth_Service
                     return result;
                 }
 
-
-
-
                 result = (true, "Valid User");
                 return result;
             }

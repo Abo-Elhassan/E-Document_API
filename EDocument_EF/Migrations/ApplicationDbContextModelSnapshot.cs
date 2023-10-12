@@ -549,14 +549,44 @@ namespace EDocument_EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
+                    b.Property<string>("AgreementName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CustomerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DataStatus")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("DiscountAmount")
+                        .HasColumnType("real");
+
+                    b.Property<string>("DiscountReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DiscountType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HasCommercialAgreement")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("InvoiceNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedAt")
@@ -565,12 +595,17 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RelatedContainers")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("RequestId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("RequestNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TaxId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
@@ -580,8 +615,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AuditId");
-
-                    b.HasIndex("RequestId");
 
                     b.ToTable("AuditDiscountRequest", "audit");
                 });
@@ -1098,8 +1131,8 @@ namespace EDocument_EF.Migrations
                     b.Property<DateTime?>("CheckOut")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("CostAllocation")
-                        .HasColumnType("real");
+                    b.Property<string>("CostAllocation")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -1685,7 +1718,8 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("AgreementName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("smalldatetime");
@@ -1695,10 +1729,44 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("CustomerName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CustomerType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<float>("DiscountAmount")
+                        .HasColumnType("real");
+
+                    b.Property<string>("DiscountReason")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("DiscountType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DocumentNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DocumentType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("HasCommercialAgreement")
                         .HasColumnType("bit");
+
+                    b.Property<string>("InvoiceNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("smalldatetime");
@@ -1707,11 +1775,14 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("MyProperty")
-                        .HasColumnType("int");
+                    b.Property<string>("RelatedContainers")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("RequestId")
                         .HasColumnType("bigint");
+
+                    b.Property<int?>("TaxId")
+                        .HasColumnType("int");
 
                     b.HasKey("RequestNumber");
 
@@ -2722,17 +2793,6 @@ namespace EDocument_EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Attachment_Request");
-
-                    b.Navigation("Request");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditDiscountRequest", b =>
-                {
-                    b.HasOne("EDocument_Data.Models.Request", "Request")
-                        .WithMany()
-                        .HasForeignKey("RequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Request");
                 });

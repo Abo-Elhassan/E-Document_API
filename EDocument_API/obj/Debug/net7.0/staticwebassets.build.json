@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0FcSULCbE2FDhUfymktahiHKJ27JJ+Aso5nLKhUfJPk=",
+  "Hash": "CAoxoZD6DvdJaa8K8StFO7EPI38pXSPE9M3eti+kd6k=",
   "Source": "EDocument_API",
   "BasePath": "_content/EDocument_API",
   "Mode": "Default",
@@ -16,6 +16,23 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\DiscountRequest\\2023101202520324\\E-Document Requests Priority.xlsx",
+      "SourceId": "EDocument_API",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\",
+      "BasePath": "_content/EDocument_API",
+      "RelativePath": "Attachments/DiscountRequest/2023101202520324/E-Document Requests Priority.xlsx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Attachments\\DiscountRequest\\2023101202520324\\E-Document Requests Priority.xlsx"
+    },
     {
       "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023092407501144\\Technical Documentation -  CLMS.docx",
       "SourceId": "EDocument_API",
@@ -1290,6 +1307,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Attachments\\RefundRequest\\2023101103072016\\Request Requires Attachments.xlsx"
+    },
+    {
+      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\RefundRequest\\2023101104301919\\Requests input validation.xlsx",
+      "SourceId": "EDocument_API",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\",
+      "BasePath": "_content/EDocument_API",
+      "RelativePath": "Attachments/RefundRequest/2023101104301919/Requests input validation.xlsx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Attachments\\RefundRequest\\2023101104301919\\Requests input validation.xlsx"
     },
     {
       "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\TravelDeskRequest\\2023093001511959\\Transit_List.xlsx",

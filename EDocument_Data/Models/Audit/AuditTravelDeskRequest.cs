@@ -15,7 +15,7 @@ namespace EDocument_Data.Models.Audit
     {
         public string RequestType { get; set; }
         public string BeneficiaryNationality { get; set; }
-        public float CostAllocation { get; set; }
+        public string CostAllocation { get; set; }
         public DateTime? CheckIn { get; set; }
         public DateTime? CheckOut { get; set; }
         public string MissionAddress { get; set; }

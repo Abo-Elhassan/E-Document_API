@@ -21,7 +21,41 @@ namespace EDocument_EF.Configurations
             .ValueGeneratedNever();
 
 
-        
+            entity.Property(e => e.CustomerType)
+            .IsRequired()
+            .HasMaxLength(50);
+
+            entity.Property(e => e.CustomerName)
+            .IsRequired()
+            .HasMaxLength(200);
+
+            entity.Property(e => e.CustomerName)
+           .HasMaxLength(200);
+
+            entity.Property(e => e.AgreementName)
+           .HasMaxLength(200);
+
+            entity.Property(e => e.TaxId)
+            .IsRequired(false);
+
+            entity.Property(e => e.DocumentType)
+            .IsRequired()
+            .HasMaxLength(50);
+
+            entity.Property(e => e.DocumentNumber)
+            .IsRequired()
+            .HasMaxLength(50);
+
+            entity.Property(e => e.InvoiceNumber)
+            .HasMaxLength(50);
+
+            entity.Property(e => e.DiscountType)
+            .IsRequired()
+            .HasMaxLength(50);
+            
+            entity.Property(e => e.DiscountReason)
+            .IsRequired()
+            .HasMaxLength(200);
 
             entity.Property(e => e.CreatedAt)
             .HasColumnType("smalldatetime");
