@@ -16,6 +16,9 @@ namespace EDocument_EF.Configurations
 
             entity.HasKey(e => e.RequestNumber);
 
+            entity.HasIndex(e => e.DocumentNumber).IsUnique();
+            entity.HasIndex(e => e.InvoiceNumber).IsUnique();
+
             entity.Property(e => e.RequestNumber)
             .HasMaxLength(50)
             .ValueGeneratedNever();
@@ -34,6 +37,12 @@ namespace EDocument_EF.Configurations
 
             entity.Property(e => e.AgreementName)
            .HasMaxLength(200);
+
+            entity.Property(e => e.LineName)
+            .HasMaxLength(50);
+
+            entity.Property(e => e.LineCode)
+            .HasMaxLength(50);
 
             entity.Property(e => e.TaxId)
             .IsRequired(false);

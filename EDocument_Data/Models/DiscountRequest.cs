@@ -11,6 +11,8 @@ namespace EDocument_Data.Models
         public string CustomerName { get; set; }
         public bool HasCommercialAgreement { get; set; }
         public string AgreementName { get; set; }
+        public string LineName { get; set; }
+        public string LineCode { get; set; }
         public int? TaxId { get; set; }
         public string DocumentType { get; set; }
         public string DocumentNumber { get; set; }

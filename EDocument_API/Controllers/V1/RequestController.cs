@@ -26,6 +26,7 @@ using EDocument_Data.DTOs.Requests.RefundRequest;
 using EDocument_Data.Consts;
 using EDocument_Data.DTOs.DefinedRequest;
 using EDocument_Data.DTOs.Requests.DiscountRequest;
+using EDocument_Data.DTOs.Requests;
 
 namespace EDocument_API.Controllers.V1
 {
@@ -67,6 +68,57 @@ namespace EDocument_API.Controllers.V1
 
 
         /// <summary>
+        /// Get Requests Dashboard Info 
+        /// </summary>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>Requests Dashboard Info</returns>
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<RequestDashboardReadDto>))]
+        [HttpGet("Dashboard")]
+        [Authorize]
+        public async Task<ActionResult> GetRequestsDashboardInfo()
+        {
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            _logger.LogInformation($"Start GetRequestsDashboardInfo from {nameof(RequestController)} for user id = {user.Id}");
+
+           
+            Expression<Func<Request, bool>> allRequestsExpression = (r => r.CreatorId==user.Id);
+            var createdRequests = await _unitOfWork.Repository<Request>().FindAllAsync(allRequestsExpression, new string[] { "DefinedRequest" });
+
+            var response = new RequestDashboardReadDto();
+
+            response.CreatedRequests = createdRequests.Count();
+            response.PendingRequests = createdRequests.Count(r=>r.Status==RequestStatus.Pending.ToString());
+            response.ApprovedRequests = createdRequests.Count(r => r.Status == RequestStatus.Approved.ToString());
+            response.DeclinedRequests = createdRequests.Count(r => r.Status == RequestStatus.Declined.ToString());
+           var recentCreatedRequests= _mapper.Map<List<RecentRequestReadDto>>(createdRequests);
+
+            foreach (var request in recentCreatedRequests)
+            {
+                request.UserRole = "Creator";
+            }
+
+            Expression<Func<Request, bool>> reviewingRequestsExpression = (r => r.RequestReviewers.Any(rr => rr.AssignedReviewerId == user.Id&&r.CurrentStage==rr.StageNumber));
+            var reviewingRequests = await _unitOfWork.Repository<Request>().FindAllAsync(reviewingRequestsExpression, new string[] { "RequestReviewers" });
+
+            var recentReviewingRequests = _mapper.Map<List<RecentRequestReadDto>>(reviewingRequests);
+
+            foreach (var request in recentReviewingRequests)
+            {
+                request.UserRole = "Reviewer";
+            }
+            var recentRequests = new List<RecentRequestReadDto>();
+            recentRequests.AddRange(recentCreatedRequests);
+            recentRequests.AddRange(recentReviewingRequests);
+            response.RecentRequests = recentRequests;
+            response.RecentRequests=response.RecentRequests.OrderByDescending(r => r.CreatedAt).Take(10).ToList();
+
+            return Ok(new ApiResponse<RequestDashboardReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+        }
+
+        /// <summary>
         /// Get Request Reviewers Details
         /// </summary>
         /// <param name="id">request id</param>
@@ -93,6 +145,8 @@ namespace EDocument_API.Controllers.V1
 
             return Ok(new ApiResponse<ReviewersDetailsDto> { StatusCode = (int)HttpStatusCode.OK, Details = reviewerDetails });
         }
+
+
 
         #region Procurement
 
@@ -2535,7 +2589,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpDelete("Discount/{id}")]
-        [Authorize(Roles = "CustomerService")]
+        [Authorize(Roles = "CustomerService,Commercial")]
         public async Task<ActionResult> DeleteDiscountRequest(long id)
         {
             _logger.LogInformation($"Start DeleteDiscountRequest from {nameof(RequestController)} for request id = {id}");
@@ -2585,7 +2639,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>List of All Created Discount Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<DiscountRequestReadDto>>))]
         [HttpPost("Discount/Inbox")]
-        [Authorize(Roles = "CustomerService")]
+        [Authorize(Roles = "CustomerService,Commercial")]
         public async Task<ActionResult> GetCreatorDiscountRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetCreatorDiscountRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -2725,12 +2779,27 @@ namespace EDocument_API.Controllers.V1
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Discount/Create")]
-        [Authorize(Roles = "CustomerService")]
+        [Authorize(Roles = "CustomerService,Commercial")]
         public async Task<ActionResult> CreateDiscountRequest([FromForm] DiscountRequestCreateDto discountRequestCreateDto)
         {
 
             _logger.LogInformation($"Start CreateDiscountRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(discountRequestCreateDto)} ");
 
+
+            Expression<Func<DiscountRequest, bool>> documenteNumberCriteria = (r => r.DocumentNumber == discountRequestCreateDto.DocumentNumber);
+            var discountRequest = await _unitOfWork.Repository<DiscountRequest>().FindAsync(documenteNumberCriteria);
+            if (discountRequest != null)
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Submitted document number has beed already used in another request no. {discountRequest.RequestNumber}" });
+
+            }
+            else if (discountRequestCreateDto.InvoiceNumber!=null)
+            {
+                Expression<Func<DiscountRequest,bool>> invoiceNumberCriteria = (r=>r.InvoiceNumber==discountRequestCreateDto.InvoiceNumber);
+                 discountRequest = await _unitOfWork.Repository<DiscountRequest>().FindAsync(invoiceNumberCriteria);
+                if (discountRequest != null)
+                    return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Submitted invoice number has beed already used in another request no. {discountRequest.RequestNumber}" });
+            }
 
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
@@ -2830,7 +2899,7 @@ namespace EDocument_API.Controllers.V1
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Discount/Update/{id}")]
-        [Authorize(Roles = "CustomerService")]
+        [Authorize(Roles = "CustomerService,Commercial")]
         public async Task<ActionResult> UpdateDiscountRequest(long id, [FromForm] DiscountRequestUpdateDto discountRequestUpdateDto)
         {
             _logger.LogInformation($"Start UpdateDiscountRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(discountRequestUpdateDto)} ");

@@ -25,6 +25,9 @@ namespace EDocument_Data.DTOs.Requests.DiscountRequest
         public string CustomerType { get; set; }
         public string CustomerName { get; set; }
         public bool HasCommercialAgreement { get; set; }
+        public string AgreementName { get; set; }
+        public string LineName { get; set; }
+        public string LineCode { get; set; }
         public int? TaxId { get; set; }
         public  string DocumentType { get; set; }
         public string DocumentNumber { get; set; }
@@ -32,6 +35,7 @@ namespace EDocument_Data.DTOs.Requests.DiscountRequest
         public string RelatedContainers { get; set; }
         public string DiscountType { get; set; }
         public string DiscountReason { get; set; }
+        public float DiscountAmount { get; set; }
         public List<AttachmentReadDto> Attachments { get; set; }
 
         public string CreatedBy { get; init; }

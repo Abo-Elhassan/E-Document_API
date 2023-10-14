@@ -18,6 +18,8 @@ namespace EDocument_Data.DTOs.Requests.DiscountRequest
         public bool HasCommercialAgreement { get; set; }
 
         public string? AgreementName { get; set; }
+        public string? LineName { get; set; }
+        public string? LineCode { get; set; }
 
         public int? TaxId { get; set; }
 
