@@ -1,5 +1,6 @@
 ﻿
 using EDocument_Data.Models;
+using EDocument_Data.Models.Audit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -11,11 +12,11 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<Attachment> entity)
         {
-
-            entity.ToTable(nameof(Attachment));
+            entity.ToTable(nameof(Attachment), tb => tb.HasTrigger($"TR_{nameof(AuditAttachment)}"));
+         
 
             entity.Property(e => e.Id)
-            .UseIdentityColumn();
+            .UseIdentityColumn(1, 1);
 
             entity.Property(e => e.FilePath)
             .IsRequired();
@@ -27,14 +28,14 @@ namespace EDocument_EF.Configurations
             .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
 
             entity.Property(e => e.ModifiedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
 
             entity.HasOne(d => d.Request).WithMany(p => p.Attachments)
             .HasForeignKey(d => d.RequestId)
-            .OnDelete(DeleteBehavior.Restrict)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_Attachment_Request");
 
 

@@ -10,10 +10,11 @@ namespace EDocument_Data.Models
 {
     public class PoRequest : BaseEntity
     {
+        public string RequestNumber { get; set; }
         public string PoNumber { get; set; }
         public string PoDescription { get; set; }
         public string VendorName { get; set; }
-        public string VendorNumber { get; set; }
+        public int VendorNumber { get; set; }
         public string InvoiceNumber { get; set; }
         public string PoAttachmentPath { get; set; }
         public string InvoiceAttachmentPath { get; set; }

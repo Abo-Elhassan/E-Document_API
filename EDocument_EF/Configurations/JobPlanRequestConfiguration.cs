@@ -14,6 +14,7 @@ namespace EDocument_EF.Configurations
 
             entity.ToTable(nameof(JobPlanRequest));
 
+
             entity.Property(e => e.Action).HasConversion<string>()
             .IsRequired()
             .HasMaxLength(50);
@@ -25,10 +26,10 @@ namespace EDocument_EF.Configurations
             .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
 
             entity.Property(e => e.ModifiedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
 
             OnConfigurePartial(entity);
         }

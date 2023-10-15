@@ -1,6 +1,8 @@
 ﻿#nullable disable
+using Microsoft.AspNetCore.Authentication;
 using System;
 using System.DirectoryServices;
+using System.DirectoryServices.AccountManagement;
 using System.Globalization;
 using System.Text;
 
@@ -15,6 +17,92 @@ namespace EDocument_Services.Auth_Service
         {
             _path = path;
         }
+        private static (bool IsDisabled, string Message) IsUserDisabled(string username)
+        {
+            (bool IsDisabled, string Message) result = (false, null);
+
+            using (PrincipalContext context = new PrincipalContext(ContextType.Domain))
+            {
+                UserPrincipal user = UserPrincipal.FindByIdentity(context, IdentityType.SamAccountName, username);
+
+                if (user != null)
+                {
+                    bool isDisabled = !user?.Enabled ?? true;  // Check if the user account is disabled
+
+                    result = isDisabled ? (true, $"User: '{username}' is disabled on Active Directory, Please Contact DPWS IT Team") : (false, "");
+
+                    return result;
+                }
+                else
+                {
+                    result = (true, $"User: '{username}' not found");
+                    return result;
+
+                }
+            }
+        }
+
+        private static (bool IsLocked, string Message) IsUserLockedOut(string username)
+        {
+            (bool IsLocked, string Message) result = (false, null);
+            using (PrincipalContext context = new PrincipalContext(ContextType.Domain))
+            {
+                UserPrincipal user = UserPrincipal.FindByIdentity(context, IdentityType.SamAccountName, username);
+
+                if (user != null)
+                {
+                    bool isLockedOut = user.IsAccountLockedOut();  // Check if the user account is locked
+
+                    result =  isLockedOut ? (true, $"User: '{username}' is locked on Active Directory, Please Contact DPWS IT Team"): (false, "");
+
+                    return result;
+                }
+                else
+                {
+                    result = (true, $"User: '{username}' not found");
+                    return result;
+                   
+                }
+            }
+        }
+
+        public static  (bool IsAuthenticated, string Message) IsUserAuthenticated(string domain, string username, string password)
+        {
+            (bool IsAuthenticated, string Message) result = (false,null);
+
+            using (PrincipalContext context = new PrincipalContext(ContextType.Domain, domain))
+            {
+
+                var checkLockResult = IsUserLockedOut(username);
+                if (checkLockResult.IsLocked)
+                {
+                    result = (false, checkLockResult.Message);
+
+                    return result;
+                }
+
+                var checkDisabledResult = IsUserDisabled(username);
+                if (checkDisabledResult.IsDisabled)
+                {
+                    result = (false, checkDisabledResult.Message);
+
+                    return result;
+                }
+
+                bool isInValid = !context.ValidateCredentials(username.ToLower(), password);
+                if (isInValid)
+                {
+                    result = (false, "Usermame or Password is incorrect");
+
+                    return result;
+                }
+
+                result = (true, "Valid User");
+                return result;
+            }
+        }
+
+
         public bool IsAuthenticated(string domain, string username, string pwd)
         {
             string domainAndUsername = domain + @"\" + username;

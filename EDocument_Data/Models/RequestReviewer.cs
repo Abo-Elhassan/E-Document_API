@@ -11,17 +11,20 @@ namespace EDocument_Data.Models
 {
     public class RequestReviewer : BaseEntity
     {
+        public string Key { get; set; }
         public long RequestId { get; set; }
 
-        public string ReviewerId { get; set; }
+        public string AssignedReviewerId { get; set; }
+
+        public string ReviewedBy { get; set; }
 
         public string StageName { get; set; }
 
         public int StageNumber { get; set; }
 
-        public string ReviewerType { get; set; }
+        public ReviewerType ReviewerType { get; set; }
 
-        public RequestStatus Status { get; set; }
+        public string Status { get; set; }
 
         public string ReviewerNotes { get; set; }
 

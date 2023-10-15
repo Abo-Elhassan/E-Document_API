@@ -9,9 +9,9 @@ namespace EDocument_Data.Models.Shared
 {
     public record struct DateFilter
     {
-        public required string ColumnName { get; set; }
-        public required DateTime From { get; set; }
-        public required DateTime To { get; set; }
+        public  string ColumnName { get; set; }
+        public  DateOnly? From { get; set; }
+        public DateOnly? To { get; set; }
 
     }
 

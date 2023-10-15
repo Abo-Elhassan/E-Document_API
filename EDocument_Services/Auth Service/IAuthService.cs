@@ -10,7 +10,7 @@ namespace EDocument_Services.Auth_Service
 {
     public interface IAuthService
     {
-        Task<ActionResult> AuthenticatUserAsync(UserWriteDto loginWriteDto);
+        Task<ActionResult> AuthenticatUserAsync(LoginWriteDto loginWriteDto);
         
     }
 }

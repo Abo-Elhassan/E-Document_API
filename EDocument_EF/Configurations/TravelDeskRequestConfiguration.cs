@@ -2,6 +2,7 @@
 using Azure;
 using EDocument_Data.Consts.Enums;
 using EDocument_Data.Models;
+using EDocument_Data.Models.Audit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -15,9 +16,14 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<TravelDeskRequest> entity)
         {
-            entity.HasKey(e => new { e.BeneficiaryId, e.RequestId });
+            entity.HasKey(e => e.RequestNumber);
 
-            entity.ToTable(nameof(TravelDeskRequest));
+          
+            entity.ToTable(nameof(TravelDeskRequest), tb => tb.HasTrigger($"TR_{nameof(AuditTravelDeskRequest)}"));
+
+            entity.Property(e => e.RequestNumber)
+            .HasMaxLength(50)
+            .ValueGeneratedNever();
 
             entity.Property(e => e.BeneficiaryId)
             .IsRequired()
@@ -33,10 +39,10 @@ namespace EDocument_EF.Configurations
             .IsRequired()
             .HasMaxLength(200);
 
-            entity.Property(e => e.BeneficiaryPostion)
+            entity.Property(e => e.BeneficiaryPosition)
             .HasMaxLength(200);
 
-            entity.Property(e => e.BeneficiaryPhone)
+            entity.Property(e => e.BeneficiaryPhoneNumber)
             .HasMaxLength(50);
 
             entity.Property(e => e.BeneficiaryExtention)
@@ -46,31 +52,22 @@ namespace EDocument_EF.Configurations
             .IsRequired()
             .HasMaxLength(50);
 
-            entity.Property(item => item.RequestTypes)
-            .HasConversion(
-                requestTypes => string.Join(',', requestTypes.Select(r => r.ToString())),
-                requestTypeString => requestTypeString.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .Select(s => Enum.Parse<TravelDeskRequisition>(s))
-                .ToList()
-            )
+            entity.Property(item => item.RequestType)
             .IsRequired()
-            .HasMaxLength(200)
-            .Metadata.SetValueComparer(new ValueComparer<List<TravelDeskRequisition>>(
-                 (c1, c2) => c1.SequenceEqual(c2),
-                 c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                 c => c.ToList()
-            ));
+            .HasMaxLength(50);
+          
 
-            entity.Property(e => e.PaymentMethod).HasConversion<string>()
+            entity.Property(e => e.PaymentMethod)
             .HasMaxLength(50);
 
 
             entity.Property(e => e.CostAllocation)
+            .HasMaxLength(200)
             .IsRequired();
 
-            entity.Property(e => e.Currency).HasConversion<string>()
-            .IsRequired()
-            .HasMaxLength(50);
+
+            entity.Property(e => e.MissionAddress)
+            .HasMaxLength(200);
 
             entity.Property(e => e.FlightOrigin)
             .HasMaxLength(50);
@@ -103,16 +100,16 @@ namespace EDocument_EF.Configurations
             .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
-            .HasMaxLength(50)
+            .HasMaxLength(200)
             .IsUnicode(false);
 
             entity.Property(e => e.ModifiedBy)
-            .HasMaxLength(50)
+            .HasMaxLength(200)
             .IsUnicode(false);
 
-            entity.HasOne(d => d.Request).WithMany(p => p.TravelDeskRequests)
-            .HasForeignKey(d => d.RequestId)
-            .OnDelete(DeleteBehavior.Restrict)
+            entity.HasOne(d => d.Request).WithOne(p => p.TravelDeskRequest)
+            .HasForeignKey<TravelDeskRequest>(d => d.RequestId)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_TravelDeskRequest_Request");
 
 

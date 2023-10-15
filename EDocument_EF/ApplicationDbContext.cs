@@ -1,10 +1,11 @@
-﻿using EDocument_Data.Models;
+﻿using EDocument_Data.Consts.Enums;
+using EDocument_Data.Models;
+using EDocument_Data.Models.Audit;
 using EDocument_Data.Models.Shared;
 using EDocument_EF.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
 
 namespace EDocument_EF
 {
@@ -29,13 +30,45 @@ namespace EDocument_EF
         public virtual DbSet<RequestApplicationRole> RequestApplicationRoles => Set<RequestApplicationRole>();
         public virtual DbSet<ApplicationUserRequest> ApplicationUserRequests => Set<ApplicationUserRequest>();
         public virtual DbSet<DomainAccountRequest> DomainAccountRequests => Set<DomainAccountRequest>();
-        public virtual DbSet<CarRequest> CarRequests => Set<CarRequest>();
+        public virtual DbSet<VehicleRequest> VehicleRequests => Set<VehicleRequest>();
         public virtual DbSet<TravelDeskRequest> TravelDeskRequests => Set<TravelDeskRequest>();
 
         //public virtual DbSet<JobPlanRequest> JobPlanRequests => Set<JobPlanRequest>();
         public virtual DbSet<VoucherRequest> VoucherRequests => Set<VoucherRequest>();
 
         public virtual DbSet<PoRequest> PoRequests => Set<PoRequest>();
+
+        public virtual DbSet<RefundRequest> RefundRequests => Set<RefundRequest>();
+
+        public virtual DbSet<DiscountRequest> DiscountRequests => Set<DiscountRequest>();
+
+
+        #region Audit Tables
+
+        public virtual DbSet<AuditDefinedRequest> AuditDefinedRequests => Set<AuditDefinedRequest>();
+        public virtual DbSet<AuditDefinedRequestReviewer> AuditDefinedRequestReviewers => Set<AuditDefinedRequestReviewer>();
+        public virtual DbSet<AuditDefinedApplicationRole> AuditDefinedApplicationRoles => Set<AuditDefinedApplicationRole>();
+        public virtual DbSet<AuditDefinedRequestRole> AuditDefinedRequestRoles => Set<AuditDefinedRequestRole>();
+        public virtual DbSet<AuditDepartment> AuditDepartments => Set<AuditDepartment>();
+        public virtual DbSet<AuditSection> AuditSections => Set<AuditSection>();
+        public virtual DbSet<AuditUser> AuditUsers => Set<AuditUser>();
+        public virtual DbSet<AuditRole> AuditRoles => Set<AuditRole>();
+        public virtual DbSet<AuditRequest> AuditRequests => Set<AuditRequest>();
+        public virtual DbSet<AuditAttachment> AuditAttachments => Set<AuditAttachment>();
+        public virtual DbSet<AuditRequestReviewer> AuditRequestReviewers => Set<AuditRequestReviewer>();
+        public virtual DbSet<AuditDefinedApplication> AuditDefinedApplications => Set<AuditDefinedApplication>();
+        public virtual DbSet<AuditRequestApplicationRole> AuditRequestApplicationRoles => Set<AuditRequestApplicationRole>();
+        public virtual DbSet<AuditApplicationUserRequest> AuditApplicationUserRequests => Set<AuditApplicationUserRequest>();
+        public virtual DbSet<AuditDomainAccountRequest> AuditDomainAccountRequests => Set<AuditDomainAccountRequest>();
+        public virtual DbSet<AuditVehicleRequest> AuditVehicleRequests => Set<AuditVehicleRequest>();
+        public virtual DbSet<AuditTravelDeskRequest> AuditTravelDeskRequests => Set<AuditTravelDeskRequest>();   
+        public virtual DbSet<AuditVoucherRequest> AuditVoucherRequests => Set<AuditVoucherRequest>();
+        public virtual DbSet<AuditPoRequest> AuditPoRequests => Set<AuditPoRequest>();
+
+        public virtual DbSet<AuditRefundRequest> AuditRefundRequests => Set<AuditRefundRequest>();
+
+        public virtual DbSet<AuditDiscountRequest> AuditDiscountRequests => Set<AuditDiscountRequest>();
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -56,11 +89,13 @@ namespace EDocument_EF
             builder.ApplyConfiguration(new DefinedApplicationConfiguration());
             builder.ApplyConfiguration(new ApplicationUserRequestConfiguration());
             builder.ApplyConfiguration(new DomainAccountRequestConfiguration());
-            builder.ApplyConfiguration(new CarRequestConfiguration());
+            builder.ApplyConfiguration(new VehicleRequestConfiguration());
             builder.ApplyConfiguration(new TravelDeskRequestConfiguration());
             //builder.ApplyConfiguration(new JobPlanRequestConfiguration());
             builder.ApplyConfiguration(new PoRequestConfiguration());
             builder.ApplyConfiguration(new VoucherRequestConfiguration());
+            builder.ApplyConfiguration(new RefundRequestConfiguration());
+            builder.ApplyConfiguration(new DiscountRequestConfiguration());
         }
 
         public override int SaveChanges()
@@ -71,7 +106,21 @@ namespace EDocument_EF
                 {
                     case EntityState.Added:
                         item.Entity.CreatedAt = DateTime.Now;
+                        break;
+
+                    case EntityState.Modified:
+                    case EntityState.Deleted:
                         item.Entity.ModifiedAt = DateTime.Now;
+                        break;
+                }
+            }
+
+            foreach (var item in ChangeTracker.Entries<User>().AsEnumerable())
+            {
+                switch (item.State)
+                {
+                    case EntityState.Added:
+                        item.Entity.CreatedAt = DateTime.Now;
                         break;
 
                     case EntityState.Modified:
@@ -92,7 +141,21 @@ namespace EDocument_EF
                 {
                     case EntityState.Added:
                         item.Entity.CreatedAt = DateTime.Now;
+                        break;
+
+                    case EntityState.Modified:
+                    case EntityState.Deleted:
                         item.Entity.ModifiedAt = DateTime.Now;
+                        break;
+                }
+            }
+
+            foreach (var item in ChangeTracker.Entries<User>().AsEnumerable())
+            {
+                switch (item.State)
+                {
+                    case EntityState.Added:
+                        item.Entity.CreatedAt = DateTime.Now;
                         break;
 
                     case EntityState.Modified:
@@ -112,13 +175,40 @@ namespace EDocument_EF
     {
         private partial void OnModelCreatingPartial(ModelBuilder builder)
         {
-            builder.Entity<User>().ToTable("User", "security");
-            builder.Entity<Role>().ToTable("Role", "security");
+            
+            builder.Entity<User>().ToTable(nameof(User), "security", tb => tb.HasTrigger($"TR_{nameof(AuditUser)}"));
+            builder.Entity<Role>().ToTable(nameof(Role), "security", tb => tb.HasTrigger($"TR_{nameof(AuditRole)}"));
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims", "security");
             builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles", "security");
             builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims", "security");
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin", "security");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserToken", "security");
+
+            #region Audit
+            builder.Entity<AuditDefinedRequest>().ToTable(nameof(AuditDefinedRequest), "audit");
+            builder.Entity<AuditDefinedRequestReviewer>().ToTable(nameof(AuditDefinedRequestReviewer), "audit");
+            builder.Entity<AuditDefinedApplicationRole>().ToTable(nameof(AuditDefinedApplicationRole), "audit");
+            builder.Entity<AuditDefinedRequestRole>().ToTable(nameof(AuditDefinedRequestRole), "audit");
+            builder.Entity<AuditDepartment>().ToTable(nameof(AuditDepartment), "audit");
+            builder.Entity<AuditSection>().ToTable(nameof(AuditSection), "audit");
+            builder.Entity<AuditUser>().ToTable(nameof(AuditUser), "audit");
+            builder.Entity<AuditRole>().ToTable(nameof(AuditRole), "audit");
+            builder.Entity<AuditRequest>().ToTable(nameof(AuditRequest), "audit");
+            builder.Entity<AuditAttachment>().ToTable(nameof(AuditAttachment), "audit");
+            builder.Entity<AuditRequestReviewer>().ToTable(nameof(AuditRequestReviewer), "audit");
+            builder.Entity<AuditDefinedApplication>().ToTable(nameof(AuditDefinedApplication), "audit");
+            builder.Entity<AuditRequestApplicationRole>().ToTable(nameof(AuditRequestApplicationRole), "audit");
+            builder.Entity<AuditApplicationUserRequest>().ToTable(nameof(AuditApplicationUserRequest), "audit");
+            builder.Entity<AuditDomainAccountRequest>().ToTable(nameof(AuditDomainAccountRequest), "audit");
+            builder.Entity<AuditVehicleRequest>().ToTable(nameof(AuditVehicleRequest), "audit");
+            builder.Entity<AuditTravelDeskRequest>().ToTable(nameof(AuditTravelDeskRequest), "audit");
+            builder.Entity<AuditVoucherRequest>().ToTable(nameof(AuditVoucherRequest), "audit");
+            builder.Entity<AuditPoRequest>().ToTable(nameof(AuditPoRequest), "audit");
+            builder.Entity<AuditRefundRequest>().ToTable(nameof(AuditRefundRequest), "audit");
+            builder.Entity<AuditDiscountRequest>().ToTable(nameof(AuditDiscountRequest), "audit");
+
+            #endregion
+
         }
     }
 }

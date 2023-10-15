@@ -20,17 +20,13 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50)
             .ValueGeneratedNever();
 
-            //entity.Ignore(e => e.EmailConfirmed);
-            //entity.Ignore(e => e.PhoneNumberConfirmed);
-            //entity.Ignore(e => e.TwoFactorEnabled);
-            //entity.Ignore(e => e.LockoutEnd);
 
             entity.Property(e => e.UserName)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(50);
 
             entity.Property(e => e.NormalizedUserName)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(50);
 
             entity.Property(e => e.Email)
@@ -40,10 +36,13 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(200);
 
             entity.Property(e => e.PhoneNumber)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(50);
 
             entity.Property(e => e.Company)
+            .HasMaxLength(200);
+
+            entity.Property(e => e.Roles)
             .HasMaxLength(200);
 
             entity.Property(e => e.ManagerId)
@@ -73,10 +72,25 @@ namespace EDocument_EF.Configurations
             .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
 
             entity.Property(e => e.ModifiedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
+
+            entity.Property(e => e.EmailConfirmed)
+                .HasDefaultValue(false);
+
+            entity.Property(e => e.PhoneNumberConfirmed)
+                .HasDefaultValue(false);
+
+            entity.Property(e => e.TwoFactorEnabled)
+                .HasDefaultValue(false);
+
+            entity.Property(e => e.LockoutEnabled)
+                .HasDefaultValue(false);
+
+            entity.Property(e => e.AccessFailedCount)
+                .HasDefaultValue(value: 0);
 
             entity.HasOne(d => d.Department).WithMany(p => p.Employees)
             .HasForeignKey(d => d.DepartmentId)

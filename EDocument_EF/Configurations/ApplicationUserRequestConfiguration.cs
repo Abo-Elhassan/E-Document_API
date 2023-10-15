@@ -1,5 +1,6 @@
 ﻿
 using EDocument_Data.Models;
+using EDocument_Data.Models.Audit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -13,7 +14,7 @@ namespace EDocument_EF.Configurations
         {
             entity.HasKey(e => new { e.BeneficiaryId, e.RequestId });
 
-            entity.ToTable(nameof(ApplicationUserRequest));
+            entity.ToTable(nameof(ApplicationUserRequest), tb => tb.HasTrigger($"TR_{nameof(AuditApplicationUserRequest)}"));
 
             entity.Property(e => e.BeneficiaryId)
             .IsRequired()
@@ -30,12 +31,11 @@ namespace EDocument_EF.Configurations
             .IsRequired()
             .HasMaxLength(200);
 
-            entity.Property(e => e.BeneficiaryPostion)
+            entity.Property(e => e.BeneficiaryPosition)
             .HasMaxLength(200);
 
-            entity.Property(e => e.BeneficiaryPhone)
-            .HasMaxLength(50)
-            .IsRequired();
+            entity.Property(e => e.BeneficiaryPhoneNumber)
+            .HasMaxLength(50);
 
             entity.Property(e => e.BeneficiaryExtention)
             .HasMaxLength(50);
@@ -47,16 +47,15 @@ namespace EDocument_EF.Configurations
             .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
 
             entity.Property(e => e.ModifiedBy)
-            .HasMaxLength(50);
+            .HasMaxLength(200);
 
-            entity.HasOne(d => d.Request).WithMany(p => p.ApplicationUserRequests)
-            .HasForeignKey(d => d.RequestId)
-            .OnDelete(DeleteBehavior.Restrict)
+            entity.HasOne(d => d.Request).WithOne(p => p.ApplicationUserRequest)
+            .HasForeignKey<ApplicationUserRequest>(d => d.RequestId)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_ApplicationUserRequest_Request");
-
 
 
 

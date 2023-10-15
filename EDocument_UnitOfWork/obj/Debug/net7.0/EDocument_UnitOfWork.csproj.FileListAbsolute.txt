@@ -29,3 +29,5 @@ F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_UnitOfWork\bin\Debug
 F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_UnitOfWork\bin\Debug\net7.0\EDocument_Repositories.pdb
 F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_UnitOfWork\bin\Debug\net7.0\EDocument_Data.pdb
 F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_UnitOfWork\obj\Debug\net7.0\EDocument_UnitOfWork.csproj.CopyComplete
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_UnitOfWork\bin\Debug\net7.0\EDocument_Services.dll
+F:\Work\My Projects\.Net\E-Document\EDocument_API\EDocument_UnitOfWork\bin\Debug\net7.0\EDocument_Services.pdb

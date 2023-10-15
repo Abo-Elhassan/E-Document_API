@@ -1,23 +1,27 @@
 ﻿using EDocument_API.Extentions;
+using EDocument_Services.File_Service;
 using EDocument_Data.Consts;
-using EDocument_Data.Consts.Enums;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_EF;
 using EDocument_Reposatories.Generic_Reposatories;
+using EDocument_Repositories.Application_Repositories.Request_Reviewer_Repository;
 using EDocument_Services.Auth_Service;
 using EDocument_Services.AutoMapper_Service;
 using EDocument_Services.Mail_Service;
 using EDocument_UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Net;
 using System.Reflection;
+using System.Threading.RateLimiting;
+using EDocument_Repositories.Application_Repositories.UserRepository;
 
 namespace EDocument_API.Shared
 {
@@ -46,7 +50,7 @@ namespace EDocument_API.Shared
                 options.Password.RequiredLength = 8;
                 options.User.RequireUniqueEmail = true;
                 options.Lockout.MaxFailedAccessAttempts = 3;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10000);
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.MaxValue;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -67,23 +71,49 @@ namespace EDocument_API.Shared
                 };
             });
 
-            #endregion ApiBehavior Configuration
+            services.AddRateLimiter(rateLimiterOptions =>
+            {
+                rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+                rateLimiterOptions.AddFixedWindowLimiter("fixed", options =>
+                {
+                    options.PermitLimit = 10;
+                    options.Window = TimeSpan.FromSeconds(10);
+                    options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                    options.QueueLimit = 5;
+                });
+            });
+
+
+            services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 20 * 1024 * 1024;
+            });
+
+        
+        #endregion ApiBehavior Configuration
 
             #region Authentication
 
-            services.AddAuthentication(options =>
+        services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
+                    ClockSkew= TimeSpan.Zero,
+                    ValidateLifetime = true,
+                    ValidateIssuer = true,
                     ValidIssuer = configuration["JwtSettings:Issuer"],
+                    ValidateAudience = true,
                     ValidAudience = configuration["JwtSettings:Audience"],
+                    ValidateIssuerSigningKey = true,
                     IssuerSigningKey = AuthService.GetSymmetricSecurityKey()
+
                 };
             });
 
@@ -113,6 +143,12 @@ namespace EDocument_API.Shared
 
             #endregion Mail
 
+            #region File
+
+            services.AddTransient<IFileService, FileService>();
+
+            #endregion Mail
+
             #region Authentication
 
             services.AddScoped<IAuthService, AuthService>();
@@ -122,9 +158,10 @@ namespace EDocument_API.Shared
             #endregion Services
 
             #region Repositories
-
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IRequestReviewerRepository, RequestReviewerRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             #endregion Repositories
 
@@ -153,9 +190,7 @@ namespace EDocument_API.Shared
                 opt.DefaultApiVersion = new ApiVersion(1, 0);
                 opt.AssumeDefaultVersionWhenUnspecified = true;
                 opt.ReportApiVersions = true;
-                opt.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader(),
-                                                                new HeaderApiVersionReader("x-api-version"),
-                                                                new MediaTypeApiVersionReader("x-api-version"));
+                opt.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader());
             });
 
             services.AddVersionedApiExplorer(setup =>
@@ -209,7 +244,8 @@ namespace EDocument_API.Shared
 
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
-            #endregion
+
+            #endregion Appsettings Configurations
 
             return services;
         }
