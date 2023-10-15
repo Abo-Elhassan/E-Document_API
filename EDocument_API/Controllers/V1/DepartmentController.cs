@@ -49,7 +49,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<DepartmentReadDto>>))]
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> Get()
         {
             _logger.LogInformation($"Start Get from {nameof(DepartmentController)}");

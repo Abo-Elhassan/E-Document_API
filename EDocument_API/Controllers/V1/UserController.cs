@@ -78,7 +78,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<UserReadSearchDto>))]
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> GetUserById(string id)
         {
             _logger.LogInformation($"Start GetUserById from {nameof(UserController)} for userId = {id}");
@@ -237,7 +237,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>List of Filtered Users</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<UserReadSearchDto>>))]
         [HttpGet("Search/{searchValue}")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> Search(string? searchValue)
         {
             _logger.LogInformation($"Start Search from {nameof(UserController)} for searchValue = {searchValue} ");

@@ -77,7 +77,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<RequestDashboardReadDto>))]
         [HttpGet("Dashboard")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> GetRequestsDashboardInfo()
         {
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -129,7 +129,7 @@ namespace EDocument_API.Controllers.V1
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<ReviewersDetailsDto>))]
         [HttpGet("Reviewers/{id}")]
-        [Authorize]
+        [Authorize(Roles = "Basic")]
         public async Task<ActionResult> GetRequestReviewersById(long id)
         {
             _logger.LogInformation($"Start GetRequestReviewersById from {nameof(RequestController)} for request id = {id}");
