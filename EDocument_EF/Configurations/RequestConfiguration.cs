@@ -15,6 +15,8 @@ namespace EDocument_EF.Configurations
         {
             entity.ToTable(nameof(Request) , tb=>tb.HasTrigger($"TR_{nameof(AuditRequest)}"));
 
+            entity.HasIndex(e => e.CreatorId);
+
             entity.Property(e => e.Id)
             .ValueGeneratedNever();
 

@@ -15,6 +15,9 @@ public partial class AuditUser:IdentityUser
     [Column(TypeName = "numeric(18,0)")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public decimal AuditId { get; set; }
+
+    public long IdentityKey { get; set; }
+
     public override string UserName { get; set; }
 
     public override string NormalizedUserName { get; set; }

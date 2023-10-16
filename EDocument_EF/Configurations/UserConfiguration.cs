@@ -20,6 +20,8 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50)
             .ValueGeneratedNever();
 
+            entity.Property(e=>e.IdentityKey)
+                .UseIdentityColumn(seed:1,increment:1);
 
             entity.Property(e => e.UserName)
             .IsRequired(false)

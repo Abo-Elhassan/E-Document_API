@@ -1246,6 +1246,9 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("IdentityKey")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime?>("LastLogin")
                         .HasColumnType("datetime2");
 
@@ -2184,7 +2187,11 @@ namespace EDocument_EF.Migrations
 
                     b.HasKey("Key");
 
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Key"), false);
+
                     b.HasIndex("AssignedReviewerId");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("AssignedReviewerId"));
 
                     b.HasIndex("RequestId");
 
@@ -2440,6 +2447,12 @@ namespace EDocument_EF.Migrations
 
                     b.Property<bool>("HasLDAP")
                         .HasColumnType("bit");
+
+                    b.Property<long>("IdentityKey")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IdentityKey"));
 
                     b.Property<DateTime?>("LastLogin")
                         .HasColumnType("smalldatetime");

@@ -23,7 +23,7 @@ using System.Reflection;
 using System.Threading.RateLimiting;
 using EDocument_Repositories.Application_Repositories.UserRepository;
 
-namespace EDocument_API.Shared
+namespace EDocument_API.Extentions
 {
     public static class ServiceManager
     {
