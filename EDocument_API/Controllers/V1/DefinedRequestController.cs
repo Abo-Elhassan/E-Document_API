@@ -278,6 +278,16 @@ namespace EDocument_API.Controllers.V1
             _mapper.Map(definedRequestUpdateDto.DefinedRequestReviewers, definedRequest.DefinedRequestReviewers);
             _mapper.Map(definedRequestUpdateDto.DefinedRequestRoles, definedRequest.DefinedRequestRoles);
 
+            foreach (var item in definedRequest.DefinedRequestReviewers)
+            {
+                item.DefinedRequestId = id;
+            }
+
+            foreach (var item in definedRequest.DefinedRequestRoles)
+            {
+                item.DefinedRequestId = id;
+            }
+
 
             definedRequest.ModifiedBy = user?.FullName;
 

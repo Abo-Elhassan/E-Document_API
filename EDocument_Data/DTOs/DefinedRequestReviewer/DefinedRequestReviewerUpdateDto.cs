@@ -7,9 +7,6 @@ namespace EDocument_Data.DTOs.DefinedRequest
 {
     public class DefinedRequestReviewerUpdateDto
     {
-        [Required]
-        public long DefinedRequestId { get; init; }
-
         public string? AssignedReviewerId { get; init; }
 
         [Required]
