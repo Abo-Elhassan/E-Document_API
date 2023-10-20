@@ -125,7 +125,7 @@ namespace EDocument_API.Extentions
 
             services.AddLogging(loggingBuilder =>
             {
-                loggingBuilder.AddFile("log_{0:yyyy}-{0:MM}-{0:dd}.log", fileLoggerOpts =>
+                loggingBuilder.AddFile("Log/log_{0:yyyy}-{0:MM}-{0:dd}.log", fileLoggerOpts =>
                 {
                     fileLoggerOpts.FormatLogFileName = fName =>
                     {

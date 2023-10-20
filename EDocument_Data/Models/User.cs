@@ -8,7 +8,6 @@ namespace EDocument_Data.Models;
 
 public partial class User:IdentityUser
 {
-    public long IdentityKey { get; set; }
     public override string UserName { get; set; }
 
     public override string NormalizedUserName { get; set; }

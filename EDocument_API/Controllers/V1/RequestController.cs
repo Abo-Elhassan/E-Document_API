@@ -364,7 +364,7 @@ namespace EDocument_API.Controllers.V1
 
             foreach (var request in requests)
             {
-                var reviewer = request.RequestReviewers?.FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
 
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;
@@ -425,7 +425,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(poRequestCreateDto.DefinedRequestId, requestId);
+            await _requestReviewerRepository.BeginRequestCycle(poRequestCreateDto.DefinedRequestId, requestId, true);
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
 
@@ -446,7 +446,7 @@ namespace EDocument_API.Controllers.V1
                 """,
                 IsHTMLBody = false,
                 Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
                 // To = user.Email
             };
 
@@ -477,7 +477,7 @@ namespace EDocument_API.Controllers.V1
                 """,
                 IsHTMLBody = false,
                 Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
                 // To = reviewersEmails
             };
 
@@ -574,7 +574,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle( request.DefinedRequestId,request.Id);
+            await _requestReviewerRepository.BeginRequestCycle( request.DefinedRequestId,request.Id, false);
 
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
@@ -596,7 +596,7 @@ namespace EDocument_API.Controllers.V1
                 """,
                 IsHTMLBody = false,
                 Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
                 //To = user.Email
             };
 
@@ -626,7 +626,7 @@ namespace EDocument_API.Controllers.V1
                 """,
                 IsHTMLBody = false,
                 Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
                 //To = reviewersEmails
             };
 
@@ -651,7 +651,7 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Po/Approve")]
         [Authorize(Roles = "Finance")]
-        public async Task<ActionResult> ApprovePoRequest(RequestReviewerWriteDto requestReviewerWriteDto)
+        public async Task<ActionResult> ApprovePoRequest(ApproveRequestReviewerDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start ApprovePoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -686,8 +686,8 @@ namespace EDocument_API.Controllers.V1
                 Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
                // Cc = $"{requestCreatorDirectManager.Email};{requestCreatorDepartmentManager.Email}",
                 //To = requestCreator.Email,
-                Cc = "mostafa.reyad@dpworld.com;",
-                To = "mostafa.reyad@dpworld.com;"
+                Cc = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;",
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -709,7 +709,7 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Po/Decline")]
         [Authorize(Roles = "Finance")]
-        public async Task<ActionResult> DeclinePoRequest(RequestReviewerWriteDto requestReviewerWriteDto)
+        public async Task<ActionResult> DeclinePoRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start DeclinePoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -745,8 +745,8 @@ namespace EDocument_API.Controllers.V1
                 Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
                // Cc = $"{requestCreatorDirectManager.Email};{requestCreatorDepartmentManager.Email}",
                 //To = requestCreator.Email
-                Cc = "mostafa.reyad@dpworld.com;",
-                To = "mostafa.reyad@dpworld.com;"
+                Cc = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;",
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -972,7 +972,7 @@ namespace EDocument_API.Controllers.V1
 
             foreach (var request in requests)
             {
-                var reviewer = request.RequestReviewers?.FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var reviewer = request.RequestReviewers?.OrderBy(r=>r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
 
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;
@@ -1040,7 +1040,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(vehicleRequestCreateDto.DefinedRequestId, requestId);
+            await _requestReviewerRepository.BeginRequestCycle(vehicleRequestCreateDto.DefinedRequestId, requestId, true);
             if (result < 1) 
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
@@ -1063,7 +1063,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"Vehicle Request No. {requestNo} on eDocuement",
                 //To = user.Email
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -1088,7 +1088,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"Vehicle Request No. {requestNo} on eDocuement",
                 // To = reviewersEmails
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(reviewerMailContent);
@@ -1170,7 +1170,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, false);
 
             if (result < 1) 
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
@@ -1194,7 +1194,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
                 // To = user.Email
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -1219,7 +1219,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
                 //To = reviewersEmails
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(reviewerMailContent);
@@ -1241,7 +1241,7 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Vehicle/Approve")]
         [Authorize]
-        public async Task<ActionResult> ApproveVehicleRequest(RequestReviewerWriteDto requestReviewerWriteDto)
+        public async Task<ActionResult> ApproveVehicleRequest(ApproveRequestReviewerDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start ApproveVehicleRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -1271,7 +1271,7 @@ namespace EDocument_API.Controllers.V1
                     IsHTMLBody = false,
                     Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
                     // To = requestCreator.Email
-                    To = "mostafa.reyad@dpworld.com;"
+                    To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
                 };
 
                 _mailService.SendMailAsync(creatorMailContent);
@@ -1296,7 +1296,7 @@ namespace EDocument_API.Controllers.V1
                     IsHTMLBody = false,
                     Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
                     // To = reviewersEmails
-                    To = "mostafa.reyad@dpworld.com;"
+                    To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
 
                 };
 
@@ -1322,7 +1322,7 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Vehicle/Decline")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> DeclineVehicleRequest(RequestReviewerWriteDto requestReviewerWriteDto)
+        public async Task<ActionResult> DeclineVehicleRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start DeclineVehicleRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -1355,7 +1355,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
                 //To = requestCreator.Email
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -1578,7 +1578,7 @@ namespace EDocument_API.Controllers.V1
 
             foreach (var request in requests)
             {
-                var reviewer = request.RequestReviewers?.FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
 
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;
@@ -1644,7 +1644,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(travelDeskRequestCreateDto.DefinedRequestId, requestId);
+            await _requestReviewerRepository.BeginRequestCycle(travelDeskRequestCreateDto.DefinedRequestId, requestId, true);
 
             if (result < 1) 
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
@@ -1668,7 +1668,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"TravelDesk Request No. {requestNo} on eDocuement",
                 //To = user.Email
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -1693,7 +1693,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"TravelDesk Request No. {requestNo} on eDocuement",
                 //  To = reviewersEmails
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(reviewerMailContent);
@@ -1773,7 +1773,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, false);
 
             if (result < 1) 
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
@@ -1797,7 +1797,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
                 //To = user.Email
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -1822,7 +1822,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
                 // To = reviewersEmails
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(reviewerMailContent);
@@ -1844,7 +1844,7 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("TravelDesk/Approve")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> ApproveTravelDeskRequest(RequestReviewerWriteDto requestReviewerWriteDto)
+        public async Task<ActionResult> ApproveTravelDeskRequest(ApproveRequestReviewerDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start ApproveTravelDeskRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -1876,7 +1876,7 @@ namespace EDocument_API.Controllers.V1
                     IsHTMLBody = false,
                     Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
                    // To = requestCreator.Email
-                    To = "mostafa.reyad@dpworld.com;"
+                    To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
                 };
 
                 _mailService.SendMailAsync(creatorMailContent);
@@ -1901,7 +1901,7 @@ namespace EDocument_API.Controllers.V1
                     IsHTMLBody = false,
                     Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
                     // To = reviewersEmails
-                    To = "mostafa.reyad@dpworld.com;"
+                    To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
                 };
 
                 _mailService.SendMailAsync(reviewerMailContent);
@@ -1926,7 +1926,7 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("TravelDesk/Decline")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> DeclineTravelDeskRequest(RequestReviewerWriteDto requestReviewerWriteDto)
+        public async Task<ActionResult> DeclineTravelDeskRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start DeclineTravelDeskRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -1959,7 +1959,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
                 //To = requestCreator.Email
-                To = "mostafa.reyad@dpworld.com;"
+                To = "mostafa.reyad@dpworld.com;alaa.muhammad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -2182,7 +2182,7 @@ namespace EDocument_API.Controllers.V1
 
             foreach (var request in requests)
             {
-                var reviewer = request.RequestReviewers?.FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var reviewer = request.RequestReviewers?.FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status == RequestStatus.Pending);
 
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;
@@ -2244,7 +2244,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(refundRequestCreateDto.DefinedRequestId, requestId);
+            await _requestReviewerRepository.BeginRequestCycle(refundRequestCreateDto.DefinedRequestId, requestId, true);
 
             await _requestReviewerRepository.NominateReviewer( requestId, refundRequestCreateDto.ConcernedEmployeeId, user?.FullName);
 
@@ -2366,7 +2366,7 @@ namespace EDocument_API.Controllers.V1
             request.ModifiedBy = user?.FullName;
 
             var result = _unitOfWork.Complete();
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, false);
             await _requestReviewerRepository.NominateReviewer(request.Id, refundRequestUpdateDto.ConcernedEmployeeId, user?.FullName);
 
             if (result < 1)
@@ -2452,7 +2452,7 @@ namespace EDocument_API.Controllers.V1
                 request.ModifiedBy = user?.FullName;
                 request.RefundRequest.ModifiedBy = user?.FullName;
             }
-            await _requestReviewerRepository.ApproveRequestAsync(_mapper.Map<RequestReviewerWriteDto>(approveRefundRequestDto), user!.FullName);
+            await _requestReviewerRepository.ApproveRequestAsync(_mapper.Map<ApproveRequestReviewerDto>(approveRefundRequestDto), user!.FullName);
 
             #region Send Emails
 
@@ -2523,7 +2523,7 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Refund/Decline")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> DeclineRefundRequest(RequestReviewerWriteDto requestReviewerWriteDto)
+        public async Task<ActionResult> DeclineRefundRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start DeclineRefundRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -2777,7 +2777,7 @@ namespace EDocument_API.Controllers.V1
 
             foreach (var request in requests)
             {
-                var reviewer = request.RequestReviewers?.FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var reviewer = request.RequestReviewers?.FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status == RequestStatus.Pending);
 
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;
@@ -2854,7 +2854,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(discountRequestCreateDto.DefinedRequestId, requestId);
+            await _requestReviewerRepository.BeginRequestCycle(discountRequestCreateDto.DefinedRequestId, requestId, true);
 
 
 
@@ -2976,7 +2976,7 @@ namespace EDocument_API.Controllers.V1
             request.ModifiedBy = user?.FullName;
 
             var result = _unitOfWork.Complete();
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, false);
            
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
@@ -3037,7 +3037,7 @@ namespace EDocument_API.Controllers.V1
         /// <summary>
         /// Approve Discount Request
         /// </summary>
-        /// <param name="approveDiscountRequestDto">Approve Discount Request</param>
+        /// <param name="requestReviewerWriteDto">Approve Discount Request</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -3045,7 +3045,7 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Discount/Approve")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> ApproveDiscountRequest(RequestReviewerWriteDto requestReviewerWriteDto)
+        public async Task<ActionResult> ApproveDiscountRequest(ApproveRequestReviewerDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start ApproveDiscountRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -3124,7 +3124,7 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Discount/Decline")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> DeclineDiscountRequest(RequestReviewerWriteDto requestReviewerWriteDto)
+        public async Task<ActionResult> DeclineDiscountRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start DeclineDiscountRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);

@@ -16,8 +16,6 @@ public partial class AuditUser:IdentityUser
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public decimal AuditId { get; set; }
 
-    public long IdentityKey { get; set; }
-
     public override string UserName { get; set; }
 
     public override string NormalizedUserName { get; set; }

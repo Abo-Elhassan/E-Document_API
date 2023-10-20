@@ -20,9 +20,9 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
         Task<string> GetAllRequestReviewersEmailsByStageNumberAsync(long requestId, int stageNumber);
         Task NominateReviewer(long requestId, string reviewerId, string naminatedBy);
-        Task BeginRequestCycle( long definedRequestId, long requestId);
-        Task ApproveRequestAsync(RequestReviewerWriteDto reviewingInfo,string reviewedBy);
-        Task DeclineRequestAsync(RequestReviewerWriteDto reviewingInfo,string reviewedBy);
+        Task BeginRequestCycle( long definedRequestId, long requestId,bool isNew);
+        Task ApproveRequestAsync(ApproveRequestReviewerDto reviewingInfo,string reviewedBy);
+        Task DeclineRequestAsync(DeclineRequestReviewerDto reviewingInfo,string reviewedBy);
     }
 
 }
