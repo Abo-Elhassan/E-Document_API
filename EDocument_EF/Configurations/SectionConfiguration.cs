@@ -21,7 +21,11 @@ namespace EDocument_EF.Configurations
             .ValueGeneratedNever();
 
             entity.Property(e => e.DepartmentId)
-           .IsRequired(false); 
+           .IsRequired(false);
+
+            entity.Property(e => e.SectionName)
+            .IsRequired()
+            .HasMaxLength(200);
 
             entity.Property(e => e.HeadId)
             .IsRequired(false)

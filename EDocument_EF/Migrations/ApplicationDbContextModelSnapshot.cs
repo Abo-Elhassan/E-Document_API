@@ -1246,9 +1246,6 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("IdentityKey")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("LastLogin")
                         .HasColumnType("datetime2");
 
@@ -2183,7 +2180,7 @@ namespace EDocument_EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasDefaultValue("Pending");
+                        .HasDefaultValue("None");
 
                     b.HasKey("Key");
 
@@ -2270,7 +2267,9 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("SectionName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -2447,12 +2446,6 @@ namespace EDocument_EF.Migrations
 
                     b.Property<bool>("HasLDAP")
                         .HasColumnType("bit");
-
-                    b.Property<long>("IdentityKey")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IdentityKey"));
 
                     b.Property<DateTime?>("LastLogin")
                         .HasColumnType("smalldatetime");

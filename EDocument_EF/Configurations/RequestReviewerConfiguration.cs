@@ -37,7 +37,7 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50);
 
             entity.Property(e => e.Status)
-            .HasDefaultValue(RequestStatus.Pending.ToString())
+            .HasDefaultValue(RequestStatus.None.ToString())
             .HasMaxLength(50);
 
 
