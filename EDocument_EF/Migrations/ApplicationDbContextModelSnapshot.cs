@@ -2081,7 +2081,7 @@ namespace EDocument_EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasDefaultValue("Pending");
+                        .HasDefaultValue("None");
 
                     b.HasKey("Id");
 
