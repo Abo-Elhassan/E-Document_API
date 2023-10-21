@@ -275,6 +275,7 @@ namespace EDocument_API.Controllers.V1
             else
             {
                 result = await _unitOfWork.Repository<PoRequest>().FindAllRequestsAsync(
+                isCreator: true,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filters: filterDto?.Filters,
@@ -345,6 +346,7 @@ namespace EDocument_API.Controllers.V1
             else
             {
                 result = await _unitOfWork.Repository<PoRequest>().FindAllRequestsAsync(
+                isCreator:false,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filters: filterDto?.Filters,
@@ -885,6 +887,7 @@ namespace EDocument_API.Controllers.V1
             else
             {
                 result = await _unitOfWork.Repository<VehicleRequest>().FindAllRequestsAsync(
+                isCreator:true,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filters: filterDto?.Filters,
@@ -953,6 +956,7 @@ namespace EDocument_API.Controllers.V1
             else
             {
                 result = await _unitOfWork.Repository<VehicleRequest>().FindAllRequestsAsync(
+                isCreator: false,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filters: filterDto?.Filters,
@@ -1491,6 +1495,7 @@ namespace EDocument_API.Controllers.V1
             else
             {
                 result = await _unitOfWork.Repository<TravelDeskRequest>().FindAllRequestsAsync(
+                isCreator: true,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filters: filterDto?.Filters,
@@ -1559,6 +1564,7 @@ namespace EDocument_API.Controllers.V1
             else
             {
                 result = await _unitOfWork.Repository<TravelDeskRequest>().FindAllRequestsAsync(
+                isCreator:false,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filters: filterDto?.Filters,
@@ -2097,6 +2103,7 @@ namespace EDocument_API.Controllers.V1
             else
             {
                 result = await _unitOfWork.Repository<RefundRequest>().FindAllRequestsAsync(
+                isCreator:true,
                 filters: filterDto?.Filters,
                 includes: includes,
                 skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
@@ -2163,6 +2170,7 @@ namespace EDocument_API.Controllers.V1
             else
             {
                 result = await _unitOfWork.Repository<RefundRequest>().FindAllRequestsAsync(
+                isCreator: false,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filters: filterDto?.Filters,
@@ -2692,6 +2700,7 @@ namespace EDocument_API.Controllers.V1
             else
             {
                 result = await _unitOfWork.Repository<DiscountRequest>().FindAllRequestsAsync(
+                isCreator: true,
                 filters: filterDto?.Filters,
                 includes: includes,
                 skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
@@ -2757,7 +2766,8 @@ namespace EDocument_API.Controllers.V1
             }
             else
             {
-                result = await _unitOfWork.Repository<DiscountRequest>().FindAllRequestsAsync(
+                result = await _unitOfWork.Repository<DiscountRequest>().FindAllRequestsAsync( 
+                isCreator:false,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filters: filterDto?.Filters,
