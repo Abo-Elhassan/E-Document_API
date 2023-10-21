@@ -143,16 +143,6 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                         reviewer.ReviewerNotes = "Automatically Approved By E-Document";
                     }
                 }
-
-                //Skip Approval step if the the first reviewer is also existing in advanced stages
-                if (request.RequestReviewers.Any(r => r.AssignedReviewerId == firstReviewer?.AssignedReviewerId &&
-                !r.StageNumber.Equals(1) &&
-                r.Status != RequestStatus.Approved.ToString()))
-                {
-                    firstReviewer.Status = RequestStatus.Approved.ToString();
-                    firstReviewer.ReviewedBy = "E-Documnet";
-                    firstReviewer.ReviewerNotes = "Automatically Approved By E-Document";
-                }
             }
 
             //Proceed with approved stages
@@ -184,17 +174,30 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             _context.SaveChanges();
         }
 
-        public async Task ApproveRequestAsync(ApproveRequestReviewerDto reviewingInfo, string reviewedBy)
+        public async Task<(bool IsSucceded, string? Message)> ApproveRequestAsync(ApproveRequestReviewerDto reviewingInfo, User reviewer)
         {
-            var remainingRequestReviewers = await _context.RequestReviewers.Include(r => r.Request).Include(dr => dr.Request.DefinedRequest).Where(rr => rr.RequestId == reviewingInfo.RequestId && rr.StageNumber >= rr.Request.CurrentStage).ToListAsync();
+            (bool IsSucceded, string? Message) result = (false, null);
 
-            //Record approving action for the current stage
-            foreach (var reviewer in remainingRequestReviewers.Where(rr => rr.StageNumber == rr.Request.CurrentStage))
+            var remainingRequestReviewers = await _context.RequestReviewers.Include(r => r.Request).Include(dr => dr.Request.DefinedRequest).Where(rr => rr.RequestId == reviewingInfo.RequestId && rr.StageNumber >= rr.Request.CurrentStage).ToListAsync();
+           
+            if (remainingRequestReviewers is null || remainingRequestReviewers.Count == 0)
             {
-                reviewer.ReviewedBy = reviewedBy;
-                reviewer.Status = RequestStatus.Approved.ToString();
-                reviewer.ReviewerNotes = reviewingInfo.ReviewedNotes;
-                reviewer.ModifiedBy = reviewedBy;
+                result = (false, $"Request reviewers not found for this stage");
+                return result;
+
+            }
+            else if (!remainingRequestReviewers.Any(rr => rr.StageNumber == rr.Request.CurrentStage && rr.AssignedReviewerId == reviewer.Id))
+            {
+                result = (false, $"user '{reviewer.Id}' is not the current reviewer for this request");
+                return result;
+            }
+            //Record approving action for the current stage
+            foreach (var requestReviewer in remainingRequestReviewers.Where(rr => rr.StageNumber == rr.Request.CurrentStage || rr.AssignedReviewerId == reviewer.Id))//Approve the current stage and the advanced stages for the same reviewer if exists
+            {
+                requestReviewer.ReviewedBy = reviewer.FullName;
+                requestReviewer.Status = RequestStatus.Approved.ToString();
+                requestReviewer.ReviewerNotes = reviewingInfo.ReviewedNotes;
+                requestReviewer.ModifiedBy = reviewer.FullName;
             }
 
             //Check if the current stage is the last stage
@@ -204,55 +207,83 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             }
             else
             {
-                //Proceed to the next stage
-                remainingRequestReviewers.FirstOrDefault().Request.CurrentStage = remainingRequestReviewers.FirstOrDefault().Request.CurrentStage++;
 
-                var nextReviewer = remainingRequestReviewers.FirstOrDefault(rr => rr.StageNumber == rr.Request.CurrentStage);
-
-                
-                if (nextReviewer.Status == RequestStatus.Approved.ToString())  //Check the next stage if they are already approved automatically or not
+                foreach (var item in remainingRequestReviewers.Where(rr => rr.StageNumber >= rr.Request.CurrentStage).OrderBy(r=>r.StageNumber).DistinctBy(r=>r.StageNumber))
                 {
-                    
-                    if (nextReviewer.Request.CurrentStage == nextReviewer.Request.DefinedRequest.ReviewersNumber) // Check if the approved stage is the last stage
+
+                    if (item.Status == RequestStatus.Approved.ToString())  //Check the next stage if they are already approved automatically or not
                     {
-                        nextReviewer.Request.Status = RequestStatus.Approved.ToString();
+
+                        if (item.Request.CurrentStage == item.Request.DefinedRequest.ReviewersNumber) // Check if the approved stage is the last stage
+                        {
+                            item.Request.Status = RequestStatus.Approved.ToString();
+                            break;
+                        }
+                        else //Skip the approved stage, proceed to the next stage and change  reviewers status to pending
+                        {
+                            item.Request.CurrentStage++;
+                            var nextReviewer = remainingRequestReviewers.FirstOrDefault(rr => rr.StageNumber == rr.Request.CurrentStage);
+
+                            if(nextReviewer.Status==RequestStatus.None.ToString())
+                                remainingRequestReviewers.Where(rr => rr.StageNumber == nextReviewer.Request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
+
+                        }
                     }
-                    else //Skip the approved stage and change  reviewers status to pending
+                    else  //Change next reviewer status to pending
                     {
-                        nextReviewer.Request.CurrentStage++;
-                        remainingRequestReviewers.Where(rr => rr.StageNumber == nextReviewer.Request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
+                        item.Request.CurrentStage++;
+                        remainingRequestReviewers.Where(rr => rr.StageNumber == item.Request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
 
                     }
-                }
-                else  //Change next reviewer status to pending
-                {
-                    remainingRequestReviewers.Where(rr => rr.StageNumber == nextReviewer.Request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
 
                 }
             }
 
-            remainingRequestReviewers.FirstOrDefault().Request.ModifiedBy = reviewedBy;
+            remainingRequestReviewers.FirstOrDefault().Request.ModifiedBy = reviewer.FullName;
             _context.RequestReviewers.UpdateRange(remainingRequestReviewers);
             _context.SaveChanges();
+
+
+            result.IsSucceded = true;
+            return result;
         }
 
-        public async Task DeclineRequestAsync(DeclineRequestReviewerDto reviewingInfo, string reviewedBy)
+        public async Task<(bool IsSucceded, string? Message)> DeclineRequestAsync(DeclineRequestReviewerDto reviewingInfo, User reviewer)
         {
+
+            (bool IsSucceded, string? Message) result = (false, null);
+
+
             var requestReviewers = await _context.RequestReviewers.Include(r => r.Request).Include(dr => dr.Request.DefinedRequest).Where(rr => rr.RequestId == reviewingInfo.RequestId && rr.StageNumber == rr.Request.CurrentStage).ToListAsync();
-            foreach (var reviewer in requestReviewers)
+            if (requestReviewers is null ||requestReviewers.Count==0)
             {
-                reviewer.ReviewedBy = reviewedBy;
-                reviewer.Status = RequestStatus.Declined.ToString();
-                reviewer.ReviewerNotes = reviewingInfo.ReviewedNotes;
-                reviewer.ModifiedBy = reviewedBy;
+                result = (false, $"Request reviewers not found for this stage");
+                return result;
+
+            }
+            else if (!requestReviewers.Any(rr=>rr.AssignedReviewerId== reviewer.Id))
+            {
+                result = (false, $"user '{reviewer.Id}' is not the current reviewer for this request");
+                return result;
+            }
+
+            foreach (var requestReviewer in requestReviewers)
+            {
+                requestReviewer.ReviewedBy = reviewer.FullName;
+                requestReviewer.Status = RequestStatus.Declined.ToString();
+                requestReviewer.ReviewerNotes = reviewingInfo.ReviewedNotes;
+                requestReviewer.ModifiedBy = reviewer.FullName;
             }
 
             requestReviewers.FirstOrDefault().Request.Status = RequestStatus.Declined.ToString();
             requestReviewers.FirstOrDefault().Request.CurrentStage = 0;
-            requestReviewers.FirstOrDefault().Request.ModifiedBy = reviewedBy;
+            requestReviewers.FirstOrDefault().Request.ModifiedBy = reviewer.FullName;
 
             _context.RequestReviewers.UpdateRange(requestReviewers);
             _context.SaveChanges();
+
+            result.IsSucceded = true;
+            return result;
         }
     }
 }

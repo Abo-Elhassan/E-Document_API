@@ -20,6 +20,7 @@ namespace EDocument_Data.DTOs.Requests.RequestReviewer
 
     public class ReviewersDetailsDto
     {
+        public RequestStatus Status { get; set; }
         public int? CurrentStage { get; set; }
         public List<ReviewersDetails> ReviewersDetails { get; set; }
 
