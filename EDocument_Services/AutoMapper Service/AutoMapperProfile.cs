@@ -69,6 +69,7 @@ namespace EDocument_Services.AutoMapper_Service
 
 
             CreateMap<DefinedRequestReviewer, RequestReviewer>()
+                .ForMember(dest => dest.Key, src => src.Ignore())
                 .ForMember(dest => dest.RequestId, src => src.Ignore())
                 .ForMember(dest => dest.Status, src => src.MapFrom(opts => RequestStatus.None.ToString()))
                 .ForMember(dest => dest.CreatedAt, src => src.Ignore())

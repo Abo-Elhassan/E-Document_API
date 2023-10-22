@@ -91,8 +91,10 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
         {
             var definedRequestReviewers = await GetAllDefinedRequestReviewersAsync(definedRequestId);
 
-            var request = await _context.Requests.FirstOrDefaultAsync(r => r.Id == requestId);
-            _mapper.Map(definedRequestReviewers, request?.RequestReviewers);
+            var request = await _context.Requests.Include(r=>r.RequestReviewers).FirstOrDefaultAsync(r => r.Id == requestId);
+
+            if(isNew)
+                _mapper.Map(definedRequestReviewers, request?.RequestReviewers);
 
             foreach (var item in request?.RequestReviewers)
             {
@@ -104,10 +106,14 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                     item.Key = Guid.NewGuid().ToString();
                     item.RequestId = requestId;
                     item.CreatedBy = "E-Document";
+                    item.CreatedAt = DateTime.Now;
                 }
                 else
                 {
+                    item.ReviewedBy = null;
+                    item.ReviewerNotes = null;
                     item.ModifiedBy = "E-Document";
+                    item.ModifiedAt = DateTime.Now;
                 }
             }
 
@@ -145,8 +151,11 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 }
             }
 
+
+
+
             //Proceed with approved stages
-            foreach (var reviewer in request.RequestReviewers)
+            foreach (var reviewer in request.RequestReviewers.OrderBy(r=>r.StageNumber).DistinctBy(r => r.StageNumber))
             {
                 if (reviewer.Status == RequestStatus.Approved.ToString())
                 {
@@ -161,17 +170,9 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             //Change current reviewer status from none to pending
             request.RequestReviewers.Where(rr => rr.StageNumber == request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
 
-            if (isNew)
-            {
-                _context.AddRange(request?.RequestReviewers);
-            }
-            else
-            {
-                _context.UpdateRange(request?.RequestReviewers);
-            }
-
             _context.Update(request);
             _context.SaveChanges();
+
         }
 
         public async Task<(bool IsSucceded, string? Message)> ApproveRequestAsync(ApproveRequestReviewerDto reviewingInfo, User reviewer)
