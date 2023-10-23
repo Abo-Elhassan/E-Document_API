@@ -448,7 +448,7 @@ namespace EDocument_API.Controllers.V1
                 """,
                 IsHTMLBody = false,
                 Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
                 // To = user.Email
             };
 
@@ -479,7 +479,7 @@ namespace EDocument_API.Controllers.V1
                 """,
                 IsHTMLBody = false,
                 Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
                 // To = reviewersEmails
             };
 
@@ -598,7 +598,7 @@ namespace EDocument_API.Controllers.V1
                 """,
                 IsHTMLBody = false,
                 Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
                 //To = user.Email
             };
 
@@ -628,7 +628,7 @@ namespace EDocument_API.Controllers.V1
                 """,
                 IsHTMLBody = false,
                 Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
                 //To = reviewersEmails
             };
 
@@ -690,8 +690,8 @@ namespace EDocument_API.Controllers.V1
                 Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
                // Cc = $"{requestCreatorDirectManager.Email};{requestCreatorDepartmentManager.Email}",
                 //To = requestCreator.Email,
-                Cc = "alaa.muhammad@dpworld.com;",
-                To = "alaa.muhammad@dpworld.com;"
+                Cc = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;",
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -751,8 +751,8 @@ namespace EDocument_API.Controllers.V1
                 Subject = $"PO Request for {request.PoRequest.PoNumber} on eDocuement",
                // Cc = $"{requestCreatorDirectManager.Email};{requestCreatorDepartmentManager.Email}",
                 //To = requestCreator.Email
-                Cc = "alaa.muhammad@dpworld.com;",
-                To = "alaa.muhammad@dpworld.com;"
+                Cc = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;",
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -1071,7 +1071,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"Vehicle Request No. {requestNo} on eDocuement",
                 //To = user.Email
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -1096,7 +1096,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"Vehicle Request No. {requestNo} on eDocuement",
                 // To = reviewersEmails
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(reviewerMailContent);
@@ -1202,7 +1202,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
                 // To = user.Email
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -1227,7 +1227,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
                 //To = reviewersEmails
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(reviewerMailContent);
@@ -1282,7 +1282,7 @@ namespace EDocument_API.Controllers.V1
                     IsHTMLBody = false,
                     Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
                     // To = requestCreator.Email
-                    To = "alaa.muhammad@dpworld.com;"
+                    To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
                 };
 
                 _mailService.SendMailAsync(creatorMailContent);
@@ -1307,7 +1307,7 @@ namespace EDocument_API.Controllers.V1
                     IsHTMLBody = false,
                     Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
                     // To = reviewersEmails
-                    To = "alaa.muhammad@dpworld.com;"
+                    To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
 
                 };
 
@@ -1369,7 +1369,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
                 //To = requestCreator.Email
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -1684,7 +1684,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"TravelDesk Request No. {requestNo} on eDocuement",
                 //To = user.Email
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -1709,7 +1709,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"TravelDesk Request No. {requestNo} on eDocuement",
                 //  To = reviewersEmails
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(reviewerMailContent);
@@ -1813,7 +1813,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
                 //To = user.Email
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);
@@ -1838,7 +1838,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
                 // To = reviewersEmails
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(reviewerMailContent);
@@ -1897,7 +1897,7 @@ namespace EDocument_API.Controllers.V1
                     IsHTMLBody = false,
                     Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
                    // To = requestCreator.Email
-                    To = "alaa.muhammad@dpworld.com;"
+                    To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
                 };
 
                 _mailService.SendMailAsync(creatorMailContent);
@@ -1922,7 +1922,7 @@ namespace EDocument_API.Controllers.V1
                     IsHTMLBody = false,
                     Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
                     // To = reviewersEmails
-                    To = "alaa.muhammad@dpworld.com;"
+                    To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
                 };
 
                 _mailService.SendMailAsync(reviewerMailContent);
@@ -1982,7 +1982,7 @@ namespace EDocument_API.Controllers.V1
                 IsHTMLBody = false,
                 Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
                 //To = requestCreator.Email
-                To = "alaa.muhammad@dpworld.com;"
+                To = "alaa.muhammad@dpworld.com;mostafa.reyad@dpworld.com;"
             };
 
             _mailService.SendMailAsync(creatorMailContent);

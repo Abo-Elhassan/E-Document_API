@@ -7,6 +7,7 @@ using EDocument_EF;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
@@ -69,7 +70,7 @@ namespace EDocument_Services.Auth_Service
 
         #region Handle Authentication
 
-        public async Task<ActionResult> AuthenticatUserAsync(LoginWriteDto loginWriteDto)
+        public async Task<ActionResult> AuthenticatUserAsync( LoginWriteDto loginWriteDto)
         {
 
          
@@ -98,15 +99,15 @@ namespace EDocument_Services.Auth_Service
 
         private async Task<ActionResult> AuthenticatEmpolyeeAsync(LoginWriteDto loginWriteDto, User user, bool isLockedOut)
         {
-       
-               //var result =  Authentication.IsUserAuthenticated(ApplicationConsts.ADDomain, loginWriteDto.UserName, loginWriteDto.Password);
-               // if (!result.IsAuthenticated)
-               // {
-            
-               // return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = result.Message });
-               // }
 
-                await _userManager.ResetAccessFailedCountAsync(user);
+            //var result = Authentication.IsUserAuthenticated(ApplicationConsts.ADDomain, loginWriteDto.UserName, loginWriteDto.Password);
+            //if (!result.IsAuthenticated)
+            //{
+
+            //    return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = result.Message });
+            //}
+
+            await _userManager.ResetAccessFailedCountAsync(user);
 
                 var userRoles = await _userManager.GetRolesAsync(user);
 

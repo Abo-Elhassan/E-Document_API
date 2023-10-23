@@ -869,9 +869,8 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     {
                         if (ColumnName == "Status")
                         {
-
-                            expression= isCreator??true? "Request.Status.Contains(@0)" : "Request.RequestReviewers.Any(Status.Contains(@0))";
-                            query = query.Where(expression, ColumnValue);
+                            expression= isCreator??true? "Request.Status.Contains(@0)" : "Request.RequestReviewers.Any(Status.Contains(@0)&& AssignedReviewerId == @1)";
+                            query = query.Where(expression, ColumnValue,userId);
                         }
                         else if(property != null)
                         {
