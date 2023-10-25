@@ -58,10 +58,10 @@ namespace EDocument_Services.Mail_Service
                 }
             }
 
-          //  using var smtp = new SmtpClient(host: _mailSettings.Value.Host, port: _mailSettings.Value.Port);
-            //smtp.EnableSsl = true;
-            //smtp.Credentials = new NetworkCredential(userName: _mailSettings.Value.Email,password: ApplicationConsts.EmailPassword?.ToString());
-            using var smtp = new SmtpClient("10.101.100.199", 25);
+          //using var smtp = new SmtpClient(host: _mailSettings.Value.Host, port: _mailSettings.Value.Port);
+           //smtp.EnableSsl = true;
+           //smtp.Credentials = new NetworkCredential(userName: _mailSettings.Value.Email,password: ApplicationConsts.EmailPassword?.ToString());
+           using var smtp = new SmtpClient("10.101.100.199", 25);
             await smtp.SendMailAsync(email);
         }
 

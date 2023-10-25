@@ -4,6 +4,7 @@ using EDocument_EF;
 using EDocument_Services.Helpers;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 
@@ -818,7 +819,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return await query.FirstOrDefaultAsync();
         }
 
-        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync( string? userId = null, string? userCondition = null, bool? isCreator = null, string[]? includes = null, Dictionary<string, string>? filters = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync( string? userId = null, string? userCondition = null, bool? isCreator = null, string[]? includes = null,string? customFilter =null, Dictionary<string, string>? filters = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var ColumnName = "";
             var ColumnValue = "";
@@ -883,6 +884,13 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
             #endregion Apply General Filter
 
+            #region Custom Filter
+            if (customFilter !=null)
+            {
+                query = query.Where(customFilter);
+            }
+            #endregion
+
             #region Apply Date Filter
 
             if (dateFilters != null)
@@ -940,7 +948,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return result;
         }
 
-        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string? userId = null, string? userCondition = null, string[]? includes = null, string? filterValue = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string? userId = null, string? userCondition = null, string[]? includes = null, string? customFilter = null, string? filterValue = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var dynamicFilter = "";
             (int TotalCount, IEnumerable<T> PaginatedData) result;
@@ -984,6 +992,13 @@ namespace EDocument_Reposatories.Generic_Reposatories
             }
 
             #endregion Apply General Filter
+
+            #region Custom Filter
+            if (customFilter != null)
+            {
+                query = query.Where(customFilter);
+            }
+            #endregion
 
             #region Apply Date Filter
 

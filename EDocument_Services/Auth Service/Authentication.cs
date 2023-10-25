@@ -60,7 +60,7 @@ namespace EDocument_Services.Auth_Service
                 }
                 else
                 {
-                    result = (true, $"User: '{username}' not found");
+                    result = (true, $"User: '{username}' not found in active directory");
                     return result;
                    
                 }
@@ -94,7 +94,7 @@ namespace EDocument_Services.Auth_Service
                 bool isInValid = !context.ValidateCredentials(username.ToLower(), password);
                 if (isInValid)
                 {
-                    result = (false, "Usermame or Password is incorrect");
+                    result = (false, "Password is incorrect");
 
                     return result;
                 }

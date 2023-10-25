@@ -161,24 +161,11 @@ namespace EDocument_API.Controllers.V1
 
             (int TotalCount, IEnumerable<User> PaginatedData) result;
 
-
-            if (filterDto?.Filters != null)
+            if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
-                result = await _unitOfWork.Repository<User>().FindAllAsync(
-                filters: filterDto?.Filters,
-                includes: includes,
-                skip: (filterDto?.PageNo - 1) * filterDto?.PageSize,
-                take: filterDto?.PageSize,
-                orderBy: filterDto?.orderBy,
-                orderByDirection: filterDto?.orderByDirection,
-                dateFilters: filterDto?.dateFilters
-                );
-
-            }
-            else if (filterDto?.FilterValue != null)
-            {
-                result = await _unitOfWork.Repository<User>().FindAllAsync(
+                result = await _unitOfWork.Repository<User>().FindAllRequestsAsync(
                 filterValue: filterDto?.FilterValue,
+                customFilter: "UserName!=null",
                 includes: includes,
                 skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
                 take: filterDto?.PageSize ?? 10,
@@ -189,8 +176,9 @@ namespace EDocument_API.Controllers.V1
             }
             else
             {
-                result = await _unitOfWork.Repository<User>().FindAllAsync(
+                result = await _unitOfWork.Repository<User>().FindAllRequestsAsync(
                 filters: filterDto?.Filters,
+                customFilter: "UserName!=null",
                 includes: includes,
                 skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
                 take: filterDto?.PageSize ?? 10,
@@ -375,6 +363,9 @@ namespace EDocument_API.Controllers.V1
 
             if (user == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"user: ({userRoleDto.UserId}) not found" });
+
+            if (user.UserName is null)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"username not found" });
 
             foreach (var role in userRoleDto.Roles)
             {
