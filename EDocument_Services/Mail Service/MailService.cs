@@ -62,7 +62,7 @@ namespace EDocument_Services.Mail_Service
            //smtp.EnableSsl = true;
            //smtp.Credentials = new NetworkCredential(userName: _mailSettings.Value.Email,password: ApplicationConsts.EmailPassword?.ToString());
            using var smtp = new SmtpClient("10.101.100.199", 25);
-            await smtp.SendMailAsync(email);
+            //await smtp.SendMailAsync(email);
         }
 
 

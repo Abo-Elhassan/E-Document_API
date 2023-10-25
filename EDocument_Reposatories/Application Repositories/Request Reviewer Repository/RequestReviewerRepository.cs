@@ -32,7 +32,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
         public async Task<List<ReviewersDetails>> GetAllRequestReviewersAsync(long requestId)
         {
             var reviewersDetails = new List<ReviewersDetails>();
-            var stages = _context.RequestReviewers.Where(rr => rr.RequestId == requestId).AsEnumerable().DistinctBy(r => r.StageNumber).Select(rr => new { rr.StageNumber, rr.StageName, rr.Status, rr.ReviewedBy, rr.ReviewerNotes }).ToList();
+            var stages = _context.RequestReviewers.Where(rr => rr.RequestId == requestId).AsEnumerable().DistinctBy(r => r.StageNumber).Select(rr => new { rr.StageNumber, rr.StageName, rr.Status, rr.ReviewedBy, rr.ReviewerNotes,rr.ModifiedAt }).ToList();
 
             var availableReviewers = await _context.RequestReviewers.Include(rr => rr.Reviewer).AsNoTracking().Where(rr => rr.RequestId == requestId).ToListAsync();
 
@@ -44,7 +44,8 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                     StageTitle = stage.StageName,
                     Status = (RequestStatus)Enum.Parse(typeof(RequestStatus), stage.Status),
                     ReviewedBy = stage.ReviewedBy,
-                    ReviewerNotes = stage.ReviewerNotes
+                    ReviewerNotes = stage.ReviewerNotes,
+                    ReviewedAt = stage.ReviewedBy != null ? stage.ModifiedAt : null
                 };
                 var assignedReviewers = new List<string>();
 

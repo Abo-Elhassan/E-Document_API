@@ -18,9 +18,14 @@ namespace EDocument_Services.File_Service
 {
     public class FileService : IFileService
     {
-    
-        public FileService()
+
+        private readonly IWebHostEnvironment _environment;
+        private readonly string _rootPath;
+
+        public FileService(IWebHostEnvironment environment)
         {
+            _environment = environment;
+            _rootPath = $@"{_environment?.WebRootPath}\Attachments\";
         }
 
         public void DeleteFile(string filePath)
@@ -55,11 +60,11 @@ namespace EDocument_Services.File_Service
             return contentType;
         }
 
-        public  string? GetFileUrl(string filePath)
+        public string? GetFileUrl(string filePath)
         {
             if (System.IO.File.Exists(filePath))
             {
-                var fileName = filePath.Replace(ApplicationConsts.MappedDrivePath, "");
+                var fileName = filePath.Replace(_rootPath, "");
 
                 var encodedFilePath = HttpUtility.UrlEncode(fileName);
 
@@ -72,17 +77,17 @@ namespace EDocument_Services.File_Service
             {
                 return null;
             }
-          
+
         }
 
         public string UploadAttachment(string requestPath, IFormFile file)
         {
 
-            if (!Directory.Exists(Path.Combine(ApplicationConsts.MappedDrivePath, requestPath)))
+            if (!Directory.Exists(Path.Combine(_rootPath, requestPath)))
             {
-                Directory.CreateDirectory(Path.Combine(ApplicationConsts.MappedDrivePath, requestPath));
+                Directory.CreateDirectory(Path.Combine(_rootPath, requestPath));
             }
-            string filePath = Path.Combine(ApplicationConsts.MappedDrivePath, requestPath, file.FileName);
+            string filePath = Path.Combine(_rootPath, requestPath, file.FileName);
 
 
             using (FileStream filestream = File.Create(filePath))
@@ -98,14 +103,14 @@ namespace EDocument_Services.File_Service
         {
             var attachments = new List<Attachment>();
 
-            if (!Directory.Exists(Path.Combine(ApplicationConsts.MappedDrivePath, requestPath)))
+            if (!Directory.Exists(Path.Combine(_rootPath, requestPath)))
             {
-                Directory.CreateDirectory(Path.Combine(ApplicationConsts.MappedDrivePath, requestPath));
+                Directory.CreateDirectory(Path.Combine(_rootPath, requestPath));
             }
-         
+
             foreach (var file in files)
             {
-                string filePath = Path.Combine(ApplicationConsts.MappedDrivePath, requestPath, file.FileName);
+                string filePath = Path.Combine(_rootPath, requestPath, file.FileName);
                 using (FileStream filestream = File.Create(filePath))
                 {
                     file.CopyTo(filestream);

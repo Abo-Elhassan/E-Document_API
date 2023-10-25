@@ -13,6 +13,7 @@ namespace EDocument_Data.DTOs.Requests.RequestReviewer
         public string StageTitle { get; set; }
         public RequestStatus Status { get; set; }
         public string ReviewedBy { get; set; }
+        public DateTime? ReviewedAt { get; set; }
         public string ReviewerNotes { get; set; }
         public List<string> AssignedReviewers { get; set; }
 

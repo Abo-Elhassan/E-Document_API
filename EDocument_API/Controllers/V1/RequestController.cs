@@ -662,7 +662,7 @@ namespace EDocument_API.Controllers.V1
 
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
-            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PoRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PoRequest", "Creator", "Creator.Manager", "Creator.Department", "Creator.Department.Manager" });
 
 
             var requestCreator = request.Creator;
@@ -721,7 +721,7 @@ namespace EDocument_API.Controllers.V1
 
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
-            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PoRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PoRequest", "Creator", "Creator.Manager", "Creator.Department", "Creator.Department.Manager" });
 
 
             var requestCreator = request.Creator;

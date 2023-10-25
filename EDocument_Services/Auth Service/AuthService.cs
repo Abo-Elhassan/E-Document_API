@@ -102,12 +102,12 @@ namespace EDocument_Services.Auth_Service
 
             try
             {
-                var result = Authentication.IsUserAuthenticated(ApplicationConsts.ADDomain, loginWriteDto.UserName, loginWriteDto.Password);
-                if (!result.IsAuthenticated)
-                {
+                //var result = Authentication.IsUserAuthenticated(ApplicationConsts.ADDomain, loginWriteDto.UserName, loginWriteDto.Password);
+                //if (!result.IsAuthenticated)
+                //{
 
-                    return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = result.Message });
-                }
+                //    return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = result.Message });
+                //}
 
                 await _userManager.ResetAccessFailedCountAsync(user);
 
