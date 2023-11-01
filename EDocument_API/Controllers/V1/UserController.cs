@@ -234,7 +234,7 @@ namespace EDocument_API.Controllers.V1
             var users = new List<UserReadSearchDto>();
             if (string.IsNullOrEmpty(searchValue))
             {
-                users = await _userManager.Users.Include(t => t.Department).Include(t => t.Section).Where(u => u.UserName != null).Select(u => new UserReadSearchDto
+                users = await _userManager.Users.Include(t => t.Department).Include(t => t.Section).Select(u => new UserReadSearchDto
                 {
                     Id = u.Id,
                     FullName = u.FullName,
@@ -248,7 +248,7 @@ namespace EDocument_API.Controllers.V1
             }
             else if (int.TryParse(searchValue, out int result) || searchValue.Contains("Exp-"))
             {
-                users = await _userManager.Users.Include(t => t.Department).Include(t => t.Section).Where(u => u.Id.Contains(searchValue)&& u.UserName != null).Select(u => new UserReadSearchDto
+                users = await _userManager.Users.Include(t => t.Department).Include(t => t.Section).Where(u => u.Id.Contains(searchValue)).Select(u => new UserReadSearchDto
                 {
                     Id = u.Id,
                     FullName = u.FullName,
@@ -262,7 +262,7 @@ namespace EDocument_API.Controllers.V1
             }
             else
             {
-                users = await _userManager.Users.Include(t => t.Department).Include(t => t.Section).Where(u => u.FullName.Contains(searchValue)&& u.UserName != null).Select(u => new UserReadSearchDto
+                users = await _userManager.Users.Include(t => t.Department).Include(t => t.Section).Where(u => u.FullName.Contains(searchValue)).Select(u => new UserReadSearchDto
                 {
                     Id = u.Id,
                     FullName = u.FullName,
