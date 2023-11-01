@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EDocument_Data.DTOs.Requests.RequestReviewer
 {
-    public class RequestReviewerWriteDto
+    public class ApproveRequestReviewerDto
     {
         [Required]
         public long RequestId { get; set; }

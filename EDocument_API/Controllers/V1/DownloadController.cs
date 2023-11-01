@@ -21,20 +21,16 @@ namespace EDocument_API.Controllers.V1
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ApiResponse<string>))]
     public class DownloadController : ControllerBase
     {
-        private readonly IFileService _fileService;
         private readonly IWebHostEnvironment _environment;
-        private readonly IMailService _mailService;
-        private readonly ApplicationDbContext _context;
         private readonly string _rootPath;
 
-        public DownloadController(IFileService fileService, IWebHostEnvironment environment, IMailService mailService, ApplicationDbContext context)
+        public DownloadController(IWebHostEnvironment environment)
         {
-            _fileService = fileService;
             _environment = environment;
-            _mailService = mailService;
-            _context = context;
             _rootPath = $@"{_environment?.WebRootPath}\Attachments\";
         }
+
+
         /// <summary>
         /// Download File 
         /// </summary>
@@ -63,6 +59,38 @@ namespace EDocument_API.Controllers.V1
         }
 
 
-                      
+        //public DownloadController()
+        //{
+
+        //}
+        ///// <summary>
+        ///// Download File 
+        ///// </summary>
+        ///// <param name="fileName">file name</param>
+        ///// <remarks>
+        /////
+        ///// </remarks>
+        ///// <returns>targeted file</returns>
+
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<PhysicalFileResult>))]
+        //[HttpGet("{fileName}")]
+        //public IActionResult Download(string fileName)
+        //{
+        //    var decodedFileName = HttpUtility.UrlDecode(fileName);
+        //    string filePath = Path.Combine(ApplicationConsts.MappedDrivePath, decodedFileName);
+
+        //    if (System.IO.File.Exists(filePath))
+        //    {
+        //        return PhysicalFile(filePath, "application/octet-stream");
+        //    }
+        //    else
+        //    {
+        //        return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "File not found" });
+        //    }
+
+        //}
+
+
+
     }
 }

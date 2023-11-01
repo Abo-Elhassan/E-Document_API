@@ -80,12 +80,16 @@ namespace EDocument_API.Controllers.V1
             var section = await _unitOfWork.Repository<Section>().GetByIdAsync(id);
 
             if (section == null)
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Section not found" });
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Section not found" });
 
             var head = await _userManager.FindByIdAsync(headId);
 
             if (head == null)
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Head Id not found" });
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Head Id not found" });
+
+            if (head.SectionId != id)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Assigned head is not related to the selected section" });
+
 
             section.HeadId = headId;
             section.ModifiedBy = _userManager.FindByNameAsync(User?.Identity?.Name)?.Result?.FullName;

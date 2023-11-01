@@ -23,7 +23,7 @@ using System.Reflection;
 using System.Threading.RateLimiting;
 using EDocument_Repositories.Application_Repositories.UserRepository;
 
-namespace EDocument_API.Shared
+namespace EDocument_API.Extentions
 {
     public static class ServiceManager
     {
@@ -125,7 +125,7 @@ namespace EDocument_API.Shared
 
             services.AddLogging(loggingBuilder =>
             {
-                loggingBuilder.AddFile("log_{0:yyyy}-{0:MM}-{0:dd}.log", fileLoggerOpts =>
+                loggingBuilder.AddFile("Log/log_{0:yyyy}-{0:MM}-{0:dd}.log", fileLoggerOpts =>
                 {
                     fileLoggerOpts.FormatLogFileName = fName =>
                     {

@@ -2081,7 +2081,7 @@ namespace EDocument_EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasDefaultValue("Pending");
+                        .HasDefaultValue("None");
 
                     b.HasKey("Id");
 
@@ -2180,11 +2180,15 @@ namespace EDocument_EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasDefaultValue("Pending");
+                        .HasDefaultValue("None");
 
                     b.HasKey("Key");
 
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Key"), false);
+
                     b.HasIndex("AssignedReviewerId");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("AssignedReviewerId"));
 
                     b.HasIndex("RequestId");
 
@@ -2263,7 +2267,9 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("SectionName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 

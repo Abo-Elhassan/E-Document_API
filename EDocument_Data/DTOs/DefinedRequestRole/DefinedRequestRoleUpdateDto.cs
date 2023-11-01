@@ -9,8 +9,6 @@ namespace EDocument_Data.DTOs.DefinedRequest
         public required string RoleId { get; init; }
 
         [Required]
-        public long DefinedRequestId { get; init; }
-        [Required]
         public RequestPermission Permission { get; init; }
     }
 }

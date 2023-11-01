@@ -78,12 +78,16 @@ namespace EDocument_API.Controllers.V1
             var department = await _unitOfWork.Repository<Department>().GetByIdAsync(id);
 
             if (department == null) 
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Department not found" });
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Department not found" });
 
             var manager = await _userManager.FindByIdAsync(managerId);
 
             if (manager == null)
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Manager Id not found" });
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Manager Id not found" });
+
+            if(manager.DepartmentId!=id)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Assigned manager is not related to the selected department" });
+
 
             department.ManagerId = managerId;
             department.ModifiedBy = _userManager.FindByNameAsync(User?.Identity?.Name)?.Result?.FullName;

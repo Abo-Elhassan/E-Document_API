@@ -69,8 +69,9 @@ namespace EDocument_Services.AutoMapper_Service
 
 
             CreateMap<DefinedRequestReviewer, RequestReviewer>()
+                .ForMember(dest => dest.Key, src => src.Ignore())
                 .ForMember(dest => dest.RequestId, src => src.Ignore())
-                .ForMember(dest => dest.Status, src => src.MapFrom(opts => RequestStatus.Pending.ToString()))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => RequestStatus.None.ToString()))
                 .ForMember(dest => dest.CreatedAt, src => src.Ignore())
                 .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
                 .ForMember(dest => dest.CreatedBy, src => src.Ignore())
@@ -247,7 +248,7 @@ namespace EDocument_Services.AutoMapper_Service
             #endregion
 
             #region Refund Reuqest
-            CreateMap<ApproveRefundRequestDto, RequestReviewerWriteDto>();
+            CreateMap<ApproveRefundRequestDto, ApproveRequestReviewerDto>();
 
             CreateMap<RefundRequest, RefundRequestReadDto>()
            .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))

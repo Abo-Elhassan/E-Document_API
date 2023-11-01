@@ -54,6 +54,11 @@ public class FileValidationAttribute : ValidationAttribute
 
     private ValidationResult ValidateFile(IFormFile file)
     {
+        if (file.FileName.Length > 100)
+        {
+            return new ValidationResult($"File name '{file.FileName}' length is more than 100 characters.");
+        }
+
         if (file.Length > _maxFileSize)
         {
             return new ValidationResult($"File size must be less than {_maxFileSize / 1024 / 1024} MB.");
