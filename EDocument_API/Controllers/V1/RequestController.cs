@@ -102,7 +102,7 @@ namespace EDocument_API.Controllers.V1
             }
 
             Expression<Func<Request, bool>> reviewingRequestsExpression = (r => r.RequestReviewers.Any(rr => rr.AssignedReviewerId == user.Id&&r.CurrentStage==rr.StageNumber));
-            var reviewingRequests = await _unitOfWork.Repository<Request>().FindAllAsync(reviewingRequestsExpression, new string[] { "RequestReviewers" });
+            var reviewingRequests = await _unitOfWork.Repository<Request>().FindAllAsync(reviewingRequestsExpression, new string[] { "RequestReviewers", "DefinedRequest" });
 
             var recentReviewingRequests = _mapper.Map<List<RecentRequestReadDto>>(reviewingRequests);
 
@@ -933,7 +933,7 @@ namespace EDocument_API.Controllers.V1
 
             userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
 
-
+           
 
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
@@ -969,7 +969,7 @@ namespace EDocument_API.Controllers.V1
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
 
             var requests = _mapper.Map<List<VehicleRequestReviewerReadDto>>(result.PaginatedData);
-
+            
             foreach (var request in requests)
             {
                 var reviewer = request.RequestReviewers?.OrderBy(r=>r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
@@ -2185,7 +2185,7 @@ namespace EDocument_API.Controllers.V1
 
             foreach (var request in requests)
             {
-                var reviewer = request.RequestReviewers?.FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status == RequestStatus.Pending);
+                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
 
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;
@@ -2788,7 +2788,7 @@ namespace EDocument_API.Controllers.V1
 
             foreach (var request in requests)
             {
-                var reviewer = request.RequestReviewers?.FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status == RequestStatus.Pending);
+                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
 
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;
