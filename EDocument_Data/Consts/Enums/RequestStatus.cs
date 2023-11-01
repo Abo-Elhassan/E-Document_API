@@ -6,6 +6,7 @@
 
         Pending,
         Approved,
-        Declined
+        Declined,
+        None
     }
 }

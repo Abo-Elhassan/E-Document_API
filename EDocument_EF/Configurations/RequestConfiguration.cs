@@ -15,6 +15,8 @@ namespace EDocument_EF.Configurations
         {
             entity.ToTable(nameof(Request) , tb=>tb.HasTrigger($"TR_{nameof(AuditRequest)}"));
 
+            entity.HasIndex(e => e.CreatorId);
+
             entity.Property(e => e.Id)
             .ValueGeneratedNever();
 
@@ -26,7 +28,7 @@ namespace EDocument_EF.Configurations
             .HasDefaultValue(1);
 
             entity.Property(e => e.Status)
-            .HasDefaultValue(RequestStatus.Pending.ToString())
+            .HasDefaultValue(RequestStatus.None.ToString())
             .HasMaxLength(50);
 
 

@@ -1,5 +1,6 @@
 ﻿#nullable disable
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Logging;
 using System;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
@@ -27,7 +28,7 @@ namespace EDocument_Services.Auth_Service
 
                 if (user != null)
                 {
-                    bool isDisabled = !user?.Enabled ?? true;  // Check if the user account is disabled
+                    bool isDisabled = (!user?.Enabled)??true;  // Check if the user account is disabled
 
                     result = isDisabled ? (true, $"User: '{username}' is disabled on Active Directory, Please Contact DPWS IT Team") : (false, "");
 
@@ -59,7 +60,7 @@ namespace EDocument_Services.Auth_Service
                 }
                 else
                 {
-                    result = (true, $"User: '{username}' not found");
+                    result = (true, $"User: '{username}' not found in active directory");
                     return result;
                    
                 }
@@ -71,7 +72,8 @@ namespace EDocument_Services.Auth_Service
             (bool IsAuthenticated, string Message) result = (false,null);
 
             using (PrincipalContext context = new PrincipalContext(ContextType.Domain, domain))
-            {
+            {             
+               UserPrincipal user = UserPrincipal.FindByIdentity(context, IdentityType.SamAccountName, username);
 
                 var checkLockResult = IsUserLockedOut(username);
                 if (checkLockResult.IsLocked)
@@ -92,7 +94,7 @@ namespace EDocument_Services.Auth_Service
                 bool isInValid = !context.ValidateCredentials(username.ToLower(), password);
                 if (isInValid)
                 {
-                    result = (false, "Usermame or Password is incorrect");
+                    result = (false, "Password is incorrect");
 
                     return result;
                 }

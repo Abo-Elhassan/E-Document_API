@@ -29,7 +29,8 @@ namespace EDocument_Services.Mail_Service
 
             var email = new MailMessage();
 
-            email.From = new MailAddress(_mailSettings.Value.Email, _mailSettings.Value.DisplayName);
+            // email.From = new MailAddress(_mailSettings.Value.Email, _mailSettings.Value.DisplayName);
+            email.From = new MailAddress("eDocument.eservice@dpworld.com", "eDocument");
             foreach (var address in mailContent.To.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
             {
                 email.To.Add(address);
@@ -57,10 +58,11 @@ namespace EDocument_Services.Mail_Service
                 }
             }
 
-            using var smtp = new SmtpClient(host: _mailSettings.Value.Host, port: _mailSettings.Value.Port);
-            smtp.EnableSsl = true;
-            smtp.Credentials = new NetworkCredential(userName: _mailSettings.Value.Email,password: ApplicationConsts.EmailPassword?.ToString());
-            await smtp.SendMailAsync(email);
+          //using var smtp = new SmtpClient(host: _mailSettings.Value.Host, port: _mailSettings.Value.Port);
+           //smtp.EnableSsl = true;
+           //smtp.Credentials = new NetworkCredential(userName: _mailSettings.Value.Email,password: ApplicationConsts.EmailPassword?.ToString());
+           using var smtp = new SmtpClient("10.101.100.199", 25);
+            //await smtp.SendMailAsync(email);
         }
 
 

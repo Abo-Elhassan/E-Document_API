@@ -1,7 +1,7 @@
+using EDocument_API.Extentions;
 using EDocument_API.Middlewares;
-using EDocument_API.Shared;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.Extensions.DependencyInjection;
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.InjectServices(builder.Configuration);

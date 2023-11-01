@@ -13,12 +13,18 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<RequestReviewer> entity)
         {
-            // entity.HasKey(e => new { e.RequestId, e.AssignedReviewerId });
-            entity.HasKey(e => e.Key);
+            entity.ToTable(nameof(RequestReviewer), tb => tb.HasTrigger($"TR_{nameof(AuditRequestReviewer)}"));
+
+            entity.HasKey(e => e.Key)
+            .IsClustered(false);
+
+            entity.HasIndex(e => e.AssignedReviewerId)  
+            .IsClustered();
+
             entity.Property(e => e.Key)
             .ValueGeneratedNever();
 
-            entity.ToTable(nameof(RequestReviewer), tb => tb.HasTrigger($"TR_{nameof(AuditRequestReviewer)}"));
+
 
             entity.Property(e => e.AssignedReviewerId)
             .HasMaxLength(50);
@@ -31,7 +37,7 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50);
 
             entity.Property(e => e.Status)
-            .HasDefaultValue(RequestStatus.Pending.ToString())
+            .HasDefaultValue(RequestStatus.None.ToString())
             .HasMaxLength(50);
 
 

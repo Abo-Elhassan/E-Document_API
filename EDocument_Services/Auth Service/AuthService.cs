@@ -69,7 +69,7 @@ namespace EDocument_Services.Auth_Service
 
         #region Handle Authentication
 
-        public async Task<ActionResult> AuthenticatUserAsync(LoginWriteDto loginWriteDto)
+        public async Task<ActionResult> AuthenticatUserAsync( LoginWriteDto loginWriteDto)
         {
 
          
@@ -90,21 +90,23 @@ namespace EDocument_Services.Auth_Service
                 return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"User: ({loginWriteDto.UserName}) is locked, Please Contact DPWS IT Team" });
             }
 
-            var result = user.HasLDAP ? AuthenticatEmpolyeeAsync(loginWriteDto, user, isLockedOut).Result : AuthenticatGuestAsync(loginWriteDto, user, isLockedOut).Result;
+            var result = user.HasLDAP ? AuthenticatEmpolyeeAsync(loginWriteDto, user).Result : AuthenticatGuestAsync(loginWriteDto, user, isLockedOut).Result;
             _context.SaveChangesAsync();
 
             return result;
         }
 
-        private async Task<ActionResult> AuthenticatEmpolyeeAsync(LoginWriteDto loginWriteDto, User user, bool isLockedOut)
+        private async Task<ActionResult> AuthenticatEmpolyeeAsync(LoginWriteDto loginWriteDto, User user)
         {
-       
-               //var result =  Authentication.IsUserAuthenticated(ApplicationConsts.ADDomain, loginWriteDto.UserName, loginWriteDto.Password);
-               // if (!result.IsAuthenticated)
-               // {
-            
-               // return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = result.Message });
-               // }
+
+            try
+            {
+                //var result = Authentication.IsUserAuthenticated(ApplicationConsts.ADDomain, loginWriteDto.UserName, loginWriteDto.Password);
+                //if (!result.IsAuthenticated)
+                //{
+
+                //    return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = result.Message });
+                //}
 
                 await _userManager.ResetAccessFailedCountAsync(user);
 
@@ -119,6 +121,13 @@ namespace EDocument_Services.Auth_Service
                 user.LastLogin = DateTime.Now;
 
                 return new OkObjectResult(new ApiResponse<LoginReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = userDetails });
+            }
+            catch (COMException)
+            {
+
+                return new BadRequestObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Usermame or Password is incorrect" });
+            }
+          
          
         }
 
