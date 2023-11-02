@@ -44,13 +44,13 @@ namespace EDocument_Data.DTOs.Requests.AccessControlRequest
     public class AccessControlRequestEditReadDto : AccessControlRequestReadDto
     {
         public List<string> AccessedBlocks { get; init; }
-        public List<string> AccessMethod { get; init; }
+        public List<string> AccessMethods { get; init; }
     }
 
     public class AccessControlRequestDetailsReadDto : AccessControlRequestReadDto
     {
         public string AccessedBlocks { get; init; }
-        public string AccessMethod { get; init; }
+        public string AccessMethods { get; init; }
     }
 
 }

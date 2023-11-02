@@ -18,12 +18,12 @@ namespace EDocument_Data.DTOs.Requests.AccessControlRequest
         [Required]
         public List<string> AccessedBlocks { get; init; }
         [Required]
-        public List<string> AccessMethod { get; init; }
+        public List<string> AccessMethods { get; init; }
         [Required]
         [FileValidation(2 * 1024 * 1024, ".png", ".jpg", ".jpeg")]
-        public IFormFile EmployeeSignaturePath { get; init; }
+        public IFormFile EmployeeSignature { get; init; }
         
-        public string Notes { get; init; }
+        public string? Notes { get; init; }
 
         [Required]
         public long DefinedRequestId { get; init; }

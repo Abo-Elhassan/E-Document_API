@@ -217,10 +217,10 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             else
             {
 
-                foreach (var item in remainingRequestReviewers.Where(rr => rr.StageNumber>= rr.Request.CurrentStage).OrderBy(r=>r.StageNumber).DistinctBy(r=>r.StageNumber))
+                foreach (var item in remainingRequestReviewers.Where(rr => rr.StageNumber >= rr.Request.CurrentStage).OrderBy(r => r.StageNumber).DistinctBy(r => r.StageNumber))
                 {
 
-                    if (item.Status == RequestStatus.Approved.ToString()&& currentStage != item.StageNumber)  //Check the next stage if they are already approved automatically or not
+                    if (item.Status == RequestStatus.Approved.ToString() && currentStage != item.StageNumber)  //Check the next stage if they are already approved automatically or not
                     {
 
                         if (item.Request.CurrentStage == item.Request.DefinedRequest.ReviewersNumber) // Check if the approved stage is the last stage
@@ -233,16 +233,24 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                             item.Request.CurrentStage++;
                             var nextReviewer = remainingRequestReviewers.FirstOrDefault(rr => rr.StageNumber == rr.Request.CurrentStage);
 
-                            if(nextReviewer.Status==RequestStatus.None.ToString())
+                            if (nextReviewer.Status == RequestStatus.None.ToString())
+                            {
                                 remainingRequestReviewers.Where(rr => rr.StageNumber == nextReviewer.Request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
+                                break;
+                            }
 
                         }
                     }
                     else  //Change next reviewer status to pending
                     {
                         item.Request.CurrentStage++;
-                        remainingRequestReviewers.Where(rr => rr.StageNumber == item.Request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
-                        break;
+                        var nextReviewer = remainingRequestReviewers.FirstOrDefault(rr => rr.StageNumber == rr.Request.CurrentStage);
+                        if (nextReviewer.Status == RequestStatus.None.ToString())
+                        {
+                            remainingRequestReviewers.Where(rr => rr.StageNumber == item.Request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
+                            break;
+
+                        }
                     }
 
                 }

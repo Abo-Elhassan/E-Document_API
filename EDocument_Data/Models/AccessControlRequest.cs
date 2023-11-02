@@ -7,7 +7,7 @@ namespace EDocument_Data.Models
     public class AccessControlRequest : BaseRequest
     {
         public string AccessedBlocks { get; set; }
-        public string AccessMethod { get; set; }
+        public string AccessMethods { get; set; }
         public string EmployeeSignaturePath { get; set; }
     }
 }

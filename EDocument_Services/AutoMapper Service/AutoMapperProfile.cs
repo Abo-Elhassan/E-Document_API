@@ -6,6 +6,7 @@ using EDocument_Data.DTOs.DefinedRequestReviewer;
 using EDocument_Data.DTOs.DefinedRequestRole;
 using EDocument_Data.DTOs.Department;
 using EDocument_Data.DTOs.Requests;
+using EDocument_Data.DTOs.Requests.AccessControlRequest;
 using EDocument_Data.DTOs.Requests.CCTVAccessRequest;
 using EDocument_Data.DTOs.Requests.DiscountRequest;
 using EDocument_Data.DTOs.Requests.PoRequest;
@@ -317,6 +318,69 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<DiscountRequestUpdateDto, DiscountRequest>()
                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            #endregion
+
+            #region Access Control Request
+
+            CreateMap<User, AccessControlRequest>()
+            .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
+            .ForMember(dest => dest.BeneficiaryName, src => src.MapFrom(opts => opts.FullName))
+            .ForMember(dest => dest.BeneficiaryEmail, src => src.MapFrom(opts => opts.Email))
+            .ForMember(dest => dest.BeneficiaryPosition, src => src.MapFrom(opts => opts.Position))
+            .ForMember(dest => dest.BeneficiaryDepartment, src => src.MapFrom(opts => opts.Department.DepartmentName))
+            .ForMember(dest => dest.BeneficiaryPhoneNumber, src => src.MapFrom(opts => opts.PhoneNumber))
+            .ForMember(dest => dest.BeneficiaryCompany, src => src.MapFrom(opts => opts.Company))
+            .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+            .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+            .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+            .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
+
+
+
+
+
+            CreateMap<AccessControlRequest, AccessControlRequestEditReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.AccessedBlocks, opt => opt.MapFrom(src => ConvertStringToList(src.AccessedBlocks)))
+                .ForMember(dest => dest.AccessMethods, opt => opt.MapFrom(src => ConvertStringToList(src.AccessMethods)));
+
+
+
+            CreateMap<AccessControlRequest, AccessControlRequestDetailsReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId));
+
+
+
+            CreateMap<AccessControlRequest, AccessControlRequestReviewerReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<AccessControlRequestCreateDto, AccessControlRequest>()
+               .ForMember(dest => dest.AccessedBlocks, opt => opt.MapFrom(src => ConvertListToString(src.AccessedBlocks)))
+               .ForMember(dest => dest.AccessMethods, opt => opt.MapFrom(src => ConvertListToString(src.AccessMethods)));
+          
+
+            CreateMap<CCTVAccessRequestUpdateDto, Request>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<AccessControlRequestUpdateDto, AccessControlRequest>()
+                .ForMember(dest => dest.AccessedBlocks, opt => opt.MapFrom(src => ConvertListToString(src.AccessedBlocks)))
+                .ForMember(dest => dest.AccessMethods, opt => opt.MapFrom(src => ConvertListToString(src.AccessMethods)))
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             #endregion
 
             #region CCTV Access Request

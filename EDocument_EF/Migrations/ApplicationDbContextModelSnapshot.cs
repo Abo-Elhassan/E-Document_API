@@ -44,11 +44,13 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("AccessMethod")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("AccessMethods")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("AccessedBlocks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("BeneficiaryCompany")
                         .HasMaxLength(200)

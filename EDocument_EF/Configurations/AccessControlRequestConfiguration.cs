@@ -45,6 +45,12 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.BeneficiaryCompany)
             .HasMaxLength(200);
 
+            entity.Property(e => e.AccessedBlocks)
+            .HasMaxLength(200);
+
+            entity.Property(e => e.AccessMethods)
+            .HasMaxLength(200);
+
             entity.Property(e => e.CreatedAt)
             .HasColumnType("smalldatetime");
 
