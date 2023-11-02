@@ -1,25 +1,27 @@
-﻿
-using EDocument_Data.Models;
+﻿using EDocument_Data.Models;
 using EDocument_Data.Models.Audit;
 using Microsoft.EntityFrameworkCore;
+
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
 
 namespace EDocument_EF.Configurations
 {
-    public partial class ApplicationUserRequestConfiguration : IEntityTypeConfiguration<ApplicationUserRequest>
+    public partial class AccessControlRequestConfiguration : IEntityTypeConfiguration<AccessControlRequest>
     {
-        public void Configure(EntityTypeBuilder<ApplicationUserRequest> entity)
+        public void Configure(EntityTypeBuilder<AccessControlRequest> entity)
         {
-            entity.HasKey(e => new { e.BeneficiaryId, e.RequestId });
+            entity.HasKey(e => e.RequestNumber);
 
-            entity.ToTable(nameof(ApplicationUserRequest), tb => tb.HasTrigger($"TR_{nameof(AuditApplicationUserRequest)}"));
+          
+            entity.ToTable(nameof(AccessControlRequest), tb => tb.HasTrigger($"TR_{nameof(AuditAccessControlRequest)}"));
+
+            entity.Property(e => e.RequestNumber)
+            .HasMaxLength(50)
+            .ValueGeneratedNever();
 
             entity.Property(e => e.BeneficiaryId)
             .IsRequired()
             .HasMaxLength(50);
-
 
             entity.Property(e => e.BeneficiaryDepartment)
             .HasMaxLength(200);
@@ -37,11 +39,11 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.BeneficiaryPhoneNumber)
             .HasMaxLength(50);
 
-            entity.Property(e => e.BeneficiaryCompany)
-            .HasMaxLength(200);
-
             entity.Property(e => e.BeneficiaryExtention)
             .HasMaxLength(50);
+
+            entity.Property(e => e.BeneficiaryCompany)
+            .HasMaxLength(200);
 
             entity.Property(e => e.CreatedAt)
             .HasColumnType("smalldatetime");
@@ -50,21 +52,22 @@ namespace EDocument_EF.Configurations
             .HasColumnType("smalldatetime");
 
             entity.Property(e => e.CreatedBy)
-            .HasMaxLength(200);
+            .HasMaxLength(200)
+            .IsUnicode(false);
 
             entity.Property(e => e.ModifiedBy)
-            .HasMaxLength(200);
+            .HasMaxLength(200)
+            .IsUnicode(false);
 
-            entity.HasOne(d => d.Request).WithOne(p => p.ApplicationUserRequest)
-            .HasForeignKey<ApplicationUserRequest>(d => d.RequestId)
+            entity.HasOne(d => d.Request).WithOne(p => p.AccessControlRequest)
+            .HasForeignKey<AccessControlRequest>(d => d.RequestId)
             .OnDelete(DeleteBehavior.Cascade)
-            .HasConstraintName("FK_ApplicationUserRequest_Request");
-
+            .HasConstraintName("FK_AccessControlRequest_Request");
 
 
             OnConfigurePartial(entity);
         }
 
-        partial void OnConfigurePartial(EntityTypeBuilder<ApplicationUserRequest> entity);
+        partial void OnConfigurePartial(EntityTypeBuilder<AccessControlRequest> entity);
     }
 }

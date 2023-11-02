@@ -16,9 +16,10 @@ namespace EDocument_Data.DTOs.User
         public required string UserName { get; init; }
         public required string FullName { get; init; }
         public required string PhoneNumber { get; init; }
+        public string Email { get; init; }
         public string Position { get; init; }
         public string Department { get; init; }
-        public string Section { get; init; }
+        public string Section { get; init; }     
         public string Company { get; init; }
         public bool HasLDAP { get; set; }
         public  List<string> Roles { get; init; }

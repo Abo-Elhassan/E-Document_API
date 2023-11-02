@@ -19,7 +19,7 @@ namespace EDocument_EF.Configurations
             entity.HasKey(e => e.RequestNumber);
 
             entity.Property(e => e.RequestNumber)
-          //  .HasMaxLength(50)
+            .HasMaxLength(50)
             .ValueGeneratedNever();
 
 
@@ -42,6 +42,9 @@ namespace EDocument_EF.Configurations
 
             entity.Property(e => e.BeneficiaryPhoneNumber)
             .HasMaxLength(50);
+
+            entity.Property(e => e.BeneficiaryCompany)
+            .HasMaxLength(200);
 
             entity.Property(e => e.BeneficiaryExtention)
             .HasMaxLength(50);

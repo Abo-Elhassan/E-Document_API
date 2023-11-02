@@ -23,6 +23,7 @@ namespace EDocument_Data.DTOs.Requests.TravelDeskRequest
         public string BeneficiaryDepartment { get; init; }
         public string BeneficiaryPhoneNumber { get; init; }
         public string BeneficiaryExtention { get; init; }
+        public string BeneficiaryComapny { get; init; }
         public string BeneficiaryNationality { get; init; }
 
         public string CostAllocation { get; init; }

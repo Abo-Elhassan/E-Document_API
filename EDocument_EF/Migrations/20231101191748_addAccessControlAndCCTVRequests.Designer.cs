@@ -4,6 +4,7 @@ using EDocument_EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDocument_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231101191748_addAccessControlAndCCTVRequests")]
+    partial class addAccessControlAndCCTVRequests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -291,7 +294,7 @@ namespace EDocument_EF.Migrations
 
                     b.HasKey("AuditId");
 
-                    b.ToTable("AuditAccessControlRequest", "audit");
+                    b.ToTable("AuditAccessControlRequests");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditApplicationUserRequest", b =>
@@ -465,7 +468,7 @@ namespace EDocument_EF.Migrations
 
                     b.HasKey("AuditId");
 
-                    b.ToTable("AuditCCTVAccessRequest", "audit");
+                    b.ToTable("AuditCCTVAccessRequests");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditDefinedApplication", b =>
@@ -2839,9 +2842,8 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("EDocument_Data.Models.VehicleRequest", b =>
                 {
-                    b.Property<string>("RequestNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("BeneficiaryCompany")
                         .HasMaxLength(200)
@@ -2908,8 +2910,9 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<long>("RequestId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("RequestNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("ReturnDate")
                         .HasColumnType("smalldatetime");
@@ -2919,10 +2922,7 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("RequestNumber");
-
-                    b.HasIndex("RequestId")
-                        .IsUnique();
+                    b.HasKey("RequestId");
 
                     b.ToTable("VehicleRequest", null, t =>
                         {

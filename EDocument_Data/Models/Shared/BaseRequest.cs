@@ -21,6 +21,8 @@ namespace EDocument_Data.Models.Shared
 
         public string BeneficiaryDepartment { get; set; }
 
+        public string BeneficiaryCompany { get; set; }
+
         public string BeneficiaryPhoneNumber { get; set; }
 
         public string BeneficiaryExtention { get; set; }

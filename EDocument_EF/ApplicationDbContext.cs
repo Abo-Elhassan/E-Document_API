@@ -42,7 +42,8 @@ namespace EDocument_EF
 
         public virtual DbSet<DiscountRequest> DiscountRequests => Set<DiscountRequest>();
 
-
+        public virtual DbSet<AccessControlRequest> AccessControlRequests => Set<AccessControlRequest>();
+        public virtual DbSet<CCTVAccessRequest> CCTVAccessRequests => Set<CCTVAccessRequest>();
         #region Audit Tables
 
         public virtual DbSet<AuditDefinedRequest> AuditDefinedRequests => Set<AuditDefinedRequest>();
@@ -68,6 +69,8 @@ namespace EDocument_EF
         public virtual DbSet<AuditRefundRequest> AuditRefundRequests => Set<AuditRefundRequest>();
 
         public virtual DbSet<AuditDiscountRequest> AuditDiscountRequests => Set<AuditDiscountRequest>();
+        public virtual DbSet<AuditAccessControlRequest> AuditAccessControlRequests => Set<AuditAccessControlRequest>();
+        public virtual DbSet<AuditCCTVAccessRequest> AuditCCTVAccessRequests => Set<AuditCCTVAccessRequest>();
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -96,6 +99,8 @@ namespace EDocument_EF
             builder.ApplyConfiguration(new VoucherRequestConfiguration());
             builder.ApplyConfiguration(new RefundRequestConfiguration());
             builder.ApplyConfiguration(new DiscountRequestConfiguration());
+            builder.ApplyConfiguration(new AccessControlRequestConfiguration());
+            builder.ApplyConfiguration(new CCTVAccessRequestConfiguration());
         }
 
         public override int SaveChanges()
@@ -206,7 +211,8 @@ namespace EDocument_EF
             builder.Entity<AuditPoRequest>().ToTable(nameof(AuditPoRequest), "audit");
             builder.Entity<AuditRefundRequest>().ToTable(nameof(AuditRefundRequest), "audit");
             builder.Entity<AuditDiscountRequest>().ToTable(nameof(AuditDiscountRequest), "audit");
-
+            builder.Entity<AuditCCTVAccessRequest>().ToTable(nameof(AuditCCTVAccessRequest), "audit");
+            builder.Entity<AuditAccessControlRequest>().ToTable(nameof(AuditAccessControlRequest), "audit");
             #endregion
 
         }

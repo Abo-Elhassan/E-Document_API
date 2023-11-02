@@ -182,6 +182,7 @@ namespace EDocument_Services.Auth_Service
                 UserName = user.UserName,
                 FullName = user.FullName,
                 PhoneNumber = user?.PhoneNumber ?? "",
+                Email = user?.Email ?? "",
                 Position = user?.Position ?? "",
                 Department = user?.Department?.DepartmentName ?? "",
                 Section = user?.Section?.SectionName ?? "",
