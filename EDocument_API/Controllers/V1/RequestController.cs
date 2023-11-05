@@ -3227,7 +3227,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _mapper.Map<AccessControlRequestEditReadDto>(accessControlRequest);
             result.EmployeeSignature = _mapper.Map<AttachmentReadDto>(accessControlRequest.EmployeeSignaturePath);
-
+            result.EmployeeSignature.FileHref = _fileService.GetImageHref(accessControlRequest.EmployeeSignaturePath);
 
             return Ok(new ApiResponse<AccessControlRequestEditReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }

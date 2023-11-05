@@ -20,9 +20,9 @@ namespace EDocument_Data.DTOs.Requests.AccessControlRequest
         public List<string> AccessedBlocks { get; init; }
         [Required]
         public List<string> AccessMethods { get; init; }
-        [Required]
+      
         [FileValidation(2 * 1024 * 1024, ".png", ".jpg", ".jpeg")]
-        public IFormFile EmployeeSignature{ get; init; }
+        public IFormFile? EmployeeSignature{ get; init; }
 
         public string? Notes { get; init; }
 

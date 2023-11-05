@@ -376,7 +376,7 @@ namespace EDocument_Services.AutoMapper_Service
                .ForMember(dest => dest.AccessMethods, opt => opt.MapFrom(src => ConvertListToString(src.AccessMethods)));
           
 
-            CreateMap<CCTVAccessRequestUpdateDto, Request>()
+            CreateMap<AccessControlRequestUpdateDto, Request>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<AccessControlRequestUpdateDto, AccessControlRequest>()
                 .ForMember(dest => dest.AccessedBlocks, opt => opt.MapFrom(src => ConvertListToString(src.AccessedBlocks)))

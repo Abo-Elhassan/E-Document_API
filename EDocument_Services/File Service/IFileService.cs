@@ -14,6 +14,7 @@ namespace EDocument_Services.File_Service
         List<Attachment> UploadAttachments(long requestId, string requestPath, List<IFormFile> files, string createdBy);
         string GetContentType(string filePath);
         string? GetFileUrl(string filePath);
+        string? GetImageHref(string filePath);
         void DeleteFile(string filePath);
         void DeleteFolder(string folderPath);
     }

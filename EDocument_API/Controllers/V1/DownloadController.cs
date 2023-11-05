@@ -58,6 +58,36 @@ namespace EDocument_API.Controllers.V1
 
         }
 
+        /// <summary>
+        /// View Image
+        /// </summary>
+        /// <param name="imageName">image name</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>targeted image</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<PhysicalFileResult>))]
+        [HttpGet("/Image/{imageName}")]
+        public IActionResult GetSignature(string imageName)
+        {
+            var decodedFileName = HttpUtility.UrlDecode(imageName);
+            string imagePath = Path.Combine(_rootPath, decodedFileName);
+
+            if (System.IO.File.Exists(imagePath))
+            {
+                var imageStream = System.IO.File.OpenRead(imagePath);
+                return File(imageStream, "image/jpg");
+              
+            }
+            else
+            {
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "File not found" });
+            }
+
+        }
+        // Serve the image as a file
+
+
 
         //public DownloadController()
         //{
