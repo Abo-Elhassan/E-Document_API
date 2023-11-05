@@ -287,6 +287,8 @@ namespace EDocument_Services.Auth_Service
                                 });
                                
                             }
+
+                            commondisplayedRequest.RequestDdl = commondisplayedRequest.RequestDdl.OrderByDescending(r => r.DisplayName).ToList();
                         }
 
 

@@ -13,8 +13,7 @@ namespace EDocument_Data.DTOs.DefinedRequest
 {
     public class DefinedRequestUpdateDto
     {
-        [Required]
-        public long Id { get; init; }
+
         [Required]
         public required string RequestName { get; init; }
         [Required]

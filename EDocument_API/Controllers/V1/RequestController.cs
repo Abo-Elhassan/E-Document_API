@@ -3226,7 +3226,7 @@ namespace EDocument_API.Controllers.V1
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
             var result = _mapper.Map<AccessControlRequestEditReadDto>(accessControlRequest);
-             _mapper.Map(accessControlRequest.EmployeeSignaturePath, result.EmployeeSignature);
+            result.EmployeeSignature = _mapper.Map<AttachmentReadDto>(accessControlRequest.EmployeeSignaturePath);
 
 
             return Ok(new ApiResponse<AccessControlRequestEditReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
@@ -3294,7 +3294,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>List of All Created Access Control Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<AccessControlRequestDetailsReadDto>>))]
         [HttpPost("AccessControl/Inbox")]
-        [Authorize(Roles = "Basic")]
+        [Authorize(Roles = "HR")]
         public async Task<ActionResult> GetCreatorAccessControlRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetCreatorAccessControlRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -3440,7 +3440,7 @@ namespace EDocument_API.Controllers.V1
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("AccessControl/Create")]
-        [Authorize(Roles = "Basic")]
+        [Authorize(Roles = "HR")]
         public async Task<ActionResult> CreateAccessControlRequest([FromForm] AccessControlRequestCreateDto accessControlRequestCreateDto)
         {
 
@@ -3544,7 +3544,7 @@ namespace EDocument_API.Controllers.V1
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("AccessControl/Update/{id}")]
-        [Authorize(Roles = "Basic")]
+        [Authorize(Roles = "HR")]
         public async Task<ActionResult> UpdateAccessControlRequest(long id, [FromForm] AccessControlRequestUpdateDto accessControlRequestUpdateDto)
         {
             _logger.LogInformation($"Start UpdateAccessControlRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(accessControlRequestUpdateDto)} ");

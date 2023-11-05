@@ -68,6 +68,7 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<DefinedRequestReviewerCreateDto, DefinedRequestReviewer>();
             CreateMap<DefinedRequestReviewerUpdateDto, DefinedRequestReviewer>()
+                .ForMember(dest => dest.Key, src => src.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<DefinedRequestReviewer, DefinedRequestReviewerReadDto>();
 

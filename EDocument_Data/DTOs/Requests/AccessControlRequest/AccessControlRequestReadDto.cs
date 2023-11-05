@@ -21,10 +21,10 @@ namespace EDocument_Data.DTOs.Requests.AccessControlRequest
         public string BeneficiaryEmail { get; init; }
         public string BeneficiaryPosition { get; init; }
         public string BeneficiaryDepartment { get; init; }
-        public string BeneficiartCompany { get; init; }
+        public string BeneficiaryCompany { get; init; }
         public string BeneficiaryPhoneNumber { get; init; }
         public string BeneficiaryExtention { get; init; }
-        public AttachmentReadDto EmployeeSignature { get; init; }
+        public AttachmentReadDto EmployeeSignature { get; set; }
         public string? CreatedBy { get; init; }
         public DateTime? CreatedAt { get; init; }
         public DateTime? ModifiedAt { get; init; }
