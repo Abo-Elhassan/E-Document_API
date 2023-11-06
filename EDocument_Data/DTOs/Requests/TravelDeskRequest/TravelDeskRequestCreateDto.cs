@@ -32,7 +32,7 @@ namespace EDocument_Data.DTOs.Requests.TravelDeskRequest
         public string? DestinationCountry { get; init; }
         public DateTime? ExpectedTravelTime { get; init; }
 
-        [FileValidation(10 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip", ".png", ".jpg")]
+        [FileValidation(50 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip", ".png", ".jpg")]
         public List<IFormFile>? Attachments { get; set; }
         [Required]
         public string Justification { get; set; }

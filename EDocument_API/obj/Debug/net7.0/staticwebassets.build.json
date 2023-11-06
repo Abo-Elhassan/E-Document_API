@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "poOKA5iUC2U3IRdffg8L+KXiXFpRwebfJ90bvZkPfVM=",
+  "Hash": "pvghyAO7XMolZvbHKJuWZDeJCcc19sXVBNCTWCwIt0k=",
   "Source": "EDocument_API",
   "BasePath": "_content/EDocument_API",
   "Mode": "Default",
@@ -1120,6 +1120,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023102110432511\\VAS ZODIAC Project Plan.xlsx"
+    },
+    {
+      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023102508433803\\mServices Lite.docx",
+      "SourceId": "EDocument_API",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\",
+      "BasePath": "_content/EDocument_API",
+      "RelativePath": "Attachments/PoRequest/2023102508433803/mServices Lite.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023102508433803\\mServices Lite.docx"
+    },
+    {
+      "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\PoRequest\\2023102508433803\\seal.xlsx",
+      "SourceId": "EDocument_API",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\",
+      "BasePath": "_content/EDocument_API",
+      "RelativePath": "Attachments/PoRequest/2023102508433803/seal.xlsx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Attachments\\PoRequest\\2023102508433803\\seal.xlsx"
     },
     {
       "Identity": "F:\\Work\\My Projects\\.Net\\E-Document\\EDocument_API\\EDocument_API\\wwwroot\\Attachments\\RefundRequest\\2023100412450550\\Transit_List.xlsx",
