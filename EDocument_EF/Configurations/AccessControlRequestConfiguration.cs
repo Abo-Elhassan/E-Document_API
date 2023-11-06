@@ -1,4 +1,4 @@
-﻿using EDocument_Data.Models;
+﻿    using EDocument_Data.Models;
 using EDocument_Data.Models.Audit;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,9 +40,6 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50);
 
             entity.Property(e => e.BeneficiaryCompany)
-            .HasMaxLength(200);
-
-            entity.Property(e => e.AccessedBlocks)
             .HasMaxLength(200);
 
             entity.Property(e => e.AccessMethods)
