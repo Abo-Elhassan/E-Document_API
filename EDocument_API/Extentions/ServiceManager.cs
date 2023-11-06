@@ -87,7 +87,7 @@ namespace EDocument_API.Extentions
 
             services.Configure<FormOptions>(options =>
             {
-                options.MultipartBodyLengthLimit = 20 * 1024 * 1024;
+                options.MultipartBodyLengthLimit = 30 * 1024 * 1024;
             });
 
         
