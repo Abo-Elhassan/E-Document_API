@@ -8,9 +8,9 @@ namespace EDocument_Data.Consts
 {
     public abstract class ApplicationConsts
     {
-        public static string? ConnectionString { get; private set; } = Environment.GetEnvironmentVariable("E-Doc", EnvironmentVariableTarget.User);
-        public static string? SecretKey { get; private set; } =  Environment.GetEnvironmentVariable("E-Doc_SK", EnvironmentVariableTarget.User);
-        public static string? EmailPassword { get; private set; } = Environment.GetEnvironmentVariable("EP", EnvironmentVariableTarget.User);
+        public static string? ConnectionString { get; private set; } = Environment.GetEnvironmentVariable("E-Doc", EnvironmentVariableTarget.Machine);
+        public static string? SecretKey { get; private set; } =  Environment.GetEnvironmentVariable("E-Doc_SK", EnvironmentVariableTarget.Machine);
+        public static string? EmailPassword { get; private set; } = Environment.GetEnvironmentVariable("EP", EnvironmentVariableTarget.Machine);
         public static string ApiOrigin { get; private set; } = "https://vm-webportal-t.dpwsapps.com/edoc2.0/api";
         public static string ClientOrigin { get; private set; } = "https://vm-webportal-t.dpwsapps.com/edoc-2.0";
         public static string MappedDrivePath { get; set; } = @"\\10.101.100.109\APP Storage\eDocument\Attachments\";
