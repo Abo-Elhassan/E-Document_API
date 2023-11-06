@@ -23,7 +23,7 @@ namespace EDocument_Data.DTOs.Requests.AccessControlRequest
         public string BeneficiaryDepartment { get; init; }
         public string BeneficiaryCompany { get; init; }
         public string BeneficiaryPhoneNumber { get; init; }
-        public string BeneficiaryExtention { get; init; }
+        public int BeneficiaryExtention { get; init; }
         public AttachmentReadDto EmployeeSignature { get; set; }
         public string? CreatedBy { get; init; }
         public DateTime? CreatedAt { get; init; }

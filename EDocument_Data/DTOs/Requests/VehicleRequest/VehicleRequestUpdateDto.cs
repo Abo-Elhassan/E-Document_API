@@ -16,7 +16,7 @@ namespace EDocument_Data.DTOs.Requests.VehicleRequest
 
         [Required]
         public string BeneficiaryId { get; init; }
-        public string? BeneficiaryExtention { get; init; }
+        public int? BeneficiaryExtention { get; init; }
         [Required]
         public string DepartureAddress { get; init; }
         [Required]

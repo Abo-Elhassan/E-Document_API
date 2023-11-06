@@ -18,7 +18,7 @@ namespace EDocument_Data.DTOs.Requests.TravelDeskRequest
         [Required]
         public string BeneficiaryId { get; init; }
 
-        public string? BeneficiaryExtention { get; init; }
+        public int? BeneficiaryExtention { get; init; }
         [Required]
         public string BeneficiaryNationality { get; init; }
         [Required]

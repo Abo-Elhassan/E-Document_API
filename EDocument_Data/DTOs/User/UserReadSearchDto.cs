@@ -19,6 +19,7 @@ namespace EDocument_Data.DTOs.User
         public required string Department { get; init; }
 
         public required string Section { get; init; }
+        public required string Company { get; init; }
 
         public  string? PhoneNumber { get; init; }
 

@@ -27,7 +27,9 @@ namespace EDocument_Data.Models.Audit
 
         public string BeneficiaryPhoneNumber { get; set; }
 
-        public string BeneficiaryExtention { get; set; }
+        public string BeneficiaryCompany { get; set; }
+
+        public int? BeneficiaryExtention { get; set; }
 
         public long RequestId { get; set; }
 
