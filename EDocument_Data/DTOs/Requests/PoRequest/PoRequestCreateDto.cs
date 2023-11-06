@@ -22,13 +22,13 @@ namespace EDocument_Data.DTOs.Requests.PoRequest
         [Required]
         public  string InvoiceNumber { get; init; }
         [Required]
-        [FileValidation(10 * 1024 * 1024, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip",".png",".jpg",".jpeg")]
+        [FileValidation(30 * 1024 * 1024, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip",".png",".jpg",".jpeg")]
         public  IFormFile PoAttachment { get; init; }
         [Required]
-        [FileValidation(10 * 1024 * 1024, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip", ".png", ".jpg", ".jpeg")]
+        [FileValidation(30 * 1024 * 1024, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip", ".png", ".jpg", ".jpeg")]
         public IFormFile InvoiceAttachment { get; init; }
 
-        [FileValidation(10 * 1024 * 1024,true, ".pdf", ".docx", ".xlsx", ".xls",".csv",".rar",".zip", ".png", ".jpg", ".jpeg")]
+        [FileValidation(40 * 1024 * 1024,true, ".pdf", ".docx", ".xlsx", ".xls",".csv",".rar",".zip", ".png", ".jpg", ".jpeg")]
         public List<IFormFile>? Attachments { get; set; }
 
         public string? Remarks { get; set; }

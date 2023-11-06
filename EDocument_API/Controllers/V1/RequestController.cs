@@ -3244,7 +3244,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpDelete("AccessControl/{id}")]
-        [Authorize(Roles = "Basic")]
+        [Authorize(Roles = "HR")]
         public async Task<ActionResult> DeleteAccessControlRequest(long id)
         {
             _logger.LogInformation($"Start DeleteAccessControlRequest from {nameof(RequestController)} for request id = {id}");

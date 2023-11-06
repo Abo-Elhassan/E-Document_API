@@ -67,7 +67,7 @@ namespace EDocument_API.Controllers.V1
         /// </remarks>
         /// <returns>targeted image</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<PhysicalFileResult>))]
-        [HttpGet("/Image/{imageName}")]
+        [HttpGet("/api/Image/{imageName}")]
         public IActionResult GetSignature(string imageName)
         {
             var decodedFileName = HttpUtility.UrlDecode(imageName);

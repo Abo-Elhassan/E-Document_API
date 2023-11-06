@@ -45,7 +45,7 @@ namespace EDocument_Data.DTOs.Requests.DiscountRequest
         [Required]
         public float DiscountAmount { get; set; }
 
-        [FileValidation(30 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip", ".png", ".jpg")]
+        [FileValidation(100 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip", ".png", ".jpg")]
         public List<IFormFile>? Attachments { get; set; }
 
         public string? Notes { get; set; }
