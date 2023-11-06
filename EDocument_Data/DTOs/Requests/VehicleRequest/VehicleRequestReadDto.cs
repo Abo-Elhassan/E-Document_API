@@ -35,7 +35,7 @@ namespace EDocument_Data.DTOs.Requests.VehicleRequest
         public string BeneficiaryDepartment { get; init; }
 
         public string BeneficiaryPhoneNumber { get; init; }
-
+        public string BeneficiaryComapny { get; init; }
         public string BeneficiaryExtention { get; init; }
         public string DepartureAddress { get; init; }
         public string DestinationAddress { get; init; }

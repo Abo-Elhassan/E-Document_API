@@ -38,6 +38,9 @@ public partial class Request : BaseEntity
     public virtual PoRequest PoRequest { get; set; }
     public virtual RefundRequest RefundRequest { get; set; }
     public virtual DiscountRequest DiscountRequest { get; set; }
+    public virtual CCTVAccessRequest CCTVAccessRequest { get; set; }
+    public virtual AccessControlRequest AccessControlRequest { get; set; }
+    
     //public virtual ICollection<JobPlanRequest> JobPlanRequests { get; set; } = new HashSet<JobPlanRequest>();
 
 }

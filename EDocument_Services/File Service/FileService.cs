@@ -80,7 +80,45 @@ namespace EDocument_Services.File_Service
 
         }
 
+        public string? GetImageHref(string filePath)
+        {
+            if (System.IO.File.Exists(filePath))
+            {
+                var fileName = filePath.Replace(_rootPath, "");
+
+                var encodedFilePath = HttpUtility.UrlEncode(fileName);
+
+                encodedFilePath = encodedFilePath.Replace("+", "%20");
+
+                var downloadUrl = $"{ApplicationConsts.ApiOrigin}/Image/{encodedFilePath}";
+                return downloadUrl;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
         public string UploadAttachment(string requestPath, IFormFile file)
+        {
+
+            if (!Directory.Exists(Path.Combine(_rootPath, requestPath)))
+            {
+                Directory.CreateDirectory(Path.Combine(_rootPath, requestPath));
+            }
+            string filePath = Path.Combine(_rootPath, requestPath, file.FileName);
+
+
+            using (FileStream filestream = File.Create(filePath))
+            {
+                file.CopyTo(filestream);
+                filestream.Flush();
+            }
+
+            return filePath;
+        }
+
+        public string UploadImage(string requestPath, IFormFile file)
         {
 
             if (!Directory.Exists(Path.Combine(_rootPath, requestPath)))

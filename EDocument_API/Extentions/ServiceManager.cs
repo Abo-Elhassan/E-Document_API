@@ -90,12 +90,12 @@ namespace EDocument_API.Extentions
                 options.MultipartBodyLengthLimit = 100 * 1024 * 1024;
             });
 
-        
-        #endregion ApiBehavior Configuration
+
+            #endregion ApiBehavior Configuration
 
             #region Authentication
 
-        services.AddAuthentication(options =>
+            services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;

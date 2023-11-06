@@ -273,10 +273,11 @@ namespace EDocument_API.Controllers.V1
 
             if (definedRequest == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Defined request not found" });
-
-            _mapper.Map(definedRequestUpdateDto, definedRequest);
+            
+           
             _mapper.Map(definedRequestUpdateDto.DefinedRequestReviewers, definedRequest.DefinedRequestReviewers);
             _mapper.Map(definedRequestUpdateDto.DefinedRequestRoles, definedRequest.DefinedRequestRoles);
+            _mapper.Map(definedRequestUpdateDto, definedRequest);
 
             foreach (var item in definedRequest.DefinedRequestReviewers)
             {
