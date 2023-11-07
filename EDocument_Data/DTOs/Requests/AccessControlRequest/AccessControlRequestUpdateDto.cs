@@ -15,7 +15,7 @@ namespace EDocument_Data.DTOs.Requests.AccessControlRequest
         [Required]
         public string BeneficiaryId { get; init; }
 
-        public string? BeneficiaryExtention { get; init; }
+        public int? BeneficiaryExtention { get; init; }
         [Required]
         public List<string> AccessedBlocks { get; init; }
         [Required]

@@ -22,7 +22,7 @@ namespace EDocument_Data.DTOs.Requests.CCTVAccessRequest
         public string BeneficiaryPosition { get; init; }
         public string BeneficiaryDepartment { get; init; }
         public string BeneficiaryPhoneNumber { get; init; }
-        public string BeneficiaryExtention { get; init; }
+        public int BeneficiaryExtention { get; init; }
         public string BeneficiaryCompany { get; init; }
 
         public string? CreatedBy { get; init; }

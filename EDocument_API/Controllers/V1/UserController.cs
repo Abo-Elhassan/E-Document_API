@@ -92,7 +92,8 @@ namespace EDocument_API.Controllers.V1
                 PhoneNumber = u.PhoneNumber,
                 Postion = u.Position,
                 Department = u.Department.DepartmentName,
-                Section = u.Section.SectionName
+                Section = u.Section.SectionName,
+                Company = u.Company
             }).FirstOrDefaultAsync(u => u.Id == id);
 
             if(userDetails == null) return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "User not found" });
@@ -242,7 +243,8 @@ namespace EDocument_API.Controllers.V1
                     PhoneNumber = u.PhoneNumber,
                     Postion = u.Position,
                     Department = u.Department.DepartmentName,
-                    Section = u.Section.SectionName
+                    Section = u.Section.SectionName,
+                    Company = u.Company
                 }).ToListAsync();
 
             }
@@ -256,7 +258,8 @@ namespace EDocument_API.Controllers.V1
                     PhoneNumber = u.PhoneNumber,
                     Postion = u.Position,
                     Department = u.Department.DepartmentName,
-                    Section = u.Section.SectionName
+                    Section = u.Section.SectionName,
+                    Company = u.Company
                 }).ToListAsync();
 
             }
@@ -270,7 +273,8 @@ namespace EDocument_API.Controllers.V1
                     PhoneNumber = u.PhoneNumber,
                     Postion = u.Position,
                     Department = u.Department.DepartmentName,
-                    Section = u.Section.SectionName
+                    Section = u.Section.SectionName,
+                    Company = u.Company
                 }).ToListAsync();
             }
             return Ok(new ApiResponse<List<UserReadSearchDto>> { StatusCode = (int)HttpStatusCode.OK, Details = users });

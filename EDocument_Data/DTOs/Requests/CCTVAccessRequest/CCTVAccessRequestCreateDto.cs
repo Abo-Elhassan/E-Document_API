@@ -12,7 +12,7 @@ namespace EDocument_Data.DTOs.Requests.CCTVAccessRequest
     public class CCTVAccessRequestCreateDto
     {
    
-        public string? BeneficiaryExtention { get; init; }
+        public int? BeneficiaryExtention { get; init; }
 
         [Required]
         public List<string> RequestedRoles { get; init; }

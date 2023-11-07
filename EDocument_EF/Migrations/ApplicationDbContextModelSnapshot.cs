@@ -49,8 +49,7 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("AccessedBlocks")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BeneficiaryCompany")
                         .HasMaxLength(200)
@@ -64,9 +63,8 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
 
                     b.Property<string>("BeneficiaryId")
                         .IsRequired()
@@ -140,9 +138,8 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
 
                     b.Property<string>("BeneficiaryName")
                         .IsRequired()
@@ -238,14 +235,17 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("AccessedBlocks")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("BeneficiaryCompany")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BeneficiaryDepartment")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BeneficiaryEmail")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
 
                     b.Property<string>("BeneficiaryId")
                         .HasColumnType("nvarchar(max)");
@@ -304,14 +304,17 @@ namespace EDocument_EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
+                    b.Property<string>("BeneficiaryCompany")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BeneficiaryDepartment")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BeneficiaryEmail")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
 
                     b.Property<string>("BeneficiaryId")
                         .HasColumnType("nvarchar(max)");
@@ -412,14 +415,17 @@ namespace EDocument_EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
+                    b.Property<string>("BeneficiaryCompany")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BeneficiaryDepartment")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BeneficiaryEmail")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
 
                     b.Property<string>("BeneficiaryId")
                         .HasColumnType("nvarchar(max)");
@@ -856,14 +862,17 @@ namespace EDocument_EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
+                    b.Property<string>("BeneficiaryCompany")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BeneficiaryDepartment")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BeneficiaryEmail")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
 
                     b.Property<string>("BeneficiaryId")
                         .HasColumnType("nvarchar(max)");
@@ -1330,14 +1339,17 @@ namespace EDocument_EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
+                    b.Property<string>("BeneficiaryCompany")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BeneficiaryDepartment")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BeneficiaryEmail")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
 
                     b.Property<string>("BeneficiaryId")
                         .HasColumnType("nvarchar(max)");
@@ -1539,14 +1551,17 @@ namespace EDocument_EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
+                    b.Property<string>("BeneficiaryCompany")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BeneficiaryDepartment")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BeneficiaryEmail")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
 
                     b.Property<string>("BeneficiaryId")
                         .HasColumnType("nvarchar(max)");
@@ -1693,9 +1708,8 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
 
                     b.Property<string>("BeneficiaryId")
                         .IsRequired()
@@ -2134,9 +2148,8 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
 
                     b.Property<string>("BeneficiaryName")
                         .IsRequired()
@@ -2604,9 +2617,8 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
 
                     b.Property<string>("BeneficiaryId")
                         .IsRequired()
@@ -2857,9 +2869,8 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("BeneficiaryExtention")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
 
                     b.Property<string>("BeneficiaryId")
                         .IsRequired()
