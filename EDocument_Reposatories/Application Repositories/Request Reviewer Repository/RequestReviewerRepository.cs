@@ -88,7 +88,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             _context.SaveChanges();
         }
 
-        public async Task BeginRequestCycle(long definedRequestId, long requestId, bool isNew)
+        public async Task BeginRequestCycle(long definedRequestId, long requestId, string requesterId, bool isNew)
         {
             var definedRequestReviewers = await GetAllDefinedRequestReviewersAsync(definedRequestId);
 
@@ -132,15 +132,15 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 switch (firstReviewer.ReviewerType)
                 {
                     case ReviewerType.DirectManager:
-                        firstReviewer.AssignedReviewerId = _userRepository.FindDirectManagerByIdAsync(request.CreatorId)?.Result.Value.Id;
+                        firstReviewer.AssignedReviewerId = _userRepository.FindDirectManagerByIdAsync(requesterId)?.Result.Value.Id;
                         break;
 
                     case ReviewerType.SectionHead:
-                        firstReviewer.AssignedReviewerId = _userRepository.FindSectionHeadByIdAsync(request.CreatorId)?.Result.Value.Id;
+                        firstReviewer.AssignedReviewerId = _userRepository.FindSectionHeadByIdAsync(requesterId)?.Result.Value.Id;
                         break;
 
                     case ReviewerType.DepartmentManager:
-                        firstReviewer.AssignedReviewerId = _userRepository.FindDepartmentManagerByIdAsync(request.CreatorId)?.Result.Value.Id;
+                        firstReviewer.AssignedReviewerId = _userRepository.FindDepartmentManagerByIdAsync(requesterId)?.Result.Value.Id;
                         break;
 
                     default:
