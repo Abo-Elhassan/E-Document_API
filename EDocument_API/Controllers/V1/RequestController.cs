@@ -427,7 +427,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(poRequestCreateDto.DefinedRequestId, requestId, true);
+            await _requestReviewerRepository.BeginRequestCycle(poRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
 
@@ -574,7 +574,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle( request.DefinedRequestId,request.Id, false);
+            await _requestReviewerRepository.BeginRequestCycle( request.DefinedRequestId,request.Id, user.Id, false);
 
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
@@ -1042,7 +1042,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(vehicleRequestCreateDto.DefinedRequestId, requestId, true);
+            await _requestReviewerRepository.BeginRequestCycle(vehicleRequestCreateDto.DefinedRequestId, requestId, beneficiaryUser.Id, true);
             if (result < 1) 
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
@@ -1173,7 +1173,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, false);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, beneficiaryUser.Id, false);
 
             if (result < 1) 
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
@@ -1653,7 +1653,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(travelDeskRequestCreateDto.DefinedRequestId, requestId, true);
+            await _requestReviewerRepository.BeginRequestCycle(travelDeskRequestCreateDto.DefinedRequestId, requestId, beneficiaryUser.Id, true);
 
             if (result < 1) 
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
@@ -1783,7 +1783,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, false);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, beneficiaryUser.Id, false);
 
             if (result < 1) 
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
@@ -2258,7 +2258,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(refundRequestCreateDto.DefinedRequestId, requestId, true);
+            await _requestReviewerRepository.BeginRequestCycle(refundRequestCreateDto.DefinedRequestId, requestId,user.Id, true);
 
             await _requestReviewerRepository.NominateReviewer( requestId, refundRequestCreateDto.ConcernedEmployeeId, user?.FullName);
 
@@ -2380,7 +2380,7 @@ namespace EDocument_API.Controllers.V1
             request.ModifiedBy = user?.FullName;
 
             var result = _unitOfWork.Complete();
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, false);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id,user.Id, false);
             await _requestReviewerRepository.NominateReviewer(request.Id, refundRequestUpdateDto.ConcernedEmployeeId, user?.FullName);
 
             if (result < 1)
@@ -2876,7 +2876,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(discountRequestCreateDto.DefinedRequestId, requestId, true);
+            await _requestReviewerRepository.BeginRequestCycle(discountRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
 
 
 
@@ -2998,7 +2998,7 @@ namespace EDocument_API.Controllers.V1
             request.ModifiedBy = user?.FullName;
 
             var result = _unitOfWork.Complete();
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, false);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, user.Id, false);
            
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
@@ -3475,7 +3475,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(accessControlRequestCreateDto.DefinedRequestId, requestId, true);
+            await _requestReviewerRepository.BeginRequestCycle(accessControlRequestCreateDto.DefinedRequestId, requestId, beneficiaryUser.Id, true);
 
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
@@ -3590,7 +3590,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, false);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, beneficiaryUser.Id, false);
 
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
@@ -4054,7 +4054,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(cctvAccessRequestCreateDto.DefinedRequestId, requestId, true);
+            await _requestReviewerRepository.BeginRequestCycle(cctvAccessRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
 
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
@@ -4148,7 +4148,7 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, false);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, user.Id, false);
 
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
