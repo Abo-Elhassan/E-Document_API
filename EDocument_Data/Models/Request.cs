@@ -40,7 +40,8 @@ public partial class Request : BaseEntity
     public virtual DiscountRequest DiscountRequest { get; set; }
     public virtual CCTVAccessRequest CCTVAccessRequest { get; set; }
     public virtual AccessControlRequest AccessControlRequest { get; set; }
-    
+    public virtual FuelOilInvoiceRequest FuelOilInvoiceRequest { get; set; }
+
     //public virtual ICollection<JobPlanRequest> JobPlanRequests { get; set; } = new HashSet<JobPlanRequest>();
 
 }

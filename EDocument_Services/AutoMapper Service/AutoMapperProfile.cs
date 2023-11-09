@@ -9,6 +9,7 @@ using EDocument_Data.DTOs.Requests;
 using EDocument_Data.DTOs.Requests.AccessControlRequest;
 using EDocument_Data.DTOs.Requests.CCTVAccessRequest;
 using EDocument_Data.DTOs.Requests.DiscountRequest;
+using EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest;
 using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.DTOs.Requests.RefundRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
@@ -441,6 +442,52 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<CCTVAccessRequestUpdateDto, CCTVAccessRequest>()
                 .ForMember(dest => dest.RequestedRoles, src => src.MapFrom(src => ConvertListToString(src.RequestedRoles)))
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            #endregion
+
+            #region Fuel Oil Invoice Request
+
+            CreateMap<User, FuelOilInvoiceRequest>()
+                .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
+                .ForMember(dest => dest.BeneficiaryName, src => src.MapFrom(opts => opts.FullName))
+                .ForMember(dest => dest.BeneficiaryEmail, src => src.MapFrom(opts => opts.Email))
+                .ForMember(dest => dest.BeneficiaryPosition, src => src.MapFrom(opts => opts.Position))
+                .ForMember(dest => dest.BeneficiaryDepartment, src => src.MapFrom(opts => opts.Department.DepartmentName))
+                .ForMember(dest => dest.BeneficiaryPhoneNumber, src => src.MapFrom(opts => opts.PhoneNumber))
+                .ForMember(dest => dest.BeneficiaryCompany, src => src.MapFrom(opts => opts.Company))
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
+
+
+
+
+
+
+            CreateMap<FuelOilInvoiceRequest, FuelOilInvoiceRequestReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId));
+
+
+
+            CreateMap<FuelOilInvoiceRequest, FuelOilInvoiceRequestReviewerReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<FuelOilInvoiceRequestCreateDto, FuelOilInvoiceRequest>();
+
+            CreateMap<FuelOilInvoiceRequestUpdateDto, FuelOilInvoiceRequest>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
             #endregion
 
 
