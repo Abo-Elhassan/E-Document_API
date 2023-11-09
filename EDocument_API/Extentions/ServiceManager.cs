@@ -85,10 +85,10 @@ namespace EDocument_API.Extentions
             });
 
 
-            services.Configure<FormOptions>(options =>
-            {
-                options.MultipartBodyLengthLimit = 100 * 1024 * 1024;
-            });
+            //services.Configure<FormOptions>(options =>
+            //{
+            //    options.MultipartBodyLengthLimit = 100 * 1024 * 1024;
+            //});
 
 
             #endregion ApiBehavior Configuration

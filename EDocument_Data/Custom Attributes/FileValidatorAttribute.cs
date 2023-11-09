@@ -59,10 +59,10 @@ public class FileValidationAttribute : ValidationAttribute
             return new ValidationResult($"File name '{file.FileName}' length is more than 100 characters.");
         }
 
-        if (file.Length > _maxFileSize)
-        {
-            return new ValidationResult($"File size must be less than {_maxFileSize / 1024 / 1024} MB.");
-        }
+        //if (file.Length > _maxFileSize)
+        //{
+        //    return new ValidationResult($"File size must be less than {_maxFileSize / 1024 / 1024} MB.");
+        //}
 
         var fileExtension = System.IO.Path.GetExtension(file.FileName).ToLower();
 
