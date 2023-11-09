@@ -244,6 +244,7 @@ namespace EDocument_Services.Auth_Service
                             }
                             else if (request.Permission == RequestPermission.Request)
                             {
+
                                 requestDdl = new List<RequestDdlContent>
                                 {
                                     new RequestDdlContent
@@ -288,7 +289,7 @@ namespace EDocument_Services.Auth_Service
                                
                             }
 
-                            commondisplayedRequest.RequestDdl = commondisplayedRequest.RequestDdl.OrderByDescending(r => r.DisplayName).ToList();
+                            commondisplayedRequest.RequestDdl = commondisplayedRequest.RequestDdl.DistinctBy(r=>r.DisplayName).OrderByDescending(r => r.DisplayName).ToList();
                         }
 
 
