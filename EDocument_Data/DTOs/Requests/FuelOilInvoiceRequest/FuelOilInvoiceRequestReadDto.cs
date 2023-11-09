@@ -4,9 +4,9 @@ using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.Models;
 
 
-namespace EDocument_Data.DTOs.Requests.CCTVAccessRequest
+namespace EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest
 {
-    public class CCTVAccessRequestReadDto
+    public class FuelOilInvoiceRequestReadDto
     {
  
         public long Id { get; init; }
@@ -24,6 +24,11 @@ namespace EDocument_Data.DTOs.Requests.CCTVAccessRequest
         public string BeneficiaryPhoneNumber { get; init; }
         public int? BeneficiaryExtention { get; init; }
         public string BeneficiaryCompany { get; init; }
+        public string ProductType { get; init; }
+        public string InvoiceNumber { get; init; }
+        public int ReceiptNumber { get; init; }
+        public DateTime RequestedDate { get; init; }
+
 
         public string? CreatedBy { get; init; }
         public DateTime? CreatedAt { get; init; }
@@ -32,7 +37,7 @@ namespace EDocument_Data.DTOs.Requests.CCTVAccessRequest
     
     }
 
-    public class CCTVAccessRequestReviewerReadDto : CCTVAccessRequestDetailsReadDto
+    public class FuelOilInvoiceRequestReviewerReadDto : FuelOilInvoiceRequestReadDto
     {
         public int? ReviewerStage { get; set; }
         public RequestStatus? ReviewerStatus { get; set; }
@@ -41,14 +46,6 @@ namespace EDocument_Data.DTOs.Requests.CCTVAccessRequest
  
 
     }
-    public class CCTVAccessRequestEditReadDto : CCTVAccessRequestReadDto
-    {
-        public List<string> RequestedRoles { get; init; }
-    }
 
-    public class CCTVAccessRequestDetailsReadDto : CCTVAccessRequestReadDto
-    {
-        public string RequestedRoles { get; init; }
-    }
 
 }

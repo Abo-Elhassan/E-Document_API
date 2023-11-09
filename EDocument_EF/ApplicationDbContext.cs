@@ -32,8 +32,6 @@ namespace EDocument_EF
         public virtual DbSet<DomainAccountRequest> DomainAccountRequests => Set<DomainAccountRequest>();
         public virtual DbSet<VehicleRequest> VehicleRequests => Set<VehicleRequest>();
         public virtual DbSet<TravelDeskRequest> TravelDeskRequests => Set<TravelDeskRequest>();
-
-        //public virtual DbSet<JobPlanRequest> JobPlanRequests => Set<JobPlanRequest>();
         public virtual DbSet<VoucherRequest> VoucherRequests => Set<VoucherRequest>();
 
         public virtual DbSet<PoRequest> PoRequests => Set<PoRequest>();
@@ -44,6 +42,9 @@ namespace EDocument_EF
 
         public virtual DbSet<AccessControlRequest> AccessControlRequests => Set<AccessControlRequest>();
         public virtual DbSet<CCTVAccessRequest> CCTVAccessRequests => Set<CCTVAccessRequest>();
+
+        public virtual DbSet<FuelOilInvoiceRequest> FuelOilInvoiceRequests => Set<FuelOilInvoiceRequest>();
+
         #region Audit Tables
 
         public virtual DbSet<AuditDefinedRequest> AuditDefinedRequests => Set<AuditDefinedRequest>();
@@ -71,6 +72,8 @@ namespace EDocument_EF
         public virtual DbSet<AuditDiscountRequest> AuditDiscountRequests => Set<AuditDiscountRequest>();
         public virtual DbSet<AuditAccessControlRequest> AuditAccessControlRequests => Set<AuditAccessControlRequest>();
         public virtual DbSet<AuditCCTVAccessRequest> AuditCCTVAccessRequests => Set<AuditCCTVAccessRequest>();
+        public virtual DbSet<AuditFuelOilInvoiceRequest> AuditFuelOilInvoiceRequests => Set<AuditFuelOilInvoiceRequest>();
+
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -94,13 +97,13 @@ namespace EDocument_EF
             builder.ApplyConfiguration(new DomainAccountRequestConfiguration());
             builder.ApplyConfiguration(new VehicleRequestConfiguration());
             builder.ApplyConfiguration(new TravelDeskRequestConfiguration());
-            //builder.ApplyConfiguration(new JobPlanRequestConfiguration());
             builder.ApplyConfiguration(new PoRequestConfiguration());
             builder.ApplyConfiguration(new VoucherRequestConfiguration());
             builder.ApplyConfiguration(new RefundRequestConfiguration());
             builder.ApplyConfiguration(new DiscountRequestConfiguration());
             builder.ApplyConfiguration(new AccessControlRequestConfiguration());
             builder.ApplyConfiguration(new CCTVAccessRequestConfiguration());
+            builder.ApplyConfiguration(new FuelOilInvoiceRequestConfiguration());
         }
 
         public override int SaveChanges()
@@ -213,6 +216,7 @@ namespace EDocument_EF
             builder.Entity<AuditDiscountRequest>().ToTable(nameof(AuditDiscountRequest), "audit");
             builder.Entity<AuditCCTVAccessRequest>().ToTable(nameof(AuditCCTVAccessRequest), "audit");
             builder.Entity<AuditAccessControlRequest>().ToTable(nameof(AuditAccessControlRequest), "audit");
+            builder.Entity<AuditFuelOilInvoiceRequest>().ToTable(nameof(AuditFuelOilInvoiceRequest), "audit"); 
             #endregion
 
         }
