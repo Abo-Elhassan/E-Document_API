@@ -61,6 +61,11 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<DefinedRequestRoleCreateDto, DefinedRequestRole>();
             CreateMap<DefinedRequestRoleUpdateDto, DefinedRequestRole>()
+                .ForMember(dest => dest.DefinedRequestId, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<DefinedRequestRole, DefinedRequestRoleReadDto>()
              .ForMember(dest => dest.RoleName, src => src.MapFrom(opts => opts.Role.Name));
@@ -70,6 +75,11 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<DefinedRequestReviewerCreateDto, DefinedRequestReviewer>();
             CreateMap<DefinedRequestReviewerUpdateDto, DefinedRequestReviewer>()
                 .ForMember(dest => dest.Key, src => src.Ignore())
+                .ForMember(dest => dest.DefinedRequestId, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<DefinedRequestReviewer, DefinedRequestReviewerReadDto>();
 
