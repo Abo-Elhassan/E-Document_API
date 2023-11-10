@@ -4584,10 +4584,11 @@ namespace EDocument_API.Controllers.V1
         ///
         /// </remarks>
         /// <returns> message</returns>
+        [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("FuelOilInvoice/Create")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> CreateFuelOilInvoiceRequest(FuelOilInvoiceRequestCreateDto fuelOilInvoiceRequestCreateDto)
+        public async Task<ActionResult> CreateFuelOilInvoiceRequest([FromForm] FuelOilInvoiceRequestCreateDto fuelOilInvoiceRequestCreateDto)
         {
 
             _logger.LogInformation($"Start CreateFuelOilInvoiceRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(fuelOilInvoiceRequestCreateDto)} ");
@@ -4602,7 +4603,10 @@ namespace EDocument_API.Controllers.V1
             _mapper.Map(user, request.FuelOilInvoiceRequest);
             request.FuelOilInvoiceRequest.RequestNumber = requestNo;
 
-
+            if (fuelOilInvoiceRequestCreateDto.Attachments != null && fuelOilInvoiceRequestCreateDto.Attachments.Count > 0)
+            {
+                request.Attachments = _fileService.UploadAttachments(requestId, $@"FuelOilInvoiceRequest\{requestId}", fuelOilInvoiceRequestCreateDto.Attachments, user.FullName);
+            }
 
             request.CreatorId = user?.Id;
             request.FuelOilInvoiceRequest.CreatedBy = user?.FullName;
@@ -4679,10 +4683,11 @@ namespace EDocument_API.Controllers.V1
         ///
         /// </remarks>
         /// <returns> message</returns>
+        [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("FuelOilInvoice/Update/{id}")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> UpdateFuelOilInvoiceRequest(long id, FuelOilInvoiceRequestUpdateDto fuelOilInvoiceRequestUpdateDto)
+        public async Task<ActionResult> UpdateFuelOilInvoiceRequest(long id, [FromForm] FuelOilInvoiceRequestUpdateDto fuelOilInvoiceRequestUpdateDto)
         {
             _logger.LogInformation($"Start UpdateFuelOilInvoiceRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(fuelOilInvoiceRequestUpdateDto)} ");
 
@@ -4696,10 +4701,33 @@ namespace EDocument_API.Controllers.V1
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
 
-
+            var oldAttachments = request.Attachments;
             request.Notes = fuelOilInvoiceRequestUpdateDto.Notes;
             _mapper.Map(fuelOilInvoiceRequestUpdateDto, request.FuelOilInvoiceRequest);
             request.FuelOilInvoiceRequest.RequestId = id;
+
+
+            if (fuelOilInvoiceRequestUpdateDto.Attachments == null || fuelOilInvoiceRequestUpdateDto.Attachments.Count == 0)
+            {
+                request.Attachments = oldAttachments;
+            }
+            else
+            {
+
+                foreach (var attachment in request.Attachments)
+                {
+                    attachment.ModifiedAt = DateTime.Now;
+                    attachment.ModifiedBy = user.FullName;
+                }
+
+                foreach (var oldAttachment in oldAttachments)
+                {
+                    _fileService.DeleteFile(oldAttachment.FilePath);
+                }
+
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"FuelOilInvoiceRequest\{request.Id}", fuelOilInvoiceRequestUpdateDto.Attachments, user.FullName);
+            }
+
             request.FuelOilInvoiceRequest.ModifiedAt = DateTime.Now;
             request.FuelOilInvoiceRequest.ModifiedBy = user?.FullName;
             request.ModifiedBy = user?.FullName;

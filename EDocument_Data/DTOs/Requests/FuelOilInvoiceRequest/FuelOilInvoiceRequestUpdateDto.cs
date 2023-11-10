@@ -20,6 +20,9 @@ namespace EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest
         [Required]
         public DateTime RequestedDate { get; init; }
 
+        [FileValidation(100 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip", ".png", ".jpg")]
+        public List<IFormFile>? Attachments { get; set; }
+
         public string? Notes { get; set; }
 
     }

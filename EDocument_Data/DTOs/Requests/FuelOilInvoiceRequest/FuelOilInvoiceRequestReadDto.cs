@@ -29,7 +29,7 @@ namespace EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest
         public int ReceiptNumber { get; init; }
         public DateTime RequestedDate { get; init; }
 
-
+        public List<AttachmentReadDto> Attachments { get; set; }
         public string? CreatedBy { get; init; }
         public DateTime? CreatedAt { get; init; }
         public DateTime? ModifiedAt { get; init; }
