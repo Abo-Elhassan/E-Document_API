@@ -510,5 +510,31 @@ namespace EDocument_API.Controllers.V1
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"user: ({id}) has been locked successfully" });
         }
 
+
+        /// <summary>
+        /// Delegate User 
+        /// </summary>
+        /// <param name="delegatationInfo">Delegated User Information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("Delegate")]
+        [Authorize]
+        public async Task<ActionResult> DelegateUser(DelegateUserDto delegatationInfo)
+        {
+            _logger.LogInformation($"Start DelegateUser from {nameof(UserController)} for '{JsonSerializer.Serialize(delegatationInfo)}'");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            user.DelegatedUserId = delegatationInfo.DelegatedUserId;
+            user.DelegatedUntil = delegatationInfo.DelegatedUntil;
+            user.ModifiedBy = user.FullName;
+            _unitOfWork.Repository<User>().Update(user);
+            _unitOfWork.Complete();
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your delegation has been done successfully" });
+        }
+
     }
 }

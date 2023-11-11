@@ -6,6 +6,7 @@ using EDocument_EF;
 using EDocument_Reposatories.Generic_Reposatories;
 using EDocument_Repositories.Application_Repositories.UserRepository;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 using System.Linq.Dynamic.Core;
 using System.Text;
 
@@ -103,6 +104,8 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
             foreach (var item in request?.RequestReviewers)
             {
+                item.AssignedReviewerId = await CheckReviewerDelegation(item.AssignedReviewerId);
+
                 if (item.StageNumber == 1)
                     item.Status = RequestStatus.Pending.ToString();
 
@@ -132,15 +135,15 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 switch (firstReviewer.ReviewerType)
                 {
                     case ReviewerType.DirectManager:
-                        firstReviewer.AssignedReviewerId = _userRepository.FindDirectManagerByIdAsync(requesterId)?.Result.Value.Id;
+                        firstReviewer.AssignedReviewerId = await CheckReviewerDelegation(_userRepository.FindDirectManagerByIdAsync(requesterId)?.Result.Value.Id);
                         break;
 
                     case ReviewerType.SectionHead:
-                        firstReviewer.AssignedReviewerId = _userRepository.FindSectionHeadByIdAsync(requesterId)?.Result.Value.Id;
+                        firstReviewer.AssignedReviewerId = await CheckReviewerDelegation(_userRepository.FindSectionHeadByIdAsync(requesterId)?.Result.Value.Id);
                         break;
 
                     case ReviewerType.DepartmentManager:
-                        firstReviewer.AssignedReviewerId = _userRepository.FindDepartmentManagerByIdAsync(requesterId)?.Result.Value.Id;
+                        firstReviewer.AssignedReviewerId = await CheckReviewerDelegation(_userRepository.FindDepartmentManagerByIdAsync(requesterId)?.Result.Value.Id);
                         break;
 
                     default:
@@ -302,5 +305,12 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             result.IsSucceded = true;
             return result;
         }
+
+        private async Task<string> CheckReviewerDelegation(string assignedReviewerId)
+        {
+            var assignedReviewer = await _context.Users.FindAsync(assignedReviewerId);
+
+            return assignedReviewer?.DelegatedUntil>DateTime.Now ? assignedReviewer.DelegatedUserId: assignedReviewerId;
+        } 
     }
 }

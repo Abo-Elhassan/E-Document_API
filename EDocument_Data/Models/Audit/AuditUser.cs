@@ -36,6 +36,10 @@ public partial class AuditUser:IdentityUser
 
     public bool HasLDAP { get; set; }
 
+    public string DelegatedUserId { get; set; }
+
+    public DateTime? DelegatedUntil { get; set; }
+
     public DateTime? LastLogin { get; set; }
 
     public DateTime? CreatedAt { get; set; }
