@@ -11,7 +11,7 @@ namespace EDocument_Services.File_Service
     public interface IFileService
     {
         string UploadAttachment(string requestPath, IFormFile file);
-        List<Attachment> UploadAttachments(long requestId, string requestPath, List<IFormFile> files, string createdBy);
+        List<Attachment> UploadAttachments(long requestId, string requestPath, List<IFormFile> files, string createdBy,string? modifiedBy=null, DateTime? modifiedAt=null);
         string GetContentType(string filePath);
         string? GetFileUrl(string filePath);
         string? GetImageHref(string filePath);

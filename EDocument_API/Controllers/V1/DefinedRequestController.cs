@@ -54,12 +54,11 @@ namespace EDocument_API.Controllers.V1
         /// <returns>List of Defined Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<DefinedRequestReadDto>>))]
         [HttpPost]
-        [Authorize(Roles ="SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> GetAll(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetAll from {nameof(DefinedRequestController)}");
             var includes = new string[] { "DefinedRequestReviewers", "DefinedRequestRoles", "Department" };
-          
 
             (int TotalCount, IEnumerable<DefinedRequest> PaginatedData) result;
 
@@ -87,7 +86,6 @@ namespace EDocument_API.Controllers.V1
                 dateFilters: filterDto?.dateFilters
                 );
             }
-        
 
             var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
@@ -99,7 +97,6 @@ namespace EDocument_API.Controllers.V1
                 {
                     requestDto.RoleName = _roleManager.FindByIdAsync(requestDto.RoleId)?.Result?.Name?.ToString();
                 }
-               
             }
             var response = new FilterReadDto<DefinedRequestReadDto>
             {
@@ -128,7 +125,7 @@ namespace EDocument_API.Controllers.V1
         {
             _logger.LogInformation($"Start GetById from {nameof(DefinedRequestController)}");
             var includes = new string[] { "DefinedRequestReviewers", "DefinedRequestRoles", "Department" };
-           Expression<Func<DefinedRequest, bool>> expression = (r => r.Id == id);
+            Expression<Func<DefinedRequest, bool>> expression = (r => r.Id == id);
             var definedRequest = await _unitOfWork.Repository<DefinedRequest>().FindAsync(expression, includes);
             if (definedRequest == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Defined request not found" });
@@ -141,7 +138,7 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
-        /// Delete Defined Request 
+        /// Delete Defined Request
         /// </summary>
         /// <param name="id">defined request id</param>
         /// <remarks>
@@ -154,12 +151,11 @@ namespace EDocument_API.Controllers.V1
         public async Task<ActionResult> Delete(long id)
         {
             _logger.LogInformation($"Start Delete from {nameof(DefinedRequestController)}");
-            var includes = new string[] { "DefinedRequestReviewers", "DefinedRequestRoles"};
+            var includes = new string[] { "DefinedRequestReviewers", "DefinedRequestRoles" };
             Expression<Func<DefinedRequest, bool>> expression = (r => r.Id == id);
             var definedRequest = await _unitOfWork.Repository<DefinedRequest>().FindAsync(expression, includes);
             if (definedRequest == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Defined request not found" });
-
 
             _unitOfWork.Repository<DefinedRequest>().Delete(definedRequest);
             _unitOfWork.Complete();
@@ -180,61 +176,46 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> Create(DefinedRequestCreateDto definedRequestCreateDto)
         {
-
             _logger.LogInformation($"Start Create from {nameof(DefinedRequestController)} for {JsonSerializer.Serialize(definedRequestCreateDto)} ");
 
             foreach (var item in definedRequestCreateDto.DefinedRequestReviewers)
             {
-                if (item?.AssignedReviewerId!=null)
+                if (item?.AssignedReviewerId != null)
                 {
                     var requestReviewer = await _userManager.FindByIdAsync(item?.AssignedReviewerId);
-                    if(requestReviewer==null)
+                    if (requestReviewer == null)
                         return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Reviewer Id: '{item?.AssignedReviewerId}' not found as user" });
                 }
-               
             }
 
             var definedRequestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var newDefinedRequest = _mapper.Map<DefinedRequest>(definedRequestCreateDto);
 
-
             newDefinedRequest.Id = definedRequestId;
             foreach (var item in newDefinedRequest.DefinedRequestReviewers)
             {
                 item.DefinedRequestId = definedRequestId;
+                item.CreatedBy = user?.FullName;
             }
 
             foreach (var item in newDefinedRequest.DefinedRequestRoles)
             {
                 item.DefinedRequestId = definedRequestId;
+                item.CreatedBy = user?.FullName;
             }
-
 
             newDefinedRequest.CreatedBy = user?.FullName;
 
-            foreach (var item in newDefinedRequest.DefinedRequestReviewers)
-            {
-                item.CreatedBy = user?.FullName;
-            }
-
-            foreach (var item in newDefinedRequest.DefinedRequestRoles)
-            {
-                item.CreatedBy = user?.FullName;
-            } 
-
             _unitOfWork.Repository<DefinedRequest>().Add(newDefinedRequest);
 
-            var result = _unitOfWork.Complete(); 
-            
+            var result = _unitOfWork.Complete();
+
             if (result < 1)
                 BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
-   
-
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully" });
         }
-
 
         /// <summary>
         /// Update Defined Request
@@ -250,7 +231,6 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "SysAdmin")]
         public async Task<ActionResult> Update(long id, DefinedRequestUpdateDto definedRequestUpdateDto)
         {
-
             _logger.LogInformation($"Start Update from {nameof(DefinedRequestController)} for {JsonSerializer.Serialize(definedRequestUpdateDto)} ");
 
             foreach (var item in definedRequestUpdateDto.DefinedRequestReviewers)
@@ -261,7 +241,6 @@ namespace EDocument_API.Controllers.V1
                     if (requestReviewer == null)
                         return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Reviewer Id: '{item?.AssignedReviewerId}' not found as user" });
                 }
-
             }
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
@@ -270,51 +249,49 @@ namespace EDocument_API.Controllers.V1
 
             var definedRequest = await _unitOfWork.Repository<DefinedRequest>().FindAsync(expression, includes);
 
-
             if (definedRequest == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Defined request not found" });
+            _unitOfWork.Repository<DefinedRequestReviewer>().DeleteRange(definedRequest.DefinedRequestReviewers);
+            _unitOfWork.Repository<DefinedRequestRole>().DeleteRange(definedRequest.DefinedRequestRoles);
 
-
-            definedRequest.DefinedRequestReviewers = _mapper.Map<List<DefinedRequestReviewer>>(definedRequestUpdateDto.DefinedRequestReviewers);
-            definedRequest.DefinedRequestRoles = _mapper.Map<List<DefinedRequestRole>>(definedRequestUpdateDto.DefinedRequestRoles);
-            definedRequest = _mapper.Map<DefinedRequest>(definedRequestUpdateDto);
-
-            foreach (var item in definedRequest.DefinedRequestReviewers)
+            _mapper.Map(definedRequestUpdateDto, definedRequest);
+            definedRequest.Id = id;
+            definedRequest.DefinedRequestReviewers = new List<DefinedRequestReviewer>();
+            foreach (var item in definedRequestUpdateDto.DefinedRequestReviewers)
             {
-                item.DefinedRequestId = id;
+                definedRequest.DefinedRequestReviewers.Add(new DefinedRequestReviewer
+                {
+                    DefinedRequestId = id,
+                    AssignedReviewerId = item.AssignedReviewerId,
+                    StageName = item.StageName,
+                    StageNumber = item.StageNumber,
+                    ReviewerType = item.ReviewerType,
+                    ModifiedBy = user?.FullName,
+                    ModifiedAt = DateTime.Now,
+                    CreatedBy = definedRequest.CreatedBy,
+                    CreatedAt = definedRequest.CreatedAt
+                });
             }
 
-            foreach (var item in definedRequest.DefinedRequestRoles)
+            definedRequest.DefinedRequestRoles = new List<DefinedRequestRole>();
+            foreach (var item in definedRequestUpdateDto.DefinedRequestRoles)
             {
-                item.DefinedRequestId = id;
+                definedRequest.DefinedRequestRoles.Add(new DefinedRequestRole
+                {
+                    DefinedRequestId = id,
+                    RoleId = item.RoleId,
+                    Permission = item.Permission,
+                    ModifiedBy = user?.FullName,
+                    ModifiedAt = DateTime.Now,
+                    CreatedBy = definedRequest.CreatedBy,
+                    CreatedAt = definedRequest.CreatedAt
+                });
             }
-
-
             definedRequest.ModifiedBy = user?.FullName;
-
-            foreach (var item in definedRequest.DefinedRequestReviewers)
-            {
-                item.ModifiedBy = user?.FullName;
-                item.ModifiedAt = DateTime.Now;
-            }
-
-            foreach (var item in definedRequest.DefinedRequestRoles)
-            {
-                item.ModifiedBy = user?.FullName;
-                item.ModifiedAt = DateTime.Now;
-            }
-
             _unitOfWork.Repository<DefinedRequest>().Update(definedRequest);
-
-            var result = _unitOfWork.Complete();
-
-            if (result < 1)
-                BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Updating request has been failed" });
-
-
+            _unitOfWork.Complete();
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
-
     }
 }

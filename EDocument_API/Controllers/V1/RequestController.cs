@@ -566,7 +566,7 @@ namespace EDocument_API.Controllers.V1
                     _fileService.DeleteFile(oldAttachment.FilePath);
                 }
 
-                request.Attachments = _fileService.UploadAttachments(request.Id, $@"PoRequest\{request.Id}", poRequestUpdateDto.Attachments, user.FullName);
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"PoRequest\{request.Id}", poRequestUpdateDto.Attachments,createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt:DateTime.Now);
             }
 
 
@@ -1165,7 +1165,7 @@ namespace EDocument_API.Controllers.V1
                     _fileService.DeleteFile(oldAttachment.FilePath);
                 }
 
-                request.Attachments = _fileService.UploadAttachments(request.Id, $@"VehicleRequest\{request.Id}", vehicleRequestUpdateDto.Attachments, user.FullName);
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"VehicleRequest\{request.Id}", vehicleRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
             }
 
 
@@ -1773,7 +1773,7 @@ namespace EDocument_API.Controllers.V1
                     _fileService.DeleteFile(oldAttachment.FilePath);
                 }
 
-                request.Attachments = _fileService.UploadAttachments(request.Id, $@"TravelDeskRequest\{request.Id}", travelDeskRequestUpdateDto.Attachments, user.FullName);
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"TravelDeskRequest\{request.Id}", travelDeskRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
             }
 
 
@@ -2370,7 +2370,7 @@ namespace EDocument_API.Controllers.V1
                     _fileService.DeleteFile(oldAttachment.FilePath);
                 }
 
-                request.Attachments = _fileService.UploadAttachments(request.Id, $@"RefundRequest\{request.Id}", refundRequestUpdateDto.Attachments, user.FullName);
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"RefundRequest\{request.Id}", refundRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
             }
 
 
@@ -2988,7 +2988,7 @@ namespace EDocument_API.Controllers.V1
                     _fileService.DeleteFile(oldAttachment.FilePath);
                 }
 
-                request.Attachments = _fileService.UploadAttachments(request.Id, $@"DiscountRequest\{request.Id}", discountRequestUpdateDto.Attachments, user.FullName);
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"DiscountRequest\{request.Id}", discountRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
             }
 
 
@@ -4727,7 +4727,7 @@ namespace EDocument_API.Controllers.V1
                     _fileService.DeleteFile(oldAttachment.FilePath);
                 }
 
-                request.Attachments = _fileService.UploadAttachments(request.Id, $@"FuelOilInvoiceRequest\{request.Id}", fuelOilInvoiceRequestUpdateDto.Attachments, user.FullName);
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"FuelOilInvoiceRequest\{request.Id}", fuelOilInvoiceRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
             }
 
             request.FuelOilInvoiceRequest.ModifiedAt = DateTime.Now;

@@ -137,7 +137,7 @@ namespace EDocument_Services.File_Service
             return filePath;
         }
 
-        public List<Attachment> UploadAttachments(long requestId, string requestPath, List<IFormFile> files, string createdBy)
+        public List<Attachment> UploadAttachments(long requestId, string requestPath, List<IFormFile> files, string createdBy, string? modifiedBy = null, DateTime? modifiedAt = null)
         {
             var attachments = new List<Attachment>();
 
@@ -158,7 +158,9 @@ namespace EDocument_Services.File_Service
                 {
                     RequestId = requestId,
                     FilePath = filePath,
-                    CreatedBy = createdBy
+                    CreatedBy = createdBy,
+                    ModifiedAt = modifiedAt,
+                    ModifiedBy = modifiedBy,
                 };
                 attachments.Add(attachment);
 
