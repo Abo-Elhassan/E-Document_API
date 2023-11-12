@@ -4,6 +4,7 @@ using EDocument_EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDocument_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231110115958_AuditTableOperationsRequest")]
+    partial class AuditTableOperationsRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -937,8 +940,70 @@ namespace EDocument_EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
-                    b.Property<string>("Additionaltools")
+                    b.Property<string>("CommunicationFacility")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConcernedEmployeeId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConcernedEmployeeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DataStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Equipment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InConcessionArea")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("RequestNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RequestedDateFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("RequestedDateTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AuditId");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("AuditEquipmentRequestIns");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditEquipmentRequestOut", b =>
+                {
+                    b.Property<decimal>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(18,0)");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
                     b.Property<string>("CommunicationFacility")
                         .HasColumnType("nvarchar(max)");
@@ -994,75 +1059,7 @@ namespace EDocument_EF.Migrations
 
                     b.HasIndex("RequestId");
 
-                    b.ToTable("AuditEquipmentRequestIn", "audit");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditEquipmentRequestOut", b =>
-                {
-                    b.Property<decimal>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(18,0)");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
-
-                    b.Property<string>("Additionaltools")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CommunicationFacility")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConcernedEmployeeId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConcernedEmployeeName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DataStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Equipment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OutConcessionArea")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("RequestId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("RequestNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("RequestedDateFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("RequestedDateTo")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("TimeStamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TransactionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AuditId");
-
-                    b.HasIndex("RequestId");
-
-                    b.ToTable("AuditEquipmentRequestOut", "audit");
+                    b.ToTable("AuditEquipmentRequestOuts");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditFuelOilInvoiceRequest", b =>
@@ -2424,10 +2421,6 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Additionaltools")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
                     b.Property<string>("CommunicationFacility")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -2471,10 +2464,10 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("RequestedDateFrom")
-                        .HasColumnType("smalldatetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("RequestedDateTo")
-                        .HasColumnType("smalldatetime");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("RequestNumber");
 
@@ -2492,10 +2485,6 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("RequestNumber")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Additionaltools")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("CommunicationFacility")
                         .IsRequired()
@@ -2540,10 +2529,10 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("RequestedDateFrom")
-                        .HasColumnType("smalldatetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("RequestedDateTo")
-                        .HasColumnType("smalldatetime");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("RequestNumber");
 

@@ -44,10 +44,12 @@ namespace EDocument_EF
         public virtual DbSet<CCTVAccessRequest> CCTVAccessRequests => Set<CCTVAccessRequest>();
 
         public virtual DbSet<FuelOilInvoiceRequest> FuelOilInvoiceRequests => Set<FuelOilInvoiceRequest>();
+        public virtual DbSet<EquipmentRequestIn> EquipmentRequestIns => Set<EquipmentRequestIn>();
+        public virtual DbSet<EquipmentRequestOut> EquipmentRequestOuts => Set<EquipmentRequestOut>();
 
         #region Audit Tables
-
         public virtual DbSet<AuditDefinedRequest> AuditDefinedRequests => Set<AuditDefinedRequest>();
+
         public virtual DbSet<AuditDefinedRequestReviewer> AuditDefinedRequestReviewers => Set<AuditDefinedRequestReviewer>();
         public virtual DbSet<AuditDefinedApplicationRole> AuditDefinedApplicationRoles => Set<AuditDefinedApplicationRole>();
         public virtual DbSet<AuditDefinedRequestRole> AuditDefinedRequestRoles => Set<AuditDefinedRequestRole>();
@@ -73,6 +75,8 @@ namespace EDocument_EF
         public virtual DbSet<AuditAccessControlRequest> AuditAccessControlRequests => Set<AuditAccessControlRequest>();
         public virtual DbSet<AuditCCTVAccessRequest> AuditCCTVAccessRequests => Set<AuditCCTVAccessRequest>();
         public virtual DbSet<AuditFuelOilInvoiceRequest> AuditFuelOilInvoiceRequests => Set<AuditFuelOilInvoiceRequest>();
+        public virtual DbSet<AuditEquipmentRequestIn> AuditEquipmentRequestIns => Set<AuditEquipmentRequestIn>();
+        public virtual DbSet<AuditEquipmentRequestOut> AuditEquipmentRequestOuts => Set<AuditEquipmentRequestOut>();
 
         #endregion
 
@@ -104,6 +108,8 @@ namespace EDocument_EF
             builder.ApplyConfiguration(new AccessControlRequestConfiguration());
             builder.ApplyConfiguration(new CCTVAccessRequestConfiguration());
             builder.ApplyConfiguration(new FuelOilInvoiceRequestConfiguration());
+            builder.ApplyConfiguration(new EquipmentRequestInConfiguration());
+            builder.ApplyConfiguration(new EquipmentRequestOutConfiguration());
         }
 
         public override int SaveChanges()
@@ -216,7 +222,9 @@ namespace EDocument_EF
             builder.Entity<AuditDiscountRequest>().ToTable(nameof(AuditDiscountRequest), "audit");
             builder.Entity<AuditCCTVAccessRequest>().ToTable(nameof(AuditCCTVAccessRequest), "audit");
             builder.Entity<AuditAccessControlRequest>().ToTable(nameof(AuditAccessControlRequest), "audit");
-            builder.Entity<AuditFuelOilInvoiceRequest>().ToTable(nameof(AuditFuelOilInvoiceRequest), "audit"); 
+            builder.Entity<AuditFuelOilInvoiceRequest>().ToTable(nameof(AuditFuelOilInvoiceRequest), "audit");
+            builder.Entity<AuditEquipmentRequestIn>().ToTable(nameof(AuditEquipmentRequestIn), "audit");
+            builder.Entity<AuditEquipmentRequestOut>().ToTable(nameof(AuditEquipmentRequestOut), "audit");
             #endregion
 
         }

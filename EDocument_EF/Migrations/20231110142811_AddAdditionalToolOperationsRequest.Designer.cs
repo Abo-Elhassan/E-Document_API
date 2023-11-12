@@ -4,6 +4,7 @@ using EDocument_EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDocument_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231110142811_AddAdditionalToolOperationsRequest")]
+    partial class AddAdditionalToolOperationsRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -937,9 +940,6 @@ namespace EDocument_EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
-                    b.Property<string>("Additionaltools")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CommunicationFacility")
                         .HasColumnType("nvarchar(max)");
 
@@ -1004,9 +1004,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("numeric(18,0)");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
-
-                    b.Property<string>("Additionaltools")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CommunicationFacility")
                         .HasColumnType("nvarchar(max)");
