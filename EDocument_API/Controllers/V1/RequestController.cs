@@ -1,37 +1,38 @@
 ﻿using AutoMapper;
-using EDocument_Services.File_Service;
+using EDocument_Data.Consts;
 using EDocument_Data.Consts.Enums;
+using EDocument_Data.DTOs.Attachments;
 using EDocument_Data.DTOs.Filter;
+using EDocument_Data.DTOs.Requests;
+using EDocument_Data.DTOs.Requests.AccessControlRequest;
+using EDocument_Data.DTOs.Requests.CCTVAccessRequest;
+using EDocument_Data.DTOs.Requests.DiscountRequest;
+using EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest;
+using EDocument_Data.DTOs.Requests.NewItemRequest;
 using EDocument_Data.DTOs.Requests.PoRequest;
+using EDocument_Data.DTOs.Requests.PRRequest;
+using EDocument_Data.DTOs.Requests.RefundRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
+using EDocument_Data.DTOs.Requests.TravelDeskRequest;
+using EDocument_Data.DTOs.Requests.VehicleRequest;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_Repositories.Application_Repositories.Request_Reviewer_Repository;
+using EDocument_Services.File_Service;
+using EDocument_Services.Mail_Service;
 using EDocument_UnitOfWork;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Mime;
 using System.Security.Claims;
-using System.Text.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+
 using Models = EDocument_Data.Models;
-using EDocument_Data.DTOs.Attachments;
-using EDocument_Services.Mail_Service;
-using EDocument_Data.DTOs.Requests.VehicleRequest;
-using EDocument_Data.DTOs.Requests.TravelDeskRequest;
-using Microsoft.EntityFrameworkCore;
-using EDocument_Data.DTOs.Requests.RefundRequest;
-using EDocument_Data.Consts;
-using EDocument_Data.DTOs.DefinedRequest;
-using EDocument_Data.DTOs.Requests.DiscountRequest;
-using EDocument_Data.DTOs.Requests;
-using Humanizer;
-using EDocument_Data.DTOs.Requests.CCTVAccessRequest;
-using NuGet.Versioning;
-using EDocument_Data.DTOs.Requests.AccessControlRequest;
-using EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest;
 
 namespace EDocument_API.Controllers.V1
 {
@@ -71,9 +72,8 @@ namespace EDocument_API.Controllers.V1
             _fileService = fileService;
         }
 
-
         /// <summary>
-        /// Get Requests Dashboard Info 
+        /// Get Requests Dashboard Info
         /// </summary>
         /// <remarks>
         ///
@@ -87,24 +87,23 @@ namespace EDocument_API.Controllers.V1
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             _logger.LogInformation($"Start GetRequestsDashboardInfo from {nameof(RequestController)} for user id = {user.Id}");
 
-           
-            Expression<Func<Request, bool>> allRequestsExpression = (r => r.CreatorId==user.Id);
+            Expression<Func<Request, bool>> allRequestsExpression = (r => r.CreatorId == user.Id);
             var createdRequests = await _unitOfWork.Repository<Request>().FindAllAsync(allRequestsExpression, new string[] { "DefinedRequest" });
 
             var response = new RequestDashboardReadDto();
 
             response.CreatedRequests = createdRequests.Count();
-            response.PendingRequests = createdRequests.Count(r=>r.Status==RequestStatus.Pending.ToString());
+            response.PendingRequests = createdRequests.Count(r => r.Status == RequestStatus.Pending.ToString());
             response.ApprovedRequests = createdRequests.Count(r => r.Status == RequestStatus.Approved.ToString());
             response.DeclinedRequests = createdRequests.Count(r => r.Status == RequestStatus.Declined.ToString());
-           var recentCreatedRequests= _mapper.Map<List<RecentRequestReadDto>>(createdRequests);
+            var recentCreatedRequests = _mapper.Map<List<RecentRequestReadDto>>(createdRequests);
 
             foreach (var request in recentCreatedRequests)
             {
                 request.UserRole = "Creator";
             }
 
-            Expression<Func<Request, bool>> reviewingRequestsExpression = (r => r.RequestReviewers.Any(rr => rr.AssignedReviewerId == user.Id&&r.CurrentStage==rr.StageNumber));
+            Expression<Func<Request, bool>> reviewingRequestsExpression = (r => r.RequestReviewers.Any(rr => rr.AssignedReviewerId == user.Id && r.CurrentStage == rr.StageNumber));
             var reviewingRequests = await _unitOfWork.Repository<Request>().FindAllAsync(reviewingRequestsExpression, new string[] { "RequestReviewers", "DefinedRequest" });
 
             var recentReviewingRequests = _mapper.Map<List<RecentRequestReadDto>>(reviewingRequests);
@@ -117,7 +116,7 @@ namespace EDocument_API.Controllers.V1
             recentRequests.AddRange(recentCreatedRequests);
             recentRequests.AddRange(recentReviewingRequests);
             response.RecentRequests = recentRequests;
-            response.RecentRequests=response.RecentRequests.OrderByDescending(r => r.CreatedAt).Take(10).ToList();
+            response.RecentRequests = response.RecentRequests.OrderByDescending(r => r.CreatedAt).Take(10).ToList();
 
             return Ok(new ApiResponse<RequestDashboardReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = response });
         }
@@ -149,8 +148,6 @@ namespace EDocument_API.Controllers.V1
             return Ok(new ApiResponse<ReviewersDetailsDto> { StatusCode = (int)HttpStatusCode.OK, Details = reviewerDetails });
         }
 
-
-
         #region Procurement
 
         #region PO Request
@@ -181,9 +178,8 @@ namespace EDocument_API.Controllers.V1
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
             var result = _mapper.Map<PoRequestReadDto>(poRequest);
-            result.InvoiceAttachment= _mapper.Map<AttachmentReadDto>(poRequest.InvoiceAttachmentPath);
+            result.InvoiceAttachment = _mapper.Map<AttachmentReadDto>(poRequest.InvoiceAttachmentPath);
             result.PoAttachment = _mapper.Map<AttachmentReadDto>(poRequest.PoAttachmentPath);
-
 
             return Ok(new ApiResponse<PoRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
@@ -214,15 +210,13 @@ namespace EDocument_API.Controllers.V1
             if (request is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
-            if (request.Status == RequestStatus.Approved.ToString()|| request.Status==RequestStatus.Declined.ToString())
+            if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
-
             }
             else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
-
             }
 
             request.PoRequest.ModifiedBy = user?.FullName;
@@ -236,7 +230,6 @@ namespace EDocument_API.Controllers.V1
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
         }
-
 
         /// <summary>
         /// Get All PO Requests By Creator With Filter
@@ -294,8 +287,6 @@ namespace EDocument_API.Controllers.V1
 
             var requests = _mapper.Map<List<PoRequestReadDto>>(result.PaginatedData);
 
-
-
             var response = new FilterReadDto<PoRequestReadDto>
             {
                 TotalCount = totalCount,
@@ -328,8 +319,6 @@ namespace EDocument_API.Controllers.V1
 
             userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
 
-
-
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
                 result = await _unitOfWork.Repository<PoRequest>().FindAllRequestsAsync(
@@ -347,7 +336,7 @@ namespace EDocument_API.Controllers.V1
             else
             {
                 result = await _unitOfWork.Repository<PoRequest>().FindAllRequestsAsync(
-                isCreator:false,
+                isCreator: false,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filters: filterDto?.Filters,
@@ -372,7 +361,6 @@ namespace EDocument_API.Controllers.V1
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;
             }
-
 
             var response = new FilterReadDto<PoRequestReviewerReadDto>
             {
@@ -399,7 +387,6 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Procurement")]
         public async Task<ActionResult> CreatePoRequest([FromForm] PoRequestCreateDto poRequestCreateDto)
         {
-            
             _logger.LogInformation($"Start CreatePoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestCreateDto)} ");
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
@@ -431,14 +418,14 @@ namespace EDocument_API.Controllers.V1
             await _requestReviewerRepository.BeginRequestCycle(poRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
-
             #region Send Emails
+
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
                     Kindly not that your Po Request  for PO Number {request.PoRequest.PoNumber} on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {requestNo}
 
@@ -454,8 +441,6 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(creatorMailContent);
 
-
-
             var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId, request.CurrentStage);
             var reviewerMailContent = new MailContent
             {
@@ -469,7 +454,7 @@ namespace EDocument_API.Controllers.V1
                     - Invoice Number: {request.PoRequest.InvoiceNumber}
                     - Vendor Name: {request.PoRequest.VendorName}
                     - Vendor Number: {request.PoRequest.VendorNumber}
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                     - eDocument Request Reference No.: {requestNo}
 
@@ -484,9 +469,7 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
-
- 
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
         }
@@ -504,14 +487,13 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Po/Update/{id}")]
         [Authorize(Roles = "Procurement")]
-        public async Task<ActionResult> UpdatePoRequest(long id, [FromForm]PoRequestUpdateDto poRequestUpdateDto)
+        public async Task<ActionResult> UpdatePoRequest(long id, [FromForm] PoRequestUpdateDto poRequestUpdateDto)
         {
             _logger.LogInformation($"Start UpdatePoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(poRequestUpdateDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Models.Request, bool>> requestRxpression = (r => r.Id == id);
 
- 
-            var request = await _unitOfWork.Repository<Models.Request>().FindAsync(requestRxpression, new string[] { "PoRequest" ,"Attachments"});
+            var request = await _unitOfWork.Repository<Models.Request>().FindAsync(requestRxpression, new string[] { "PoRequest", "Attachments" });
 
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
@@ -544,15 +526,12 @@ namespace EDocument_API.Controllers.V1
                 request.PoRequest.InvoiceAttachmentPath = _fileService.UploadAttachment($@"PoRequest\{request.Id}", poRequestUpdateDto.InvoiceAttachment);
             }
 
-
-
-            if (poRequestUpdateDto.Attachments==null || poRequestUpdateDto.Attachments.Count==0)
+            if (poRequestUpdateDto.Attachments == null || poRequestUpdateDto.Attachments.Count == 0)
             {
                 request.Attachments = oldAttachments;
             }
             else
             {
-
                 foreach (var attachment in request.Attachments)
                 {
                     attachment.ModifiedAt = DateTime.Now;
@@ -564,10 +543,8 @@ namespace EDocument_API.Controllers.V1
                     _fileService.DeleteFile(oldAttachment.FilePath);
                 }
 
-                request.Attachments = _fileService.UploadAttachments(request.Id, $@"PoRequest\{request.Id}", poRequestUpdateDto.Attachments,createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt:DateTime.Now);
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"PoRequest\{request.Id}", poRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
             }
-
-
 
             request.PoRequest.ModifiedAt = DateTime.Now;
             request.PoRequest.ModifiedBy = user?.FullName;
@@ -575,18 +552,18 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle( request.DefinedRequestId,request.Id, user.Id, false);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, user.Id, false);
 
             if (result < 1) BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
-
             #region Send Emails
+
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
                     Kindly not that your Po Request  for PO Number {request.PoRequest.PoNumber} on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
 
@@ -602,7 +579,6 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(creatorMailContent);
 
-
             var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(id, request.CurrentStage);
             var reviewerMailContent = new MailContent
             {
@@ -616,7 +592,7 @@ namespace EDocument_API.Controllers.V1
                     - Invoice Number: {request.PoRequest.InvoiceNumber}
                     - Vendor Name: {request.PoRequest.VendorName}
                     - Vendor Number: {request.PoRequest.VendorNumber}
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                     - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
 
@@ -631,13 +607,10 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
-
-          
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
-
 
         /// <summary>
         /// Approve PO Request
@@ -655,16 +628,14 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start ApprovePoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            var result =await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user);
+            var result = await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user);
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
             #region Send Emails
 
-
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PoRequest", "Creator", "Creator.Manager", "Creator.Department", "Creator.Department.Manager" });
-
 
             var requestCreator = request.Creator;
             var requestCreatorDirectManager = request.Creator.Manager;
@@ -674,7 +645,7 @@ namespace EDocument_API.Controllers.V1
                 Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
                     Kindly not that your Po Request for PO Number {request.PoRequest.PoNumber} on eDocuement has been approved successfully by {user.FullName}.
-                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
                     - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
 
@@ -690,9 +661,8 @@ namespace EDocument_API.Controllers.V1
             };
 
             _mailService.SendMailAsync(creatorMailContent);
-            #endregion
 
-
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -713,17 +683,14 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start DeclinePoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-
-            var result =await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
+            var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
             #region Send Emails
 
-
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PoRequest", "Creator", "Creator.Manager", "Creator.Department", "Creator.Department.Manager" });
-
 
             var requestCreator = request.Creator;
             var requestCreatorDirectManager = request.Creator.Manager;
@@ -733,7 +700,7 @@ namespace EDocument_API.Controllers.V1
                 Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
                     Kindly not that your Po Request for PO Number {request.PoRequest.PoNumber} on eDocuement has been declined by {user.FullName}.
-                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
                     - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
 
@@ -749,8 +716,8 @@ namespace EDocument_API.Controllers.V1
             };
 
             _mailService.SendMailAsync(creatorMailContent);
-            #endregion
 
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -791,8 +758,6 @@ namespace EDocument_API.Controllers.V1
 
             var result = _mapper.Map<VehicleRequestReadDto>(vehicleRequest);
 
-
-
             return Ok(new ApiResponse<VehicleRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
@@ -825,12 +790,10 @@ namespace EDocument_API.Controllers.V1
             if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
-
             }
             else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
-
             }
 
             request.VehicleRequest.ModifiedBy = user?.FullName;
@@ -844,7 +807,6 @@ namespace EDocument_API.Controllers.V1
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
         }
-
 
         /// <summary>
         /// Get All Vehicle Requests By Creator With Filter
@@ -884,7 +846,7 @@ namespace EDocument_API.Controllers.V1
             else
             {
                 result = await _unitOfWork.Repository<VehicleRequest>().FindAllRequestsAsync(
-                isCreator:true,
+                isCreator: true,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filters: filterDto?.Filters,
@@ -934,8 +896,6 @@ namespace EDocument_API.Controllers.V1
 
             userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
 
-           
-
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
                 result = await _unitOfWork.Repository<VehicleRequest>().FindAllRequestsAsync(
@@ -970,15 +930,14 @@ namespace EDocument_API.Controllers.V1
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
 
             var requests = _mapper.Map<List<VehicleRequestReviewerReadDto>>(result.PaginatedData);
-            
+
             foreach (var request in requests)
             {
-                var reviewer = request.RequestReviewers?.OrderBy(r=>r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
+                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
 
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;
             }
-
 
             var response = new FilterReadDto<VehicleRequestReviewerReadDto>
             {
@@ -1005,7 +964,6 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Basic")]
         public async Task<ActionResult> CreateVehicleRequest([FromForm] VehicleRequestCreateDto vehicleRequestCreateDto)
         {
-
             _logger.LogInformation($"Start CreateVehicleRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(vehicleRequestCreateDto)} ");
 
             var beneficiaryUser = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == vehicleRequestCreateDto.BeneficiaryId);
@@ -1027,13 +985,11 @@ namespace EDocument_API.Controllers.V1
             request.VehicleRequest.RequestNumber = requestNo;
             _mapper.Map(beneficiaryUser, request.VehicleRequest);
 
-
-
             if (vehicleRequestCreateDto.Attachments != null && vehicleRequestCreateDto.Attachments.Count > 0)
             {
                 request.Attachments = _fileService.UploadAttachments(requestId, $@"VehicleRequest\{requestId}", vehicleRequestCreateDto.Attachments, user.FullName);
             }
-            
+
             request.CreatorId = user?.Id;
             request.VehicleRequest.CreatedBy = user?.FullName;
             request.CreatedBy = user?.FullName;
@@ -1044,17 +1000,17 @@ namespace EDocument_API.Controllers.V1
             var result = _unitOfWork.Complete();
 
             await _requestReviewerRepository.BeginRequestCycle(vehicleRequestCreateDto.DefinedRequestId, requestId, beneficiaryUser.Id, true);
-            if (result < 1) 
+            if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
-
             #region Send Emails
+
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
                     Kindly not that your Vehicle Request on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {requestNo}
 
@@ -1070,8 +1026,6 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(creatorMailContent);
 
-
-
             var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId, request.CurrentStage);
             var reviewerMailContent = new MailContent
             {
@@ -1079,7 +1033,7 @@ namespace EDocument_API.Controllers.V1
                 Dears,
                     Kindly note that {user.FullName} has created Vehicle Request for on eDocuement and need to be reviewed from your side.
 
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                     - eDocument Request Reference No.: {requestNo}
 
@@ -1094,9 +1048,7 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
-
-
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
         }
@@ -1123,10 +1075,8 @@ namespace EDocument_API.Controllers.V1
             if (beneficiaryUser is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Beneficiary user '{vehicleRequestUpdateDto.BeneficiaryId}' not found" });
 
-
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Models.Request, bool>> requestRxpression = (r => r.Id == id);
-
 
             var request = await _unitOfWork.Repository<Models.Request>().FindAsync(requestRxpression, new string[] { "VehicleRequest", "Attachments" });
 
@@ -1136,7 +1086,6 @@ namespace EDocument_API.Controllers.V1
             if (beneficiaryUser.Company != "DP World")
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Beneficiary user '{vehicleRequestUpdateDto.BeneficiaryId}' is not DP WORLD Employee" });
 
-
             var oldAttachments = request.Attachments;
 
             request.Notes = vehicleRequestUpdateDto.Justification;
@@ -1144,14 +1093,12 @@ namespace EDocument_API.Controllers.V1
             _mapper.Map(vehicleRequestUpdateDto, request.VehicleRequest);
             _mapper.Map(beneficiaryUser, request.VehicleRequest);
 
-
             if (vehicleRequestUpdateDto.Attachments == null || vehicleRequestUpdateDto.Attachments.Count == 0)
             {
                 request.Attachments = oldAttachments;
             }
             else
             {
-
                 foreach (var attachment in request.Attachments)
                 {
                     attachment.ModifiedAt = DateTime.Now;
@@ -1166,8 +1113,6 @@ namespace EDocument_API.Controllers.V1
                 request.Attachments = _fileService.UploadAttachments(request.Id, $@"VehicleRequest\{request.Id}", vehicleRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
             }
 
-
-
             request.VehicleRequest.ModifiedAt = DateTime.Now;
             request.VehicleRequest.ModifiedBy = user?.FullName;
             request.ModifiedBy = user?.FullName;
@@ -1176,17 +1121,17 @@ namespace EDocument_API.Controllers.V1
 
             await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, beneficiaryUser.Id, false);
 
-            if (result < 1) 
+            if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
-
             #region Send Emails
+
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
                     Kindly not that your Vehicle Request on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {request.VehicleRequest.RequestNumber}
 
@@ -1202,8 +1147,6 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(creatorMailContent);
 
-
-
             var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(request.Id, request.CurrentStage);
             var reviewerMailContent = new MailContent
             {
@@ -1211,7 +1154,7 @@ namespace EDocument_API.Controllers.V1
                 Dears,
                     Kindly note that {user.FullName} has updated Vehicle Request for on eDocuement and need to be reviewed from your side.
 
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                     - eDocument Request Reference No.: {request.VehicleRequest.RequestNumber}
 
@@ -1226,11 +1169,10 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
-
 
         /// <summary>
         /// Approve Vehicle Request
@@ -1248,23 +1190,23 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start ApproveVehicleRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            var result =  await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user);
+            var result = await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user);
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
             #region Send Emails
+
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
-            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "VehicleRequest", "Creator"});
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "VehicleRequest", "Creator" });
             var requestCreator = request.Creator;
             if (request?.Status == RequestStatus.Approved.ToString())
             {
-                
                 var creatorMailContent = new MailContent
                 {
                     Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
                     Kindly not that your Vehicle Request {request.VehicleRequest.RequestNumber} on eDocuement has been approved successfully.
-                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
                     - eDocument Request Reference No.: {request.VehicleRequest.RequestNumber}
 
@@ -1289,7 +1231,7 @@ namespace EDocument_API.Controllers.V1
                     Dears,
                         Kindly note that {requestCreator.FullName} has created Vehicle Request for on eDocuement and need to be reviewed from your side.
 
-                        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                         - eDocument Request Reference No.: {request.VehicleRequest.RequestNumber}
 
@@ -1300,16 +1242,12 @@ namespace EDocument_API.Controllers.V1
                     IsHTMLBody = false,
                     Subject = $"Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement",
                     To = reviewersEmails
-
                 };
 
                 _mailService.SendMailAsync(reviewerMailContent);
             }
 
-
-
-
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -1330,7 +1268,6 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start DeclineVehicleRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-
             var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
 
             if (!result.IsSucceded)
@@ -1338,10 +1275,8 @@ namespace EDocument_API.Controllers.V1
 
             #region Send Emails
 
-
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "VehicleRequest", "Creator" });
-
 
             var requestCreator = request.Creator;
             var creatorMailContent = new MailContent
@@ -1349,7 +1284,7 @@ namespace EDocument_API.Controllers.V1
                 Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
                     Kindly not that your Vehicle Request No. {request.VehicleRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
-                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
                     - eDocument Request Reference No.: {request.VehicleRequest.RequestNumber}
 
@@ -1364,7 +1299,8 @@ namespace EDocument_API.Controllers.V1
             };
 
             _mailService.SendMailAsync(creatorMailContent);
-            #endregion
+
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -1400,8 +1336,6 @@ namespace EDocument_API.Controllers.V1
 
             var result = _mapper.Map<TravelDeskRequestEditReadDto>(travelDeskRequest);
 
-
-
             return Ok(new ApiResponse<TravelDeskRequestEditReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
@@ -1434,12 +1368,10 @@ namespace EDocument_API.Controllers.V1
             if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
-
             }
             else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
-
             }
 
             request.TravelDeskRequest.ModifiedBy = user?.FullName;
@@ -1453,7 +1385,6 @@ namespace EDocument_API.Controllers.V1
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
         }
-
 
         /// <summary>
         /// Get All TravelDesk Requests By Creator With Filter
@@ -1543,8 +1474,6 @@ namespace EDocument_API.Controllers.V1
 
             userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
 
-
-
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
                 result = await _unitOfWork.Repository<TravelDeskRequest>().FindAllRequestsAsync(
@@ -1562,7 +1491,7 @@ namespace EDocument_API.Controllers.V1
             else
             {
                 result = await _unitOfWork.Repository<TravelDeskRequest>().FindAllRequestsAsync(
-                isCreator:false,
+                isCreator: false,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filters: filterDto?.Filters,
@@ -1587,7 +1516,6 @@ namespace EDocument_API.Controllers.V1
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;
             }
-
 
             var response = new FilterReadDto<TravelDeskRequestReviewerReadDto>
             {
@@ -1614,17 +1542,15 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Basic")]
         public async Task<ActionResult> CreateTravelDeskRequest([FromForm] TravelDeskRequestCreateDto travelDeskRequestCreateDto)
         {
-
             _logger.LogInformation($"Start CreateTravelDeskRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(travelDeskRequestCreateDto)} ");
 
             var beneficiaryUser = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == travelDeskRequestCreateDto.BeneficiaryId);
 
-            if (beneficiaryUser is null) 
+            if (beneficiaryUser is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Beneficiary user '{travelDeskRequestCreateDto.BeneficiaryId}' not found" });
 
-            if(beneficiaryUser.Company!= "DP World")
+            if (beneficiaryUser.Company != "DP World")
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Beneficiary user '{travelDeskRequestCreateDto.BeneficiaryId}' is not DP WORLD Employee" });
-
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
@@ -1636,7 +1562,6 @@ namespace EDocument_API.Controllers.V1
             request.TravelDeskRequest = _mapper.Map<TravelDeskRequest>(travelDeskRequestCreateDto);
             _mapper.Map(beneficiaryUser, request.TravelDeskRequest);
             request.TravelDeskRequest.RequestNumber = requestNo;
-
 
             if (travelDeskRequestCreateDto.Attachments != null && travelDeskRequestCreateDto.Attachments.Count > 0)
             {
@@ -1654,17 +1579,17 @@ namespace EDocument_API.Controllers.V1
 
             await _requestReviewerRepository.BeginRequestCycle(travelDeskRequestCreateDto.DefinedRequestId, requestId, beneficiaryUser.Id, true);
 
-            if (result < 1) 
+            if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
-
             #region Send Emails
+
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
                     Kindly not that your TravelDesk Request on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {requestNo}
 
@@ -1680,8 +1605,6 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(creatorMailContent);
 
-
-
             var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId, request.CurrentStage);
             var reviewerMailContent = new MailContent
             {
@@ -1689,7 +1612,7 @@ namespace EDocument_API.Controllers.V1
                 Dears,
                     Kindly note that {user.FullName} has created TravelDesk Request for on eDocuement and need to be reviewed from your side.
 
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                     - eDocument Request Reference No.: {requestNo}
 
@@ -1704,7 +1627,7 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
         }
@@ -1737,7 +1660,6 @@ namespace EDocument_API.Controllers.V1
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Models.Request, bool>> requestRxpression = (r => r.Id == id);
 
-
             var request = await _unitOfWork.Repository<Models.Request>().FindAsync(requestRxpression, new string[] { "TravelDeskRequest", "Attachments" });
 
             if (request == null)
@@ -1749,17 +1671,12 @@ namespace EDocument_API.Controllers.V1
             _mapper.Map(travelDeskRequestUpdateDto, request.TravelDeskRequest);
             _mapper.Map(beneficiaryUser, request.TravelDeskRequest);
 
-
-
-
-
             if (travelDeskRequestUpdateDto.Attachments == null || travelDeskRequestUpdateDto.Attachments.Count == 0)
             {
                 request.Attachments = oldAttachments;
             }
             else
             {
-
                 foreach (var attachment in request.Attachments)
                 {
                     attachment.ModifiedAt = DateTime.Now;
@@ -1774,8 +1691,6 @@ namespace EDocument_API.Controllers.V1
                 request.Attachments = _fileService.UploadAttachments(request.Id, $@"TravelDeskRequest\{request.Id}", travelDeskRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
             }
 
-
-
             request.TravelDeskRequest.ModifiedAt = DateTime.Now;
             request.TravelDeskRequest.ModifiedBy = user?.FullName;
             request.ModifiedBy = user?.FullName;
@@ -1784,17 +1699,17 @@ namespace EDocument_API.Controllers.V1
 
             await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, beneficiaryUser.Id, false);
 
-            if (result < 1) 
+            if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
-
             #region Send Emails
+
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
                     Kindly not that your TravelDesk Request on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {request.TravelDeskRequest.RequestNumber}
 
@@ -1810,8 +1725,6 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(creatorMailContent);
 
-
-
             var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(request.Id, request.CurrentStage);
             var reviewerMailContent = new MailContent
             {
@@ -1819,7 +1732,7 @@ namespace EDocument_API.Controllers.V1
                 Dears,
                     Kindly note that {user.FullName} has updated TravelDesk Request for on eDocuement and need to be reviewed from your side.
 
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                     - eDocument Request Reference No.: {request.TravelDeskRequest.RequestNumber}
 
@@ -1834,11 +1747,10 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
-
 
         /// <summary>
         /// Approve TravelDesk Request
@@ -1861,14 +1773,13 @@ namespace EDocument_API.Controllers.V1
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
-
             #region Send Emails
+
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "TravelDeskRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
             var requestCreator = request.Creator;
             if (request?.Status == RequestStatus.Approved.ToString())
             {
-               
                 var requestCreatorDirectManager = request.Creator.Manager;
                 var requestCreatorDepartmentManager = request.Creator.Department.Manager;
                 var creatorMailContent = new MailContent
@@ -1876,7 +1787,7 @@ namespace EDocument_API.Controllers.V1
                     Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
                     Kindly not that your TravelDesk Request {request.TravelDeskRequest.RequestNumber} on eDocuement has been approved successfully.
-                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
                     - eDocument Request Reference No.: {request.TravelDeskRequest.RequestNumber}
 
@@ -1901,7 +1812,7 @@ namespace EDocument_API.Controllers.V1
                     Dears,
                         Kindly note that {requestCreator.FullName} has created TravelDesk Request for on eDocuement and need to be reviewed from your side.
 
-                        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                         - eDocument Request Reference No.: {request.TravelDeskRequest.RequestNumber}
 
@@ -1917,10 +1828,7 @@ namespace EDocument_API.Controllers.V1
                 _mailService.SendMailAsync(reviewerMailContent);
             }
 
-
-
-
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -1941,17 +1849,14 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start DeclineTravelDeskRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-
             var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
             #region Send Emails
 
-
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "TravelDeskRequest", "Creator" });
-
 
             var requestCreator = request.Creator;
             var creatorMailContent = new MailContent
@@ -1959,7 +1864,7 @@ namespace EDocument_API.Controllers.V1
                 Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
                     Kindly not that your TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
-                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
                     - eDocument Request Reference No.: {request.TravelDeskRequest.RequestNumber}
 
@@ -1974,7 +1879,8 @@ namespace EDocument_API.Controllers.V1
             };
 
             _mailService.SendMailAsync(creatorMailContent);
-            #endregion
+
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -2014,12 +1920,8 @@ namespace EDocument_API.Controllers.V1
 
             var result = _mapper.Map<RefundRequestReadDto>(refundRequest);
 
-
-
             return Ok(new ApiResponse<RefundRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
-
-
 
         /// <summary>
         /// Delete Refund Requests By Id
@@ -2031,7 +1933,7 @@ namespace EDocument_API.Controllers.V1
         /// <returns>message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpDelete("Refund/{id}")]
-        [Authorize(Roles ="CustomerService")]
+        [Authorize(Roles = "CustomerService")]
         public async Task<ActionResult> DeleteRefundRequest(long id)
         {
             _logger.LogInformation($"Start DeleteRefundRequest from {nameof(RequestController)} for request id = {id}");
@@ -2050,12 +1952,10 @@ namespace EDocument_API.Controllers.V1
             if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
-
             }
             else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
-
             }
 
             request.RefundRequest.ModifiedBy = user?.FullName;
@@ -2069,7 +1969,6 @@ namespace EDocument_API.Controllers.V1
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
         }
-
 
         /// <summary>
         /// Get All Refund Requests By Creator With Filter
@@ -2086,11 +1985,8 @@ namespace EDocument_API.Controllers.V1
         {
             _logger.LogInformation($"Start GetCreatorRefundRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
-  
 
             (int TotalCount, IEnumerable<RefundRequest> PaginatedData) result;
-
- 
 
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
@@ -2107,7 +2003,7 @@ namespace EDocument_API.Controllers.V1
             else
             {
                 result = await _unitOfWork.Repository<RefundRequest>().FindAllRequestsAsync(
-                isCreator:true,
+                isCreator: true,
                 filters: filterDto?.Filters,
                 includes: includes,
                 skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
@@ -2155,8 +2051,6 @@ namespace EDocument_API.Controllers.V1
 
             userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
 
-
-
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
                 result = await _unitOfWork.Repository<RefundRequest>().FindAllRequestsAsync(
@@ -2200,7 +2094,6 @@ namespace EDocument_API.Controllers.V1
                 request.ReviewerStage = reviewer?.StageNumber;
             }
 
-
             var response = new FilterReadDto<RefundRequestReviewerReadDto>
             {
                 TotalCount = totalCount,
@@ -2226,10 +2119,7 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "CustomerService")]
         public async Task<ActionResult> CreateRefundRequest([FromForm] RefundRequestCreateDto refundRequestCreateDto)
         {
-
             _logger.LogInformation($"Start CreateRefundRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(refundRequestCreateDto)} ");
-
-           
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
@@ -2240,7 +2130,6 @@ namespace EDocument_API.Controllers.V1
             request.Notes = refundRequestCreateDto.Notes;
             request.RefundRequest = _mapper.Map<RefundRequest>(refundRequestCreateDto);
             request.RefundRequest.RequestNumber = requestNo;
-
 
             if (refundRequestCreateDto.Attachments != null && refundRequestCreateDto.Attachments.Count > 0)
             {
@@ -2256,21 +2145,21 @@ namespace EDocument_API.Controllers.V1
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(refundRequestCreateDto.DefinedRequestId, requestId,user.Id, true);
+            await _requestReviewerRepository.BeginRequestCycle(refundRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
 
-            await _requestReviewerRepository.NominateReviewer( requestId, refundRequestCreateDto.ConcernedEmployeeId, user?.FullName);
+            await _requestReviewerRepository.NominateReviewer(requestId, refundRequestCreateDto.ConcernedEmployeeId, user?.FullName);
 
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
-
             #region Send Emails
+
             //var creatorMailContent = new MailContent
             //{
             //    Body = $"""
             //    Dear {user.FullName.Split(" ")[0]},
             //        Kindly not that your Refund Request on eDocuement has been created successfully and it's under reviewing now.
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
             //        - eDocument Request Reference No.: {requestNo}
 
@@ -2287,8 +2176,6 @@ namespace EDocument_API.Controllers.V1
 
             //_mailService.SendMailAsync(creatorMailContent);
 
-
-
             //var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId,request.CurrentStage);
             //var reviewerMailContent =  new MailContent
             //{
@@ -2296,7 +2183,7 @@ namespace EDocument_API.Controllers.V1
             //    Dears,
             //        Kindly note that {user.FullName} has created Refund Request for on eDocuement and need to be reviewed from your side.
 
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
             //        - eDocument Request Reference No.: {requestNo}
 
@@ -2311,7 +2198,7 @@ namespace EDocument_API.Controllers.V1
 
             //_mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
         }
@@ -2333,11 +2220,8 @@ namespace EDocument_API.Controllers.V1
         {
             _logger.LogInformation($"Start UpdateRefundRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(refundRequestUpdateDto)} ");
 
-          
-
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Models.Request, bool>> requestRxpression = (r => r.Id == id);
-
 
             var request = await _unitOfWork.Repository<Models.Request>().FindAsync(requestRxpression, new string[] { "RefundRequest", "Attachments" });
 
@@ -2349,14 +2233,12 @@ namespace EDocument_API.Controllers.V1
             _mapper.Map(refundRequestUpdateDto, request);
             _mapper.Map(refundRequestUpdateDto, request.RefundRequest);
 
-
             if (refundRequestUpdateDto.Attachments == null || refundRequestUpdateDto.Attachments.Count == 0)
             {
                 request.Attachments = oldAttachments;
             }
             else
             {
-
                 foreach (var attachment in request.Attachments)
                 {
                     attachment.ModifiedAt = DateTime.Now;
@@ -2371,27 +2253,25 @@ namespace EDocument_API.Controllers.V1
                 request.Attachments = _fileService.UploadAttachments(request.Id, $@"RefundRequest\{request.Id}", refundRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
             }
 
-
-
             request.RefundRequest.ModifiedAt = DateTime.Now;
             request.RefundRequest.ModifiedBy = user?.FullName;
             request.ModifiedBy = user?.FullName;
 
             var result = _unitOfWork.Complete();
-            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id,user.Id, false);
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, user.Id, false);
             await _requestReviewerRepository.NominateReviewer(request.Id, refundRequestUpdateDto.ConcernedEmployeeId, user?.FullName);
 
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
-
             #region Send Emails
+
             //var creatorMailContent = new MailContent
             //{
             //    Body = $"""
             //    Dear {user.FullName.Split(" ")[0]},
             //        Kindly not that your Refund Request on eDocuement has been created successfully and it's under reviewing now.
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
             //        - eDocument Request Reference No.: {requestNo}
 
@@ -2407,8 +2287,6 @@ namespace EDocument_API.Controllers.V1
 
             //_mailService.SendMailAsync(creatorMailContent);
 
-
-
             //var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId,request.CurrentStage);
             //var reviewerMailContent =  new MailContent
             //{
@@ -2416,7 +2294,7 @@ namespace EDocument_API.Controllers.V1
             //    Dears,
             //        Kindly note that {user.FullName} has updated Refund Request for on eDocuement and need to be reviewed from your side.
 
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
             //        - eDocument Request Reference No.: {requestNo}
 
@@ -2431,11 +2309,10 @@ namespace EDocument_API.Controllers.V1
 
             //_mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
-
 
         /// <summary>
         /// Approve Refund Request
@@ -2456,7 +2333,7 @@ namespace EDocument_API.Controllers.V1
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == approveRefundRequestDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "RefundRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
 
-            if (request!=null && request?.CurrentStage==2)
+            if (request != null && request?.CurrentStage == 2)
             {
                 request.RefundRequest.CreditNote = approveRefundRequestDto.CreditNote;
                 request.RefundRequest.Amount = approveRefundRequestDto.Amount;
@@ -2469,18 +2346,19 @@ namespace EDocument_API.Controllers.V1
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
             #region Send Emails
+
             var requestCreator = request.Creator;
             var requestCreatorDepartmentManager = request.Creator.Department.Manager;
             //if (request?.Status==RequestStatus.Approved.ToString())
             //{
-            //    
-            //   
+            //
+            //
             //    var creatorMailContent = new MailContent
             //    {
             //        Body = $"""
             //    Dear {requestCreator.FullName.Split(" ")[0]},
             //        Kindly not that your Refund Request {request.RefundRequest.RequestNumber} on eDocuement has been approved successfully.
-            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
             //        - eDocument Request Reference No.: {request.RefundRequest.RequestNumber}
 
@@ -2492,7 +2370,7 @@ namespace EDocument_API.Controllers.V1
             //        IsHTMLBody = false,
             //        Subject = $"Refund Request No. {request.RefundRequest.RequestNumber} on eDocuement",
             //        Cc = requestCreatorDepartmentManager.Email,
-            //        To = $"{requestCreator.Email};DPWSokhna.CustomerService@dpworld.com;"  
+            //        To = $"{requestCreator.Email};DPWSokhna.CustomerService@dpworld.com;"
             //    };
 
             //    _mailService.SendMailAsync(creatorMailContent);
@@ -2506,7 +2384,7 @@ namespace EDocument_API.Controllers.V1
             //        Dears,
             //            Kindly note that {requestCreator.FullName} has created Refund Request for on eDocuement and need to be reviewed from your side.
 
-            //            Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+            //            Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
             //            - eDocument Request Reference No.: {request.RefundRequest.RequestNumber}
 
@@ -2522,7 +2400,7 @@ namespace EDocument_API.Controllers.V1
             //    _mailService.SendMailAsync(reviewerMailContent);
             //}
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -2543,18 +2421,14 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start DeclineRefundRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-
             var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
-
             #region Send Emails
-
 
             //Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             //var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "RefundRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
-
 
             //var requestCreator = request.Creator;
             //var requestCreatorDepartmentManager = request.Creator.Department.Manager;
@@ -2563,7 +2437,7 @@ namespace EDocument_API.Controllers.V1
             //    Body = $"""
             //    Dear {requestCreator.FullName.Split(" ")[0]},
             //        Kindly not that your Refund Request No. {request.RefundRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
-            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
             //        - eDocument Request Reference No.: {request.RefundRequest.RequestNumber}
 
@@ -2575,11 +2449,12 @@ namespace EDocument_API.Controllers.V1
             //    IsHTMLBody = false,
             //    Subject = $"Refund Request No. {request.RefundRequest.RequestNumber} on eDocuement",
             //    Cc = requestCreatorDepartmentManager.Email,
-            //    To = $"{requestCreator.Email};DPWSokhna.CustomerService@dpworld.com;"  
+            //    To = $"{requestCreator.Email};DPWSokhna.CustomerService@dpworld.com;"
             //};
 
             //_mailService.SendMailAsync(creatorMailContent);
-            #endregion
+
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -2619,8 +2494,6 @@ namespace EDocument_API.Controllers.V1
 
             var result = _mapper.Map<DiscountRequestReadDto>(discountRequest);
 
-
-
             return Ok(new ApiResponse<DiscountRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
@@ -2653,12 +2526,10 @@ namespace EDocument_API.Controllers.V1
             if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
-
             }
             else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
-
             }
 
             request.DiscountRequest.ModifiedBy = user?.FullName;
@@ -2672,7 +2543,6 @@ namespace EDocument_API.Controllers.V1
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
         }
-
 
         /// <summary>
         /// Get All Discount Requests By Creator With Filter
@@ -2690,10 +2560,7 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start GetCreatorDiscountRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
 
-
             (int TotalCount, IEnumerable<DiscountRequest> PaginatedData) result;
-
-
 
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
@@ -2758,8 +2625,6 @@ namespace EDocument_API.Controllers.V1
 
             userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
 
-
-
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
                 result = await _unitOfWork.Repository<DiscountRequest>().FindAllRequestsAsync(
@@ -2776,8 +2641,8 @@ namespace EDocument_API.Controllers.V1
             }
             else
             {
-                result = await _unitOfWork.Repository<DiscountRequest>().FindAllRequestsAsync( 
-                isCreator:false,
+                result = await _unitOfWork.Repository<DiscountRequest>().FindAllRequestsAsync(
+                isCreator: false,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filters: filterDto?.Filters,
@@ -2802,7 +2667,6 @@ namespace EDocument_API.Controllers.V1
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;
             }
-
 
             var response = new FilterReadDto<DiscountRequestReviewerReadDto>
             {
@@ -2829,25 +2693,21 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "CustomerService,Commercial")]
         public async Task<ActionResult> CreateDiscountRequest([FromForm] DiscountRequestCreateDto discountRequestCreateDto)
         {
-
             _logger.LogInformation($"Start CreateDiscountRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(discountRequestCreateDto)} ");
-
 
             Expression<Func<DiscountRequest, bool>> documenteNumberCriteria = (r => r.DocumentNumber == discountRequestCreateDto.DocumentNumber);
             var discountRequest = await _unitOfWork.Repository<DiscountRequest>().FindAsync(documenteNumberCriteria);
             if (discountRequest != null)
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Submitted document number has beed already used in another request no. {discountRequest.RequestNumber}" });
-
             }
-            else if (discountRequestCreateDto.InvoiceNumber!=null)
+            else if (discountRequestCreateDto.InvoiceNumber != null)
             {
-                Expression<Func<DiscountRequest,bool>> invoiceNumberCriteria = (r=>r.InvoiceNumber==discountRequestCreateDto.InvoiceNumber);
-                 discountRequest = await _unitOfWork.Repository<DiscountRequest>().FindAsync(invoiceNumberCriteria);
+                Expression<Func<DiscountRequest, bool>> invoiceNumberCriteria = (r => r.InvoiceNumber == discountRequestCreateDto.InvoiceNumber);
+                discountRequest = await _unitOfWork.Repository<DiscountRequest>().FindAsync(invoiceNumberCriteria);
                 if (discountRequest != null)
                     return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Submitted invoice number has beed already used in another request no. {discountRequest.RequestNumber}" });
             }
-
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
@@ -2858,7 +2718,6 @@ namespace EDocument_API.Controllers.V1
             request.Notes = discountRequestCreateDto.Notes;
             request.DiscountRequest = _mapper.Map<DiscountRequest>(discountRequestCreateDto);
             request.DiscountRequest.RequestNumber = requestNo;
-
 
             if (discountRequestCreateDto.Attachments != null && discountRequestCreateDto.Attachments.Count > 0)
             {
@@ -2876,19 +2735,17 @@ namespace EDocument_API.Controllers.V1
 
             await _requestReviewerRepository.BeginRequestCycle(discountRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
 
-
-
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
-
             #region Send Emails
+
             //var creatorMailContent = new MailContent
             //{
             //    Body = $"""
             //    Dear {user.FullName.Split(" ")[0]},
             //        Kindly not that your Discount Request on eDocuement has been created successfully and it's under reviewing now.
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
             //        - eDocument Request Reference No.: {requestNo}
 
@@ -2905,8 +2762,6 @@ namespace EDocument_API.Controllers.V1
 
             //_mailService.SendMailAsync(creatorMailContent);
 
-
-
             //var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId,request.CurrentStage);
             //var reviewerMailContent =  new MailContent
             //{
@@ -2914,7 +2769,7 @@ namespace EDocument_API.Controllers.V1
             //    Dears,
             //        Kindly note that {user.FullName} has created Discount Request for on eDocuement and need to be reviewed from your side.
 
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
             //        - eDocument Request Reference No.: {requestNo}
 
@@ -2929,7 +2784,7 @@ namespace EDocument_API.Controllers.V1
 
             //_mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
         }
@@ -2951,11 +2806,8 @@ namespace EDocument_API.Controllers.V1
         {
             _logger.LogInformation($"Start UpdateDiscountRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(discountRequestUpdateDto)} ");
 
-
-
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Models.Request, bool>> requestRxpression = (r => r.Id == id);
-
 
             var request = await _unitOfWork.Repository<Models.Request>().FindAsync(requestRxpression, new string[] { "DiscountRequest", "Attachments" });
 
@@ -2967,14 +2819,12 @@ namespace EDocument_API.Controllers.V1
             _mapper.Map(discountRequestUpdateDto, request);
             _mapper.Map(discountRequestUpdateDto, request.DiscountRequest);
 
-
             if (discountRequestUpdateDto.Attachments == null || discountRequestUpdateDto.Attachments.Count == 0)
             {
                 request.Attachments = oldAttachments;
             }
             else
             {
-
                 foreach (var attachment in request.Attachments)
                 {
                     attachment.ModifiedAt = DateTime.Now;
@@ -2989,26 +2839,24 @@ namespace EDocument_API.Controllers.V1
                 request.Attachments = _fileService.UploadAttachments(request.Id, $@"DiscountRequest\{request.Id}", discountRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
             }
 
-
-
             request.DiscountRequest.ModifiedAt = DateTime.Now;
             request.DiscountRequest.ModifiedBy = user?.FullName;
             request.ModifiedBy = user?.FullName;
 
             var result = _unitOfWork.Complete();
             await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, user.Id, false);
-           
+
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
-
             #region Send Emails
+
             //var creatorMailContent = new MailContent
             //{
             //    Body = $"""
             //    Dear {user.FullName.Split(" ")[0]},
             //        Kindly not that your Discount Request on eDocuement has been created successfully and it's under reviewing now.
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
             //        - eDocument Request Reference No.: {requestNo}
 
@@ -3024,8 +2872,6 @@ namespace EDocument_API.Controllers.V1
 
             //_mailService.SendMailAsync(creatorMailContent);
 
-
-
             //var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId,request.CurrentStage);
             //var reviewerMailContent =  new MailContent
             //{
@@ -3033,7 +2879,7 @@ namespace EDocument_API.Controllers.V1
             //    Dears,
             //        Kindly note that {user.FullName} has updated Discount Request for on eDocuement and need to be reviewed from your side.
 
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
             //        - eDocument Request Reference No.: {requestNo}
 
@@ -3048,11 +2894,10 @@ namespace EDocument_API.Controllers.V1
 
             //_mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
-
 
         /// <summary>
         /// Approve Discount Request
@@ -3073,13 +2918,12 @@ namespace EDocument_API.Controllers.V1
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "DiscountRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
 
-           
-            var result =await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user);
+            var result = await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user);
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
-
             #region Send Emails
+
             var requestCreator = request.Creator;
             var requestCreatorDepartmentManager = request.Creator.Department.Manager;
             //if (request?.Status==RequestStatus.Approved.ToString())
@@ -3089,7 +2933,7 @@ namespace EDocument_API.Controllers.V1
             //        Body = $"""
             //    Dear {requestCreator.FullName.Split(" ")[0]},
             //        Kindly not that your Discount Request {request.DiscountRequest.RequestNumber} on eDocuement has been approved successfully.
-            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
             //        - eDocument Request Reference No.: {request.DiscountRequest.RequestNumber}
 
@@ -3114,7 +2958,7 @@ namespace EDocument_API.Controllers.V1
             //        Dears,
             //            Kindly note that {requestCreator.FullName} has created Discount Request for on eDocuement and need to be reviewed from your side.
 
-            //            Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+            //            Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
             //            - eDocument Request Reference No.: {request.DiscountRequest.RequestNumber}
 
@@ -3130,7 +2974,7 @@ namespace EDocument_API.Controllers.V1
             //    _mailService.SendMailAsync(reviewerMailContent);
             //}
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -3151,18 +2995,14 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start DeclineDiscountRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-
             var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
-
             #region Send Emails
-
 
             //Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             //var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "DiscountRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
-
 
             //var requestCreator = request.Creator;
             //var requestCreatorDepartmentManager = request.Creator.Department.Manager;
@@ -3171,7 +3011,7 @@ namespace EDocument_API.Controllers.V1
             //    Body = $"""
             //    Dear {requestCreator.FullName.Split(" ")[0]},
             //        Kindly not that your Discount Request No. {request.DiscountRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
-            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
             //        - eDocument Request Reference No.: {request.DiscountRequest.RequestNumber}
 
@@ -3187,17 +3027,20 @@ namespace EDocument_API.Controllers.V1
             //};
 
             //_mailService.SendMailAsync(creatorMailContent);
-            #endregion
+
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
-        #endregion
+
+        #endregion Discount Request
 
         #endregion Commercial
 
         #region Security
 
         #region Access Control Request
+
         /// <summary>
         /// Get Access Control Requests By for Edit Id
         /// </summary>
@@ -3230,8 +3073,6 @@ namespace EDocument_API.Controllers.V1
             return Ok(new ApiResponse<AccessControlRequestEditReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
-
-
         /// <summary>
         /// Delete Access Control Requests By Id
         /// </summary>
@@ -3261,12 +3102,10 @@ namespace EDocument_API.Controllers.V1
             if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
-
             }
             else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
-
             }
 
             request.AccessControlRequest.ModifiedBy = user?.FullName;
@@ -3280,7 +3119,6 @@ namespace EDocument_API.Controllers.V1
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
         }
-
 
         /// <summary>
         /// Get All Access Control Requests By Creator With Filter
@@ -3370,8 +3208,6 @@ namespace EDocument_API.Controllers.V1
 
             userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
 
-
-
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
                 result = await _unitOfWork.Repository<AccessControlRequest>().FindAllRequestsAsync(
@@ -3415,7 +3251,6 @@ namespace EDocument_API.Controllers.V1
                 request.ReviewerStage = reviewer?.StageNumber;
             }
 
-
             var response = new FilterReadDto<AccessControlRequestReviewerReadDto>
             {
                 TotalCount = totalCount,
@@ -3441,14 +3276,12 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "HR")]
         public async Task<ActionResult> CreateAccessControlRequest([FromForm] AccessControlRequestCreateDto accessControlRequestCreateDto)
         {
-
             _logger.LogInformation($"Start CreateAccessControlRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(accessControlRequestCreateDto)} ");
 
             var beneficiaryUser = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == accessControlRequestCreateDto.BeneficiaryId);
 
             if (beneficiaryUser is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Beneficiary user '{accessControlRequestCreateDto.BeneficiaryId}' not found" });
-
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
@@ -3461,8 +3294,6 @@ namespace EDocument_API.Controllers.V1
             _mapper.Map(beneficiaryUser, request.AccessControlRequest);
             request.AccessControlRequest.RequestNumber = requestNo;
             request.AccessControlRequest.EmployeeSignaturePath = _fileService.UploadAttachment($@"AccessControlRequest\{requestId}", accessControlRequestCreateDto.EmployeeSignature);
-
-
 
             request.CreatorId = user?.Id;
             request.AccessControlRequest.CreatedBy = user?.FullName;
@@ -3478,14 +3309,14 @@ namespace EDocument_API.Controllers.V1
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
-
             #region Send Emails
+
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
                     Kindly not that your Access Control Request on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {requestNo}
 
@@ -3501,8 +3332,6 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(creatorMailContent);
 
-
-
             var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId, request.CurrentStage);
             var reviewerMailContent = new MailContent
             {
@@ -3510,7 +3339,7 @@ namespace EDocument_API.Controllers.V1
                 Dears,
                     Kindly note that {user.FullName} has created Access Control Request for on eDocuement and need to be reviewed from your side.
 
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                     - eDocument Request Reference No.: {requestNo}
 
@@ -3525,7 +3354,7 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
         }
@@ -3552,10 +3381,8 @@ namespace EDocument_API.Controllers.V1
             if (beneficiaryUser is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Beneficiary user '{accessControlRequestUpdateDto.BeneficiaryId}' not found" });
 
-
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Models.Request, bool>> requestRxpression = (r => r.Id == id);
-
 
             var request = await _unitOfWork.Repository<Models.Request>().FindAsync(requestRxpression, new string[] { "AccessControlRequest", "Attachments" });
 
@@ -3568,8 +3395,6 @@ namespace EDocument_API.Controllers.V1
             _mapper.Map(accessControlRequestUpdateDto, request.AccessControlRequest);
             _mapper.Map(beneficiaryUser, request.AccessControlRequest);
 
-                 
-
             if (accessControlRequestUpdateDto.EmployeeSignature == null)
             {
                 request.AccessControlRequest.EmployeeSignaturePath = oldEmployeeSignaturePath;
@@ -3579,8 +3404,6 @@ namespace EDocument_API.Controllers.V1
                 _fileService.DeleteFile(oldEmployeeSignaturePath);
                 request.AccessControlRequest.EmployeeSignaturePath = _fileService.UploadAttachment($@"AccessControlRequest\{request.Id}", accessControlRequestUpdateDto.EmployeeSignature);
             }
-
-
 
             request.AccessControlRequest.ModifiedAt = DateTime.Now;
             request.AccessControlRequest.ModifiedBy = user?.FullName;
@@ -3593,14 +3416,14 @@ namespace EDocument_API.Controllers.V1
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
-
             #region Send Emails
+
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
                     Kindly not that your Access Control Request on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {request.AccessControlRequest.RequestNumber}
 
@@ -3616,8 +3439,6 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(creatorMailContent);
 
-
-
             var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(request.Id, request.CurrentStage);
             var reviewerMailContent = new MailContent
             {
@@ -3625,7 +3446,7 @@ namespace EDocument_API.Controllers.V1
                 Dears,
                     Kindly note that {user.FullName} has updated Access Control Request for on eDocuement and need to be reviewed from your side.
 
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                     - eDocument Request Reference No.: {request.AccessControlRequest.RequestNumber}
 
@@ -3640,11 +3461,10 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
-
 
         /// <summary>
         /// Approve Access Control Request
@@ -3667,14 +3487,13 @@ namespace EDocument_API.Controllers.V1
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
-
             #region Send Emails
+
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "AccessControlRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
             var requestCreator = request.Creator;
             if (request?.Status == RequestStatus.Approved.ToString())
             {
-
                 var requestCreatorDirectManager = request.Creator.Manager;
                 var requestCreatorDepartmentManager = request.Creator.Department.Manager;
                 var creatorMailContent = new MailContent
@@ -3682,7 +3501,7 @@ namespace EDocument_API.Controllers.V1
                     Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
                     Kindly not that your Access Control Request {request.AccessControlRequest.RequestNumber} on eDocuement has been approved successfully.
-                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
                     - eDocument Request Reference No.: {request.AccessControlRequest.RequestNumber}
 
@@ -3707,7 +3526,7 @@ namespace EDocument_API.Controllers.V1
                     Dears,
                         Kindly note that {requestCreator.FullName} has created Access Control Request for on eDocuement and need to be reviewed from your side.
 
-                        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                         - eDocument Request Reference No.: {request.AccessControlRequest.RequestNumber}
 
@@ -3723,10 +3542,7 @@ namespace EDocument_API.Controllers.V1
                 _mailService.SendMailAsync(reviewerMailContent);
             }
 
-
-
-
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -3747,17 +3563,14 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start DeclineAccessControlRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-
             var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
             #region Send Emails
 
-
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "AccessControlRequest", "Creator" });
-
 
             var requestCreator = request.Creator;
             var creatorMailContent = new MailContent
@@ -3765,7 +3578,7 @@ namespace EDocument_API.Controllers.V1
                 Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
                     Kindly not that your Access Control Request No. {request.AccessControlRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
-                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
                     - eDocument Request Reference No.: {request.AccessControlRequest.RequestNumber}
 
@@ -3780,10 +3593,12 @@ namespace EDocument_API.Controllers.V1
             };
 
             _mailService.SendMailAsync(creatorMailContent);
-            #endregion
+
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
+
         #endregion Access Control Request
 
         #region CCTV Request
@@ -3814,8 +3629,6 @@ namespace EDocument_API.Controllers.V1
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
             var result = _mapper.Map<CCTVAccessRequestEditReadDto>(cctvAccessRequest);
-
-
 
             return Ok(new ApiResponse<CCTVAccessRequestEditReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
@@ -3849,12 +3662,10 @@ namespace EDocument_API.Controllers.V1
             if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
-
             }
             else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
-
             }
 
             request.CCTVAccessRequest.ModifiedBy = user?.FullName;
@@ -3868,7 +3679,6 @@ namespace EDocument_API.Controllers.V1
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
         }
-
 
         /// <summary>
         /// Get All CCTV Access Requests By Creator With Filter
@@ -3958,8 +3768,6 @@ namespace EDocument_API.Controllers.V1
 
             userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
 
-
-
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
                 result = await _unitOfWork.Repository<CCTVAccessRequest>().FindAllRequestsAsync(
@@ -4003,7 +3811,6 @@ namespace EDocument_API.Controllers.V1
                 request.ReviewerStage = reviewer?.StageNumber;
             }
 
-
             var response = new FilterReadDto<CCTVAccessRequestReviewerReadDto>
             {
                 TotalCount = totalCount,
@@ -4026,9 +3833,8 @@ namespace EDocument_API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("CCTVAccess/Create")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> CreateCCTVAccessRequest( CCTVAccessRequestCreateDto cctvAccessRequestCreateDto)
+        public async Task<ActionResult> CreateCCTVAccessRequest(CCTVAccessRequestCreateDto cctvAccessRequestCreateDto)
         {
-
             _logger.LogInformation($"Start CreateCCTVAccessRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(cctvAccessRequestCreateDto)} ");
             var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
@@ -4040,8 +3846,6 @@ namespace EDocument_API.Controllers.V1
             request.CCTVAccessRequest = _mapper.Map<CCTVAccessRequest>(cctvAccessRequestCreateDto);
             _mapper.Map(user, request.CCTVAccessRequest);
             request.CCTVAccessRequest.RequestNumber = requestNo;
-
-
 
             request.CreatorId = user?.Id;
             request.CCTVAccessRequest.CreatedBy = user?.FullName;
@@ -4057,14 +3861,14 @@ namespace EDocument_API.Controllers.V1
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
-
             #region Send Emails
+
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
                     Kindly not that your CCTV Access Request on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {requestNo}
 
@@ -4080,8 +3884,6 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(creatorMailContent);
 
-
-
             var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId, request.CurrentStage);
             var reviewerMailContent = new MailContent
             {
@@ -4089,7 +3891,7 @@ namespace EDocument_API.Controllers.V1
                 Dears,
                     Kindly note that {user.FullName} has created CCTV Access Request for on eDocuement and need to be reviewed from your side.
 
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                     - eDocument Request Reference No.: {requestNo}
 
@@ -4104,7 +3906,7 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
         }
@@ -4125,17 +3927,15 @@ namespace EDocument_API.Controllers.V1
         {
             _logger.LogInformation($"Start UpdateCCTVAccessRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(cctvAccessRequestUpdateDto)} ");
 
-            var user = await _userManager.Users.Include(t=>t.Department).FirstOrDefaultAsync(u=>u.Id==User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
-
 
             var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "CCTVAccessRequest", "Attachments" });
 
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
 
-           
             request.Notes = cctvAccessRequestUpdateDto.Notes;
             _mapper.Map(cctvAccessRequestUpdateDto, request);
             _mapper.Map(cctvAccessRequestUpdateDto, request.CCTVAccessRequest);
@@ -4151,14 +3951,14 @@ namespace EDocument_API.Controllers.V1
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
-
             #region Send Emails
+
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
                     Kindly not that your CCTV Access Request on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {request.CCTVAccessRequest.RequestNumber}
 
@@ -4174,8 +3974,6 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(creatorMailContent);
 
-
-
             var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(request.Id, request.CurrentStage);
             var reviewerMailContent = new MailContent
             {
@@ -4183,7 +3981,7 @@ namespace EDocument_API.Controllers.V1
                 Dears,
                     Kindly note that {user.FullName} has updated CCTV Access Request for on eDocuement and need to be reviewed from your side.
 
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                     - eDocument Request Reference No.: {request.CCTVAccessRequest.RequestNumber}
 
@@ -4198,11 +3996,10 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
-
 
         /// <summary>
         /// Approve CCTV Access Request
@@ -4225,14 +4022,13 @@ namespace EDocument_API.Controllers.V1
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
-
             #region Send Emails
+
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "CCTVAccessRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
             var requestCreator = request.Creator;
             if (request?.Status == RequestStatus.Approved.ToString())
             {
-
                 var requestCreatorDirectManager = request.Creator.Manager;
                 var requestCreatorDepartmentManager = request.Creator.Department.Manager;
                 var creatorMailContent = new MailContent
@@ -4240,7 +4036,7 @@ namespace EDocument_API.Controllers.V1
                     Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
                     Kindly not that your CCTV Access Request {request.CCTVAccessRequest.RequestNumber} on eDocuement has been approved successfully.
-                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
                     - eDocument Request Reference No.: {request.CCTVAccessRequest.RequestNumber}
 
@@ -4265,7 +4061,7 @@ namespace EDocument_API.Controllers.V1
                     Dears,
                         Kindly note that {requestCreator.FullName} has created CCTV Access Request for on eDocuement and need to be reviewed from your side.
 
-                        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                         - eDocument Request Reference No.: {request.CCTVAccessRequest.RequestNumber}
 
@@ -4281,10 +4077,7 @@ namespace EDocument_API.Controllers.V1
                 _mailService.SendMailAsync(reviewerMailContent);
             }
 
-
-
-
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -4305,17 +4098,14 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start DeclineCCTVAccessRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-
             var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
             #region Send Emails
 
-
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "CCTVAccessRequest", "Creator" });
-
 
             var requestCreator = request.Creator;
             var creatorMailContent = new MailContent
@@ -4323,7 +4113,7 @@ namespace EDocument_API.Controllers.V1
                 Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
                     Kindly not that your CCTV Access Request No. {request.CCTVAccessRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
-                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
                     - eDocument Request Reference No.: {request.CCTVAccessRequest.RequestNumber}
 
@@ -4338,7 +4128,8 @@ namespace EDocument_API.Controllers.V1
             };
 
             _mailService.SendMailAsync(creatorMailContent);
-            #endregion
+
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -4347,10 +4138,12 @@ namespace EDocument_API.Controllers.V1
 
         #endregion Security
 
+        #region Store
+      
         #region Fuel Oil Invoice Request
 
         /// <summary>
-        /// Get Fuel Oil Invoice Requests By for Edit Id
+        /// Get Fuel Oil Invoice Requests Details
         /// </summary>
         /// <param name="id">request id</param>
         /// <remarks>
@@ -4375,8 +4168,6 @@ namespace EDocument_API.Controllers.V1
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
             var result = _mapper.Map<FuelOilInvoiceRequestReadDto>(fuelOilInvoiceRequest);
-
-
 
             return Ok(new ApiResponse<FuelOilInvoiceRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
@@ -4410,12 +4201,10 @@ namespace EDocument_API.Controllers.V1
             if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
-
             }
             else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
-
             }
 
             request.FuelOilInvoiceRequest.ModifiedBy = user?.FullName;
@@ -4429,7 +4218,6 @@ namespace EDocument_API.Controllers.V1
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
         }
-
 
         /// <summary>
         /// Get All Fuel Oil Invoice Requests By Creator With Filter
@@ -4519,8 +4307,6 @@ namespace EDocument_API.Controllers.V1
 
             userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
 
-
-
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
                 result = await _unitOfWork.Repository<FuelOilInvoiceRequest>().FindAllRequestsAsync(
@@ -4564,7 +4350,6 @@ namespace EDocument_API.Controllers.V1
                 request.ReviewerStage = reviewer?.StageNumber;
             }
 
-
             var response = new FilterReadDto<FuelOilInvoiceRequestReviewerReadDto>
             {
                 TotalCount = totalCount,
@@ -4590,7 +4375,6 @@ namespace EDocument_API.Controllers.V1
         [Authorize(Roles = "Basic")]
         public async Task<ActionResult> CreateFuelOilInvoiceRequest([FromForm] FuelOilInvoiceRequestCreateDto fuelOilInvoiceRequestCreateDto)
         {
-
             _logger.LogInformation($"Start CreateFuelOilInvoiceRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(fuelOilInvoiceRequestCreateDto)} ");
             var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
@@ -4622,14 +4406,14 @@ namespace EDocument_API.Controllers.V1
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
-
             #region Send Emails
+
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
                     Kindly not that your Fuel Oil Invoice Request on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {requestNo}
 
@@ -4645,8 +4429,6 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(creatorMailContent);
 
-
-
             var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId, request.CurrentStage);
             var reviewerMailContent = new MailContent
             {
@@ -4654,7 +4436,7 @@ namespace EDocument_API.Controllers.V1
                 Dears,
                     Kindly note that {user.FullName} has created Fuel Oil Invoice Request for on eDocuement and need to be reviewed from your side.
 
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                     - eDocument Request Reference No.: {requestNo}
 
@@ -4669,7 +4451,7 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
         }
@@ -4695,7 +4477,6 @@ namespace EDocument_API.Controllers.V1
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
-
             var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "FuelOilInvoiceRequest", "Attachments" });
 
             if (request == null)
@@ -4706,14 +4487,12 @@ namespace EDocument_API.Controllers.V1
             _mapper.Map(fuelOilInvoiceRequestUpdateDto, request.FuelOilInvoiceRequest);
             request.FuelOilInvoiceRequest.RequestId = id;
 
-
             if (fuelOilInvoiceRequestUpdateDto.Attachments == null || fuelOilInvoiceRequestUpdateDto.Attachments.Count == 0)
             {
                 request.Attachments = oldAttachments;
             }
             else
             {
-
                 foreach (var attachment in request.Attachments)
                 {
                     attachment.ModifiedAt = DateTime.Now;
@@ -4739,14 +4518,14 @@ namespace EDocument_API.Controllers.V1
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
-
             #region Send Emails
+
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
                     Kindly not that your Fuel Oil Invoice Request on eDocuement has been created successfully and it's under reviewing now.
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {request.FuelOilInvoiceRequest.RequestNumber}
 
@@ -4762,8 +4541,6 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(creatorMailContent);
 
-
-
             var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(request.Id, request.CurrentStage);
             var reviewerMailContent = new MailContent
             {
@@ -4771,7 +4548,7 @@ namespace EDocument_API.Controllers.V1
                 Dears,
                     Kindly note that {user.FullName} has updated Fuel Oil Invoice Request for on eDocuement and need to be reviewed from your side.
 
-                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                     - eDocument Request Reference No.: {request.FuelOilInvoiceRequest.RequestNumber}
 
@@ -4786,11 +4563,10 @@ namespace EDocument_API.Controllers.V1
 
             _mailService.SendMailAsync(reviewerMailContent);
 
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
-
 
         /// <summary>
         /// Approve Fuel Oil Invoice Request
@@ -4813,14 +4589,13 @@ namespace EDocument_API.Controllers.V1
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
-
             #region Send Emails
+
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "FuelOilInvoiceRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
             var requestCreator = request.Creator;
             if (request?.Status == RequestStatus.Approved.ToString())
             {
-
                 var requestCreatorDirectManager = request.Creator.Manager;
                 var requestCreatorDepartmentManager = request.Creator.Department.Manager;
                 var creatorMailContent = new MailContent
@@ -4828,7 +4603,7 @@ namespace EDocument_API.Controllers.V1
                     Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
                     Kindly not that your Fuel Oil Invoice Request {request.FuelOilInvoiceRequest.RequestNumber} on eDocuement has been approved successfully.
-                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
                     - eDocument Request Reference No.: {request.FuelOilInvoiceRequest.RequestNumber}
 
@@ -4853,7 +4628,7 @@ namespace EDocument_API.Controllers.V1
                     Dears,
                         Kindly note that {requestCreator.FullName} has created Fuel Oil Invoice Request for on eDocuement and need to be reviewed from your side.
 
-                        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details. 
+                        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
                         - eDocument Request Reference No.: {request.FuelOilInvoiceRequest.RequestNumber}
 
@@ -4869,10 +4644,7 @@ namespace EDocument_API.Controllers.V1
                 _mailService.SendMailAsync(reviewerMailContent);
             }
 
-
-
-
-            #endregion
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
@@ -4893,17 +4665,14 @@ namespace EDocument_API.Controllers.V1
             _logger.LogInformation($"Start DeclineFuelOilInvoiceRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-
             var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
             #region Send Emails
 
-
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "FuelOilInvoiceRequest", "Creator" });
-
 
             var requestCreator = request.Creator;
             var creatorMailContent = new MailContent
@@ -4911,7 +4680,7 @@ namespace EDocument_API.Controllers.V1
                 Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
                     Kindly not that your Fuel Oil Invoice Request No. {request.FuelOilInvoiceRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
-                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}). 
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
                     - eDocument Request Reference No.: {request.FuelOilInvoiceRequest.RequestNumber}
 
@@ -4926,15 +4695,1188 @@ namespace EDocument_API.Controllers.V1
             };
 
             _mailService.SendMailAsync(creatorMailContent);
-            #endregion
+
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
 
-        #endregion CCTV Request
+        #endregion Fuel Oil Invoice Request
 
+        #region New Item Request
+
+        /// <summary>
+        /// Get New Item Requests Details
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>New Item Request</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<NewItemRequestReadDto>))]
+        [HttpGet("NewItem/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetNewItemRequestById(long id)
+        {
+            _logger.LogInformation($"Start GetNewItemRequestById from {nameof(RequestController)} for request id = {id}");
+
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "RequestedItems" };
+            var newItemRequest = await _unitOfWork.Repository<NewItemRequest>().FindRequestAsync(
+            requestId: id,
+            expression: "Request.Id==@0",
+            includes: includes
+            );
+
+            if (newItemRequest is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            var result = _mapper.Map<NewItemRequestReadDto>(newItemRequest);
+
+            return Ok(new ApiResponse<NewItemRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+        }
+
+        /// <summary>
+        /// Delete New Item Requests By Id
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpDelete("NewItem/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> DeleteNewItemRequest(long id)
+        {
+            _logger.LogInformation($"Start DeleteNewItemRequest from {nameof(RequestController)} for request id = {id}");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var includes = new string[] { "NewItemRequest", "Attachments", "RequestReviewers" };
+
+            var request = await _unitOfWork.Repository<Models.Request>().FindRequestAsync(
+            requestId: id,
+            expression: "Id==@0",
+            includes: includes
+                );
+
+            if (request is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
+            }
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
+            }
+
+            request.NewItemRequest.ModifiedBy = user?.FullName;
+            request.ModifiedBy = user?.FullName;
+            _unitOfWork.Complete();
+
+            _unitOfWork.Repository<Models.Request>().Delete(request);
+            _unitOfWork.Complete();
+
+            _fileService.DeleteFolder($@"NewItemRequest\{id}");
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
+        }
+
+        /// <summary>
+        /// Get All New Item Requests By Creator With Filter
+        /// </summary>
+        /// <param name="filterDto">filter information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All Created New Item Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<NewItemRequestReadDto>>))]
+        [HttpPost("NewItem/Inbox")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetCreatorNewItemRequestsFiltered(FilterWriteDto? filterDto)
+        {
+            _logger.LogInformation($"Start GetCreatorNewItemRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "RequestedItems" };
+            string? userCondition = null;
+
+            (int TotalCount, IEnumerable<NewItemRequest> PaginatedData) result;
+
+            userCondition = "Request.CreatorId ==@0";
+
+            if (!string.IsNullOrEmpty(filterDto?.FilterValue))
+            {
+                result = await _unitOfWork.Repository<NewItemRequest>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<NewItemRequest>().FindAllRequestsAsync(
+                isCreator: true,
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filters: filterDto?.Filters,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+
+            var totalCount = result.TotalCount;
+            var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
+
+            var requests = _mapper.Map<List<NewItemRequestReadDto>>(result.PaginatedData);
+
+            var response = new FilterReadDto<NewItemRequestReadDto>
+            {
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto?.PageNo ?? 1,
+                PageSize = requests.Count,
+                PaginatedData = requests
+            };
+            return Ok(new ApiResponse<FilterReadDto<NewItemRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+        }
+
+        /// <summary>
+        /// Get All New Item Requests By Reviewer With Filter
+        /// </summary>
+        /// <param name="filterDto">filter information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All Reviewer New Item Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<NewItemRequestReviewerReadDto>>))]
+        [HttpPost("NewItem/AssignedToMe")]
+        [Authorize(Roles = "Store")]
+        public async Task<ActionResult> GetReviewerNewItemRequestsFiltered(FilterWriteDto? filterDto)
+        {
+            _logger.LogInformation($"Start GetReviewerNewItemRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "RequestedItems" };
+            string? userCondition = null;
+
+            (int TotalCount, IEnumerable<NewItemRequest> PaginatedData) result;
+
+            userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
+
+            if (!string.IsNullOrEmpty(filterDto?.FilterValue))
+            {
+                result = await _unitOfWork.Repository<NewItemRequest>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<NewItemRequest>().FindAllRequestsAsync(
+                isCreator: false,
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filters: filterDto?.Filters,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+
+            var totalCount = result.TotalCount;
+            var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
+
+            var requests = _mapper.Map<List<NewItemRequestReviewerReadDto>>(result.PaginatedData);
+
+            foreach (var request in requests)
+            {
+                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
+
+                request.ReviewerStatus = reviewer?.Status;
+                request.ReviewerStage = reviewer?.StageNumber;
+            }
+
+            var response = new FilterReadDto<NewItemRequestReviewerReadDto>
+            {
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto?.PageNo ?? 1,
+                PageSize = requests.Count,
+                PaginatedData = requests
+            };
+            return Ok(new ApiResponse<FilterReadDto<NewItemRequestReviewerReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+        }
+
+        /// <summary>
+        /// Create New Item Request
+        /// </summary>
+        /// <param name="newItemRequestCreateDto">New Item request Information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPost("NewItem/Create")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> CreateNewItemRequest([FromForm] NewItemRequestCreateDto newItemRequestCreateDto)
+        {
+            _logger.LogInformation($"Start CreateNewItemRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(newItemRequestCreateDto)} ");
+
+            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
+            var requestNo = $"NewItem-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
+
+            var request = new Request { Id = requestId, DefinedRequestId = newItemRequestCreateDto.DefinedRequestId };
+            request.Notes = newItemRequestCreateDto.Notes;
+            request.NewItemRequest = _mapper.Map<NewItemRequest>(newItemRequestCreateDto);
+            _mapper.Map(user, request.NewItemRequest);
+            request.NewItemRequest.RequestNumber = requestNo;
+            var sentItems = Request.Form["RequestedItems"].ToList();
+
+            if (sentItems != null && sentItems.Count > 0)
+            {
+                foreach (var sentItem in sentItems)
+                {
+                    var item = JsonConvert.DeserializeObject<RequestedItem>(sentItem);
+                    item.RequestNumber = requestNo;
+                    item.CreatedAt = DateTime.Now;
+                    item.CreatedBy = user?.FullName;
+                    request.NewItemRequest.RequestedItems.Add(item);
+                }
+            }
+            else
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "RequestedItems field not found" });
+            }
+
+            if (newItemRequestCreateDto.Attachments != null && newItemRequestCreateDto.Attachments.Count > 0)
+            {
+                request.Attachments = _fileService.UploadAttachments(requestId, $@"NewItemRequest\{requestId}", newItemRequestCreateDto.Attachments, user.FullName);
+            }
+
+            request.CreatorId = user?.Id;
+            request.NewItemRequest.CreatedBy = user?.FullName;
+            request.CreatedBy = user?.FullName;
+
+            _unitOfWork.Repository<Request>().Add(request);
+
+            _unitOfWork.Complete();
+
+            await _requestReviewerRepository.BeginRequestCycle(newItemRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
+
+            #region Send Emails
+
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your New Item Request on eDocuement has been created successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+
+                    - eDocument Request Reference No.: {requestNo}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"New Item Request No. {requestNo} on eDocuement",
+                To = user.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has created New Item Request for on eDocuement and need to be reviewed from your side.
+
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+
+                    - eDocument Request Reference No.: {requestNo}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $"New Item Request No. {requestNo} on eDocuement",
+                To = reviewersEmails
+            };
+
+            _mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
+        }
+
+        /// <summary>
+        /// Update New Item Request
+        /// </summary>
+        /// <param name="id">New Item request Id</param>
+        /// <param name="newItemRequestUpdateDto">New Item request Informarion</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("NewItem/Update/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> UpdateNewItemRequest(long id, [FromForm] NewItemRequestUpdateDto newItemRequestUpdateDto)
+        {
+            _logger.LogInformation($"Start UpdateNewItemRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(newItemRequestUpdateDto)} ");
+
+            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
+
+            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "NewItemRequest", "Attachments", "NewItemRequest.RequestedItems" });
+
+            if (request == null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
+
+            var oldAttachments = request.Attachments;
+            request.Notes = newItemRequestUpdateDto.Notes;
+            _mapper.Map(newItemRequestUpdateDto, request.NewItemRequest);
+
+            request.NewItemRequest.RequestId = id;
+            var sentItems = Request.Form["RequestedItems"].ToList();
+
+
+            if (sentItems != null && sentItems.Count > 0)
+            {
+                _unitOfWork.Repository<RequestedItem>().DeleteRange(request.NewItemRequest.RequestedItems);
+
+                request.NewItemRequest.RequestedItems = new List<RequestedItem>();
+                foreach (var sentItem in sentItems)
+                {
+                    var item = JsonConvert.DeserializeObject<RequestedItem>(sentItem);
+                    item.RequestNumber = request.NewItemRequest.RequestNumber;
+                    item.CreatedAt = request.CreatedAt;
+                    item.CreatedBy = request.CreatedBy;
+                    item.ModifiedAt = DateTime.Now;
+                    item.ModifiedBy = user?.FullName;
+                    request.NewItemRequest.RequestedItems.Add(item);
+                }
+            }
+            else
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "RequestedItems field not found" });
+            }
+
+            if (newItemRequestUpdateDto.Attachments == null || newItemRequestUpdateDto.Attachments.Count == 0)
+            {
+                request.Attachments = oldAttachments;
+            }
+            else
+            {
+                foreach (var attachment in request.Attachments)
+                {
+                    attachment.ModifiedAt = DateTime.Now;
+                    attachment.ModifiedBy = user.FullName;
+                }
+
+                foreach (var oldAttachment in oldAttachments)
+                {
+                    _fileService.DeleteFile(oldAttachment.FilePath);
+                }
+
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"NewItemRequest\{request.Id}", newItemRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
+            }
+
+            request.NewItemRequest.ModifiedAt = DateTime.Now;
+            request.NewItemRequest.ModifiedBy = user?.FullName;
+            request.ModifiedBy = user?.FullName;
+
+            var result = _unitOfWork.Complete();
+
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, user.Id, false);
+
+            if (result < 1)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
+
+            #region Send Emails
+
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your New Item Request on eDocuement has been created successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+
+                    - eDocument Request Reference No.: {request.NewItemRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"New Item Request No. {request.NewItemRequest.RequestNumber} on eDocuement",
+                To = user.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(request.Id, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has updated New Item Request for on eDocuement and need to be reviewed from your side.
+
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+
+                    - eDocument Request Reference No.: {request.NewItemRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $"New Item Request No. {request.NewItemRequest.RequestNumber} on eDocuement",
+                To = reviewersEmails
+            };
+
+            _mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
+        }
+
+        /// <summary>
+        /// Approve New Item Request
+        /// </summary>
+        /// <param name="approveNewItemRequest">Approve New Item Request Info</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("NewItem/Approve")]
+        [Authorize(Roles = "Store")]
+        public async Task<ActionResult> ApproveNewItemRequest(ApproveNewItemRequestDto approveNewItemRequest)
+        {
+            _logger.LogInformation($"Start ApproveNewItemRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(approveNewItemRequest)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            foreach (var item in approveNewItemRequest.ApprovedItems)
+            {
+                var requestedItem = await _unitOfWork.Repository<RequestedItem>().GetByIdAsync(item.RequestedItemId);
+                if (requestedItem != null)
+                {
+                    requestedItem.ItemNumber = item.ItemNumber;
+                    requestedItem.ModifiedBy = user.FullName;
+                }
+                else
+                {
+                    return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Requested Item Not found" });
+                }
+            }
+
+            _unitOfWork.Complete();
+
+            var result = await _requestReviewerRepository.ApproveRequestAsync(_mapper.Map<ApproveRequestReviewerDto>(approveNewItemRequest), user);
+
+            if (!result.IsSucceded)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
+
+            #region Send Emails
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == approveNewItemRequest.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "NewItemRequest", "Creator" });
+            var requestCreator = request.Creator;
+
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {requestCreator.FullName.Split(" ")[0]},
+                    Kindly not that your New Item Request {request.NewItemRequest.RequestNumber} on eDocuement has been approved successfully.
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
+
+                    - eDocument Request Reference No.: {request.NewItemRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"New Item Request No. {request.NewItemRequest.RequestNumber} on eDocuement",
+                To = requestCreator.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+
+        /// <summary>
+        /// Decline New Item Request
+        /// </summary>
+        /// <param name="requestReviewerWriteDto">Decline New Item Request</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("NewItem/Decline")]
+        [Authorize(Roles = "Store")]
+        public async Task<ActionResult> DeclineNewItemRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
+        {
+            _logger.LogInformation($"Start DeclineNewItemRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
+            if (!result.IsSucceded)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
+
+            #region Send Emails
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "NewItemRequest", "Creator" });
+
+            var requestCreator = request.Creator;
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {requestCreator.FullName.Split(" ")[0]},
+                    Kindly not that your New Item Request No. {request.NewItemRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
+
+                    - eDocument Request Reference No.: {request.NewItemRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"New Item Request No. {request.NewItemRequest.RequestNumber} on eDocuement",
+                To = requestCreator.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+
+        #endregion New Item Request
+
+        #region PR Request
+        /// <summary>
+        /// Get PR Requests Details
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>PR Request</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<PRRequestReadDto>))]
+        [HttpGet("PR/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetPRRequestById(long id)
+        {
+            _logger.LogInformation($"Start GetPRRequestById from {nameof(RequestController)} for request id = {id}");
+
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "RequestedPRs" };
+            var pRRequest = await _unitOfWork.Repository<PRRequest>().FindRequestAsync(
+            requestId: id,
+            expression: "Request.Id==@0",
+            includes: includes
+            );
+
+            if (pRRequest is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            var result = _mapper.Map<PRRequestReadDto>(pRRequest);
+
+            return Ok(new ApiResponse<PRRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+        }
+
+        /// <summary>
+        /// Delete PR Requests By Id
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpDelete("PR/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> DeletePRRequest(long id)
+        {
+            _logger.LogInformation($"Start DeletePRRequest from {nameof(RequestController)} for request id = {id}");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var includes = new string[] { "PRRequest", "Attachments", "RequestReviewers" };
+
+            var request = await _unitOfWork.Repository<Models.Request>().FindRequestAsync(
+            requestId: id,
+            expression: "Id==@0",
+            includes: includes
+                );
+
+            if (request is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
+            }
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
+            }
+
+            request.PRRequest.ModifiedBy = user?.FullName;
+            request.ModifiedBy = user?.FullName;
+            _unitOfWork.Complete();
+
+            _unitOfWork.Repository<Models.Request>().Delete(request);
+            _unitOfWork.Complete();
+
+            _fileService.DeleteFolder($@"PRRequest\{id}");
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
+        }
+
+        /// <summary>
+        /// Get All PR Requests By Creator With Filter
+        /// </summary>
+        /// <param name="filterDto">filter information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All Created PR Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<PRRequestReadDto>>))]
+        [HttpPost("PR/Inbox")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetCreatorPRRequestsFiltered(FilterWriteDto? filterDto)
+        {
+            _logger.LogInformation($"Start GetCreatorPRRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "RequestedPRs" };
+            string? userCondition = null;
+
+            (int TotalCount, IEnumerable<PRRequest> PaginatedData) result;
+
+            userCondition = "Request.CreatorId ==@0";
+
+            if (!string.IsNullOrEmpty(filterDto?.FilterValue))
+            {
+                result = await _unitOfWork.Repository<PRRequest>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<PRRequest>().FindAllRequestsAsync(
+                isCreator: true,
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filters: filterDto?.Filters,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+
+            var totalCount = result.TotalCount;
+            var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
+
+            var requests = _mapper.Map<List<PRRequestReadDto>>(result.PaginatedData);
+
+            var response = new FilterReadDto<PRRequestReadDto>
+            {
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto?.PageNo ?? 1,
+                PageSize = requests.Count,
+                PaginatedData = requests
+            };
+            return Ok(new ApiResponse<FilterReadDto<PRRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+        }
+
+        /// <summary>
+        /// Get All PR Requests By Reviewer With Filter
+        /// </summary>
+        /// <param name="filterDto">filter information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All Reviewer PR Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<PRRequestReviewerReadDto>>))]
+        [HttpPost("PR/AssignedToMe")]
+        [Authorize(Roles = "Store")]
+        public async Task<ActionResult> GetReviewerPRRequestsFiltered(FilterWriteDto? filterDto)
+        {
+            _logger.LogInformation($"Start GetReviewerPRRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "RequestedPRs" };
+            string? userCondition = null;
+
+            (int TotalCount, IEnumerable<PRRequest> PaginatedData) result;
+
+            userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
+
+            if (!string.IsNullOrEmpty(filterDto?.FilterValue))
+            {
+                result = await _unitOfWork.Repository<PRRequest>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<PRRequest>().FindAllRequestsAsync(
+                isCreator: false,
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filters: filterDto?.Filters,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+
+            var totalCount = result.TotalCount;
+            var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
+
+            var requests = _mapper.Map<List<PRRequestReviewerReadDto>>(result.PaginatedData);
+
+            foreach (var request in requests)
+            {
+                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
+
+                request.ReviewerStatus = reviewer?.Status;
+                request.ReviewerStage = reviewer?.StageNumber;
+            }
+
+            var response = new FilterReadDto<PRRequestReviewerReadDto>
+            {
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto?.PageNo ?? 1,
+                PageSize = requests.Count,
+                PaginatedData = requests
+            };
+            return Ok(new ApiResponse<FilterReadDto<PRRequestReviewerReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+        }
+
+        /// <summary>
+        /// Create PR Request
+        /// </summary>
+        /// <param name="pRRequestCreateDto">PR request Information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPost("PR/Create")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> CreatePRRequest([FromForm] PRRequestCreateDto pRRequestCreateDto)
+        {
+            _logger.LogInformation($"Start CreatePRRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(pRRequestCreateDto)} ");
+
+            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
+            var requestNo = $"PR-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
+
+            var request = new Request { Id = requestId, DefinedRequestId = pRRequestCreateDto.DefinedRequestId };
+            request.Notes = pRRequestCreateDto.Notes;
+            request.PRRequest = _mapper.Map<PRRequest>(pRRequestCreateDto);
+            _mapper.Map(user, request.PRRequest);
+            request.PRRequest.RequestNumber = requestNo;
+            var sentItems = Request.Form["RequestedPRs"].ToList();
+
+            if (sentItems != null && sentItems.Count > 0)
+            {
+                foreach (var sentItem in sentItems)
+                {
+                    var item = JsonConvert.DeserializeObject<RequestedPR>(sentItem);
+                    item.RequestNumber = requestNo;
+                    item.CreatedAt = DateTime.Now;
+                    item.CreatedBy = user?.FullName;
+                    request.PRRequest.RequestedPRs.Add(item);
+                }
+            }
+            else
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "RequestedItems field not found" });
+            }
+
+            if (pRRequestCreateDto.Attachments != null && pRRequestCreateDto.Attachments.Count > 0)
+            {
+                request.Attachments = _fileService.UploadAttachments(requestId, $@"PRRequest\{requestId}", pRRequestCreateDto.Attachments, user.FullName);
+            }
+
+            request.CreatorId = user?.Id;
+            request.PRRequest.CreatedBy = user?.FullName;
+            request.CreatedBy = user?.FullName;
+
+            _unitOfWork.Repository<Request>().Add(request);
+
+            _unitOfWork.Complete();
+
+            await _requestReviewerRepository.BeginRequestCycle(pRRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
+
+            #region Send Emails
+
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your PR Request on eDocuement has been created successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+
+                    - eDocument Request Reference No.: {requestNo}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"PR Request No. {requestNo} on eDocuement",
+                To = user.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has created PR Request for on eDocuement and need to be reviewed from your side.
+
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+
+                    - eDocument Request Reference No.: {requestNo}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $"PR Request No. {requestNo} on eDocuement",
+                To = reviewersEmails
+            };
+
+            _mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
+        }
+
+        /// <summary>
+        /// Update PR Request
+        /// </summary>
+        /// <param name="id">PR request Id</param>
+        /// <param name="pRRequestUpdateDto">PR request Informarion</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("PR/Update/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> UpdatePRRequest(long id, [FromForm] PRRequestUpdateDto pRRequestUpdateDto)
+        {
+            _logger.LogInformation($"Start UpdatePRRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(pRRequestUpdateDto)} ");
+
+            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
+
+            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "PRRequest", "Attachments", "PRRequest.RequestedPRs" });
+
+            if (request == null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
+
+            var oldAttachments = request.Attachments;
+            request.Notes = pRRequestUpdateDto.Notes;
+            _mapper.Map(pRRequestUpdateDto, request.PRRequest);
+
+            request.PRRequest.RequestId = id;
+            var sentItems = Request.Form["RequestedPRs"].ToList();
+
+
+            if (sentItems != null && sentItems.Count > 0)
+            {
+                _unitOfWork.Repository<RequestedPR>().DeleteRange(request.PRRequest.RequestedPRs);
+
+                request.PRRequest.RequestedPRs = new List<RequestedPR>();
+                foreach (var sentItem in sentItems)
+                {
+                    var item = JsonConvert.DeserializeObject<RequestedPR>(sentItem);
+                    item.RequestNumber = request.PRRequest.RequestNumber;
+                    item.CreatedAt = request.CreatedAt;
+                    item.CreatedBy = request.CreatedBy;
+                    item.ModifiedAt = DateTime.Now;
+                    item.ModifiedBy = user?.FullName;
+                    request.PRRequest.RequestedPRs.Add(item);
+                }
+            }
+            else
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "RequestedPRs field not found" });
+            }
+
+            if (pRRequestUpdateDto.Attachments == null || pRRequestUpdateDto.Attachments.Count == 0)
+            {
+                request.Attachments = oldAttachments;
+            }
+            else
+            {
+                foreach (var attachment in request.Attachments)
+                {
+                    attachment.ModifiedAt = DateTime.Now;
+                    attachment.ModifiedBy = user.FullName;
+                }
+
+                foreach (var oldAttachment in oldAttachments)
+                {
+                    _fileService.DeleteFile(oldAttachment.FilePath);
+                }
+
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"PRRequest\{request.Id}", pRRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
+            }
+
+            request.PRRequest.ModifiedAt = DateTime.Now;
+            request.PRRequest.ModifiedBy = user?.FullName;
+            request.ModifiedBy = user?.FullName;
+
+            var result = _unitOfWork.Complete();
+
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, user.Id, false);
+
+            if (result < 1)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
+
+            #region Send Emails
+
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your PR Request on eDocuement has been created successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+
+                    - eDocument Request Reference No.: {request.PRRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"PR Request No. {request.PRRequest.RequestNumber} on eDocuement",
+                To = user.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(request.Id, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has updated PR Request for on eDocuement and need to be reviewed from your side.
+
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+
+                    - eDocument Request Reference No.: {request.PRRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $"PR Request No. {request.PRRequest.RequestNumber} on eDocuement",
+                To = reviewersEmails
+            };
+
+            _mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
+        }
+
+        /// <summary>
+        /// Approve PR Request
+        /// </summary>
+        /// <param name="approvePRRequest">Approve PR Request Info</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("PR/Approve")]
+        [Authorize(Roles = "Store")]
+        public async Task<ActionResult> ApprovePRRequest(ApprovePRRequestDto approvePRRequest)
+        {
+            _logger.LogInformation($"Start ApprovePRRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(approvePRRequest)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            foreach (var item in approvePRRequest.ApprovedPRs)
+            {
+                var requestedPR= await _unitOfWork.Repository<RequestedPR>().GetByIdAsync(item.RequestedPRId);
+                if (requestedPR != null)
+                {
+                    requestedPR.PRNumber = item.PRNumber;
+                    requestedPR.ModifiedBy = user.FullName;
+                }
+                else
+                {
+                    return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Requested Item Not found" });
+                }
+            }
+
+            _unitOfWork.Complete();
+
+            var result = await _requestReviewerRepository.ApproveRequestAsync(_mapper.Map<ApproveRequestReviewerDto>(approvePRRequest), user);
+
+            if (!result.IsSucceded)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
+
+            #region Send Emails
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == approvePRRequest.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PRRequest", "Creator" });
+            var requestCreator = request.Creator;
+
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {requestCreator.FullName.Split(" ")[0]},
+                    Kindly not that your PR Request {request.PRRequest.RequestNumber} on eDocuement has been approved successfully.
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
+
+                    - eDocument Request Reference No.: {request.PRRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"PR Request No. {request.PRRequest.RequestNumber} on eDocuement",
+                To = requestCreator.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+
+        /// <summary>
+        /// Decline PR Request
+        /// </summary>
+        /// <param name="requestReviewerWriteDto">Decline PR Request</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("PR/Decline")]
+        [Authorize(Roles = "Store")]
+        public async Task<ActionResult> DeclinePRRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
+        {
+            _logger.LogInformation($"Start DeclinePRRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
+            if (!result.IsSucceded)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
+
+            #region Send Emails
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PRRequest", "Creator" });
+
+            var requestCreator = request.Creator;
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {requestCreator.FullName.Split(" ")[0]},
+                    Kindly not that your PR Request No. {request.PRRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
+
+                    - eDocument Request Reference No.: {request.PRRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"PR Request No. {request.PRRequest.RequestNumber} on eDocuement",
+                To = requestCreator.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+        #endregion
+
+        #endregion Store
     }
-
-
-
 }

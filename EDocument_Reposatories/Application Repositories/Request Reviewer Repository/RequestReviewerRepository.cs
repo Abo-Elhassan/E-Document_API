@@ -194,7 +194,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             var currentStage = remainingRequestReviewers.FirstOrDefault().Request.CurrentStage;
             if (remainingRequestReviewers is null || remainingRequestReviewers.Count == 0)
             {
-                result = (false, $"Request reviewers not found for this stage");
+                result = (false, $"Request reviewers not found for this stage or request is already approved");
                 return result;
 
             }
@@ -272,12 +272,11 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
         {
 
             (bool IsSucceded, string? Message) result = (false, null);
-
-
+            var remainingRequestReviewers = await _context.RequestReviewers.Include(r => r.Request).Include(dr => dr.Request.DefinedRequest).Where(rr => rr.RequestId == reviewingInfo.RequestId && rr.StageNumber >= rr.Request.CurrentStage).ToListAsync();
             var requestReviewers = await _context.RequestReviewers.Include(r => r.Request).Include(dr => dr.Request.DefinedRequest).Where(rr => rr.RequestId == reviewingInfo.RequestId && rr.StageNumber == rr.Request.CurrentStage).ToListAsync();
-            if (requestReviewers is null ||requestReviewers.Count==0)
+            if (remainingRequestReviewers is null || remainingRequestReviewers.Count==0)
             {
-                result = (false, $"Request reviewers not found for this stage");
+                result = (false, $"Request reviewers not found for this stage or request is already reviewed");
                 return result;
 
             }

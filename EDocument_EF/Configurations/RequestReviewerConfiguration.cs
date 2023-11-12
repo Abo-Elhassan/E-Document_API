@@ -24,8 +24,6 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.Key)
             .ValueGeneratedNever();
 
-
-
             entity.Property(e => e.AssignedReviewerId)
             .HasMaxLength(50);
 

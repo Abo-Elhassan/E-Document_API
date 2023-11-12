@@ -44,6 +44,11 @@ namespace EDocument_EF
         public virtual DbSet<CCTVAccessRequest> CCTVAccessRequests => Set<CCTVAccessRequest>();
 
         public virtual DbSet<FuelOilInvoiceRequest> FuelOilInvoiceRequests => Set<FuelOilInvoiceRequest>();
+        public virtual DbSet<NewItemRequest> NewItemRequests => Set<NewItemRequest>();
+        public virtual DbSet<RequestedItem> RequestedItems => Set<RequestedItem>();
+
+        public virtual DbSet<PRRequest> PRRequests => Set<PRRequest>();
+        public virtual DbSet<RequestedPR> RequestedPRs => Set<RequestedPR>();
 
         #region Audit Tables
 
@@ -73,6 +78,10 @@ namespace EDocument_EF
         public virtual DbSet<AuditAccessControlRequest> AuditAccessControlRequests => Set<AuditAccessControlRequest>();
         public virtual DbSet<AuditCCTVAccessRequest> AuditCCTVAccessRequests => Set<AuditCCTVAccessRequest>();
         public virtual DbSet<AuditFuelOilInvoiceRequest> AuditFuelOilInvoiceRequests => Set<AuditFuelOilInvoiceRequest>();
+        public virtual DbSet<AuditNewItemRequest> AuditNewItemRequests => Set<AuditNewItemRequest>();
+        public virtual DbSet<AuditRequestedItem> AuditRequestedItems => Set<AuditRequestedItem>();
+        public virtual DbSet<AuditPRRequest> AuditPRRequests => Set<AuditPRRequest>();
+        public virtual DbSet<AuditRequestedPR> AuditRequestedPRs => Set<AuditRequestedPR>();
 
         #endregion
 
@@ -104,6 +113,10 @@ namespace EDocument_EF
             builder.ApplyConfiguration(new AccessControlRequestConfiguration());
             builder.ApplyConfiguration(new CCTVAccessRequestConfiguration());
             builder.ApplyConfiguration(new FuelOilInvoiceRequestConfiguration());
+            builder.ApplyConfiguration(new NewItemRequestConfiguration());
+            builder.ApplyConfiguration(new RequestedItemConfiguration());
+            builder.ApplyConfiguration(new PRRequestConfiguration());
+            builder.ApplyConfiguration(new RequestedPRConfiguration());
         }
 
         public override int SaveChanges()
@@ -216,7 +229,12 @@ namespace EDocument_EF
             builder.Entity<AuditDiscountRequest>().ToTable(nameof(AuditDiscountRequest), "audit");
             builder.Entity<AuditCCTVAccessRequest>().ToTable(nameof(AuditCCTVAccessRequest), "audit");
             builder.Entity<AuditAccessControlRequest>().ToTable(nameof(AuditAccessControlRequest), "audit");
-            builder.Entity<AuditFuelOilInvoiceRequest>().ToTable(nameof(AuditFuelOilInvoiceRequest), "audit"); 
+            builder.Entity<AuditFuelOilInvoiceRequest>().ToTable(nameof(AuditFuelOilInvoiceRequest), "audit");
+            builder.Entity<AuditNewItemRequest>().ToTable(nameof(AuditNewItemRequest), "audit");
+            builder.Entity<AuditRequestedItem>().ToTable(nameof(AuditRequestedItem), "audit");
+            builder.Entity<AuditPRRequest>().ToTable(nameof(AuditPRRequest), "audit");
+            builder.Entity<AuditRequestedPR>().ToTable(nameof(AuditRequestedPR), "audit");
+
             #endregion
 
         }

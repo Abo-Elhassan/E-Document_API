@@ -10,7 +10,9 @@ using EDocument_Data.DTOs.Requests.AccessControlRequest;
 using EDocument_Data.DTOs.Requests.CCTVAccessRequest;
 using EDocument_Data.DTOs.Requests.DiscountRequest;
 using EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest;
+using EDocument_Data.DTOs.Requests.NewItemRequest;
 using EDocument_Data.DTOs.Requests.PoRequest;
+using EDocument_Data.DTOs.Requests.PRRequest;
 using EDocument_Data.DTOs.Requests.RefundRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.DTOs.Requests.TravelDeskRequest;
@@ -436,6 +438,98 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             #endregion Fuel Oil Invoice Request
+
+            #region New Item Request
+            CreateMap<ApproveNewItemRequestDto, ApproveRequestReviewerDto>();
+
+            CreateMap<User, NewItemRequest>()
+                .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
+                .ForMember(dest => dest.BeneficiaryName, src => src.MapFrom(opts => opts.FullName))
+                .ForMember(dest => dest.BeneficiaryEmail, src => src.MapFrom(opts => opts.Email))
+                .ForMember(dest => dest.BeneficiaryPosition, src => src.MapFrom(opts => opts.Position))
+                .ForMember(dest => dest.BeneficiaryDepartment, src => src.MapFrom(opts => opts.Department.DepartmentName))
+                .ForMember(dest => dest.BeneficiaryPhoneNumber, src => src.MapFrom(opts => opts.PhoneNumber))
+                .ForMember(dest => dest.BeneficiaryCompany, src => src.MapFrom(opts => opts.Company))
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
+
+            CreateMap<NewItemRequest, NewItemRequestReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
+
+            CreateMap<NewItemRequest, NewItemRequestReviewerReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<NewItemRequestCreateDto, NewItemRequest>();
+
+            CreateMap<NewItemRequestUpdateDto, NewItemRequest>()
+                .ForMember(dest => dest.RequestedItems, src => src.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<RequestedItem, RequestedItemReadDto>();
+            CreateMap<RequestedItemSubmitDto, RequestedItem>();
+
+
+            #endregion 
+
+            #region PR Request
+            CreateMap<ApprovePRRequestDto, ApproveRequestReviewerDto>();
+
+            CreateMap<User, PRRequest>()
+                .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
+                .ForMember(dest => dest.BeneficiaryName, src => src.MapFrom(opts => opts.FullName))
+                .ForMember(dest => dest.BeneficiaryEmail, src => src.MapFrom(opts => opts.Email))
+                .ForMember(dest => dest.BeneficiaryPosition, src => src.MapFrom(opts => opts.Position))
+                .ForMember(dest => dest.BeneficiaryDepartment, src => src.MapFrom(opts => opts.Department.DepartmentName))
+                .ForMember(dest => dest.BeneficiaryPhoneNumber, src => src.MapFrom(opts => opts.PhoneNumber))
+                .ForMember(dest => dest.BeneficiaryCompany, src => src.MapFrom(opts => opts.Company))
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
+
+            CreateMap<PRRequest, PRRequestReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
+
+            CreateMap<PRRequest, PRRequestReviewerReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<PRRequestCreateDto, PRRequest>();
+
+            CreateMap<PRRequestUpdateDto, PRRequest>()
+                .ForMember(dest => dest.RequestedPRs, src => src.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<RequestedPR, RequestedPRReadDto>();
+            CreateMap<RequestedPRSubmitDto, RequestedPR>();
+
+
+            #endregion PR Request Request
         }
 
         private string ConvertListToString(List<string> list)

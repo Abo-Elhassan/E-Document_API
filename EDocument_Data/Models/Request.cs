@@ -41,7 +41,7 @@ public partial class Request : BaseEntity
     public virtual CCTVAccessRequest CCTVAccessRequest { get; set; }
     public virtual AccessControlRequest AccessControlRequest { get; set; }
     public virtual FuelOilInvoiceRequest FuelOilInvoiceRequest { get; set; }
-
-    //public virtual ICollection<JobPlanRequest> JobPlanRequests { get; set; } = new HashSet<JobPlanRequest>();
+    public virtual NewItemRequest NewItemRequest { get; set; }
+    public virtual PRRequest PRRequest { get; set; }
 
 }
