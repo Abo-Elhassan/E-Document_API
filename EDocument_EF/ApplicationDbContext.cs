@@ -46,13 +46,15 @@ namespace EDocument_EF
         public virtual DbSet<FuelOilInvoiceRequest> FuelOilInvoiceRequests => Set<FuelOilInvoiceRequest>();
         public virtual DbSet<NewItemRequest> NewItemRequests => Set<NewItemRequest>();
         public virtual DbSet<RequestedItem> RequestedItems => Set<RequestedItem>();
-
         public virtual DbSet<PRRequest> PRRequests => Set<PRRequest>();
         public virtual DbSet<RequestedPR> RequestedPRs => Set<RequestedPR>();
+        public virtual DbSet<EquipmentRequestIn> EquipmentRequestIns => Set<EquipmentRequestIn>();
+        public virtual DbSet<EquipmentRequestOut> EquipmentRequestOuts => Set<EquipmentRequestOut>();
+        
 
         #region Audit Tables
-
         public virtual DbSet<AuditDefinedRequest> AuditDefinedRequests => Set<AuditDefinedRequest>();
+
         public virtual DbSet<AuditDefinedRequestReviewer> AuditDefinedRequestReviewers => Set<AuditDefinedRequestReviewer>();
         public virtual DbSet<AuditDefinedApplicationRole> AuditDefinedApplicationRoles => Set<AuditDefinedApplicationRole>();
         public virtual DbSet<AuditDefinedRequestRole> AuditDefinedRequestRoles => Set<AuditDefinedRequestRole>();
@@ -78,6 +80,8 @@ namespace EDocument_EF
         public virtual DbSet<AuditAccessControlRequest> AuditAccessControlRequests => Set<AuditAccessControlRequest>();
         public virtual DbSet<AuditCCTVAccessRequest> AuditCCTVAccessRequests => Set<AuditCCTVAccessRequest>();
         public virtual DbSet<AuditFuelOilInvoiceRequest> AuditFuelOilInvoiceRequests => Set<AuditFuelOilInvoiceRequest>();
+        public virtual DbSet<AuditEquipmentRequestIn> AuditEquipmentRequestIns => Set<AuditEquipmentRequestIn>();
+        public virtual DbSet<AuditEquipmentRequestOut> AuditEquipmentRequestOuts => Set<AuditEquipmentRequestOut>();
         public virtual DbSet<AuditNewItemRequest> AuditNewItemRequests => Set<AuditNewItemRequest>();
         public virtual DbSet<AuditRequestedItem> AuditRequestedItems => Set<AuditRequestedItem>();
         public virtual DbSet<AuditPRRequest> AuditPRRequests => Set<AuditPRRequest>();
@@ -117,6 +121,8 @@ namespace EDocument_EF
             builder.ApplyConfiguration(new RequestedItemConfiguration());
             builder.ApplyConfiguration(new PRRequestConfiguration());
             builder.ApplyConfiguration(new RequestedPRConfiguration());
+            builder.ApplyConfiguration(new EquipmentRequestInConfiguration());
+            builder.ApplyConfiguration(new EquipmentRequestOutConfiguration());
         }
 
         public override int SaveChanges()
@@ -234,7 +240,8 @@ namespace EDocument_EF
             builder.Entity<AuditRequestedItem>().ToTable(nameof(AuditRequestedItem), "audit");
             builder.Entity<AuditPRRequest>().ToTable(nameof(AuditPRRequest), "audit");
             builder.Entity<AuditRequestedPR>().ToTable(nameof(AuditRequestedPR), "audit");
-
+            builder.Entity<AuditEquipmentRequestIn>().ToTable(nameof(AuditEquipmentRequestIn), "audit");
+            builder.Entity<AuditEquipmentRequestOut>().ToTable(nameof(AuditEquipmentRequestOut), "audit");
             #endregion
 
         }

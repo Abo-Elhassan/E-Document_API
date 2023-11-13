@@ -5821,8 +5821,804 @@ namespace EDocument_API.Controllers.V1
 
             #endregion Send Emails
 
+
+
+
+
+
+        #region Operations - Cargo & Bulk
+
+
+
+        #region Equipment-In Concession Area Request
+
+        /// <summary>
+        /// Get Equipment Request In Concession Area Request Details
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>Equipment Request In Concession Area Request</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<EquipmentInAreaRequestReadDto>))]
+        [HttpGet("EquipmentRequestIn/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetEquipmentInRequestById(long id)
+        {
+            _logger.LogInformation($"Start GetEquipmentInRequestById from {nameof(RequestController)} for request id = {id}");
+
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            var equipmentInRequest = await _unitOfWork.Repository<EquipmentRequestIn>().FindRequestAsync(
+            requestId: id,
+            expression: "Request.Id==@0",
+            includes: includes
+            );
+
+            if (equipmentInRequest is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            var result = _mapper.Map<EquipmentInAreaRequestReadDto>(equipmentInRequest);
+
+
+
+            return Ok(new ApiResponse<EquipmentInAreaRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+        }
+
+        /// <summary>
+        /// Delete Equipment Request In Concession Area Requests By Id
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpDelete("EquipmentRequestIn/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> DeleteEquipmentInRequest(long id)
+        {
+            _logger.LogInformation($"Start Delete EquipmentInAreaRequest from {nameof(RequestController)} for request id = {id}");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var includes = new string[] { "EquipmentRequestIn", "Attachments", "RequestReviewers" };
+
+            var request = await _unitOfWork.Repository<Models.Request>().FindRequestAsync(
+            requestId: id,
+            expression: "Id==@0",
+            includes: includes
+                );
+
+            if (request is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
+
+            }
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
+
+            }
+
+            request.EquipmentRequestIn.ModifiedBy = user?.FullName;
+            request.ModifiedBy = user?.FullName;
+            _unitOfWork.Complete();
+
+            _unitOfWork.Repository<Models.Request>().Delete(request);
+            _unitOfWork.Complete();
+
+            _fileService.DeleteFolder($@"EquipmentRequestIn\{id}");
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
+        }
+
+
+        /// <summary>
+        /// Get All Equipment Request In Concession Area Requests By Creator With Filter
+        /// </summary>
+        /// <param name="filterDto">filter information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All Created Equipment Request In Concession Area Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<EquipmentInAreaRequestReadDto>>))]
+        [HttpPost("EquipmentRequestIn/Inbox")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetCreatorEquipmentInRequestFiltered(FilterWriteDto? filterDto)
+        {
+            _logger.LogInformation($"Start GetCreatorEquipmentInRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            string? userCondition = null;
+
+            (int TotalCount, IEnumerable<EquipmentRequestIn> PaginatedData) result;
+
+            userCondition = "Request.CreatorId ==@0";
+
+            if (!string.IsNullOrEmpty(filterDto?.FilterValue))
+            {
+                result = await _unitOfWork.Repository<EquipmentRequestIn>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<EquipmentRequestIn>().FindAllRequestsAsync(
+                isCreator: true,
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filters: filterDto?.Filters,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+
+            var totalCount = result.TotalCount;
+            var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
+
+            var requests = _mapper.Map<List<EquipmentInAreaRequestReadDto>>(result.PaginatedData);
+
+            var response = new FilterReadDto<EquipmentInAreaRequestReadDto>
+            {
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto?.PageNo ?? 1,
+                PageSize = requests.Count,
+                PaginatedData = requests
+            };
+            return Ok(new ApiResponse<FilterReadDto<EquipmentInAreaRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+        }
+
+        /// <summary>
+        /// Get All Equipment Request In Concession Area Requests By Reviewer With Filter
+        /// </summary>
+        /// <param name="filterDto">filter information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All Reviewer Equipment Request In Concession Area Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<EquipmentInAreaRequestReviewerReadDto>>))]
+        [HttpPost("EquipmentRequestIn/AssignedToMe")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetReviewerEquipmentInRequestFiltered(FilterWriteDto? filterDto)
+        {
+            _logger.LogInformation($"Start GetReviewerEquipmentInRequestFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            string? userCondition = null;
+
+            (int TotalCount, IEnumerable<EquipmentRequestIn> PaginatedData) result;
+
+            userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
+
+
+
+            if (!string.IsNullOrEmpty(filterDto?.FilterValue))
+            {
+                result = await _unitOfWork.Repository<EquipmentRequestIn>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<EquipmentRequestIn>().FindAllRequestsAsync(
+                isCreator: false,
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filters: filterDto?.Filters,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+
+            var totalCount = result.TotalCount;
+            var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
+
+            var requests = _mapper.Map<List<EquipmentInAreaRequestReviewerReadDto>>(result.PaginatedData);
+
+            foreach (var request in requests)
+            {
+                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
+
+                request.ReviewerStatus = reviewer?.Status;
+                request.ReviewerStage = reviewer?.StageNumber;
+            }
+
+
+            var response = new FilterReadDto<EquipmentInAreaRequestReviewerReadDto>
+            {
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto?.PageNo ?? 1,
+                PageSize = requests.Count,
+                PaginatedData = requests
+            };
+            return Ok(new ApiResponse<FilterReadDto<EquipmentInAreaRequestReviewerReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+        }
+
+        /// <summary>
+        /// Create Equipment Request In Concession Area Request
+        /// </summary>
+        /// <param name="equipmentInAreaRequestCreateDto">equipmentInArea request Informarion</param>    
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPost("EquipmentRequestIn/Create")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> CreateEquipmentInRequest(EquipmentInAreaRequestCreateDto equipmentInAreaRequestCreateDto)
+        {
+
+            _logger.LogInformation($"Start CreateEquipmentInRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(equipmentInAreaRequestCreateDto)} ");
+            var ConcernedEmployee = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == equipmentInAreaRequestCreateDto.ConcernedEmployeeId);
+
+            if (ConcernedEmployee is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $" user '{equipmentInAreaRequestCreateDto.ConcernedEmployeeId}' not found" });
+
+
+            var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
+            var requestNo = $"EquipmentRequestIn-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            
+
+            var request = new Models.Request { Id = requestId, DefinedRequestId = equipmentInAreaRequestCreateDto.DefinedRequestId };
+    
+            request.EquipmentRequestIn = _mapper.Map<EquipmentRequestIn>(equipmentInAreaRequestCreateDto);
+            request.EquipmentRequestIn.RequestNumber = requestNo;
+            request.CreatorId = user?.Id;
+            request.EquipmentRequestIn.CreatedBy = user?.FullName;
+            request.CreatedBy = user?.FullName;
+            request.EquipmentRequestIn.CreatedBy = user?.FullName;
+
+            _unitOfWork.Repository<Models.Request>().Add(request);
+
+            var result = _unitOfWork.Complete();
+
+            await _requestReviewerRepository.BeginRequestCycle(equipmentInAreaRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
+
+            if (result < 1)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
+        }
+
+        /// <summary>
+        /// Update Equipment Request In Concession Area Request
+        /// </summary>
+        /// <param name="id">Equipment Request In Concession Area request Id</param>
+        /// <param name="equipmentInAreaRequestUpdateDto">Equipment Request In Concession Area request Informarion</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("EquipmentRequestIn/Update/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> UpdateEquipmentInRequest(long id, EquipmentInAreaRequestUpdateDto equipmentInAreaRequestUpdateDto)
+        {
+            _logger.LogInformation($"Start UpdateEquipmentInRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(equipmentInAreaRequestUpdateDto)} ");
+
+            var ConcernedEmployee = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == equipmentInAreaRequestUpdateDto.ConcernedEmployeeId);
+
+            if (ConcernedEmployee is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $" user '{equipmentInAreaRequestUpdateDto.ConcernedEmployeeId}' not found" });
+
+            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
+
+
+            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "EquipmentRequestIn", "Attachments" });
+
+            if (request == null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
+
+
+            _mapper.Map(equipmentInAreaRequestUpdateDto, request);
+            _mapper.Map(equipmentInAreaRequestUpdateDto, request.EquipmentRequestIn);
+            request.EquipmentRequestIn.RequestId = id;
+            request.EquipmentRequestIn.ModifiedAt = DateTime.Now;
+            request.EquipmentRequestIn.ModifiedBy = user?.FullName;
+            request.ModifiedBy = user?.FullName;
+
+            var result = _unitOfWork.Complete();
+
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, user.Id, false);
+
+            if (result < 1)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
+
+
+     
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
+        }
+
+
+        /// <summary>
+        /// Approve Equipment Request In Concession Area Request
+        /// </summary>
+        /// <param name="requestReviewerWriteDto">Approve Equipment Request In Concession Area Request</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("EquipmentRequestIn/Approve")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> ApproveEquipmentInRequest(ApproveRequestReviewerDto requestReviewerWriteDto)
+        {
+            _logger.LogInformation($"Start ApproveEquipment-InRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user);
+
+            if (!result.IsSucceded)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
+
+
+
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
+
+        /// <summary>
+        /// Decline Equipment Request In Concession Area Request
+        /// </summary>
+        /// <param name="requestReviewerWriteDto">Decline Equipment Request In Concession Area Request</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("EquipmentRequestIn/Decline")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> DeclineEquipmentInRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
+        {
+            _logger.LogInformation($"Start DeclineEquipmentInRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+
+            var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
+            if (!result.IsSucceded)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
+
+ 
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+
+        #endregion In Request
+
+
+
+
+
+
+
+        #region Equipment-Out Concession Area Request
+
+        /// <summary>
+        /// Get Equipment Request Out Concession Area Request Details
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>Equipment Request Out Concession Area Request</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<EquipmentOutAreaRequestReadDto>))]
+        [HttpGet("EquipmentRequestOut/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetEquipmentOutRequestById(long id)
+        {
+            _logger.LogInformation($"Start GetEquipmentOutRequestById from {nameof(RequestController)} for request id = {id}");
+
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            var equipmentOutRequest = await _unitOfWork.Repository<EquipmentRequestOut>().FindRequestAsync(
+            requestId: id,
+            expression: "Request.Id==@0",
+            includes: includes
+            );
+
+            if (equipmentOutRequest is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            var result = _mapper.Map<EquipmentOutAreaRequestReadDto>(equipmentOutRequest);
+
+
+
+            return Ok(new ApiResponse<EquipmentOutAreaRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+        }
+
+        /// <summary>
+        /// Delete Equipment Request Out Concession Area Requests By Id
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpDelete("EquipmentRequestOut/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> DeleteEquipmentOutRequest(long id)
+        {
+            _logger.LogInformation($"Start DeleteEquipmentOutRequest from {nameof(RequestController)} for request id = {id}");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var includes = new string[] { "EquipmentRequestOut", "Attachments", "RequestReviewers" };
+
+            var request = await _unitOfWork.Repository<Models.Request>().FindRequestAsync(
+            requestId: id,
+            expression: "Id==@0",
+            includes: includes
+                );
+
+            if (request is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request after as it has been already {request.Status}" });
+
+            }
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
+
+            }
+
+            request.EquipmentRequestOut.ModifiedBy = user?.FullName;
+            request.ModifiedBy = user?.FullName;
+            _unitOfWork.Complete();
+
+            _unitOfWork.Repository<Models.Request>().Delete(request);
+            _unitOfWork.Complete();
+
+            _fileService.DeleteFolder($@"EquipmentRequestOut\{id}");
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
+        }
+
+
+        /// <summary>
+        /// Get All Equipment Request Out Concession Area Requests By Creator With Filter
+        /// </summary>
+        /// <param name="filterDto">filter information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All Created Equipment Request Out Concession Area Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<EquipmentOutAreaRequestReadDto>>))]
+        [HttpPost("EquipmentRequestOut/Inbox")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetCreatorEquipmentOutRequestFiltered(FilterWriteDto? filterDto)
+        {
+            _logger.LogInformation($"Start GetCreatorEquipmentOutRequestFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            string? userCondition = null;
+
+            (int TotalCount, IEnumerable<EquipmentRequestOut> PaginatedData) result;
+
+            userCondition = "Request.CreatorId ==@0";
+
+            if (!string.IsNullOrEmpty(filterDto?.FilterValue))
+            {
+                result = await _unitOfWork.Repository<EquipmentRequestOut>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<EquipmentRequestOut>().FindAllRequestsAsync(
+                isCreator: true,
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filters: filterDto?.Filters,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+
+            var totalCount = result.TotalCount;
+            var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
+
+            var requests = _mapper.Map<List<EquipmentOutAreaRequestReadDto>>(result.PaginatedData);
+
+            var response = new FilterReadDto<EquipmentOutAreaRequestReadDto>
+            {
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto?.PageNo ?? 1,
+                PageSize = requests.Count,
+                PaginatedData = requests
+            };
+            return Ok(new ApiResponse<FilterReadDto<EquipmentOutAreaRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+        }
+
+        /// <summary>
+        /// Get All Equipment Request Out Concession Area Requests By Reviewer With Filter
+        /// </summary>
+        /// <param name="filterDto">filter information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All Reviewer Equipment Request Out Concession Area Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<EquipmentOutAreaRequestReviewerReadDto>>))]
+        [HttpPost("EquipmentRequestOut/AssignedToMe")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetReviewerEquipmentOutRequestFiltered(FilterWriteDto? filterDto)
+        {
+            _logger.LogInformation($"Start GetReviewerEquipmentOutRequestFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            string? userCondition = null;
+
+            (int TotalCount, IEnumerable<EquipmentRequestOut> PaginatedData) result;
+
+            userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
+
+
+
+            if (!string.IsNullOrEmpty(filterDto?.FilterValue))
+            {
+                result = await _unitOfWork.Repository<EquipmentRequestOut>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<EquipmentRequestOut>().FindAllRequestsAsync(
+                isCreator: false,
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filters: filterDto?.Filters,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+
+            var totalCount = result.TotalCount;
+            var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
+
+            var requests = _mapper.Map<List<EquipmentOutAreaRequestReviewerReadDto>>(result.PaginatedData);
+
+            foreach (var request in requests)
+            {
+                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
+
+                request.ReviewerStatus = reviewer?.Status;
+                request.ReviewerStage = reviewer?.StageNumber;
+            }
+
+
+            var response = new FilterReadDto<EquipmentOutAreaRequestReviewerReadDto>
+            {
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto?.PageNo ?? 1,
+                PageSize = requests.Count,
+                PaginatedData = requests
+            };
+            return Ok(new ApiResponse<FilterReadDto<EquipmentOutAreaRequestReviewerReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+        }
+
+        /// <summary>
+        /// Create Equipment Request Out Concession Area Request
+        /// </summary>
+        /// <param name="equipmentOutAreaRequestCreateDto">equipmentInArea request Informarion</param>
+
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPost("EquipmentRequestOut/Create")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> CreateEquipmentOutRequest(EquipmentOutAreaRequestCreateDto equipmentOutAreaRequestCreateDto)
+        {
+
+            _logger.LogInformation($"Start CreateEquipmentOutRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(equipmentOutAreaRequestCreateDto)} ");
+            var ConcernedEmployee = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == equipmentOutAreaRequestCreateDto.ConcernedEmployeeId);
+
+            if (ConcernedEmployee is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $" user '{equipmentOutAreaRequestCreateDto.ConcernedEmployeeId}' not found" });
+
+            //           if (beneficiaryUser.Company != "DP World")
+            //              return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $" user '{equipmentInAreaRequestCreateDto.ConcernedEmployeeId}' is not DP WORLD Employee" });
+
+
+            var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
+            var requestNo = $"EquipmentRequestOut-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+
+            var request = new Models.Request { Id = requestId, DefinedRequestId = equipmentOutAreaRequestCreateDto.DefinedRequestId };
+
+            request.EquipmentRequestOut = _mapper.Map<EquipmentRequestOut>(equipmentOutAreaRequestCreateDto);
+            request.EquipmentRequestOut.RequestNumber = requestNo;
+
+
+
+            request.CreatorId = user?.Id;
+            request.EquipmentRequestOut.CreatedBy = user?.FullName;
+            request.CreatedBy = user?.FullName;
+            request.EquipmentRequestOut.CreatedBy = user?.FullName;
+
+            _unitOfWork.Repository<Models.Request>().Add(request);
+
+            var result = _unitOfWork.Complete();
+
+            await _requestReviewerRepository.BeginRequestCycle(equipmentOutAreaRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
+
+            if (result < 1)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
+
+
+
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
+        }
+
+        /// <summary>
+        /// Update Equipment Request Out Concession Area Request
+        /// </summary>
+        /// <param name="id">Equipment Request Out Concession Area request Id</param>
+        /// <param name="equipmentOutAreaRequestUpdateDto">Equipment Request Out Concession Area request Informarion</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("EquipmentRequestOut/Update/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> UpdateEquipmentOutRequest(long id, EquipmentOutAreaRequestUpdateDto equipmentOutAreaRequestUpdateDto)
+        {
+            _logger.LogInformation($"Start UpdateEquipmentOutRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(equipmentOutAreaRequestUpdateDto)} ");
+
+            var ConcernedEmployee = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == equipmentOutAreaRequestUpdateDto.ConcernedEmployeeId);
+
+            if (ConcernedEmployee is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $" user '{equipmentOutAreaRequestUpdateDto.ConcernedEmployeeId}' not found" });
+
+            //           if (beneficiaryUser.Company != "DP World")
+            //             return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $" user '{equipmentInAreaRequestUpdateDto.ConcernedEmployeeId}' is not DP WORLD Employee" });
+
+            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
+
+
+            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "EquipmentRequestOut", "Attachments" });
+
+            if (request == null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
+
+
+            _mapper.Map(equipmentOutAreaRequestUpdateDto, request);
+            _mapper.Map(equipmentOutAreaRequestUpdateDto, request.EquipmentRequestOut);
+            request.EquipmentRequestOut.RequestId = id;
+            request.EquipmentRequestOut.ModifiedAt = DateTime.Now;
+            request.EquipmentRequestOut.ModifiedBy = user?.FullName;
+            request.ModifiedBy = user?.FullName;
+
+            var result = _unitOfWork.Complete();
+
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, user.Id, false);
+
+            if (result < 1)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
+
+
+
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
+        }
+
+
+        /// <summary>
+        /// Approve Equipment Request Out Concession Area Request
+        /// </summary>
+        /// <param name="requestReviewerWriteDto">Approve Equipment Request Out Concession Area Request</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("EquipmentRequestOut/Approve")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> ApproveEquipmentOutRequest(ApproveRequestReviewerDto requestReviewerWriteDto)
+        {
+            _logger.LogInformation($"Start ApproveEquipmentOutRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user);
+
+            if (!result.IsSucceded)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
+
+
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+
+        /// <summary>
+        /// Decline Equipment Request Out Concession Area Request
+        /// </summary>
+        /// <param name="requestReviewerWriteDto">Decline Equipment Request Out Concession Area Request</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("EquipmentRequestOut/Decline")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> DeclineEquipmentOutRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
+        {
+            _logger.LogInformation($"Start DeclineEquipmentOutRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+
+            var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
+            if (!result.IsSucceded)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
+
+
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+
+        #endregion Out Request
+
+
+        #endregion Operations
+
+    }
 
         /// <summary>
         /// Decline PR Request

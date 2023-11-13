@@ -43,5 +43,8 @@ public partial class Request : BaseEntity
     public virtual FuelOilInvoiceRequest FuelOilInvoiceRequest { get; set; }
     public virtual NewItemRequest NewItemRequest { get; set; }
     public virtual PRRequest PRRequest { get; set; }
+    public virtual EquipmentRequestIn EquipmentRequestIn { get; set; }
+    public virtual EquipmentRequestOut EquipmentRequestOut { get; set; }
+
 
 }

@@ -9,6 +9,8 @@ using EDocument_Data.DTOs.Requests;
 using EDocument_Data.DTOs.Requests.AccessControlRequest;
 using EDocument_Data.DTOs.Requests.CCTVAccessRequest;
 using EDocument_Data.DTOs.Requests.DiscountRequest;
+using EDocument_Data.DTOs.Requests.EquipmentInAreaRequest;
+using EDocument_Data.DTOs.Requests.EquipmentOutAreaRequest;
 using EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest;
 using EDocument_Data.DTOs.Requests.NewItemRequest;
 using EDocument_Data.DTOs.Requests.PoRequest;
@@ -436,6 +438,69 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<FuelOilInvoiceRequestUpdateDto, FuelOilInvoiceRequest>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            #endregion
+
+
+            #region EquipmentRequestOut Reuqest
+
+            CreateMap<EquipmentRequestOut, EquipmentOutAreaRequestReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId));
+
+
+
+            CreateMap<EquipmentRequestOut, EquipmentOutAreaRequestReviewerReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+           .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<EquipmentOutAreaRequestCreateDto, EquipmentRequestOut>();
+
+            CreateMap<EquipmentOutAreaRequestUpdateDto, Request>()
+     
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+
+            CreateMap<EquipmentOutAreaRequestUpdateDto, EquipmentRequestOut>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            #endregion
+
+
+            #region EquipmentRequestIn Reuqest
+
+            CreateMap<EquipmentRequestIn, EquipmentInAreaRequestReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId));
+
+
+
+            CreateMap<EquipmentRequestIn, EquipmentInAreaRequestReviewerReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+           .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<EquipmentInAreaRequestCreateDto, EquipmentRequestIn>();
+
+            CreateMap<EquipmentInAreaRequestUpdateDto, Request>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+
+            CreateMap<EquipmentInAreaRequestUpdateDto, EquipmentRequestIn>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            #endregion
 
             #endregion Fuel Oil Invoice Request
 
