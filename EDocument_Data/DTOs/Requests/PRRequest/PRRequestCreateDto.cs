@@ -8,12 +8,12 @@ namespace EDocument_Data.DTOs.Requests.PRRequest
     public class PRRequestCreateDto
     {
         [Required]
-        public string PRSubject { get; init; }
+        public string PrSubject { get; init; }
        
         public string? ItemNumber { get; init; }
 
        
-        public string? AFENumber { get; init; }
+        public string? AfeNumber { get; init; }
 
         [Required]
         public List<RequestedPRSubmitDto> RequestedPRs { get; init; }

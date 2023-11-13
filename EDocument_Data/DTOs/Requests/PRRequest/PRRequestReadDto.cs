@@ -22,9 +22,9 @@ namespace EDocument_Data.DTOs.Requests.PRRequest
         public string BeneficiaryDepartment { get; init; }
         public string BeneficiaryPhoneNumber { get; init; }
         public string BeneficiaryCompany { get; init; }
-        public string PRSubject { get; init; }
+        public string PrSubject { get; init; }
         public string ItemNumber { get; init; }
-        public string AFENumber { get; init; }
+        public string AfeNumber { get; init; }
         public List<RequestedPRReadDto> RequestedPRs { get; set; }
         public List<AttachmentReadDto> Attachments { get; set; }
         public string? CreatedBy { get; init; }

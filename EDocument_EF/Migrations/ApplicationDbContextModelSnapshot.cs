@@ -1223,7 +1223,7 @@ namespace EDocument_EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
-                    b.Property<string>("AFENumber")
+                    b.Property<string>("AfeNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BeneficiaryCompany")
@@ -1269,7 +1269,7 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PRSubject")
+                    b.Property<string>("PrSubject")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("RequestId")
@@ -2993,7 +2993,7 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("AFENumber")
+                    b.Property<string>("AfeNumber")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -3050,7 +3050,7 @@ namespace EDocument_EF.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)");
 
-                    b.Property<string>("PRSubject")
+                    b.Property<string>("PrSubject")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");

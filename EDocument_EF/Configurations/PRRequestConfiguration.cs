@@ -41,14 +41,14 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.BeneficiaryCompany)
             .HasMaxLength(200);
 
-            entity.Property(e => e.PRSubject)
+            entity.Property(e => e.PrSubject)
             .IsRequired()
             .HasMaxLength(200);
 
             entity.Property(e => e.ItemNumber)
             .HasMaxLength(50);
 
-            entity.Property(e => e.AFENumber)
+            entity.Property(e => e.AfeNumber)
             .HasMaxLength(50);
 
             entity.Property(e => e.CreatedAt)
