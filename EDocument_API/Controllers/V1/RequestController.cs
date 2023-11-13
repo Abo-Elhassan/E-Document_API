@@ -7,6 +7,8 @@ using EDocument_Data.DTOs.Requests;
 using EDocument_Data.DTOs.Requests.AccessControlRequest;
 using EDocument_Data.DTOs.Requests.CCTVAccessRequest;
 using EDocument_Data.DTOs.Requests.DiscountRequest;
+using EDocument_Data.DTOs.Requests.EquipmentInAreaRequest;
+using EDocument_Data.DTOs.Requests.EquipmentOutAreaRequest;
 using EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest;
 using EDocument_Data.DTOs.Requests.NewItemRequest;
 using EDocument_Data.DTOs.Requests.PoRequest;
@@ -562,7 +564,7 @@ namespace EDocument_API.Controllers.V1
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
-                    Kindly not that your Po Request  for PO Number {request.PoRequest.PoNumber} on eDocuement has been created successfully and it's under reviewing now.
+                    Kindly not that your Po Request  for PO Number {request.PoRequest.PoNumber} on eDocuement has been updated successfully and it's under reviewing now.
                     Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {request.PoRequest.RequestNumber}
@@ -1130,7 +1132,7 @@ namespace EDocument_API.Controllers.V1
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
-                    Kindly not that your Vehicle Request on eDocuement has been created successfully and it's under reviewing now.
+                    Kindly not that your Vehicle Request on eDocuement has been updated successfully and it's under reviewing now.
                     Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {request.VehicleRequest.RequestNumber}
@@ -1708,7 +1710,7 @@ namespace EDocument_API.Controllers.V1
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
-                    Kindly not that your TravelDesk Request on eDocuement has been created successfully and it's under reviewing now.
+                    Kindly not that your TravelDesk Request on eDocuement has been updated successfully and it's under reviewing now.
                     Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {request.TravelDeskRequest.RequestNumber}
@@ -2266,48 +2268,48 @@ namespace EDocument_API.Controllers.V1
 
             #region Send Emails
 
-            //var creatorMailContent = new MailContent
-            //{
-            //    Body = $"""
-            //    Dear {user.FullName.Split(" ")[0]},
-            //        Kindly not that your Refund Request on eDocuement has been created successfully and it's under reviewing now.
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your Refund Request on eDocuement has been updated successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
-            //        - eDocument Request Reference No.: {requestNo}
+                    - eDocument Request Reference No.: {request.RefundRequest.RequestNumber}
 
-            //    Thanks,
+                Thanks,
 
-            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
 
-            //    """,
-            //    IsHTMLBody = false,
-            //    Subject = $"Refund Request No. {requestNo} on eDocuement",
-            //    To = $"{user.Email};DPWSokhna.CustomerService@dpworld.com;"
-            //};
+                """,
+                IsHTMLBody = false,
+                Subject = $"Refund Request No. {request.RefundRequest.RequestNumber} on eDocuement",
+                To = $"{user.Email};DPWSokhna.CustomerService@dpworld.com;"
+            };
 
-            //_mailService.SendMailAsync(creatorMailContent);
+            _mailService.SendMailAsync(creatorMailContent);
 
-            //var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId,request.CurrentStage);
-            //var reviewerMailContent =  new MailContent
-            //{
-            //    Body = $"""
-            //    Dears,
-            //        Kindly note that {user.FullName} has updated Refund Request for on eDocuement and need to be reviewed from your side.
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(id, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has updated Refund Request for on eDocuement and need to be reviewed from your side.
 
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
-            //        - eDocument Request Reference No.: {requestNo}
+                    - eDocument Request Reference No.: {request.RefundRequest.RequestNumber}
 
-            //    Thanks,
+                Thanks,
 
-            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
-            //    """,
-            //    IsHTMLBody = false,
-            //    Subject = $"Refund Request No. {requestNo} on eDocuement",
-            //    To = reviewersEmails
-            //};
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $"Refund Request No. {request.RefundRequest.RequestNumber} on eDocuement",
+                To = reviewersEmails
+            };
 
-            //_mailService.SendMailAsync(reviewerMailContent);
+            _mailService.SendMailAsync(reviewerMailContent);
 
             #endregion Send Emails
 
@@ -2740,49 +2742,49 @@ namespace EDocument_API.Controllers.V1
 
             #region Send Emails
 
-            //var creatorMailContent = new MailContent
-            //{
-            //    Body = $"""
-            //    Dear {user.FullName.Split(" ")[0]},
-            //        Kindly not that your Discount Request on eDocuement has been created successfully and it's under reviewing now.
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your Discount Request on eDocuement has been created successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
-            //        - eDocument Request Reference No.: {requestNo}
+                    - eDocument Request Reference No.: {requestNo}
 
-            //    Thanks,
+                Thanks,
 
-            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
 
-            //    """,
-            //    IsHTMLBody = false,
-            //    Subject = $"Discount Request No. {requestNo} on eDocuement",
-            //
-            //    To = $"{user.Email};DPWSokhna.CustomerService@dpworld.com;DPWSokhna.Commercial@dpworld.com;"
-            //};
+                """,
+                IsHTMLBody = false,
+                Subject = $"Discount Request No. {requestNo} on eDocuement",
 
-            //_mailService.SendMailAsync(creatorMailContent);
+                To = $"{user.Email};DPWSokhna.CustomerService@dpworld.com;DPWSokhna.Commercial@dpworld.com;"
+            };
 
-            //var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId,request.CurrentStage);
-            //var reviewerMailContent =  new MailContent
-            //{
-            //    Body = $"""
-            //    Dears,
-            //        Kindly note that {user.FullName} has created Discount Request for on eDocuement and need to be reviewed from your side.
+            _mailService.SendMailAsync(creatorMailContent);
 
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has created Discount Request for on eDocuement and need to be reviewed from your side.
 
-            //        - eDocument Request Reference No.: {requestNo}
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
-            //    Thanks,
+                    - eDocument Request Reference No.: {requestNo}
 
-            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
-            //    """,
-            //    IsHTMLBody = false,
-            //    Subject = $"Discount Request No. {requestNo} on eDocuement",
-            //    To = reviewersEmails
-            //};
+                Thanks,
 
-            //_mailService.SendMailAsync(reviewerMailContent);
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $"Discount Request No. {requestNo} on eDocuement",
+                To = reviewersEmails
+            };
+
+            _mailService.SendMailAsync(reviewerMailContent);
 
             #endregion Send Emails
 
@@ -2851,48 +2853,48 @@ namespace EDocument_API.Controllers.V1
 
             #region Send Emails
 
-            //var creatorMailContent = new MailContent
-            //{
-            //    Body = $"""
-            //    Dear {user.FullName.Split(" ")[0]},
-            //        Kindly not that your Discount Request on eDocuement has been created successfully and it's under reviewing now.
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your Discount Request on eDocuement has been updated successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
-            //        - eDocument Request Reference No.: {requestNo}
+                    - eDocument Request Reference No.: {request.DiscountRequest.RequestNumber}
 
-            //    Thanks,
+                Thanks,
 
-            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
 
-            //    """,
-            //    IsHTMLBody = false,
-            //    Subject = $"Discount Request No. {requestNo} on eDocuement",
-            //    To = $"{user.Email};DPWSokhna.CustomerService@dpworld.com;DPWSokhna.Commercial@dpworld.com;"
-            //};
+                """,
+                IsHTMLBody = false,
+                Subject = $"Discount Request No. {request.DiscountRequest.RequestNumber} on eDocuement",
+                To = $"{user.Email};DPWSokhna.CustomerService@dpworld.com;DPWSokhna.Commercial@dpworld.com;"
+            };
 
-            //_mailService.SendMailAsync(creatorMailContent);
+            _mailService.SendMailAsync(creatorMailContent);
 
-            //var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId,request.CurrentStage);
-            //var reviewerMailContent =  new MailContent
-            //{
-            //    Body = $"""
-            //    Dears,
-            //        Kindly note that {user.FullName} has updated Discount Request for on eDocuement and need to be reviewed from your side.
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(id, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has updated Discount Request for on eDocuement and need to be reviewed from your side.
 
-            //        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
-            //        - eDocument Request Reference No.: {requestNo}
+                    - eDocument Request Reference No.: {request.DiscountRequest.RequestNumber}
 
-            //    Thanks,
+                Thanks,
 
-            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
-            //    """,
-            //    IsHTMLBody = false,
-            //    Subject = $"Discount Request No. {requestNo} on eDocuement",
-            //    To = reviewersEmails
-            //};
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $"Discount Request No. {request.DiscountRequest.RequestNumber} on eDocuement",
+                To = reviewersEmails
+            };
 
-            //_mailService.SendMailAsync(reviewerMailContent);
+            _mailService.SendMailAsync(reviewerMailContent);
 
             #endregion Send Emails
 
@@ -2926,53 +2928,53 @@ namespace EDocument_API.Controllers.V1
 
             var requestCreator = request.Creator;
             var requestCreatorDepartmentManager = request.Creator.Department.Manager;
-            //if (request?.Status==RequestStatus.Approved.ToString())
-            //{
-            //    var creatorMailContent = new MailContent
-            //    {
-            //        Body = $"""
-            //    Dear {requestCreator.FullName.Split(" ")[0]},
-            //        Kindly not that your Discount Request {request.DiscountRequest.RequestNumber} on eDocuement has been approved successfully.
-            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
+            if (request?.Status == RequestStatus.Approved.ToString())
+            {
+                var creatorMailContent = new MailContent
+                {
+                    Body = $"""
+                Dear {requestCreator.FullName.Split(" ")[0]},
+                    Kindly not that your Discount Request {request.DiscountRequest.RequestNumber} on eDocuement has been approved successfully.
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
-            //        - eDocument Request Reference No.: {request.DiscountRequest.RequestNumber}
+                    - eDocument Request Reference No.: {request.DiscountRequest.RequestNumber}
 
-            //    Thanks,
+                Thanks,
 
-            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
 
-            //    """,
-            //        IsHTMLBody = false,
-            //        Subject = $"Discount Request No. {request.DiscountRequest.RequestNumber} on eDocuement",
-            //        To = $"{requestCreator.Email};DPWSokhna.CustomerService@dpworld.com;DPWSokhna.Commercial@dpworld.com;"
-            //    };
+                """,
+                    IsHTMLBody = false,
+                    Subject = $"Discount Request No. {request.DiscountRequest.RequestNumber} on eDocuement",
+                    To = $"{requestCreator.Email};DPWSokhna.CustomerService@dpworld.com;DPWSokhna.Commercial@dpworld.com;"
+                };
 
-            //    _mailService.SendMailAsync(creatorMailContent);
-            //}
-            //else
-            //{
-            //    var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestReviewerWriteDto.RequestId, request.CurrentStage);
-            //    var reviewerMailContent = new MailContent
-            //    {
-            //        Body = $"""
-            //        Dears,
-            //            Kindly note that {requestCreator.FullName} has created Discount Request for on eDocuement and need to be reviewed from your side.
+                _mailService.SendMailAsync(creatorMailContent);
+            }
+            else
+            {
+                var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestReviewerWriteDto.RequestId, request.CurrentStage);
+                var reviewerMailContent = new MailContent
+                {
+                    Body = $"""
+                    Dears,
+                        Kindly note that {requestCreator.FullName} has created Discount Request for on eDocuement and need to be reviewed from your side.
 
-            //            Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+                        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
-            //            - eDocument Request Reference No.: {request.DiscountRequest.RequestNumber}
+                        - eDocument Request Reference No.: {request.DiscountRequest.RequestNumber}
 
-            //        Thanks,
+                    Thanks,
 
-            //        “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
-            //        """,
-            //        IsHTMLBody = false,
-            //        Subject = $"Discount Request No. {request.DiscountRequest.RequestNumber} on eDocuement",
-            //        To = reviewersEmails
-            //    };
+                    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                    """,
+                    IsHTMLBody = false,
+                    Subject = $"Discount Request No. {request.DiscountRequest.RequestNumber} on eDocuement",
+                    To = reviewersEmails
+                };
 
-            //    _mailService.SendMailAsync(reviewerMailContent);
-            //}
+                _mailService.SendMailAsync(reviewerMailContent);
+            }
 
             #endregion Send Emails
 
@@ -3001,32 +3003,32 @@ namespace EDocument_API.Controllers.V1
 
             #region Send Emails
 
-            //Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
-            //var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "DiscountRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "DiscountRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
 
-            //var requestCreator = request.Creator;
-            //var requestCreatorDepartmentManager = request.Creator.Department.Manager;
-            //var creatorMailContent = new MailContent
-            //{
-            //    Body = $"""
-            //    Dear {requestCreator.FullName.Split(" ")[0]},
-            //        Kindly not that your Discount Request No. {request.DiscountRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
-            //        For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
+            var requestCreator = request.Creator;
+            var requestCreatorDepartmentManager = request.Creator.Department.Manager;
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {requestCreator.FullName.Split(" ")[0]},
+                    Kindly not that your Discount Request No. {request.DiscountRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
-            //        - eDocument Request Reference No.: {request.DiscountRequest.RequestNumber}
+                    - eDocument Request Reference No.: {request.DiscountRequest.RequestNumber}
 
-            //    Thanks,
+                Thanks,
 
-            //    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
 
-            //    """,
-            //    IsHTMLBody = false,
-            //    Subject = $"Discount Request No. {request.DiscountRequest.RequestNumber} on eDocuement",
-            //    Cc = requestCreatorDepartmentManager.Email,
-            //    To = $"{requestCreator.Email};DPWSokhna.CustomerService@dpworld.com;DPWSokhna.Commercial@dpworld.com;"
-            //};
+                """,
+                IsHTMLBody = false,
+                Subject = $"Discount Request No. {request.DiscountRequest.RequestNumber} on eDocuement",
+                Cc = requestCreatorDepartmentManager.Email,
+                To = $"{requestCreator.Email};DPWSokhna.CustomerService@dpworld.com;DPWSokhna.Commercial@dpworld.com;"
+            };
 
-            //_mailService.SendMailAsync(creatorMailContent);
+            _mailService.SendMailAsync(creatorMailContent);
 
             #endregion Send Emails
 
@@ -3422,7 +3424,7 @@ namespace EDocument_API.Controllers.V1
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
-                    Kindly not that your Access Control Request on eDocuement has been created successfully and it's under reviewing now.
+                    Kindly not that your Access Control Request on eDocuement has been updated successfully and it's under reviewing now.
                     Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {request.AccessControlRequest.RequestNumber}
@@ -4524,7 +4526,7 @@ namespace EDocument_API.Controllers.V1
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
-                    Kindly not that your Fuel Oil Invoice Request on eDocuement has been created successfully and it's under reviewing now.
+                    Kindly not that your Fuel Oil Invoice Request on eDocuement has been updated successfully and it's under reviewing now.
                     Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {request.FuelOilInvoiceRequest.RequestNumber}
@@ -5124,7 +5126,7 @@ namespace EDocument_API.Controllers.V1
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
-                    Kindly not that your New Item Request on eDocuement has been created successfully and it's under reviewing now.
+                    Kindly not that your New Item Request on eDocuement has been updated successfully and it's under reviewing now.
                     Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {request.NewItemRequest.RequestNumber}
@@ -5711,7 +5713,7 @@ namespace EDocument_API.Controllers.V1
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
-                    Kindly not that your PR Request on eDocuement has been created successfully and it's under reviewing now.
+                    Kindly not that your PR Request on eDocuement has been updated successfully and it's under reviewing now.
                     Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {request.PRRequest.RequestNumber}
@@ -5773,7 +5775,7 @@ namespace EDocument_API.Controllers.V1
 
             foreach (var item in approvePRRequest.ApprovedPRs)
             {
-                var requestedPR= await _unitOfWork.Repository<RequestedPR>().GetByIdAsync(item.RequestedPRId);
+                var requestedPR = await _unitOfWork.Repository<RequestedPR>().GetByIdAsync(item.RequestedPRId);
                 if (requestedPR != null)
                 {
                     requestedPR.PRNumber = item.PRNumber;
@@ -5821,25 +5823,78 @@ namespace EDocument_API.Controllers.V1
 
             #endregion Send Emails
 
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
 
+        }
 
+        /// <summary>
+        /// Decline PR Request
+        /// </summary>
+        /// <param name="requestReviewerWriteDto">Decline PR Request</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("PR/Decline")]
+        [Authorize(Roles = "Store")]
+        public async Task<ActionResult> DeclinePRRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
+        {
+            _logger.LogInformation($"Start DeclinePRRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
+            var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
+            if (!result.IsSucceded)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
+            #region Send Emails
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PRRequest", "Creator" });
+
+            var requestCreator = request.Creator;
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {requestCreator.FullName.Split(" ")[0]},
+                    Kindly not that your PR Request No. {request.PRRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
+
+                    - eDocument Request Reference No.: {request.PRRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"PR Request No. {request.PRRequest.RequestNumber} on eDocuement",
+                To = requestCreator.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+
+        #endregion Store
+
+        #endregion
 
         #region Operations - Cargo & Bulk
 
-
-
-        #region Equipment-In Concession Area Request
+        #region Equipment Request - In Concession Area 
 
         /// <summary>
-        /// Get Equipment Request In Concession Area Request Details
+        /// Get Equipment Request (In Concession Area) Details
         /// </summary>
         /// <param name="id">request id</param>
         /// <remarks>
         ///
         /// </remarks>
-        /// <returns>Equipment Request In Concession Area Request</returns>
+        /// <returns>Equipment Request (In Concession Area)</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<EquipmentInAreaRequestReadDto>))]
         [HttpGet("EquipmentRequestIn/{id}")]
         [Authorize(Roles = "Basic")]
@@ -5865,7 +5920,7 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
-        /// Delete Equipment Request In Concession Area Requests By Id
+        /// Delete Equipment Request (In Concession Area) By Id
         /// </summary>
         /// <param name="id">request id</param>
         /// <remarks>
@@ -5915,13 +5970,13 @@ namespace EDocument_API.Controllers.V1
 
 
         /// <summary>
-        /// Get All Equipment Request In Concession Area Requests By Creator With Filter
+        /// Get All Equipment Request (In Concession Area) By Creator With Filter
         /// </summary>
         /// <param name="filterDto">filter information</param>
         /// <remarks>
         ///
         /// </remarks>
-        /// <returns>List of All Created Equipment Request In Concession Area Requests</returns>
+        /// <returns>List of All Created Equipment Request (In Concession Area)</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<EquipmentInAreaRequestReadDto>>))]
         [HttpPost("EquipmentRequestIn/Inbox")]
         [Authorize(Roles = "Basic")]
@@ -5982,13 +6037,13 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
-        /// Get All Equipment Request In Concession Area Requests By Reviewer With Filter
+        /// Get All Equipment Request (In Concession Area) By Reviewer With Filter
         /// </summary>
         /// <param name="filterDto">filter information</param>
         /// <remarks>
         ///
         /// </remarks>
-        /// <returns>List of All Reviewer Equipment Request In Concession Area Requests</returns>
+        /// <returns>List of All Reviewer Equipment Request (In Concession Area)</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<EquipmentInAreaRequestReviewerReadDto>>))]
         [HttpPost("EquipmentRequestIn/AssignedToMe")]
         [Authorize(Roles = "Basic")]
@@ -6060,9 +6115,9 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
-        /// Create Equipment Request In Concession Area Request
+        /// Create Equipment Request (In Concession Area)
         /// </summary>
-        /// <param name="equipmentInAreaRequestCreateDto">equipmentInArea request Informarion</param>    
+        /// <param name="equipmentInAreaRequestCreateDto">Equipment Request (In Concession Area) Informarion</param>    
         /// <remarks>
         ///
         /// </remarks>
@@ -6103,14 +6158,61 @@ namespace EDocument_API.Controllers.V1
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
+            #region Send Emails
+
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your Equipment Request (In Concession  Area) on eDocuement has been created successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+
+                    - eDocument Request Reference No.: {requestNo}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"Equipment Request (In Concession  Area) No. {requestNo} on eDocuement",
+                To = user.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has created Equipment Request (In Concession  Area)  for on eDocuement and need to be reviewed from your side.
+
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+
+                    - eDocument Request Reference No.: {requestNo}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $"Equipment Request (In Concession  Area) No. {requestNo} on eDocuement",
+                To = reviewersEmails
+            };
+
+            _mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion Send Emails
+
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
         }
 
         /// <summary>
-        /// Update Equipment Request In Concession Area Request
+        /// Update Equipment Request (In Concession Area)
         /// </summary>
-        /// <param name="id">Equipment Request In Concession Area request Id</param>
-        /// <param name="equipmentInAreaRequestUpdateDto">Equipment Request In Concession Area request Informarion</param>
+        /// <param name="id">Equipment Request (In Concession Area)  Id</param>
+        /// <param name="equipmentInAreaRequestUpdateDto">Equipment Request (In Concession Area)  Informarion</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -6152,17 +6254,61 @@ namespace EDocument_API.Controllers.V1
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
+            #region Send Emails
 
-     
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your Equipment Request (In Concession Area)  on eDocuement has been updated successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+
+                    - eDocument Request Reference No.: {request.EquipmentRequestIn.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $" Equipment Request (In Concession Area)  No. {request.EquipmentRequestIn.RequestNumber} on eDocuement",
+                To = user.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(request.Id, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has updated Equipment Request (In Concession Area)  for on eDocuement and need to be reviewed from your side.
+
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+
+                    - eDocument Request Reference No.: {request.EquipmentRequestIn.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $" Equipment Request (In Concession Area)  No. {request.EquipmentRequestIn.RequestNumber} on eDocuement",
+                To = reviewersEmails
+            };
+
+            _mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
 
 
         /// <summary>
-        /// Approve Equipment Request In Concession Area Request
+        /// Approve Equipment Request (In Concession Area)
         /// </summary>
-        /// <param name="requestReviewerWriteDto">Approve Equipment Request In Concession Area Request</param>
+        /// <param name="requestReviewerWriteDto">Approve Equipment Request (In Concession Area)</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -6180,15 +6326,42 @@ namespace EDocument_API.Controllers.V1
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
+            #region Send Emails
 
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "EquipmentRequestIn", "Creator" });
+            var requestCreator = request.Creator;
+
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {requestCreator.FullName.Split(" ")[0]},
+                    Kindly not that your Equipment Request (In Concession Area) {request.EquipmentRequestIn.RequestNumber} on eDocuement has been approved successfully.
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
+
+                    - eDocument Request Reference No.: {request.EquipmentRequestIn.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"Equipment Request (In Concession Area) No. {request.EquipmentRequestIn.RequestNumber} on eDocuement",
+                To = requestCreator.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
 
         /// <summary>
-        /// Decline Equipment Request In Concession Area Request
+        /// Decline Equipment Request (In Concession Area)
         /// </summary>
-        /// <param name="requestReviewerWriteDto">Decline Equipment Request In Concession Area Request</param>
+        /// <param name="requestReviewerWriteDto">Decline Equipment Request (In Concession Area)</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -6206,29 +6379,50 @@ namespace EDocument_API.Controllers.V1
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
- 
+            #region Send Emails
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "EquipmentRequestIn", "Creator" });
+
+            var requestCreator = request.Creator;
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {requestCreator.FullName.Split(" ")[0]},
+                    Kindly not that your Equipment Request (In Concession Area) No. {request.EquipmentRequestIn.RequestNumber} on eDocuement has been declined by {user.FullName}.
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
+
+                    - eDocument Request Reference No.: {request.EquipmentRequestIn.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"Equipment Request (In Concession Area) No. {request.EquipmentRequestIn.RequestNumber} on eDocuement",
+                To = requestCreator.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
 
-        #endregion In Request
+        #endregion 
 
-
-
-
-
-
-
-        #region Equipment-Out Concession Area Request
+        #region Equipment Request - Out Concession Area 
 
         /// <summary>
-        /// Get Equipment Request Out Concession Area Request Details
+        /// Get Equipment Request (Out Concession Area) Details
         /// </summary>
         /// <param name="id">request id</param>
         /// <remarks>
         ///
         /// </remarks>
-        /// <returns>Equipment Request Out Concession Area Request</returns>
+        /// <returns>Equipment Request (Out Concession Area)</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<EquipmentOutAreaRequestReadDto>))]
         [HttpGet("EquipmentRequestOut/{id}")]
         [Authorize(Roles = "Basic")]
@@ -6254,7 +6448,7 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
-        /// Delete Equipment Request Out Concession Area Requests By Id
+        /// Delete Equipment Request (Out Concession Area) By Id
         /// </summary>
         /// <param name="id">request id</param>
         /// <remarks>
@@ -6304,7 +6498,7 @@ namespace EDocument_API.Controllers.V1
 
 
         /// <summary>
-        /// Get All Equipment Request Out Concession Area Requests By Creator With Filter
+        /// Get All Equipment Request (Out Concession Area) By Creator With Filter
         /// </summary>
         /// <param name="filterDto">filter information</param>
         /// <remarks>
@@ -6371,7 +6565,7 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
-        /// Get All Equipment Request Out Concession Area Requests By Reviewer With Filter
+        /// Get All Equipment Request (Out Concession Area)  By Reviewer With Filter
         /// </summary>
         /// <param name="filterDto">filter information</param>
         /// <remarks>
@@ -6449,10 +6643,9 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
-        /// Create Equipment Request Out Concession Area Request
+        /// Create Equipment Request (Out Concession Area) 
         /// </summary>
         /// <param name="equipmentOutAreaRequestCreateDto">equipmentInArea request Informarion</param>
-
         /// <remarks>
         ///
         /// </remarks>
@@ -6468,9 +6661,6 @@ namespace EDocument_API.Controllers.V1
 
             if (ConcernedEmployee is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $" user '{equipmentOutAreaRequestCreateDto.ConcernedEmployeeId}' not found" });
-
-            //           if (beneficiaryUser.Company != "DP World")
-            //              return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $" user '{equipmentInAreaRequestCreateDto.ConcernedEmployeeId}' is not DP WORLD Employee" });
 
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
@@ -6499,17 +6689,62 @@ namespace EDocument_API.Controllers.V1
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
+            #region Send Emails
 
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your Equipment Request (Out Concession  Area) on eDocuement has been created successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+
+                    - eDocument Request Reference No.: {requestNo}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"Equipment Request (Out Concession  Area) No. {requestNo} on eDocuement",
+                To = user.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has created Equipment Request (Out Concession  Area)  for on eDocuement and need to be reviewed from your side.
+
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+
+                    - eDocument Request Reference No.: {requestNo}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $"Equipment Request (Out Concession  Area) No. {requestNo} on eDocuement",
+                To = reviewersEmails
+            };
+
+            _mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion Send Emails
 
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
         }
 
         /// <summary>
-        /// Update Equipment Request Out Concession Area Request
+        /// Update Equipment Request (Out Concession Area) 
         /// </summary>
-        /// <param name="id">Equipment Request Out Concession Area request Id</param>
-        /// <param name="equipmentOutAreaRequestUpdateDto">Equipment Request Out Concession Area request Informarion</param>
+        /// <param name="id">Equipment Request (Out Concession Area)  Id</param>
+        /// <param name="equipmentOutAreaRequestUpdateDto">Equipment Request (Out Concession Area)  Informarion</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -6525,9 +6760,6 @@ namespace EDocument_API.Controllers.V1
 
             if (ConcernedEmployee is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $" user '{equipmentOutAreaRequestUpdateDto.ConcernedEmployeeId}' not found" });
-
-            //           if (beneficiaryUser.Company != "DP World")
-            //             return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $" user '{equipmentInAreaRequestUpdateDto.ConcernedEmployeeId}' is not DP WORLD Employee" });
 
             var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
@@ -6555,16 +6787,61 @@ namespace EDocument_API.Controllers.V1
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
 
 
+            #region Send Emails
 
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your Equipment Request (Out Concession Area)  on eDocuement has been updated successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+
+                    - eDocument Request Reference No.: {request.EquipmentRequestOut.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $" Equipment Request (Out Concession Area)  No. {request.EquipmentRequestOut.RequestNumber} on eDocuement",
+                To = user.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(request.Id, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has updated Equipment Request (Out Concession Area)  for on eDocuement and need to be reviewed from your side.
+
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+
+                    - eDocument Request Reference No.: {request.EquipmentRequestOut.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $" Equipment Request (Out Concession Area)  No. {request.EquipmentRequestOut.RequestNumber} on eDocuement",
+                To = reviewersEmails
+            };
+
+            _mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
         }
 
 
         /// <summary>
-        /// Approve Equipment Request Out Concession Area Request
+        /// Approve Equipment Request (Out Concession Area) 
         /// </summary>
-        /// <param name="requestReviewerWriteDto">Approve Equipment Request Out Concession Area Request</param>
+        /// <param name="requestReviewerWriteDto">Approve Equipment Request (Out Concession Area) </param>
         /// <remarks>
         ///
         /// </remarks>
@@ -6582,15 +6859,42 @@ namespace EDocument_API.Controllers.V1
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
+            #region Send Emails
 
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "EquipmentRequestOut", "Creator" });
+            var requestCreator = request.Creator;
+
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {requestCreator.FullName.Split(" ")[0]},
+                    Kindly not that your Equipment Request (Out Concession Area) {request.EquipmentRequestOut.RequestNumber} on eDocuement has been approved successfully.
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
+
+                    - eDocument Request Reference No.: {request.EquipmentRequestOut.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"Equipment Request (Out Concession Area) No. {request.EquipmentRequestOut.RequestNumber} on eDocuement",
+                To = requestCreator.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            #endregion Send Emails
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
 
         /// <summary>
-        /// Decline Equipment Request Out Concession Area Request
+        /// Decline Equipment Request (Out Concession Area) 
         /// </summary>
-        /// <param name="requestReviewerWriteDto">Decline Equipment Request Out Concession Area Request</param>
+        /// <param name="requestReviewerWriteDto">Decline Equipment Request (Out Concession Area) </param>
         /// <remarks>
         ///
         /// </remarks>
@@ -6608,52 +6912,20 @@ namespace EDocument_API.Controllers.V1
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
-
-
-            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
-        }
-
-        #endregion Out Request
-
-
-        #endregion Operations
-
-    }
-
-        /// <summary>
-        /// Decline PR Request
-        /// </summary>
-        /// <param name="requestReviewerWriteDto">Decline PR Request</param>
-        /// <remarks>
-        ///
-        /// </remarks>
-        /// <returns> message</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
-        [HttpPut("PR/Decline")]
-        [Authorize(Roles = "Store")]
-        public async Task<ActionResult> DeclinePRRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
-        {
-            _logger.LogInformation($"Start DeclinePRRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
-            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
-            var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
-            if (!result.IsSucceded)
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
-
             #region Send Emails
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
-            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PRRequest", "Creator" });
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "EquipmentRequestOut", "Creator" });
 
             var requestCreator = request.Creator;
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
-                    Kindly not that your PR Request No. {request.PRRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
+                    Kindly not that your Equipment Request (Out Concession Area) No. {request.EquipmentRequestOut.RequestNumber} on eDocuement has been declined by {user.FullName}.
                     For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
-                    - eDocument Request Reference No.: {request.PRRequest.RequestNumber}
+                    - eDocument Request Reference No.: {request.EquipmentRequestOut.RequestNumber}
 
                 Thanks,
 
@@ -6661,7 +6933,7 @@ namespace EDocument_API.Controllers.V1
 
                 """,
                 IsHTMLBody = false,
-                Subject = $"PR Request No. {request.PRRequest.RequestNumber} on eDocuement",
+                Subject = $"Equipment Request (Out Concession Area) No. {request.EquipmentRequestOut.RequestNumber} on eDocuement",
                 To = requestCreator.Email
             };
 
@@ -6671,8 +6943,12 @@ namespace EDocument_API.Controllers.V1
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
-        #endregion
 
-        #endregion Store
+        #endregion 
+
+        #endregion 
+
     }
+
+     
 }

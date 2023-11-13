@@ -441,7 +441,6 @@ namespace EDocument_Services.AutoMapper_Service
 
             #endregion
 
-
             #region EquipmentRequestOut Reuqest
 
             CreateMap<EquipmentRequestOut, EquipmentOutAreaRequestReadDto>()
@@ -472,7 +471,6 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             #endregion
 
-
             #region EquipmentRequestIn Reuqest
 
             CreateMap<EquipmentRequestIn, EquipmentInAreaRequestReadDto>()
@@ -500,9 +498,7 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<EquipmentInAreaRequestUpdateDto, EquipmentRequestIn>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-            #endregion
-
-            #endregion Fuel Oil Invoice Request
+            #endregion            
 
             #region New Item Request
             CreateMap<ApproveNewItemRequestDto, ApproveRequestReviewerDto>();
