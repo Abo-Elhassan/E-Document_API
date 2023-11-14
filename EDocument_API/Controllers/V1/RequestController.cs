@@ -4739,6 +4739,33 @@ namespace EDocument_API.Controllers.V1
         }
 
         /// <summary>
+        /// Get Requested Items By Id 
+        /// </summary>
+        /// <param name="requestNumber">request number</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>Requested PRs</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<RequestedItemReadDto>>))]
+        [HttpGet("NewItem/RequestedItem/{requestNumber}")]
+        [Authorize(Roles = "Store")]
+        public async Task<ActionResult> GetRequestedItemsByRequestNumber(string requestNumber)
+        {
+            _logger.LogInformation($"Start GetRequestedItemsByRequestNumber from {nameof(RequestController)} for request number = {requestNumber}");
+
+            Expression<Func<RequestedItem, bool>> criteria = (r => r.RequestNumber == requestNumber);
+
+            var requestedItems = await _unitOfWork.Repository<RequestedItem>().FindAllAsync(criteria, null);
+
+            if (requestedItems is null || !requestedItems.Any())
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Requested Items not found" });
+
+            var result = _mapper.Map<List<RequestedItemReadDto>>(requestedItems);
+
+            return Ok(new ApiResponse<List<RequestedItemReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+        }
+
+        /// <summary>
         /// Delete New Item Requests By Id
         /// </summary>
         /// <param name="id">request id</param>
@@ -5323,6 +5350,33 @@ namespace EDocument_API.Controllers.V1
             var result = _mapper.Map<PRRequestReadDto>(pRRequest);
 
             return Ok(new ApiResponse<PRRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+        }
+
+        /// <summary>
+        /// Get Requested PRs By Id 
+        /// </summary>
+        /// <param name="requestNumber">request number</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>Requested PRs</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<RequestedPRReadDto>>))]
+        [HttpGet("PR/RequestedPR/{requestNumber}")]
+        [Authorize(Roles = "Store")]
+        public async Task<ActionResult> GetRequestedPRsByRequestNumber(string requestNumber)
+        {
+            _logger.LogInformation($"Start GetRequestedPRsByRequestNumber from {nameof(RequestController)} for request number = {requestNumber}");
+
+            Expression<Func<RequestedPR, bool>> criteria = (r => r.RequestNumber == requestNumber);
+
+            var requestedPRs = await _unitOfWork.Repository<RequestedPR>().FindAllAsync(criteria,null);
+
+            if (requestedPRs is null || !requestedPRs.Any())
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Requested PRs not found" });
+
+            var result = _mapper.Map<List<RequestedPRReadDto>>(requestedPRs);
+
+            return Ok(new ApiResponse<List<RequestedPRReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
         /// <summary>
