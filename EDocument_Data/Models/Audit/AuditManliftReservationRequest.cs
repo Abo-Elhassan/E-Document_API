@@ -1,10 +1,8 @@
 ﻿#nullable disable
 
-using EDocument_Data.Models.Shared;
-
-namespace EDocument_Data.Models
+namespace EDocument_Data.Models.Audit
 {
-    public class ManliftReservationRequest:BaseRequest
+    public class AuditManliftReservationRequest:AuditBaseRequest
     {
         public string ManliftNumber { get; set; }
         public DateTime RequestedFrom { get; set; }

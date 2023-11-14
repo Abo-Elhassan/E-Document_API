@@ -12,6 +12,7 @@ using EDocument_Data.DTOs.Requests.DiscountRequest;
 using EDocument_Data.DTOs.Requests.EquipmentInAreaRequest;
 using EDocument_Data.DTOs.Requests.EquipmentOutAreaRequest;
 using EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest;
+using EDocument_Data.DTOs.Requests.ManliftReservationRequest;
 using EDocument_Data.DTOs.Requests.NewItemRequest;
 using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.DTOs.Requests.PRRequest;
@@ -441,65 +442,6 @@ namespace EDocument_Services.AutoMapper_Service
 
             #endregion
 
-            #region EquipmentRequestOut Reuqest
-
-            CreateMap<EquipmentRequestOut, EquipmentOutAreaRequestReadDto>()
-           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
-           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
-           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
-           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
-           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId));
-
-
-
-            CreateMap<EquipmentRequestOut, EquipmentOutAreaRequestReviewerReadDto>()
-           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
-           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
-           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
-           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
-           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
-           .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
-
-            CreateMap<EquipmentOutAreaRequestCreateDto, EquipmentRequestOut>();
-
-            CreateMap<EquipmentOutAreaRequestUpdateDto, Request>()
-     
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-
-
-            CreateMap<EquipmentOutAreaRequestUpdateDto, EquipmentRequestOut>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-            #endregion
-
-            #region EquipmentRequestIn Reuqest
-
-            CreateMap<EquipmentRequestIn, EquipmentInAreaRequestReadDto>()
-           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
-           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
-           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
-           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
-           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId));
-
-
-
-            CreateMap<EquipmentRequestIn, EquipmentInAreaRequestReviewerReadDto>()
-           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
-           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
-           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
-           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
-           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
-           .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
-
-            CreateMap<EquipmentInAreaRequestCreateDto, EquipmentRequestIn>();
-
-            CreateMap<EquipmentInAreaRequestUpdateDto, Request>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-
-
-            CreateMap<EquipmentInAreaRequestUpdateDto, EquipmentRequestIn>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-            #endregion            
-
             #region New Item Request
             CreateMap<ApproveNewItemRequestDto, ApproveRequestReviewerDto>();
 
@@ -591,6 +533,105 @@ namespace EDocument_Services.AutoMapper_Service
 
 
             #endregion PR Request Request
+
+            #region Manlift Reservation Request
+
+            CreateMap<User, ManliftReservationRequest>()
+            .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
+            .ForMember(dest => dest.BeneficiaryName, src => src.MapFrom(opts => opts.FullName))
+            .ForMember(dest => dest.BeneficiaryEmail, src => src.MapFrom(opts => opts.Email))
+            .ForMember(dest => dest.BeneficiaryPosition, src => src.MapFrom(opts => opts.Position))
+            .ForMember(dest => dest.BeneficiaryDepartment, src => src.MapFrom(opts => opts.Department.DepartmentName))
+            .ForMember(dest => dest.BeneficiaryPhoneNumber, src => src.MapFrom(opts => opts.PhoneNumber))
+            .ForMember(dest => dest.BeneficiaryCompany, src => src.MapFrom(opts => opts.Company))
+            .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+            .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+            .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+            .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
+
+
+            CreateMap<ManliftReservationRequest, ManliftReservationRequestReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId));
+
+            CreateMap<ManliftReservationRequest, ManliftReservationRequestReviewerReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<ManliftReservationRequestCreateDto, ManliftReservationRequest>();
+
+            CreateMap<ManliftReservationRequestUpdateDto, ManliftReservationRequest>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            #endregion 
+
+            #region EquipmentRequestOut Reuqest
+
+            CreateMap<EquipmentRequestOut, EquipmentOutAreaRequestReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId));
+
+
+
+            CreateMap<EquipmentRequestOut, EquipmentOutAreaRequestReviewerReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+           .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<EquipmentOutAreaRequestCreateDto, EquipmentRequestOut>();
+
+            CreateMap<EquipmentOutAreaRequestUpdateDto, Request>()
+
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+
+            CreateMap<EquipmentOutAreaRequestUpdateDto, EquipmentRequestOut>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            #endregion
+
+            #region EquipmentRequestIn Reuqest
+
+            CreateMap<EquipmentRequestIn, EquipmentInAreaRequestReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId));
+
+
+
+            CreateMap<EquipmentRequestIn, EquipmentInAreaRequestReviewerReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+           .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<EquipmentInAreaRequestCreateDto, EquipmentRequestIn>();
+
+            CreateMap<EquipmentInAreaRequestUpdateDto, Request>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+
+            CreateMap<EquipmentInAreaRequestUpdateDto, EquipmentRequestIn>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            #endregion            
         }
 
         private string ConvertListToString(List<string> list)
