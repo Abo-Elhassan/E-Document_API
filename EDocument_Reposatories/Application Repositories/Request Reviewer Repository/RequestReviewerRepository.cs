@@ -93,7 +93,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
         {
             var definedRequestReviewers = await GetAllDefinedRequestReviewersAsync(definedRequestId);
 
-            var request = await _context.Requests.Include(r=>r.RequestReviewers).FirstOrDefaultAsync(r => r.Id == requestId);
+            var request = await _context.Requests.Include(r=>r.RequestReviewers).Include(r=>r.DefinedRequest).FirstOrDefaultAsync(r => r.Id == requestId);
             request.Status = RequestStatus.Pending.ToString();
             request.CurrentStage = 1;
 
@@ -153,7 +153,8 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 // Skip All Approval steps for the creator if he is one of the reviewers
                 if (request.RequestReviewers.Any(r => r.AssignedReviewerId == request.CreatorId))
                 {
-                    foreach (var reviewer in request.RequestReviewers.Where(r => r.AssignedReviewerId == request.CreatorId))
+                    var reviewerStageNumber = request.RequestReviewers.FirstOrDefault(rr=>rr.AssignedReviewerId == request.CreatorId).StageNumber;
+                    foreach (var reviewer in request.RequestReviewers.Where(r => r.StageNumber == reviewerStageNumber))
                     {
                         reviewer.Status = RequestStatus.Approved.ToString();
                         reviewer.ReviewedBy = "E-Documnet";
@@ -166,20 +167,25 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
 
             //Proceed with approved stages
-            foreach (var reviewer in request.RequestReviewers.OrderBy(r=>r.StageNumber).DistinctBy(r => r.StageNumber))
+
+            if (firstReviewer.Status == RequestStatus.Approved.ToString())
             {
-                if (reviewer.Status == RequestStatus.Approved.ToString())
+                if (request.CurrentStage == request.DefinedRequest.ReviewersNumber) // Check if the approved stage is the last stage
                 {
-                    request.CurrentStage++;
+                    request.Status = RequestStatus.Approved.ToString();
+                    
                 }
                 else
                 {
-                    break;
+                    request.CurrentStage++;
+
+                    //Change current reviewer status from none to pending
+                    request.RequestReviewers.Where(rr => rr.StageNumber == request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
+                  
                 }
             }
+            
 
-            //Change current reviewer status from none to pending
-            request.RequestReviewers.Where(rr => rr.StageNumber == request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
 
             _context.Update(request);
             _context.SaveChanges();
