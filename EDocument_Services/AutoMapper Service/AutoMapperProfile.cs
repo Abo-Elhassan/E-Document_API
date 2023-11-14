@@ -558,6 +558,10 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId));
 
+            CreateMap<ManliftReservationRequest, ReservedManliftReadDto>()
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status));
+
+
             CreateMap<ManliftReservationRequest, ManliftReservationRequestReviewerReadDto>()
                 .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
                 .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))

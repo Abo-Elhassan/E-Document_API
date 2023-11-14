@@ -5892,7 +5892,7 @@ namespace EDocument_API.Controllers.V1
         ///
         /// </remarks>
         /// <returns>All Manlift Reservations</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<ManliftReservationRequestReadDto>>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<ReservedManliftReadDto>>))]
         [HttpGet("ManliftReservation/Reserved/{manliftNumber}")]
         [Authorize(Roles = "Basic")]
         public async Task<ActionResult> GetAllManliftReservationRequestByManliftNumber(string manliftNumber)
@@ -5911,9 +5911,9 @@ namespace EDocument_API.Controllers.V1
                 includes: includes
             );
 
-            var result = _mapper.Map<List<ManliftReservationRequestReadDto>>(manliftReservationRequests);
+            var result = _mapper.Map<List<ReservedManliftReadDto>>(manliftReservationRequests);
 
-            return Ok(new ApiResponse<List<ManliftReservationRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+            return Ok(new ApiResponse<List<ReservedManliftReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
         /// <summary>
