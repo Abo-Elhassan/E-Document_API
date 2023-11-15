@@ -1707,8 +1707,8 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RequestNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("RequestedItemId")
                         .HasColumnType("bigint");
@@ -1767,8 +1767,8 @@ namespace EDocument_EF.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("RequestNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("RequestType")
                         .HasColumnType("nvarchar(max)");
@@ -3575,9 +3575,11 @@ namespace EDocument_EF.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)");
 
-                    b.Property<string>("RequestNumber")
-                        .HasMaxLength(50)
+                    b.Property<string>("NewItemRequestRequestNumber")
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("StoreRoom")
                         .IsRequired()
@@ -3591,7 +3593,9 @@ namespace EDocument_EF.Migrations
 
                     b.HasKey("RequestedItemId");
 
-                    b.HasIndex("RequestNumber");
+                    b.HasIndex("NewItemRequestRequestNumber");
+
+                    b.HasIndex("RequestId");
 
                     b.ToTable("RequestedItem", null, t =>
                         {
@@ -3636,12 +3640,14 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("PRRequestRequestNumber")
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("RequestNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("RequestType")
                         .IsRequired()
@@ -3650,7 +3656,9 @@ namespace EDocument_EF.Migrations
 
                     b.HasKey("RequestedPRId");
 
-                    b.HasIndex("RequestNumber");
+                    b.HasIndex("PRRequestRequestNumber");
+
+                    b.HasIndex("RequestId");
 
                     b.ToTable("RequestedPR", null, t =>
                         {
@@ -4625,24 +4633,34 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("EDocument_Data.Models.RequestedItem", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.NewItemRequest", "NewItemRequest")
+                    b.HasOne("EDocument_Data.Models.NewItemRequest", null)
                         .WithMany("RequestedItems")
-                        .HasForeignKey("RequestNumber")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("FK_RequestedItem_NewItemRequest");
+                        .HasForeignKey("NewItemRequestRequestNumber");
 
-                    b.Navigation("NewItemRequest");
+                    b.HasOne("EDocument_Data.Models.Request", "Request")
+                        .WithMany("RequestedItems")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_RequestedItem_Request");
+
+                    b.Navigation("Request");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.RequestedPR", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.PRRequest", "PRRequest")
+                    b.HasOne("EDocument_Data.Models.PRRequest", null)
                         .WithMany("RequestedPRs")
-                        .HasForeignKey("RequestNumber")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("FK_RequestedPR_PRRequest");
+                        .HasForeignKey("PRRequestRequestNumber");
 
-                    b.Navigation("PRRequest");
+                    b.HasOne("EDocument_Data.Models.Request", "Request")
+                        .WithMany("RequestedPRs")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_RequestedPR_Request");
+
+                    b.Navigation("Request");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Section", b =>
@@ -4851,6 +4869,10 @@ namespace EDocument_EF.Migrations
                     b.Navigation("RequestApplicationRoles");
 
                     b.Navigation("RequestReviewers");
+
+                    b.Navigation("RequestedItems");
+
+                    b.Navigation("RequestedPRs");
 
                     b.Navigation("TravelDeskRequest");
 

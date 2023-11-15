@@ -17,9 +17,6 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.RequestedItemId)
             .UseIdentityColumn(1, 1);
 
-            entity.Property(e => e.RequestNumber)
-            .HasMaxLength(50);
-
             entity.Property(e => e.ItemNumber)
            .HasMaxLength(50);
 
@@ -55,10 +52,10 @@ namespace EDocument_EF.Configurations
             .IsUnicode(false);
 
 
-            entity.HasOne(d => d.NewItemRequest).WithMany(p => p.RequestedItems)
-            .HasForeignKey(d => d.RequestNumber)
+            entity.HasOne(d => d.Request).WithMany(p => p.RequestedItems)
+            .HasForeignKey(d => d.RequestId)
             .OnDelete(DeleteBehavior.Cascade)
-            .HasConstraintName("FK_RequestedItem_NewItemRequest");
+            .HasConstraintName("FK_RequestedItem_Request");
 
 
             OnConfigurePartial(entity);

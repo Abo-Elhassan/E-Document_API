@@ -99,19 +99,19 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <summary>
         /// Get Requested Items By Id 
         /// </summary>
-        /// <param name="requestNumber">request number</param>
+        /// <param name="requestId">request id</param>
         /// <remarks>
         ///
         /// </remarks>
         /// <returns>Requested PRs</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<RequestedItemReadDto>>))]
-        [HttpGet("RequestedItem/{requestNumber}")]
+        [HttpGet("RequestedItem/{requestId}")]
         [Authorize(Roles = "Store")]
-        public async Task<ActionResult> GetRequestedItemsByRequestNumber(string requestNumber)
+        public async Task<ActionResult> GetRequestedItemsByRequestNumber(long requestId)
         {
-            _logger.LogInformation($"Start GetRequestedItemsByRequestNumber from {nameof(RequestController)} for request number = {requestNumber}");
+            _logger.LogInformation($"Start GetRequestedItemsByRequestNumber from {nameof(RequestController)} for request id = {requestId}");
 
-            Expression<Func<RequestedItem, bool>> criteria = (r => r.RequestNumber == requestNumber);
+            Expression<Func<RequestedItem, bool>> criteria = (r => r.RequestId == requestId);
 
             var requestedItems = await _unitOfWork.Repository<RequestedItem>().FindAllAsync(criteria, null);
 
@@ -344,7 +344,7 @@ namespace EDocument_API.Controllers.V1.Requests
                 foreach (var sentItem in sentItems)
                 {
                     var item = JsonConvert.DeserializeObject<RequestedItem>(sentItem);
-                    item.RequestNumber = requestNo;
+                    item.RequestedItemId = requestId;
                     item.CreatedAt = DateTime.Now;
                     item.CreatedBy = user?.FullName;
                     request.NewItemRequest.RequestedItems.Add(item);
@@ -462,7 +462,7 @@ namespace EDocument_API.Controllers.V1.Requests
                 foreach (var sentItem in sentItems)
                 {
                     var item = JsonConvert.DeserializeObject<RequestedItem>(sentItem);
-                    item.RequestNumber = request.NewItemRequest.RequestNumber;
+                    item.RequestId = id;
                     item.CreatedAt = request.CreatedAt;
                     item.CreatedBy = request.CreatedBy;
                     item.ModifiedAt = DateTime.Now;

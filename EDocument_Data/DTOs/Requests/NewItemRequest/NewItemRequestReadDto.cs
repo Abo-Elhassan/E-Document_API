@@ -46,7 +46,7 @@ namespace EDocument_Data.DTOs.Requests.NewItemRequest
     {
         public long RequestedItemId { get; init; }
         public string ItemNumber { get; init; }
-        public string RequestNumber { get; init; }
+        public string RequestId { get; init; }
         public string BudgetType { get; init; }
         public string CommodityCode { get; init; }
         public string StoreRoom { get; init; }

@@ -6,7 +6,7 @@ namespace EDocument_Data.Models.Audit
     {
         public long RequestedPRId { get; set; }
         public string PRNumber { get; set; }
-        public string RequestNumber { get; set; }
+        public long RequestId { get; set; }
         public string RequestType { get; set; }
         public string PRDescription { get; set; }
         public string BudgetType { get; set; }

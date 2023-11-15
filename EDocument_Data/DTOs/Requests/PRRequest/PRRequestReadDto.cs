@@ -45,7 +45,7 @@ namespace EDocument_Data.DTOs.Requests.PRRequest
     {
         public long RequestedPRId { get; init; }
         public string PRNumber { get; init; }
-        public string RequestNumber { get; init; }
+        public string RequestId { get; init; }
         public string RequestType { get; init; }
         public string PRDescription { get; init; }
         public string BudgetType { get; init; }

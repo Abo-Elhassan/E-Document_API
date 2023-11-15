@@ -17,9 +17,6 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.RequestedPRId)
             .UseIdentityColumn(1, 1);
 
-            entity.Property(e => e.RequestNumber)
-            .HasMaxLength(50);
-
 
             entity.Property(e => e.PRNumber)
             .HasMaxLength(50);
@@ -50,10 +47,10 @@ namespace EDocument_EF.Configurations
             .IsUnicode(false);
 
 
-            entity.HasOne(d => d.PRRequest).WithMany(p => p.RequestedPRs)
-            .HasForeignKey(d => d.RequestNumber)
+            entity.HasOne(d => d.Request).WithMany(p => p.RequestedPRs)
+            .HasForeignKey(d => d.RequestId)
             .OnDelete(DeleteBehavior.Cascade)
-            .HasConstraintName("FK_RequestedPR_PRRequest");
+            .HasConstraintName("FK_RequestedPR_Request");
 
 
             OnConfigurePartial(entity);

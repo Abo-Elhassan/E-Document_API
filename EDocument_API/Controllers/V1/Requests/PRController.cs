@@ -98,19 +98,19 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <summary>
         /// Get Requested PRs By Id 
         /// </summary>
-        /// <param name="requestNumber">request number</param>
+        /// <param name="requestId">request id</param>
         /// <remarks>
         ///
         /// </remarks>
         /// <returns>Requested PRs</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<RequestedPRReadDto>>))]
-        [HttpGet("Requested{requestNumber}")]
+        [HttpGet("RequestedPR/{requestId}")]
         [Authorize(Roles = "Store")]
-        public async Task<ActionResult> GetRequestedPRsByRequestNumber(string requestNumber)
+        public async Task<ActionResult> GetRequestedPRsByRequestNumber(long requestId)
         {
-            _logger.LogInformation($"Start GetRequestedPRsByRequestNumber from {nameof(RequestController)} for request number = {requestNumber}");
+            _logger.LogInformation($"Start GetRequestedPRsByRequestNumber from {nameof(RequestController)} for request id = {requestId}");
 
-            Expression<Func<RequestedPR, bool>> criteria = (r => r.RequestNumber == requestNumber);
+            Expression<Func<RequestedPR, bool>> criteria = (r => r.RequestId == requestId);
 
             var requestedPRs = await _unitOfWork.Repository<RequestedPR>().FindAllAsync(criteria, null);
 
@@ -343,7 +343,7 @@ namespace EDocument_API.Controllers.V1.Requests
                 foreach (var sentItem in sentItems)
                 {
                     var item = JsonConvert.DeserializeObject<RequestedPR>(sentItem);
-                    item.RequestNumber = requestNo;
+                    item.RequestId = requestId;
                     item.CreatedAt = DateTime.Now;
                     item.CreatedBy = user?.FullName;
                     request.PRRequest.RequestedPRs.Add(item);
@@ -461,7 +461,7 @@ namespace EDocument_API.Controllers.V1.Requests
                 foreach (var sentItem in sentItems)
                 {
                     var item = JsonConvert.DeserializeObject<RequestedPR>(sentItem);
-                    item.RequestNumber = request.PRRequest.RequestNumber;
+                    item.RequestId = id;
                     item.CreatedAt = request.CreatedAt;
                     item.CreatedBy = request.CreatedBy;
                     item.ModifiedAt = DateTime.Now;

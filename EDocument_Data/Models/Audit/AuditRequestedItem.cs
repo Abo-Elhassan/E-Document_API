@@ -6,7 +6,7 @@ namespace EDocument_Data.Models.Audit
     {
         public long RequestedItemId { get; set; }
         public string ItemNumber { get; set; }
-        public string RequestNumber { get; set; }
+        public long RequestId { get; set; }
         public string BudgetType { get; set; }
         public string CommodityCode { get; set; }
         public string StoreRoom { get; set; }
