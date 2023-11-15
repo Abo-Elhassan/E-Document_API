@@ -441,7 +441,7 @@ namespace EDocument_API.Controllers.V1.Requests
                     _fileService.DeleteFile(oldAttachment.FilePath);
                 }
 
-                request.Attachments = _fileService.UploadAttachments(request.Id, $@"TravelDeskRequest\{request.Id}", travelDeskRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"TravelDeskRequest\{request.Id}", travelDeskRequestUpdateDto.Attachments, createdBy: request.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
             }
 
             request.TravelDeskRequest.ModifiedAt = DateTime.Now;

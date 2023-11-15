@@ -492,7 +492,7 @@ namespace EDocument_API.Controllers.V1.Requests
                     _fileService.DeleteFile(oldAttachment.FilePath);
                 }
 
-                request.Attachments = _fileService.UploadAttachments(request.Id, $@"NewItemRequest\{request.Id}", newItemRequestUpdateDto.Attachments, createdBy: request.PoRequest.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"NewItemRequest\{request.Id}", newItemRequestUpdateDto.Attachments, createdBy: request.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
             }
 
             request.NewItemRequest.ModifiedAt = DateTime.Now;
