@@ -20,10 +20,11 @@ namespace EDocument_Data.DTOs.Requests.RefundRequest
         public long DefinedRequestId { get; init; }
         public int CurrentStage { get; init; }
         public RequestStatus Status { get; init; }
-        public string Notes { get; init; }
+  
         public string CreatorId { get; init; }
         public string CustomerName { get; set; }
         public string CustomerMobileNumber { get; set; }
+        public string Notes { get; init; }
         public string RefundSubject { get; set; }
         public string RefundDescription { get; set; }
         public string RefundType { get; set; }

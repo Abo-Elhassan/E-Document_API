@@ -133,7 +133,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             }
 
 
-            return  query.ToList();
+            return query.ToList();
         }
 
         public virtual (int TotalCount, IEnumerable<T> PaginatedData) FindAll(Expression<Func<T, bool>>? criteria, string[]? includes = null, int? skip = null, int? take = null, Expression<Func<T, object>>? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
@@ -441,7 +441,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 query = query.Where(criteria);
             }
-               
+
 
             return await query.ToListAsync();
         }
@@ -785,6 +785,12 @@ namespace EDocument_Reposatories.Generic_Reposatories
             _context.Set<T>().Update(entity);
             return entity;
         }
+        public IEnumerable<T> UpdateRange(IEnumerable<T> entities)
+        {
+            _context.Set<T>().UpdateRange(entities);
+            return entities;
+        }
+
 
         public void Delete(T entity)
         {
@@ -819,7 +825,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             return await query.FirstOrDefaultAsync();
         }
 
-        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync( string? userId = null, string? userCondition = null, bool? isCreator = null, string[]? includes = null,string? customFilter =null, Dictionary<string, string>? filters = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
+        public virtual async Task<(int TotalCount, IEnumerable<T> PaginatedData)> FindAllRequestsAsync(string? userId = null, string? userCondition = null, bool? isCreator = null, string[]? includes = null, string? customFilter = null, Dictionary<string, string>? filters = null, int? skip = null, int? take = null, string? orderBy = null, OrderBy? orderByDirection = null, DateFilter[]? dateFilters = null)
         {
             var ColumnName = "";
             var ColumnValue = "";
@@ -848,7 +854,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             if (userId != null && userCondition != null)
             {
                 query = query.Where(userCondition, userId);
-            }        
+            }
 
             #endregion Permission Filter
 
@@ -870,10 +876,10 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     {
                         if (ColumnName == "Status")
                         {
-                            expression= isCreator??true? "Request.Status.Contains(@0)" : "Request.RequestReviewers.Any(Status.Contains(@0)&& AssignedReviewerId == @1)";
-                            query = query.Where(expression, ColumnValue,userId);
+                            expression = isCreator ?? true ? "Request.Status.Contains(@0)" : "Request.RequestReviewers.Any(Status.Contains(@0)&& AssignedReviewerId == @1)";
+                            query = query.Where(expression, ColumnValue, userId);
                         }
-                        else if(property != null)
+                        else if (property != null)
                         {
                             expression = property.PropertyType == typeof(string) ? $"{ColumnName}.Contains(@0)" : $"{ColumnName}.Equals(@0)";
                             query = query.Where(expression, property.PropertyType == typeof(string) ? ColumnValue : int.Parse(ColumnValue));
@@ -885,7 +891,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
             #endregion Apply General Filter
 
             #region Custom Filter
-            if (customFilter !=null)
+            if (customFilter != null)
             {
                 query = query.Where(customFilter);
             }
@@ -897,17 +903,17 @@ namespace EDocument_Reposatories.Generic_Reposatories
             {
                 foreach (var filter in dateFilters)
                 {
-                    if (filter.From!=null&&filter.To!=null)
+                    if (filter.From != null && filter.To != null)
                     {
                         var pascalCaseColumnName = Utilities.ConvertColumnNameToPascalCase(filter.ColumnName);
 
                         var property = typeof(T).GetProperty(pascalCaseColumnName);
                         DateTime fromDate = DateTime.Parse(filter.From.ToString());
                         DateTime toDate = DateTime.Parse(filter.To.ToString());
-                       var x=  _context.PoRequests.Where(p => p.CreatedAt >= fromDate && p.CreatedAt<=toDate );
+                        var x = _context.PoRequests.Where(p => p.CreatedAt >= fromDate && p.CreatedAt <= toDate);
                         if (property != null)
                         {
-                            query = query.Where($"{pascalCaseColumnName} >= @0 && {pascalCaseColumnName} <= @1",fromDate,toDate);
+                            query = query.Where($"{pascalCaseColumnName} >= @0 && {pascalCaseColumnName} <= @1", fromDate, toDate);
                         }
                     }
 
@@ -1054,5 +1060,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
             return result;
         }
+
+
     }
 }

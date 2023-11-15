@@ -54,6 +54,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
 
 
         T Update(T entity);
+        IEnumerable<T> UpdateRange(IEnumerable<T> entities);
 
 
         void Delete(T entity);

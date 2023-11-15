@@ -1,0 +1,643 @@
+﻿using AutoMapper;
+using EDocument_Data.Consts;
+using EDocument_Data.Consts.Enums;
+using EDocument_Data.DTOs.Attachments;
+using EDocument_Data.DTOs.Filter;
+using EDocument_Data.DTOs.Requests.RequestReviewer;
+using EDocument_Data.DTOs.Requests.TravelDeskRequest;
+using EDocument_Data.Models;
+using EDocument_Data.Models.Shared;
+using EDocument_Repositories.Application_Repositories.Request_Reviewer_Repository;
+using EDocument_Services.File_Service;
+using EDocument_Services.Mail_Service;
+using EDocument_UnitOfWork;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System.Net;
+using System.Net.Mime;
+using System.Security.Claims;
+using System.Text.Json;
+
+namespace EDocument_API.Controllers.V1.Requests
+{
+
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiController]
+    [Route("api/v{version:apiVersion}/Request/[controller]")]
+    [ApiVersion("1.0")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse<string>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ApiResponse<string>))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ApiResponse<string>))]
+    public class TravelDeskController : ControllerBase
+    {
+        private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
+        private readonly ILogger<TravelDeskController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IRequestReviewerRepository _requestReviewerRepository;
+        private readonly IMailService _mailService;
+        private readonly IFileService _fileService;
+
+        public TravelDeskController(
+            ILogger<TravelDeskController> logger,
+            UserManager<User> userManager,
+            IMapper mapper,
+            IUnitOfWork unitOfWork,
+            IRequestReviewerRepository RequestReviewerRepository,
+            IMailService mailService,
+            IFileService fileService)
+        {
+            _userManager = userManager;
+            _mapper = mapper;
+            _logger = logger;
+            _unitOfWork = unitOfWork;
+            _requestReviewerRepository = RequestReviewerRepository;
+            _mailService = mailService;
+            _fileService = fileService;
+        }
+
+
+
+        /// <summary>
+        /// Get TravelDesk Requests By for Edit Id
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>TravelDesk Request</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<TravelDeskRequestEditReadDto>))]
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetTravelDeskRequestById(long id)
+        {
+            _logger.LogInformation($"Start GetTravelDeskRequestById from {nameof(RequestController)} for request id = {id}");
+
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            var travelDeskRequest = await _unitOfWork.Repository<TravelDeskRequest>().FindRequestAsync(
+            requestId: id,
+            expression: "Request.Id==@0",
+            includes: includes
+            );
+
+            if (travelDeskRequest is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            var result = _mapper.Map<TravelDeskRequestEditReadDto>(travelDeskRequest);
+
+            return Ok(new ApiResponse<TravelDeskRequestEditReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+        }
+
+        /// <summary>
+        /// Delete TravelDesk Requests By Id
+        /// </summary>
+        /// <param name="id">request id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> DeleteTravelDeskRequest(long id)
+        {
+            _logger.LogInformation($"Start DeleteTravelDeskRequest from {nameof(RequestController)} for request id = {id}");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var includes = new string[] { "TravelDeskRequest", "Attachments", "RequestReviewers" };
+
+            var request = await _unitOfWork.Repository<Request>().FindRequestAsync(
+            requestId: id,
+            expression: "Id==@0",
+            includes: includes
+                );
+
+            if (request is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
+
+            if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request as it has been already {request.Status}" });
+            }
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
+            }
+
+            request.TravelDeskRequest.ModifiedBy = user?.FullName;
+            request.ModifiedBy = user?.FullName;
+            _unitOfWork.Complete();
+
+            _unitOfWork.Repository<Request>().Delete(request);
+            _unitOfWork.Complete();
+
+            _fileService.DeleteFolder($@"TravelDeskRequest\{id}");
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
+        }
+
+        /// <summary>
+        /// Get All TravelDesk Requests By Creator With Filter
+        /// </summary>
+        /// <param name="filterDto">filter information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All Created TravelDesk Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<TravelDeskRequestDetailsReadDto>>))]
+        [HttpPost("Inbox")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetCreatorTravelDeskRequestsFiltered(FilterWriteDto? filterDto)
+        {
+            _logger.LogInformation($"Start GetCreatorTravelDeskRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            string? userCondition = null;
+
+            (int TotalCount, IEnumerable<TravelDeskRequest> PaginatedData) result;
+
+            userCondition = "Request.CreatorId ==@0";
+
+            if (!string.IsNullOrEmpty(filterDto?.FilterValue))
+            {
+                result = await _unitOfWork.Repository<TravelDeskRequest>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<TravelDeskRequest>().FindAllRequestsAsync(
+                isCreator: true,
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filters: filterDto?.Filters,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+
+            var totalCount = result.TotalCount;
+            var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
+
+            var requests = _mapper.Map<List<TravelDeskRequestDetailsReadDto>>(result.PaginatedData);
+
+            var response = new FilterReadDto<TravelDeskRequestDetailsReadDto>
+            {
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto?.PageNo ?? 1,
+                PageSize = requests.Count,
+                PaginatedData = requests
+            };
+            return Ok(new ApiResponse<FilterReadDto<TravelDeskRequestDetailsReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+        }
+
+        /// <summary>
+        /// Get All TravelDesk Requests By Reviewer With Filter
+        /// </summary>
+        /// <param name="filterDto">filter information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>List of All Reviewer TravelDesk Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<TravelDeskRequestReviewerReadDto>>))]
+        [HttpPost("AssignedToMe")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetReviewerTravelDeskRequestsFiltered(FilterWriteDto? filterDto)
+        {
+            _logger.LogInformation($"Start GetReviewerTravelDeskRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
+            string? userCondition = null;
+
+            (int TotalCount, IEnumerable<TravelDeskRequest> PaginatedData) result;
+
+            userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
+
+            if (!string.IsNullOrEmpty(filterDto?.FilterValue))
+            {
+                result = await _unitOfWork.Repository<TravelDeskRequest>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filterValue: filterDto?.FilterValue,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+            else
+            {
+                result = await _unitOfWork.Repository<TravelDeskRequest>().FindAllRequestsAsync(
+                isCreator: false,
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
+                filters: filterDto?.Filters,
+                includes: includes,
+                skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
+                take: filterDto?.PageSize ?? 10,
+                orderBy: filterDto?.orderBy,
+                orderByDirection: filterDto?.orderByDirection,
+                dateFilters: filterDto?.dateFilters
+                );
+            }
+
+            var totalCount = result.TotalCount;
+            var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
+
+            var requests = _mapper.Map<List<TravelDeskRequestReviewerReadDto>>(result.PaginatedData);
+
+            foreach (var request in requests)
+            {
+                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
+
+                request.ReviewerStatus = reviewer?.Status;
+                request.ReviewerStage = reviewer?.StageNumber;
+            }
+
+            var response = new FilterReadDto<TravelDeskRequestReviewerReadDto>
+            {
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto?.PageNo ?? 1,
+                PageSize = requests.Count,
+                PaginatedData = requests
+            };
+            return Ok(new ApiResponse<FilterReadDto<TravelDeskRequestReviewerReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+        }
+
+        /// <summary>
+        /// Create TravelDesk Request
+        /// </summary>
+        /// <param name="travelDeskRequestCreateDto">TravelDesk request Informarion</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPost("Create")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> CreateTravelDeskRequest([FromForm] TravelDeskRequestCreateDto travelDeskRequestCreateDto)
+        {
+            _logger.LogInformation($"Start CreateTravelDeskRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(travelDeskRequestCreateDto)} ");
+
+            var beneficiaryUser = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == travelDeskRequestCreateDto.BeneficiaryId);
+
+            if (beneficiaryUser is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Beneficiary user '{travelDeskRequestCreateDto.BeneficiaryId}' not found" });
+
+            if (beneficiaryUser.Company != "DP World")
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Beneficiary user '{travelDeskRequestCreateDto.BeneficiaryId}' is not DP WORLD Employee" });
+
+            var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
+
+            var requestNo = $"Travel-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var request = new Request { Id = requestId, DefinedRequestId = travelDeskRequestCreateDto.DefinedRequestId };
+            request.Notes = travelDeskRequestCreateDto.Justification;
+            request.TravelDeskRequest = _mapper.Map<TravelDeskRequest>(travelDeskRequestCreateDto);
+            _mapper.Map(beneficiaryUser, request.TravelDeskRequest);
+            request.TravelDeskRequest.RequestNumber = requestNo;
+
+            if (travelDeskRequestCreateDto.Attachments != null && travelDeskRequestCreateDto.Attachments.Count > 0)
+            {
+                request.Attachments = _fileService.UploadAttachments(requestId, $@"TravelDeskRequest\{requestId}", travelDeskRequestCreateDto.Attachments, user.FullName);
+            }
+
+            request.CreatorId = user?.Id;
+            request.TravelDeskRequest.CreatedBy = user?.FullName;
+            request.CreatedBy = user?.FullName;
+            request.TravelDeskRequest.CreatedBy = user?.FullName;
+
+            _unitOfWork.Repository<Request>().Add(request);
+
+            var result = _unitOfWork.Complete();
+
+            await _requestReviewerRepository.BeginRequestCycle(travelDeskRequestCreateDto.DefinedRequestId, requestId, beneficiaryUser.Id, true);
+
+            if (result < 1)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
+
+            #region Send Emails
+
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your TravelDesk Request on eDocuement has been created successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+
+                    - eDocument Request Reference No.: {requestNo}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"TravelDesk Request No. {requestNo} on eDocuement",
+                To = user.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestId, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has created TravelDesk Request for on eDocuement and need to be reviewed from your side.
+
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+
+                    - eDocument Request Reference No.: {requestNo}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $"TravelDesk Request No. {requestNo} on eDocuement",
+                To = reviewersEmails
+            };
+
+            _mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been created successfully - Request No. {requestNo}" });
+        }
+
+        /// <summary>
+        /// Update TravelDesk Request
+        /// </summary>
+        /// <param name="id">Travel Desk request Id</param>
+        /// <param name="travelDeskRequestUpdateDto">TravelDesk request Informarion</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("Update/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> UpdateTravelDeskRequest(long id, [FromForm] TravelDeskRequestUpdateDto travelDeskRequestUpdateDto)
+        {
+            _logger.LogInformation($"Start UpdateTravelDeskRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(travelDeskRequestUpdateDto)} ");
+
+            var beneficiaryUser = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == travelDeskRequestUpdateDto.BeneficiaryId);
+
+            if (beneficiaryUser is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Beneficiary user '{travelDeskRequestUpdateDto.BeneficiaryId}' not found" });
+
+            if (beneficiaryUser.Company != "DP World")
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Beneficiary user '{travelDeskRequestUpdateDto.BeneficiaryId}' is not DP WORLD Employee" });
+
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
+
+            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "TravelDeskRequest", "Attachments" });
+
+            if (request == null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
+
+            var oldAttachments = request.Attachments;
+            request.Notes = travelDeskRequestUpdateDto.Justification;
+            _mapper.Map(travelDeskRequestUpdateDto, request);
+            _mapper.Map(travelDeskRequestUpdateDto, request.TravelDeskRequest);
+            _mapper.Map(beneficiaryUser, request.TravelDeskRequest);
+
+            if (travelDeskRequestUpdateDto.Attachments == null || travelDeskRequestUpdateDto.Attachments.Count == 0)
+            {
+                request.Attachments = oldAttachments;
+            }
+            else
+            {
+                foreach (var attachment in request.Attachments)
+                {
+                    attachment.ModifiedAt = DateTime.Now;
+                    attachment.ModifiedBy = user.FullName;
+                }
+
+                foreach (var oldAttachment in oldAttachments)
+                {
+                    _fileService.DeleteFile(oldAttachment.FilePath);
+                }
+
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"TravelDeskRequest\{request.Id}", travelDeskRequestUpdateDto.Attachments, createdBy: request.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
+            }
+
+            request.TravelDeskRequest.ModifiedAt = DateTime.Now;
+            request.TravelDeskRequest.ModifiedBy = user?.FullName;
+            request.ModifiedBy = user?.FullName;
+
+            var result = _unitOfWork.Complete();
+
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, beneficiaryUser.Id, false);
+
+            if (result < 1)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Request update has been failed" });
+
+            #region Send Emails
+
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your TravelDesk Request on eDocuement has been updated successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+
+                    - eDocument Request Reference No.: {request.TravelDeskRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
+                To = user.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(request.Id, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has updated TravelDesk Request for on eDocuement and need to be reviewed from your side.
+
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+
+                    - eDocument Request Reference No.: {request.TravelDeskRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
+                To = reviewersEmails
+            };
+
+            _mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been updated successfully" });
+        }
+
+        /// <summary>
+        /// Approve TravelDesk Request
+        /// </summary>
+        /// <param name="requestReviewerWriteDto">Approve TravelDesk Request</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("Approve")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> ApproveTravelDeskRequest(ApproveRequestReviewerDto requestReviewerWriteDto)
+        {
+            _logger.LogInformation($"Start ApproveTravelDeskRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user);
+
+            if (!result.IsSucceded)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
+
+            #region Send Emails
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "TravelDeskRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
+            var requestCreator = request.Creator;
+            if (request?.Status == RequestStatus.Approved.ToString())
+            {
+                var requestCreatorDirectManager = request.Creator.Manager;
+                var requestCreatorDepartmentManager = request.Creator.Department.Manager;
+                var creatorMailContent = new MailContent
+                {
+                    Body = $"""
+                Dear {requestCreator.FullName.Split(" ")[0]},
+                    Kindly not that your TravelDesk Request {request.TravelDeskRequest.RequestNumber} on eDocuement has been approved successfully.
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
+
+                    - eDocument Request Reference No.: {request.TravelDeskRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                    IsHTMLBody = false,
+                    Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
+                    To = requestCreator.Email
+                };
+
+                _mailService.SendMailAsync(creatorMailContent);
+            }
+            else
+            {
+                var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(requestReviewerWriteDto.RequestId, request.CurrentStage);
+                var reviewerMailContent = new MailContent
+                {
+                    Body = $"""
+                    Dears,
+                        Kindly note that {requestCreator.FullName} has created TravelDesk Request for on eDocuement and need to be reviewed from your side.
+
+                        Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+
+                        - eDocument Request Reference No.: {request.TravelDeskRequest.RequestNumber}
+
+                    Thanks,
+
+                    “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                    """,
+                    IsHTMLBody = false,
+                    Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
+                    To = reviewersEmails
+                };
+
+                _mailService.SendMailAsync(reviewerMailContent);
+            }
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+
+        /// <summary>
+        /// Decline TravelDesk Request
+        /// </summary>
+        /// <param name="requestReviewerWriteDto">Decline TravelDesk Request</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("Decline")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> DeclineTravelDeskRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
+        {
+            _logger.LogInformation($"Start DeclineTravelDeskRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
+            if (!result.IsSucceded)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
+
+            #region Send Emails
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "TravelDeskRequest", "Creator" });
+
+            var requestCreator = request.Creator;
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {requestCreator.FullName.Split(" ")[0]},
+                    Kindly not that your TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
+                    For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
+
+                    - eDocument Request Reference No.: {request.TravelDeskRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"TravelDesk Request No. {request.TravelDeskRequest.RequestNumber} on eDocuement",
+                To = requestCreator.Email
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
+        }
+
+        
+    }
+}

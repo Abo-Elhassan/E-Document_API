@@ -40,7 +40,14 @@ public partial class Request : BaseEntity
     public virtual DiscountRequest DiscountRequest { get; set; }
     public virtual CCTVAccessRequest CCTVAccessRequest { get; set; }
     public virtual AccessControlRequest AccessControlRequest { get; set; }
-    
-    //public virtual ICollection<JobPlanRequest> JobPlanRequests { get; set; } = new HashSet<JobPlanRequest>();
+    public virtual FuelOilInvoiceRequest FuelOilInvoiceRequest { get; set; }
+    public virtual NewItemRequest NewItemRequest { get; set; }
+    public virtual ICollection<RequestedItem> RequestedItems { get; set; } = new HashSet<RequestedItem>();
+    public virtual PRRequest PRRequest { get; set; }
+    public virtual ICollection<RequestedPR> RequestedPRs { get; set; } = new HashSet<RequestedPR>();
+    public virtual ManliftReservationRequest ManliftReservationRequest { get; set; }
+    public virtual EquipmentRequestIn EquipmentRequestIn { get; set; }
+    public virtual EquipmentRequestOut EquipmentRequestOut { get; set; }
+
 
 }

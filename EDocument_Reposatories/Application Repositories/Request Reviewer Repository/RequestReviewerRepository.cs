@@ -6,6 +6,7 @@ using EDocument_EF;
 using EDocument_Reposatories.Generic_Reposatories;
 using EDocument_Repositories.Application_Repositories.UserRepository;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 using System.Linq.Dynamic.Core;
 using System.Text;
 
@@ -92,7 +93,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
         {
             var definedRequestReviewers = await GetAllDefinedRequestReviewersAsync(definedRequestId);
 
-            var request = await _context.Requests.Include(r=>r.RequestReviewers).FirstOrDefaultAsync(r => r.Id == requestId);
+            var request = await _context.Requests.Include(r=>r.RequestReviewers).Include(r=>r.DefinedRequest).FirstOrDefaultAsync(r => r.Id == requestId);
             request.Status = RequestStatus.Pending.ToString();
             request.CurrentStage = 1;
 
@@ -103,9 +104,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
             foreach (var item in request?.RequestReviewers)
             {
-                if (item.StageNumber == 1)
-                    item.Status = RequestStatus.Pending.ToString();
-
+                item.AssignedReviewerId = await CheckReviewerDelegation(item.AssignedReviewerId);
 
 
                 if (isNew)
@@ -123,6 +122,9 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                     item.ModifiedBy = "E-Document";
                     item.ModifiedAt = DateTime.Now;
                 }
+
+                if (item.StageNumber == 1)
+                    item.Status = RequestStatus.Pending.ToString();
             }
 
             var firstReviewer = request?.RequestReviewers.FirstOrDefault(rr => rr.StageNumber == 1);
@@ -132,15 +134,15 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 switch (firstReviewer.ReviewerType)
                 {
                     case ReviewerType.DirectManager:
-                        firstReviewer.AssignedReviewerId = _userRepository.FindDirectManagerByIdAsync(requesterId)?.Result.Value.Id;
+                        firstReviewer.AssignedReviewerId = await CheckReviewerDelegation(_userRepository.FindDirectManagerByIdAsync(requesterId)?.Result.Value.Id);
                         break;
 
                     case ReviewerType.SectionHead:
-                        firstReviewer.AssignedReviewerId = _userRepository.FindSectionHeadByIdAsync(requesterId)?.Result.Value.Id;
+                        firstReviewer.AssignedReviewerId = await CheckReviewerDelegation(_userRepository.FindSectionHeadByIdAsync(requesterId)?.Result.Value.Id);
                         break;
 
                     case ReviewerType.DepartmentManager:
-                        firstReviewer.AssignedReviewerId = _userRepository.FindDepartmentManagerByIdAsync(requesterId)?.Result.Value.Id;
+                        firstReviewer.AssignedReviewerId = await CheckReviewerDelegation(_userRepository.FindDepartmentManagerByIdAsync(requesterId)?.Result.Value.Id);
                         break;
 
                     default:
@@ -150,7 +152,8 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 // Skip All Approval steps for the creator if he is one of the reviewers
                 if (request.RequestReviewers.Any(r => r.AssignedReviewerId == request.CreatorId))
                 {
-                    foreach (var reviewer in request.RequestReviewers.Where(r => r.AssignedReviewerId == request.CreatorId))
+                    var reviewerStageNumber = request.RequestReviewers.FirstOrDefault(rr=>rr.AssignedReviewerId == request.CreatorId).StageNumber;
+                    foreach (var reviewer in request.RequestReviewers.Where(r => r.StageNumber == reviewerStageNumber))
                     {
                         reviewer.Status = RequestStatus.Approved.ToString();
                         reviewer.ReviewedBy = "E-Documnet";
@@ -163,20 +166,25 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
 
             //Proceed with approved stages
-            foreach (var reviewer in request.RequestReviewers.OrderBy(r=>r.StageNumber).DistinctBy(r => r.StageNumber))
+
+            if (firstReviewer.Status == RequestStatus.Approved.ToString())
             {
-                if (reviewer.Status == RequestStatus.Approved.ToString())
+                if (request.CurrentStage == request.DefinedRequest.ReviewersNumber) // Check if the approved stage is the last stage
                 {
-                    request.CurrentStage++;
+                    request.Status = RequestStatus.Approved.ToString();
+                    
                 }
                 else
                 {
-                    break;
+                    request.CurrentStage++;
+
+                    //Change current reviewer status from none to pending
+                    request.RequestReviewers.Where(rr => rr.StageNumber == request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
+                  
                 }
             }
+            
 
-            //Change current reviewer status from none to pending
-            request.RequestReviewers.Where(rr => rr.StageNumber == request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
 
             _context.Update(request);
             _context.SaveChanges();
@@ -191,7 +199,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             var currentStage = remainingRequestReviewers.FirstOrDefault().Request.CurrentStage;
             if (remainingRequestReviewers is null || remainingRequestReviewers.Count == 0)
             {
-                result = (false, $"Request reviewers not found for this stage");
+                result = (false, $"Request reviewers not found for this stage or request is already approved");
                 return result;
 
             }
@@ -269,12 +277,11 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
         {
 
             (bool IsSucceded, string? Message) result = (false, null);
-
-
+            var remainingRequestReviewers = await _context.RequestReviewers.Include(r => r.Request).Include(dr => dr.Request.DefinedRequest).Where(rr => rr.RequestId == reviewingInfo.RequestId && rr.StageNumber >= rr.Request.CurrentStage).ToListAsync();
             var requestReviewers = await _context.RequestReviewers.Include(r => r.Request).Include(dr => dr.Request.DefinedRequest).Where(rr => rr.RequestId == reviewingInfo.RequestId && rr.StageNumber == rr.Request.CurrentStage).ToListAsync();
-            if (requestReviewers is null ||requestReviewers.Count==0)
+            if (remainingRequestReviewers is null || remainingRequestReviewers.Count==0)
             {
-                result = (false, $"Request reviewers not found for this stage");
+                result = (false, $"Request reviewers not found for this stage or request is already reviewed");
                 return result;
 
             }
@@ -302,5 +309,12 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             result.IsSucceded = true;
             return result;
         }
+
+        private async Task<string> CheckReviewerDelegation(string assignedReviewerId)
+        {
+            var assignedReviewer = await _context.Users.FindAsync(assignedReviewerId);
+
+            return assignedReviewer?.DelegatedUntil>DateTime.Now ? assignedReviewer.DelegatedUserId: assignedReviewerId;
+        } 
     }
 }

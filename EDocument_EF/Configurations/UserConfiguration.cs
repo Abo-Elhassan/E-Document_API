@@ -62,6 +62,12 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.Position)
             .HasMaxLength(200);
 
+            entity.Property(e => e.DelegatedUserId)
+            .HasMaxLength(50);
+
+            entity.Property(e => e.DelegatedUntil)
+            .HasColumnType("smalldatetime");
+
             entity.Property(e => e.LastLogin)
             .HasColumnType("smalldatetime");
 

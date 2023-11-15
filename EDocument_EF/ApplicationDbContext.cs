@@ -32,8 +32,6 @@ namespace EDocument_EF
         public virtual DbSet<DomainAccountRequest> DomainAccountRequests => Set<DomainAccountRequest>();
         public virtual DbSet<VehicleRequest> VehicleRequests => Set<VehicleRequest>();
         public virtual DbSet<TravelDeskRequest> TravelDeskRequests => Set<TravelDeskRequest>();
-
-        //public virtual DbSet<JobPlanRequest> JobPlanRequests => Set<JobPlanRequest>();
         public virtual DbSet<VoucherRequest> VoucherRequests => Set<VoucherRequest>();
 
         public virtual DbSet<PoRequest> PoRequests => Set<PoRequest>();
@@ -44,9 +42,20 @@ namespace EDocument_EF
 
         public virtual DbSet<AccessControlRequest> AccessControlRequests => Set<AccessControlRequest>();
         public virtual DbSet<CCTVAccessRequest> CCTVAccessRequests => Set<CCTVAccessRequest>();
-        #region Audit Tables
 
+        public virtual DbSet<FuelOilInvoiceRequest> FuelOilInvoiceRequests => Set<FuelOilInvoiceRequest>();
+        public virtual DbSet<NewItemRequest> NewItemRequests => Set<NewItemRequest>();
+        public virtual DbSet<RequestedItem> RequestedItems => Set<RequestedItem>();
+        public virtual DbSet<PRRequest> PRRequests => Set<PRRequest>();
+        public virtual DbSet<ManliftReservationRequest> ManliftReservationRequests => Set<ManliftReservationRequest>(); 
+        public virtual DbSet<RequestedPR> RequestedPRs => Set<RequestedPR>();
+        public virtual DbSet<EquipmentRequestIn> EquipmentRequestIns => Set<EquipmentRequestIn>();
+        public virtual DbSet<EquipmentRequestOut> EquipmentRequestOuts => Set<EquipmentRequestOut>();
+        
+
+        #region Audit Tables
         public virtual DbSet<AuditDefinedRequest> AuditDefinedRequests => Set<AuditDefinedRequest>();
+
         public virtual DbSet<AuditDefinedRequestReviewer> AuditDefinedRequestReviewers => Set<AuditDefinedRequestReviewer>();
         public virtual DbSet<AuditDefinedApplicationRole> AuditDefinedApplicationRoles => Set<AuditDefinedApplicationRole>();
         public virtual DbSet<AuditDefinedRequestRole> AuditDefinedRequestRoles => Set<AuditDefinedRequestRole>();
@@ -71,6 +80,15 @@ namespace EDocument_EF
         public virtual DbSet<AuditDiscountRequest> AuditDiscountRequests => Set<AuditDiscountRequest>();
         public virtual DbSet<AuditAccessControlRequest> AuditAccessControlRequests => Set<AuditAccessControlRequest>();
         public virtual DbSet<AuditCCTVAccessRequest> AuditCCTVAccessRequests => Set<AuditCCTVAccessRequest>();
+        public virtual DbSet<AuditFuelOilInvoiceRequest> AuditFuelOilInvoiceRequests => Set<AuditFuelOilInvoiceRequest>();
+        public virtual DbSet<AuditEquipmentRequestIn> AuditEquipmentRequestIns => Set<AuditEquipmentRequestIn>();
+        public virtual DbSet<AuditEquipmentRequestOut> AuditEquipmentRequestOuts => Set<AuditEquipmentRequestOut>();
+        public virtual DbSet<AuditNewItemRequest> AuditNewItemRequests => Set<AuditNewItemRequest>();
+        public virtual DbSet<AuditRequestedItem> AuditRequestedItems => Set<AuditRequestedItem>();
+        public virtual DbSet<AuditPRRequest> AuditPRRequests => Set<AuditPRRequest>();
+        public virtual DbSet<AuditRequestedPR> AuditRequestedPRs => Set<AuditRequestedPR>();
+        public virtual DbSet<AuditManliftReservationRequest> AuditManliftReservationRequests => Set<AuditManliftReservationRequest>();
+
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -94,13 +112,20 @@ namespace EDocument_EF
             builder.ApplyConfiguration(new DomainAccountRequestConfiguration());
             builder.ApplyConfiguration(new VehicleRequestConfiguration());
             builder.ApplyConfiguration(new TravelDeskRequestConfiguration());
-            //builder.ApplyConfiguration(new JobPlanRequestConfiguration());
             builder.ApplyConfiguration(new PoRequestConfiguration());
             builder.ApplyConfiguration(new VoucherRequestConfiguration());
             builder.ApplyConfiguration(new RefundRequestConfiguration());
             builder.ApplyConfiguration(new DiscountRequestConfiguration());
             builder.ApplyConfiguration(new AccessControlRequestConfiguration());
             builder.ApplyConfiguration(new CCTVAccessRequestConfiguration());
+            builder.ApplyConfiguration(new FuelOilInvoiceRequestConfiguration());
+            builder.ApplyConfiguration(new NewItemRequestConfiguration());
+            builder.ApplyConfiguration(new RequestedItemConfiguration());
+            builder.ApplyConfiguration(new PRRequestConfiguration());
+            builder.ApplyConfiguration(new RequestedPRConfiguration());
+            builder.ApplyConfiguration(new ManliftReservationRequestConfiguration());
+            builder.ApplyConfiguration(new EquipmentRequestInConfiguration());
+            builder.ApplyConfiguration(new EquipmentRequestOutConfiguration());
         }
 
         public override int SaveChanges()
@@ -213,6 +238,14 @@ namespace EDocument_EF
             builder.Entity<AuditDiscountRequest>().ToTable(nameof(AuditDiscountRequest), "audit");
             builder.Entity<AuditCCTVAccessRequest>().ToTable(nameof(AuditCCTVAccessRequest), "audit");
             builder.Entity<AuditAccessControlRequest>().ToTable(nameof(AuditAccessControlRequest), "audit");
+            builder.Entity<AuditFuelOilInvoiceRequest>().ToTable(nameof(AuditFuelOilInvoiceRequest), "audit");
+            builder.Entity<AuditNewItemRequest>().ToTable(nameof(AuditNewItemRequest), "audit");
+            builder.Entity<AuditRequestedItem>().ToTable(nameof(AuditRequestedItem), "audit");
+            builder.Entity<AuditPRRequest>().ToTable(nameof(AuditPRRequest), "audit");
+            builder.Entity<AuditRequestedPR>().ToTable(nameof(AuditRequestedPR), "audit");
+            builder.Entity<AuditManliftReservationRequest>().ToTable(nameof(AuditManliftReservationRequest), "audit");
+            builder.Entity<AuditEquipmentRequestIn>().ToTable(nameof(AuditEquipmentRequestIn), "audit");
+            builder.Entity<AuditEquipmentRequestOut>().ToTable(nameof(AuditEquipmentRequestOut), "audit");
             #endregion
 
         }
