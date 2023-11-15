@@ -9,7 +9,6 @@ namespace EDocument_Data.Models
         public string PrSubject { get; set; }
         public string ItemNumber { get; set; }
         public string AfeNumber { get; set; }
-        public virtual ICollection<RequestedPR> RequestedPRs { get; set; } = new HashSet<RequestedPR>();
 
     }
 }

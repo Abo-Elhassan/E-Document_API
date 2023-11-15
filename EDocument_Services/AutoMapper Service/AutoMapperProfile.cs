@@ -465,7 +465,8 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
-                .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
+                .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments))
+                .ForMember(dest => dest.RequestedItems, src => src.MapFrom(opts => opts.Request.RequestedItems));
 
             CreateMap<NewItemRequest, NewItemRequestReviewerReadDto>()
                 .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
@@ -474,12 +475,12 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.RequestedItems, src => src.MapFrom(opts => opts.Request.RequestedItems))
                 .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
 
             CreateMap<NewItemRequestCreateDto, NewItemRequest>();
 
             CreateMap<NewItemRequestUpdateDto, NewItemRequest>()
-                .ForMember(dest => dest.RequestedItems, src => src.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<RequestedItem, RequestedItemReadDto>();
@@ -511,7 +512,8 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
-                .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
+                .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments))
+                .ForMember(dest => dest.RequestedPRs, src => src.MapFrom(opts => opts.Request.RequestedPRs));
 
             CreateMap<PRRequest, PRRequestReviewerReadDto>()
                 .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
@@ -520,12 +522,12 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.RequestedPRs, src => src.MapFrom(opts => opts.Request.RequestedPRs))
                 .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
 
             CreateMap<PRRequestCreateDto, PRRequest>();
 
             CreateMap<PRRequestUpdateDto, PRRequest>()
-                .ForMember(dest => dest.RequestedPRs, src => src.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<RequestedPR, RequestedPRReadDto>();

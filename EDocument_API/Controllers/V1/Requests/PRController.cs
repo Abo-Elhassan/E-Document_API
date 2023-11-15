@@ -80,7 +80,7 @@ namespace EDocument_API.Controllers.V1.Requests
         {
             _logger.LogInformation($"Start GetPRRequestById from {nameof(RequestController)} for request id = {id}");
 
-            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "RequestedPRs" };
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "Request.RequestedPRs" };
             var pRRequest = await _unitOfWork.Repository<PRRequest>().FindRequestAsync(
             requestId: id,
             expression: "Request.Id==@0",
@@ -183,7 +183,7 @@ namespace EDocument_API.Controllers.V1.Requests
         public async Task<ActionResult> GetCreatorPRRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetCreatorPRRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
-            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "RequestedPRs" };
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "Request.RequestedPRs" };
             string? userCondition = null;
 
             (int TotalCount, IEnumerable<PRRequest> PaginatedData) result;
@@ -250,7 +250,7 @@ namespace EDocument_API.Controllers.V1.Requests
         public async Task<ActionResult> GetReviewerPRRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetReviewerPRRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
-            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "RequestedPRs" };
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "Request.RequestedPRs" };
             string? userCondition = null;
 
             (int TotalCount, IEnumerable<PRRequest> PaginatedData) result;
@@ -346,7 +346,7 @@ namespace EDocument_API.Controllers.V1.Requests
                     item.RequestId = requestId;
                     item.CreatedAt = DateTime.Now;
                     item.CreatedBy = user?.FullName;
-                    request.PRRequest.RequestedPRs.Add(item);
+                    request.RequestedPRs.Add(item);
                 }
             }
             else
@@ -440,7 +440,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
-            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "PRRequest", "Attachments", "PRRequest.RequestedPRs" });
+            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "PRRequest", "Attachments", "RequestedPRs" });
 
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
@@ -455,9 +455,9 @@ namespace EDocument_API.Controllers.V1.Requests
 
             if (sentItems != null && sentItems.Count > 0)
             {
-                _unitOfWork.Repository<RequestedPR>().DeleteRange(request.PRRequest.RequestedPRs);
+                _unitOfWork.Repository<RequestedPR>().DeleteRange(request.RequestedPRs);
 
-                request.PRRequest.RequestedPRs = new List<RequestedPR>();
+                request.RequestedPRs = new List<RequestedPR>();
                 foreach (var sentItem in sentItems)
                 {
                     var item = JsonConvert.DeserializeObject<RequestedPR>(sentItem);
@@ -466,7 +466,7 @@ namespace EDocument_API.Controllers.V1.Requests
                     item.CreatedBy = request.CreatedBy;
                     item.ModifiedAt = DateTime.Now;
                     item.ModifiedBy = user?.FullName;
-                    request.PRRequest.RequestedPRs.Add(item);
+                    request.RequestedPRs.Add(item);
                 }
             }
             else

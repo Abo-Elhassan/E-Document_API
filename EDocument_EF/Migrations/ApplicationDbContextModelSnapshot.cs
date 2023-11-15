@@ -3575,9 +3575,6 @@ namespace EDocument_EF.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)");
 
-                    b.Property<string>("NewItemRequestRequestNumber")
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<long>("RequestId")
                         .HasColumnType("bigint");
 
@@ -3592,8 +3589,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("RequestedItemId");
-
-                    b.HasIndex("NewItemRequestRequestNumber");
 
                     b.HasIndex("RequestId");
 
@@ -3640,8 +3635,6 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PRRequestRequestNumber")
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -3655,8 +3648,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("RequestedPRId");
-
-                    b.HasIndex("PRRequestRequestNumber");
 
                     b.HasIndex("RequestId");
 
@@ -4633,9 +4624,6 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("EDocument_Data.Models.RequestedItem", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.NewItemRequest", null)
-                        .WithMany("RequestedItems")
-                        .HasForeignKey("NewItemRequestRequestNumber");
 
                     b.HasOne("EDocument_Data.Models.Request", "Request")
                         .WithMany("RequestedItems")
@@ -4649,9 +4637,6 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("EDocument_Data.Models.RequestedPR", b =>
                 {
-                    b.HasOne("EDocument_Data.Models.PRRequest", null)
-                        .WithMany("RequestedPRs")
-                        .HasForeignKey("PRRequestRequestNumber");
 
                     b.HasOne("EDocument_Data.Models.Request", "Request")
                         .WithMany("RequestedPRs")

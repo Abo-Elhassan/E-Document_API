@@ -10,6 +10,5 @@ namespace EDocument_Data.Models
         public string EquipmentType { get; set; }
         public string PartNumber { get; set; }
         public string Manufacturing { get; set; }
-        public virtual ICollection<RequestedItem> RequestedItems { get; set; } = new HashSet<RequestedItem>();
     }
 }

@@ -81,7 +81,7 @@ namespace EDocument_API.Controllers.V1.Requests
         {
             _logger.LogInformation($"Start GetNewItemRequestById from {nameof(RequestController)} for request id = {id}");
 
-            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "RequestedItems" };
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "Request.RequestedItems" };
             var newItemRequest = await _unitOfWork.Repository<NewItemRequest>().FindRequestAsync(
             requestId: id,
             expression: "Request.Id==@0",
@@ -184,7 +184,7 @@ namespace EDocument_API.Controllers.V1.Requests
         public async Task<ActionResult> GetCreatorNewItemRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetCreatorNewItemRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
-            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "RequestedItems" };
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "Request.RequestedItems" };
             string? userCondition = null;
 
             (int TotalCount, IEnumerable<NewItemRequest> PaginatedData) result;
@@ -251,7 +251,7 @@ namespace EDocument_API.Controllers.V1.Requests
         public async Task<ActionResult> GetReviewerNewItemRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetReviewerNewItemRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
-            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "RequestedItems" };
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "Request.RequestedItems" };
             string? userCondition = null;
 
             (int TotalCount, IEnumerable<NewItemRequest> PaginatedData) result;
@@ -344,10 +344,10 @@ namespace EDocument_API.Controllers.V1.Requests
                 foreach (var sentItem in sentItems)
                 {
                     var item = JsonConvert.DeserializeObject<RequestedItem>(sentItem);
-                    item.RequestedItemId = requestId;
+                    item.RequestId = requestId;
                     item.CreatedAt = DateTime.Now;
                     item.CreatedBy = user?.FullName;
-                    request.NewItemRequest.RequestedItems.Add(item);
+                    request.RequestedItems.Add(item);
                 }
             }
             else
@@ -441,7 +441,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
-            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "NewItemRequest", "Attachments", "NewItemRequest.RequestedItems" });
+            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "NewItemRequest", "Attachments", "RequestedItems" });
 
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
@@ -456,9 +456,9 @@ namespace EDocument_API.Controllers.V1.Requests
 
             if (sentItems != null && sentItems.Count > 0)
             {
-                _unitOfWork.Repository<RequestedItem>().DeleteRange(request.NewItemRequest.RequestedItems);
+                _unitOfWork.Repository<RequestedItem>().DeleteRange(request.RequestedItems);
 
-                request.NewItemRequest.RequestedItems = new List<RequestedItem>();
+                request.RequestedItems = new List<RequestedItem>();
                 foreach (var sentItem in sentItems)
                 {
                     var item = JsonConvert.DeserializeObject<RequestedItem>(sentItem);
@@ -467,7 +467,7 @@ namespace EDocument_API.Controllers.V1.Requests
                     item.CreatedBy = request.CreatedBy;
                     item.ModifiedAt = DateTime.Now;
                     item.ModifiedBy = user?.FullName;
-                    request.NewItemRequest.RequestedItems.Add(item);
+                    request.RequestedItems.Add(item);
                 }
             }
             else
