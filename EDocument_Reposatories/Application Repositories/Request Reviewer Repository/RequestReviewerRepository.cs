@@ -106,10 +106,6 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             {
                 item.AssignedReviewerId = await CheckReviewerDelegation(item.AssignedReviewerId);
 
-                if (item.StageNumber == 1)
-                    item.Status = RequestStatus.Pending.ToString();
-
-
 
                 if (isNew)
                 {
@@ -126,6 +122,9 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                     item.ModifiedBy = "E-Document";
                     item.ModifiedAt = DateTime.Now;
                 }
+
+                if (item.StageNumber == 1)
+                    item.Status = RequestStatus.Pending.ToString();
             }
 
             var firstReviewer = request?.RequestReviewers.FirstOrDefault(rr => rr.StageNumber == 1);
