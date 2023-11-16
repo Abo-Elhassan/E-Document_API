@@ -118,3 +118,8 @@ SET HasLDAP = 0
 WHERE Id IN (  SELECT Id FROM [security].[User] WHERE Company !='DP World' AND  HasLDAP = 1 );
 
 GO
+
+-----------* Update ReviewerType as DepartmentManager for Ahmez Zaki To enable Approve form Emails * -------
+
+update DefinedRequestReviewer set ReviewerType = 'DepartmentManager' where AssignedReviewerId = '50269'
+GO
