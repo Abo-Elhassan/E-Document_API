@@ -11,7 +11,10 @@ namespace EDocument_EF.Configurations
         {
             entity.HasKey(e => e.RequestNumber);
 
-          
+            entity.HasIndex(e => e.InvoiceNumber)
+            .IsUnique();
+
+
             entity.ToTable(nameof(FuelOilInvoiceRequest), tb => tb.HasTrigger($"TR_{nameof(AuditFuelOilInvoiceRequest)}"));
 
             entity.Property(e => e.RequestNumber)

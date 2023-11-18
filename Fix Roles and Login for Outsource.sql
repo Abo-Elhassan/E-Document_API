@@ -123,3 +123,22 @@ GO
 
 update DefinedRequestReviewer set ReviewerType = 'DepartmentManager' where AssignedReviewerId = '50269'
 GO
+
+--------------------------* Make CreatedBy &  [ModifiedBy] Allow null *-------------------------------------
+
+ALTER TABLE [audit].[AuditRole]
+ALTER COLUMN [CreatedBy] [nvarchar](max) NULL;
+
+ALTER TABLE [audit].[AuditRole]
+ALTER COLUMN [ModifiedBy] [nvarchar](max) NULL;
+
+-------------------------------* Remove Finance Role From Members Not included in PO Cycle*---------------------------------------------
+UPDATE [security].[User] SET Roles = 'Basic' WHERE DepartmentId=9;
+UPDATE [security].[User] SET Roles = 'Basic,Finance_Po' WHERE Id IN('51510','51653','51682','51640');
+UPDATE [security].[User] SET Roles = 'Basic,Finance_Po,Finance_FuelOil' WHERE Id ='51510';
+GO
+Delete [security].[UserRoles] where UserId NOT IN (
+'51510',
+'51653',
+'51682',
+'51640') and RoleId ='c3f87f77-415a-45da-8587-50221963b560';

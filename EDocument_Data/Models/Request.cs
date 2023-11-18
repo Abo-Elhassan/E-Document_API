@@ -43,8 +43,8 @@ public partial class Request : BaseEntity
     public virtual FuelOilInvoiceRequest FuelOilInvoiceRequest { get; set; }
     public virtual NewItemRequest NewItemRequest { get; set; }
     public virtual ICollection<RequestedItem> RequestedItems { get; set; } = new HashSet<RequestedItem>();
-    public virtual PRRequest PRRequest { get; set; }
-    public virtual ICollection<RequestedPR> RequestedPRs { get; set; } = new HashSet<RequestedPR>();
+    public virtual PrRequest PrRequest { get; set; }
+    public virtual ICollection<RequestedPr> RequestedPrs { get; set; } = new HashSet<RequestedPr>();
     public virtual ManliftReservationRequest ManliftReservationRequest { get; set; }
     public virtual EquipmentRequestIn EquipmentRequestIn { get; set; }
     public virtual EquipmentRequestOut EquipmentRequestOut { get; set; }

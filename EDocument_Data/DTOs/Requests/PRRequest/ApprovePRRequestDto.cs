@@ -2,20 +2,24 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace EDocument_Data.DTOs.Requests.PRRequest
+namespace EDocument_Data.DTOs.Requests.PrRequest
 {
-    public class ApprovePRRequestDto
+    public class ApprovePrRequestDto
     {
         [Required]
         public long RequestId { get; init; }
         [Required]
-        public List<ApproveRequestedPRDto> ApprovedPRs { get; init; }
+        public List<ApproveRequestedPrDto> ApprovedPrs { get; init; }
     }
 
-    public class ApproveRequestedPRDto
+    public class ApproveRequestedPrDto
     {
-        public long RequestedPRId { get; init; }
-        public string PRNumber { get; init; }
+        [Required]
+        public long RequestedPrId { get; init; }
+
+        [Required]
+        [RegularExpression(@"^[A-Z]{2}\d{2}-\d{4}$")]
+        public string PrNumber { get; init; }
 
     }
 }

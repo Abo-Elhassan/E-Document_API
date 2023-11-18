@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EDocument_Data\EDocument_Data.csproj" />
     <ProjectReference Include="..\EDocument_EF\EDocument_EF.csproj" />
     <ProjectReference Include="..\EDocument_Services\EDocument_Services.csproj" />
     <ProjectReference Include="..\EDocument_UnitOfWork\EDocument_UnitOfWork.csproj" />

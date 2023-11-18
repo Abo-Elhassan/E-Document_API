@@ -277,7 +277,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <summary>
         /// Create Refund Request
         /// </summary>
-        /// <param name="refundRequestCreateDto">Refund request Informarion</param>
+        /// <param name="refundRequestCreateDto">Refund request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -376,7 +376,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// Update Refund Request
         /// </summary>
         /// <param name="id">Refund request Id</param>
-        /// <param name="refundRequestUpdateDto">Refund request Informarion</param>
+        /// <param name="refundRequestUpdateDto">Refund request Information</param>
         /// <remarks>
         ///
         /// </remarks>

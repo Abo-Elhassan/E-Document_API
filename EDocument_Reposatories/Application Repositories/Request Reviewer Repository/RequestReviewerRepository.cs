@@ -197,6 +197,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             
             var remainingRequestReviewers = await _context.RequestReviewers.Include(r => r.Request).Include(dr => dr.Request.DefinedRequest).Where(rr => rr.RequestId == reviewingInfo.RequestId && rr.StageNumber >= rr.Request.CurrentStage).ToListAsync();
             var currentStage = remainingRequestReviewers.FirstOrDefault().Request.CurrentStage;
+
             if (remainingRequestReviewers is null || remainingRequestReviewers.Count == 0)
             {
                 result = (false, $"Request reviewers not found for this stage or request is already approved");
@@ -208,6 +209,9 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 result = (false, $"user '{reviewer.Id}' is not the current reviewer for this request");
                 return result;
             }
+            remainingRequestReviewers.FirstOrDefault().Request.ModifiedBy = reviewer.FullName;
+            remainingRequestReviewers.FirstOrDefault().Request.ModifiedAt = DateTime.Now;
+
             //Record approving action for the current stage
             foreach (var requestReviewer in remainingRequestReviewers.Where(rr => rr.StageNumber == rr.Request.CurrentStage || rr.AssignedReviewerId == reviewer.Id))//Approve the current stage and the advanced stages for the same reviewer if exists
             {
@@ -291,6 +295,8 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 return result;
             }
 
+            remainingRequestReviewers.FirstOrDefault().Request.ModifiedBy = reviewer.FullName;
+            remainingRequestReviewers.FirstOrDefault().Request.ModifiedAt = DateTime.Now;
             foreach (var requestReviewer in requestReviewers)
             {
                 requestReviewer.ReviewedBy = reviewer.FullName;

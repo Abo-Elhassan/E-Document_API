@@ -3,7 +3,7 @@ using EDocument_Data.Consts;
 using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Attachments;
 using EDocument_Data.DTOs.Filter;
-using EDocument_Data.DTOs.Requests.PRRequest;
+using EDocument_Data.DTOs.Requests.PrRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
@@ -34,18 +34,18 @@ namespace EDocument_API.Controllers.V1.Requests
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse<string>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ApiResponse<string>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ApiResponse<string>))]
-    public class PRController : ControllerBase
+    public class PrController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
-        private readonly ILogger<PRController> _logger;
+        private readonly ILogger<PrController> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRequestReviewerRepository _requestReviewerRepository;
         private readonly IMailService _mailService;
         private readonly IFileService _fileService;
 
-        public PRController(
-            ILogger<PRController> logger,
+        public PrController(
+            ILogger<PrController> logger,
             UserManager<User> userManager,
             IMapper mapper,
             IUnitOfWork unitOfWork,
@@ -66,22 +66,22 @@ namespace EDocument_API.Controllers.V1.Requests
 
    
         /// <summary>
-        /// Get PR Requests Details
+        /// Get Pr Requests Details
         /// </summary>
         /// <param name="id">request id</param>
         /// <remarks>
         ///
         /// </remarks>
-        /// <returns>PR Request</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<PRRequestReadDto>))]
+        /// <returns>Pr Request</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<PrRequestReadDto>))]
         [HttpGet("{id}")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> GetPRRequestById(long id)
+        public async Task<ActionResult> GetPrRequestById(long id)
         {
-            _logger.LogInformation($"Start GetPRRequestById from {nameof(RequestController)} for request id = {id}");
+            _logger.LogInformation($"Start GetPrRequestById from {nameof(RequestController)} for request id = {id}");
 
-            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "Request.RequestedPRs" };
-            var pRRequest = await _unitOfWork.Repository<PRRequest>().FindRequestAsync(
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "Request.RequestedPrs" };
+            var pRRequest = await _unitOfWork.Repository<PrRequest>().FindRequestAsync(
             requestId: id,
             expression: "Request.Id==@0",
             includes: includes
@@ -90,40 +90,40 @@ namespace EDocument_API.Controllers.V1.Requests
             if (pRRequest is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
-            var result = _mapper.Map<PRRequestReadDto>(pRRequest);
+            var result = _mapper.Map<PrRequestReadDto>(pRRequest);
 
-            return Ok(new ApiResponse<PRRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+            return Ok(new ApiResponse<PrRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
         /// <summary>
-        /// Get Requested PRs By Id 
+        /// Get Requested Prs By Id 
         /// </summary>
         /// <param name="requestId">request id</param>
         /// <remarks>
         ///
         /// </remarks>
-        /// <returns>Requested PRs</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<RequestedPRReadDto>>))]
-        [HttpGet("RequestedPR/{requestId}")]
+        /// <returns>Requested Prs</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<RequestedPrReadDto>>))]
+        [HttpGet("RequestedPr/{requestId}")]
         [Authorize(Roles = "Store")]
-        public async Task<ActionResult> GetRequestedPRsByRequestNumber(long requestId)
+        public async Task<ActionResult> GetRequestedPrsByRequestNumber(long requestId)
         {
-            _logger.LogInformation($"Start GetRequestedPRsByRequestNumber from {nameof(RequestController)} for request id = {requestId}");
+            _logger.LogInformation($"Start GetRequestedPrsByRequestNumber from {nameof(RequestController)} for request id = {requestId}");
 
-            Expression<Func<RequestedPR, bool>> criteria = (r => r.RequestId == requestId);
+            Expression<Func<RequestedPr, bool>> criteria = (r => r.RequestId == requestId);
 
-            var requestedPRs = await _unitOfWork.Repository<RequestedPR>().FindAllAsync(criteria, null);
+            var requestedPRs = await _unitOfWork.Repository<RequestedPr>().FindAllAsync(criteria, null);
 
             if (requestedPRs is null || !requestedPRs.Any())
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Requested PRs not found" });
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Requested Prs not found" });
 
-            var result = _mapper.Map<List<RequestedPRReadDto>>(requestedPRs);
+            var result = _mapper.Map<List<RequestedPrReadDto>>(requestedPRs);
 
-            return Ok(new ApiResponse<List<RequestedPRReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = result });
+            return Ok(new ApiResponse<List<RequestedPrReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
 
         /// <summary>
-        /// Delete PR Requests By Id
+        /// Delete Pr Requests By Id
         /// </summary>
         /// <param name="id">request id</param>
         /// <remarks>
@@ -133,11 +133,11 @@ namespace EDocument_API.Controllers.V1.Requests
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpDelete("{id}")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> DeletePRRequest(long id)
+        public async Task<ActionResult> DeletePrRequest(long id)
         {
-            _logger.LogInformation($"Start DeletePRRequest from {nameof(RequestController)} for request id = {id}");
+            _logger.LogInformation($"Start DeletePrRequest from {nameof(RequestController)} for request id = {id}");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            var includes = new string[] { "PRRequest", "Attachments", "RequestReviewers" };
+            var includes = new string[] { "PrRequest", "Attachments", "RequestReviewers" };
 
             var request = await _unitOfWork.Repository<Request>().FindRequestAsync(
             requestId: id,
@@ -157,42 +157,42 @@ namespace EDocument_API.Controllers.V1.Requests
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
             }
 
-            request.PRRequest.ModifiedBy = user?.FullName;
+            request.PrRequest.ModifiedBy = user?.FullName;
             request.ModifiedBy = user?.FullName;
             _unitOfWork.Complete();
 
             _unitOfWork.Repository<Request>().Delete(request);
             _unitOfWork.Complete();
 
-            _fileService.DeleteFolder($@"PRRequest\{id}");
+            _fileService.DeleteFolder($@"PrRequest\{id}");
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = "Request deleted successfully" });
         }
 
         /// <summary>
-        /// Get All PR Requests By Creator With Filter
+        /// Get All Pr Requests By Creator With Filter
         /// </summary>
         /// <param name="filterDto">filter information</param>
         /// <remarks>
         ///
         /// </remarks>
-        /// <returns>List of All Created PR Requests</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<PRRequestReadDto>>))]
+        /// <returns>List of All Created Pr Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<PrRequestReadDto>>))]
         [HttpPost("Inbox")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> GetCreatorPRRequestsFiltered(FilterWriteDto? filterDto)
+        public async Task<ActionResult> GetCreatorPrRequestsFiltered(FilterWriteDto? filterDto)
         {
-            _logger.LogInformation($"Start GetCreatorPRRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
-            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "Request.RequestedPRs" };
+            _logger.LogInformation($"Start GetCreatorPrRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "Request.RequestedPrs" };
             string? userCondition = null;
 
-            (int TotalCount, IEnumerable<PRRequest> PaginatedData) result;
+            (int TotalCount, IEnumerable<PrRequest> PaginatedData) result;
 
             userCondition = "Request.CreatorId ==@0";
 
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
-                result = await _unitOfWork.Repository<PRRequest>().FindAllRequestsAsync(
+                result = await _unitOfWork.Repository<PrRequest>().FindAllRequestsAsync(
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filterValue: filterDto?.FilterValue,
@@ -206,7 +206,7 @@ namespace EDocument_API.Controllers.V1.Requests
             }
             else
             {
-                result = await _unitOfWork.Repository<PRRequest>().FindAllRequestsAsync(
+                result = await _unitOfWork.Repository<PrRequest>().FindAllRequestsAsync(
                 isCreator: true,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
@@ -223,9 +223,9 @@ namespace EDocument_API.Controllers.V1.Requests
             var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
 
-            var requests = _mapper.Map<List<PRRequestReadDto>>(result.PaginatedData);
+            var requests = _mapper.Map<List<PrRequestReadDto>>(result.PaginatedData);
 
-            var response = new FilterReadDto<PRRequestReadDto>
+            var response = new FilterReadDto<PrRequestReadDto>
             {
                 TotalCount = totalCount,
                 TotalPages = totalPages,
@@ -233,33 +233,33 @@ namespace EDocument_API.Controllers.V1.Requests
                 PageSize = requests.Count,
                 PaginatedData = requests
             };
-            return Ok(new ApiResponse<FilterReadDto<PRRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+            return Ok(new ApiResponse<FilterReadDto<PrRequestReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
         }
 
         /// <summary>
-        /// Get All PR Requests By Reviewer With Filter
+        /// Get All Pr Requests By Reviewer With Filter
         /// </summary>
         /// <param name="filterDto">filter information</param>
         /// <remarks>
         ///
         /// </remarks>
-        /// <returns>List of All Reviewer PR Requests</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<PRRequestReviewerReadDto>>))]
+        /// <returns>List of All Reviewer Pr Requests</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<PrRequestReviewerReadDto>>))]
         [HttpPost("AssignedToMe")]
         [Authorize(Roles = "Store")]
-        public async Task<ActionResult> GetReviewerPRRequestsFiltered(FilterWriteDto? filterDto)
+        public async Task<ActionResult> GetReviewerPrRequestsFiltered(FilterWriteDto? filterDto)
         {
-            _logger.LogInformation($"Start GetReviewerPRRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
-            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "Request.RequestedPRs" };
+            _logger.LogInformation($"Start GetReviewerPrRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
+            var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments", "Request.RequestedPrs" };
             string? userCondition = null;
 
-            (int TotalCount, IEnumerable<PRRequest> PaginatedData) result;
+            (int TotalCount, IEnumerable<PrRequest> PaginatedData) result;
 
             userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
 
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
-                result = await _unitOfWork.Repository<PRRequest>().FindAllRequestsAsync(
+                result = await _unitOfWork.Repository<PrRequest>().FindAllRequestsAsync(
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
                 filterValue: filterDto?.FilterValue,
@@ -273,7 +273,7 @@ namespace EDocument_API.Controllers.V1.Requests
             }
             else
             {
-                result = await _unitOfWork.Repository<PRRequest>().FindAllRequestsAsync(
+                result = await _unitOfWork.Repository<PrRequest>().FindAllRequestsAsync(
                 isCreator: false,
                 userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                 userCondition: userCondition,
@@ -290,7 +290,7 @@ namespace EDocument_API.Controllers.V1.Requests
             var totalCount = result.TotalCount;
             var totalPages = (int)Math.Ceiling((decimal)totalCount / (filterDto?.PageSize ?? 10));
 
-            var requests = _mapper.Map<List<PRRequestReviewerReadDto>>(result.PaginatedData);
+            var requests = _mapper.Map<List<PrRequestReviewerReadDto>>(result.PaginatedData);
 
             foreach (var request in requests)
             {
@@ -300,7 +300,7 @@ namespace EDocument_API.Controllers.V1.Requests
                 request.ReviewerStage = reviewer?.StageNumber;
             }
 
-            var response = new FilterReadDto<PRRequestReviewerReadDto>
+            var response = new FilterReadDto<PrRequestReviewerReadDto>
             {
                 TotalCount = totalCount,
                 TotalPages = totalPages,
@@ -308,13 +308,13 @@ namespace EDocument_API.Controllers.V1.Requests
                 PageSize = requests.Count,
                 PaginatedData = requests
             };
-            return Ok(new ApiResponse<FilterReadDto<PRRequestReviewerReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
+            return Ok(new ApiResponse<FilterReadDto<PrRequestReviewerReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
         }
 
         /// <summary>
-        /// Create PR Request
+        /// Create Pr Request
         /// </summary>
-        /// <param name="pRRequestCreateDto">PR request Information</param>
+        /// <param name="prRequestCreateDto">Pr Request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -323,30 +323,30 @@ namespace EDocument_API.Controllers.V1.Requests
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Create")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> CreatePRRequest([FromForm] PRRequestCreateDto pRRequestCreateDto)
+        public async Task<ActionResult> CreatePrRequest([FromForm] PrRequestCreateDto prRequestCreateDto)
         {
-            _logger.LogInformation($"Start CreatePRRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(pRRequestCreateDto)} ");
+            _logger.LogInformation($"Start CreatePrRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(prRequestCreateDto)} ");
 
             var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
-            var requestNo = $"PR-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
+            var requestNo = $"Pr-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
 
-            var request = new Request { Id = requestId, DefinedRequestId = pRRequestCreateDto.DefinedRequestId };
-            request.Notes = pRRequestCreateDto.Notes;
-            request.PRRequest = _mapper.Map<PRRequest>(pRRequestCreateDto);
-            _mapper.Map(user, request.PRRequest);
-            request.PRRequest.RequestNumber = requestNo;
-            var sentItems = Request.Form["RequestedPRs"].ToList();
+            var request = new Request { Id = requestId, DefinedRequestId = prRequestCreateDto.DefinedRequestId };
+            request.Notes = prRequestCreateDto.Notes;
+            request.PrRequest = _mapper.Map<PrRequest>(prRequestCreateDto);
+            _mapper.Map(user, request.PrRequest);
+            request.PrRequest.RequestNumber = requestNo;
+            var sentItems = Request.Form["RequestedPrs"].ToList();
 
             if (sentItems != null && sentItems.Count > 0)
             {
                 foreach (var sentItem in sentItems)
                 {
-                    var item = JsonConvert.DeserializeObject<RequestedPR>(sentItem);
+                    var item = JsonConvert.DeserializeObject<RequestedPr>(sentItem);
                     item.RequestId = requestId;
                     item.CreatedAt = DateTime.Now;
                     item.CreatedBy = user?.FullName;
-                    request.RequestedPRs.Add(item);
+                    request.RequestedPrs.Add(item);
                 }
             }
             else
@@ -354,20 +354,20 @@ namespace EDocument_API.Controllers.V1.Requests
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "RequestedItems field not found" });
             }
 
-            if (pRRequestCreateDto.Attachments != null && pRRequestCreateDto.Attachments.Count > 0)
+            if (prRequestCreateDto.Attachments != null && prRequestCreateDto.Attachments.Count > 0)
             {
-                request.Attachments = _fileService.UploadAttachments(requestId, $@"PRRequest\{requestId}", pRRequestCreateDto.Attachments, user.FullName);
+                request.Attachments = _fileService.UploadAttachments(requestId, $@"PrRequest\{requestId}", prRequestCreateDto.Attachments, user.FullName);
             }
 
             request.CreatorId = user?.Id;
-            request.PRRequest.CreatedBy = user?.FullName;
+            request.PrRequest.CreatedBy = user?.FullName;
             request.CreatedBy = user?.FullName;
 
             _unitOfWork.Repository<Request>().Add(request);
 
             _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(pRRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
+            await _requestReviewerRepository.BeginRequestCycle(prRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
 
             #region Send Emails
 
@@ -375,7 +375,7 @@ namespace EDocument_API.Controllers.V1.Requests
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
-                    Kindly not that your PR Request on eDocuement has been created successfully and it's under reviewing now.
+                    Kindly not that your Pr Request on eDocuement has been created successfully and it's under reviewing now.
                     Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
                     - eDocument Request Reference No.: {requestNo}
@@ -386,7 +386,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
                 """,
                 IsHTMLBody = false,
-                Subject = $"PR Request No. {requestNo} on eDocuement",
+                Subject = $"Pr Request No. {requestNo} on eDocuement",
                 To = user.Email
             };
 
@@ -397,7 +397,7 @@ namespace EDocument_API.Controllers.V1.Requests
             {
                 Body = $"""
                 Dears,
-                    Kindly note that {user.FullName} has created PR Request for on eDocuement and need to be reviewed from your side.
+                    Kindly note that {user.FullName} has created Pr Request for on eDocuement and need to be reviewed from your side.
 
                     Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
@@ -408,7 +408,7 @@ namespace EDocument_API.Controllers.V1.Requests
                 “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
                 """,
                 IsHTMLBody = false,
-                Subject = $"PR Request No. {requestNo} on eDocuement",
+                Subject = $"Pr Request No. {requestNo} on eDocuement",
                 To = reviewersEmails
             };
 
@@ -420,10 +420,10 @@ namespace EDocument_API.Controllers.V1.Requests
         }
 
         /// <summary>
-        /// Update PR Request
+        /// Update Pr Request
         /// </summary>
-        /// <param name="id">PR request Id</param>
-        /// <param name="pRRequestUpdateDto">PR request Informarion</param>
+        /// <param name="id">Pr Request Id</param>
+        /// <param name="prRequestUpdateDto">Pr Request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -432,49 +432,49 @@ namespace EDocument_API.Controllers.V1.Requests
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Update/{id}")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> UpdatePRRequest(long id, [FromForm] PRRequestUpdateDto pRRequestUpdateDto)
+        public async Task<ActionResult> UpdatePrRequest(long id, [FromForm] PrRequestUpdateDto prRequestUpdateDto)
         {
-            _logger.LogInformation($"Start UpdatePRRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(pRRequestUpdateDto)} ");
+            _logger.LogInformation($"Start UpdatePrRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(prRequestUpdateDto)} ");
 
             var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
-            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "PRRequest", "Attachments", "RequestedPRs" });
+            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "PrRequest", "Attachments", "RequestedPrs" });
 
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
 
             var oldAttachments = request.Attachments;
-            request.Notes = pRRequestUpdateDto.Notes;
-            _mapper.Map(pRRequestUpdateDto, request.PRRequest);
+            request.Notes = prRequestUpdateDto.Notes;
+            _mapper.Map(prRequestUpdateDto, request.PrRequest);
 
-            request.PRRequest.RequestId = id;
-            var sentItems = Request.Form["RequestedPRs"].ToList();
+            request.PrRequest.RequestId = id;
+            var sentItems = Request.Form["RequestedPrs"].ToList();
 
 
             if (sentItems != null && sentItems.Count > 0)
             {
-                _unitOfWork.Repository<RequestedPR>().DeleteRange(request.RequestedPRs);
+                _unitOfWork.Repository<RequestedPr>().DeleteRange(request.RequestedPrs);
 
-                request.RequestedPRs = new List<RequestedPR>();
+                request.RequestedPrs = new List<RequestedPr>();
                 foreach (var sentItem in sentItems)
                 {
-                    var item = JsonConvert.DeserializeObject<RequestedPR>(sentItem);
+                    var item = JsonConvert.DeserializeObject<RequestedPr>(sentItem);
                     item.RequestId = id;
                     item.CreatedAt = request.CreatedAt;
                     item.CreatedBy = request.CreatedBy;
                     item.ModifiedAt = DateTime.Now;
                     item.ModifiedBy = user?.FullName;
-                    request.RequestedPRs.Add(item);
+                    request.RequestedPrs.Add(item);
                 }
             }
             else
             {
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "RequestedPRs field not found" });
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "RequestedPrs field not found" });
             }
 
-            if (pRRequestUpdateDto.Attachments == null || pRRequestUpdateDto.Attachments.Count == 0)
+            if (prRequestUpdateDto.Attachments == null || prRequestUpdateDto.Attachments.Count == 0)
             {
                 request.Attachments = oldAttachments;
             }
@@ -491,11 +491,11 @@ namespace EDocument_API.Controllers.V1.Requests
                     _fileService.DeleteFile(oldAttachment.FilePath);
                 }
 
-                request.Attachments = _fileService.UploadAttachments(request.Id, $@"PRRequest\{request.Id}", pRRequestUpdateDto.Attachments, createdBy: request.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"PrRequest\{request.Id}", prRequestUpdateDto.Attachments, createdBy: request.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
             }
 
-            request.PRRequest.ModifiedAt = DateTime.Now;
-            request.PRRequest.ModifiedBy = user?.FullName;
+            request.PrRequest.ModifiedAt = DateTime.Now;
+            request.PrRequest.ModifiedBy = user?.FullName;
             request.ModifiedBy = user?.FullName;
 
             var result = _unitOfWork.Complete();
@@ -511,10 +511,10 @@ namespace EDocument_API.Controllers.V1.Requests
             {
                 Body = $"""
                 Dear {user.FullName.Split(" ")[0]},
-                    Kindly not that your PR Request on eDocuement has been updated successfully and it's under reviewing now.
+                    Kindly not that your Pr Request on eDocuement has been updated successfully and it's under reviewing now.
                     Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
 
-                    - eDocument Request Reference No.: {request.PRRequest.RequestNumber}
+                    - eDocument Request Reference No.: {request.PrRequest.RequestNumber}
 
                 Thanks,
 
@@ -522,7 +522,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
                 """,
                 IsHTMLBody = false,
-                Subject = $"PR Request No. {request.PRRequest.RequestNumber} on eDocuement",
+                Subject = $"Pr Request No. {request.PrRequest.RequestNumber} on eDocuement",
                 To = user.Email
             };
 
@@ -533,18 +533,18 @@ namespace EDocument_API.Controllers.V1.Requests
             {
                 Body = $"""
                 Dears,
-                    Kindly note that {user.FullName} has updated PR Request for on eDocuement and need to be reviewed from your side.
+                    Kindly note that {user.FullName} has updated Pr Request for on eDocuement and need to be reviewed from your side.
 
                     Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
 
-                    - eDocument Request Reference No.: {request.PRRequest.RequestNumber}
+                    - eDocument Request Reference No.: {request.PrRequest.RequestNumber}
 
                 Thanks,
 
                 “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
                 """,
                 IsHTMLBody = false,
-                Subject = $"PR Request No. {request.PRRequest.RequestNumber} on eDocuement",
+                Subject = $"Pr Request No. {request.PrRequest.RequestNumber} on eDocuement",
                 To = reviewersEmails
             };
 
@@ -556,9 +556,9 @@ namespace EDocument_API.Controllers.V1.Requests
         }
 
         /// <summary>
-        /// Approve PR Request
+        /// Approve Pr Request
         /// </summary>
-        /// <param name="approvePRRequest">Approve PR Request Info</param>
+        /// <param name="approvePrRequest">Approve Pr Request Info</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -566,18 +566,18 @@ namespace EDocument_API.Controllers.V1.Requests
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Approve")]
         [Authorize(Roles = "Store")]
-        public async Task<ActionResult> ApprovePRRequest(ApprovePRRequestDto approvePRRequest)
+        public async Task<ActionResult> ApprovePrRequest(ApprovePrRequestDto approvePrRequest)
         {
-            _logger.LogInformation($"Start ApprovePRRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(approvePRRequest)} ");
+            _logger.LogInformation($"Start ApprovePrRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(approvePrRequest)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            foreach (var item in approvePRRequest.ApprovedPRs)
+            foreach (var item in approvePrRequest.ApprovedPrs)
             {
-                var requestedPR = await _unitOfWork.Repository<RequestedPR>().GetByIdAsync(item.RequestedPRId);
-                if (requestedPR != null)
+                var requestedPr = await _unitOfWork.Repository<RequestedPr>().GetByIdAsync(item.RequestedPrId);
+                if (requestedPr != null)
                 {
-                    requestedPR.PRNumber = item.PRNumber;
-                    requestedPR.ModifiedBy = user.FullName;
+                    requestedPr.PrNumber = item.PrNumber;
+                    requestedPr.ModifiedBy = user.FullName;
                 }
                 else
                 {
@@ -587,25 +587,25 @@ namespace EDocument_API.Controllers.V1.Requests
 
             _unitOfWork.Complete();
 
-            var result = await _requestReviewerRepository.ApproveRequestAsync(_mapper.Map<ApproveRequestReviewerDto>(approvePRRequest), user);
+            var result = await _requestReviewerRepository.ApproveRequestAsync(_mapper.Map<ApproveRequestReviewerDto>(approvePrRequest), user);
 
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
             #region Send Emails
 
-            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == approvePRRequest.RequestId);
-            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PRRequest", "Creator" });
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == approvePrRequest.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PrRequest", "Creator" });
             var requestCreator = request.Creator;
 
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
-                    Kindly not that your PR Request {request.PRRequest.RequestNumber} on eDocuement has been approved successfully.
+                    Kindly not that your Pr Request {request.PrRequest.RequestNumber} on eDocuement has been approved successfully.
                     For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
-                    - eDocument Request Reference No.: {request.PRRequest.RequestNumber}
+                    - eDocument Request Reference No.: {request.PrRequest.RequestNumber}
 
                 Thanks,
 
@@ -613,7 +613,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
                 """,
                 IsHTMLBody = false,
-                Subject = $"PR Request No. {request.PRRequest.RequestNumber} on eDocuement",
+                Subject = $"Pr Request No. {request.PrRequest.RequestNumber} on eDocuement",
                 To = requestCreator.Email
             };
 
@@ -626,9 +626,9 @@ namespace EDocument_API.Controllers.V1.Requests
         }
 
         /// <summary>
-        /// Decline PR Request
+        /// Decline Pr Request
         /// </summary>
-        /// <param name="requestReviewerWriteDto">Decline PR Request</param>
+        /// <param name="requestReviewerWriteDto">Decline Pr Request</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -636,9 +636,9 @@ namespace EDocument_API.Controllers.V1.Requests
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Decline")]
         [Authorize(Roles = "Store")]
-        public async Task<ActionResult> DeclinePRRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
+        public async Task<ActionResult> DeclinePrRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
         {
-            _logger.LogInformation($"Start DeclinePRRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
+            _logger.LogInformation($"Start DeclinePrRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var result = await _requestReviewerRepository.DeclineRequestAsync(requestReviewerWriteDto, user);
@@ -648,17 +648,17 @@ namespace EDocument_API.Controllers.V1.Requests
             #region Send Emails
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
-            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PRRequest", "Creator" });
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "PrRequest", "Creator" });
 
             var requestCreator = request.Creator;
             var creatorMailContent = new MailContent
             {
                 Body = $"""
                 Dear {requestCreator.FullName.Split(" ")[0]},
-                    Kindly not that your PR Request No. {request.PRRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
+                    Kindly not that your Pr Request No. {request.PrRequest.RequestNumber} on eDocuement has been declined by {user.FullName}.
                     For more detail, please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}).
 
-                    - eDocument Request Reference No.: {request.PRRequest.RequestNumber}
+                    - eDocument Request Reference No.: {request.PrRequest.RequestNumber}
 
                 Thanks,
 
@@ -666,7 +666,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
                 """,
                 IsHTMLBody = false,
-                Subject = $"PR Request No. {request.PRRequest.RequestNumber} on eDocuement",
+                Subject = $"Pr Request No. {request.PrRequest.RequestNumber} on eDocuement",
                 To = requestCreator.Email
             };
 

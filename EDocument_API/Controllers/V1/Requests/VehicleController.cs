@@ -284,7 +284,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <summary>
         /// Create Vehicle Request
         /// </summary>
-        /// <param name="vehicleRequestCreateDto">Vehicle request Informarion</param>
+        /// <param name="vehicleRequestCreateDto">Vehicle request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -388,7 +388,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// Update Vehicle Request
         /// </summary>
         /// <param name="id">Vehicle request Id</param>
-        /// <param name="vehicleRequestUpdateDto">Vehicle request Informarion</param>
+        /// <param name="vehicleRequestUpdateDto">Vehicle request Information</param>
         /// <remarks>
         ///
         /// </remarks>

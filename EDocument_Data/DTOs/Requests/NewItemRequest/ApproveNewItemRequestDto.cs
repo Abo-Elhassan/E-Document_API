@@ -14,7 +14,10 @@ namespace EDocument_Data.DTOs.Requests.NewItemRequest
 
     public class ApproveRequestedItemDto
     {
+        [Required]
         public long RequestedItemId { get; init; }
+        [Required]
+        [RegularExpression(@"^(R|T)?\d{6}$|^(PMK-\d{4})$")]
         public string ItemNumber { get; init; }
 
     }

@@ -3,20 +3,17 @@ using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 
-namespace EDocument_Data.DTOs.Requests.PRRequest
+namespace EDocument_Data.DTOs.Requests.PrRequest
 {
-    public class PRRequestUpdateDto
+    public class PrRequestUpdateDto
     {
         [Required]
         public string PrSubject { get; init; }
 
-        public string? ItemNumber { get; init; }
-
-
         public string? AfeNumber { get; init; }
 
         [Required]
-        public List<RequestedPRSubmitDto> RequestedPRs { get; init; }
+        public List<RequestedPrSubmitDto> RequestedPrs { get; init; }
 
         [FileValidation(100 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip", ".png", ".jpg", ".jpeg")]
         public List<IFormFile>? Attachments { get; set; }

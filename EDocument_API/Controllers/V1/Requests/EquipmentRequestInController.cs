@@ -291,7 +291,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <summary>
         /// Create Equipment Request (In Concession Area)
         /// </summary>
-        /// <param name="equipmentInAreaRequestCreateDto">Equipment Request (In Concession Area) Informarion</param>    
+        /// <param name="equipmentInAreaRequestCreateDto">Equipment Request (In Concession Area) Information</param>    
         /// <remarks>
         ///
         /// </remarks>
@@ -386,7 +386,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// Update Equipment Request (In Concession Area)
         /// </summary>
         /// <param name="id">Equipment Request (In Concession Area)  Id</param>
-        /// <param name="equipmentInAreaRequestUpdateDto">Equipment Request (In Concession Area)  Informarion</param>
+        /// <param name="equipmentInAreaRequestUpdateDto">Equipment Request (In Concession Area)  Information</param>
         /// <remarks>
         ///
         /// </remarks>

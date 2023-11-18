@@ -46,9 +46,9 @@ namespace EDocument_EF
         public virtual DbSet<FuelOilInvoiceRequest> FuelOilInvoiceRequests => Set<FuelOilInvoiceRequest>();
         public virtual DbSet<NewItemRequest> NewItemRequests => Set<NewItemRequest>();
         public virtual DbSet<RequestedItem> RequestedItems => Set<RequestedItem>();
-        public virtual DbSet<PRRequest> PRRequests => Set<PRRequest>();
+        public virtual DbSet<PrRequest> PRRequests => Set<PrRequest>();
         public virtual DbSet<ManliftReservationRequest> ManliftReservationRequests => Set<ManliftReservationRequest>(); 
-        public virtual DbSet<RequestedPR> RequestedPRs => Set<RequestedPR>();
+        public virtual DbSet<RequestedPr> RequestedPRs => Set<RequestedPr>();
         public virtual DbSet<EquipmentRequestIn> EquipmentRequestIns => Set<EquipmentRequestIn>();
         public virtual DbSet<EquipmentRequestOut> EquipmentRequestOuts => Set<EquipmentRequestOut>();
         
@@ -85,8 +85,8 @@ namespace EDocument_EF
         public virtual DbSet<AuditEquipmentRequestOut> AuditEquipmentRequestOuts => Set<AuditEquipmentRequestOut>();
         public virtual DbSet<AuditNewItemRequest> AuditNewItemRequests => Set<AuditNewItemRequest>();
         public virtual DbSet<AuditRequestedItem> AuditRequestedItems => Set<AuditRequestedItem>();
-        public virtual DbSet<AuditPRRequest> AuditPRRequests => Set<AuditPRRequest>();
-        public virtual DbSet<AuditRequestedPR> AuditRequestedPRs => Set<AuditRequestedPR>();
+        public virtual DbSet<AuditPrRequest> AuditPRRequests => Set<AuditPrRequest>();
+        public virtual DbSet<AuditRequestedPr> AuditRequestedPRs => Set<AuditRequestedPr>();
         public virtual DbSet<AuditManliftReservationRequest> AuditManliftReservationRequests => Set<AuditManliftReservationRequest>();
 
         #endregion
@@ -121,8 +121,8 @@ namespace EDocument_EF
             builder.ApplyConfiguration(new FuelOilInvoiceRequestConfiguration());
             builder.ApplyConfiguration(new NewItemRequestConfiguration());
             builder.ApplyConfiguration(new RequestedItemConfiguration());
-            builder.ApplyConfiguration(new PRRequestConfiguration());
-            builder.ApplyConfiguration(new RequestedPRConfiguration());
+            builder.ApplyConfiguration(new PrRequestConfiguration());
+            builder.ApplyConfiguration(new RequestedPrConfiguration());
             builder.ApplyConfiguration(new ManliftReservationRequestConfiguration());
             builder.ApplyConfiguration(new EquipmentRequestInConfiguration());
             builder.ApplyConfiguration(new EquipmentRequestOutConfiguration());
@@ -241,8 +241,8 @@ namespace EDocument_EF
             builder.Entity<AuditFuelOilInvoiceRequest>().ToTable(nameof(AuditFuelOilInvoiceRequest), "audit");
             builder.Entity<AuditNewItemRequest>().ToTable(nameof(AuditNewItemRequest), "audit");
             builder.Entity<AuditRequestedItem>().ToTable(nameof(AuditRequestedItem), "audit");
-            builder.Entity<AuditPRRequest>().ToTable(nameof(AuditPRRequest), "audit");
-            builder.Entity<AuditRequestedPR>().ToTable(nameof(AuditRequestedPR), "audit");
+            builder.Entity<AuditPrRequest>().ToTable(nameof(AuditPrRequest), "audit");
+            builder.Entity<AuditRequestedPr>().ToTable(nameof(AuditRequestedPr), "audit");
             builder.Entity<AuditManliftReservationRequest>().ToTable(nameof(AuditManliftReservationRequest), "audit");
             builder.Entity<AuditEquipmentRequestIn>().ToTable(nameof(AuditEquipmentRequestIn), "audit");
             builder.Entity<AuditEquipmentRequestOut>().ToTable(nameof(AuditEquipmentRequestOut), "audit");

@@ -5,20 +5,20 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EDocument_EF.Configurations
 {
-    public partial class RequestedPRConfiguration : IEntityTypeConfiguration<RequestedPR>
+    public partial class RequestedPrConfiguration : IEntityTypeConfiguration<RequestedPr>
     {
-        public void Configure(EntityTypeBuilder<RequestedPR> entity)
+        public void Configure(EntityTypeBuilder<RequestedPr> entity)
         {
-            entity.HasKey(e => e.RequestedPRId);
+            entity.HasKey(e => e.RequestedPrId);
 
           
-            entity.ToTable(nameof(RequestedPR), tb => tb.HasTrigger($"TR_{nameof(RequestedPR)}"));
+            entity.ToTable(nameof(RequestedPr), tb => tb.HasTrigger($"TR_{nameof(RequestedPr)}"));
 
-            entity.Property(e => e.RequestedPRId)
+            entity.Property(e => e.RequestedPrId)
             .UseIdentityColumn(1, 1);
 
 
-            entity.Property(e => e.PRNumber)
+            entity.Property(e => e.PrNumber)
             .HasMaxLength(50);
 
             entity.Property(e => e.BudgetType)
@@ -29,8 +29,11 @@ namespace EDocument_EF.Configurations
             .IsRequired()
             .HasMaxLength(50);
 
-            entity.Property(e => e.PRDescription)
+            entity.Property(e => e.PrDescription)
             .IsRequired();
+
+            entity.Property(e => e.ItemNumber)
+            .HasMaxLength(50);
 
             entity.Property(e => e.CreatedAt)
             .HasColumnType("smalldatetime");
@@ -47,15 +50,15 @@ namespace EDocument_EF.Configurations
             .IsUnicode(false);
 
 
-            entity.HasOne(d => d.Request).WithMany(p => p.RequestedPRs)
+            entity.HasOne(d => d.Request).WithMany(p => p.RequestedPrs)
             .HasForeignKey(d => d.RequestId)
             .OnDelete(DeleteBehavior.Cascade)
-            .HasConstraintName("FK_RequestedPR_Request");
+            .HasConstraintName("FK_RequestedPr_Request");
 
 
             OnConfigurePartial(entity);
         }
 
-        partial void OnConfigurePartial(EntityTypeBuilder<RequestedPR> entity);
+        partial void OnConfigurePartial(EntityTypeBuilder<RequestedPr> entity);
     }
 }

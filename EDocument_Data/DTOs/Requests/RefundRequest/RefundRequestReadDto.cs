@@ -34,7 +34,7 @@ namespace EDocument_Data.DTOs.Requests.RefundRequest
         public string ConcernedEmployeeId { get; set; }
         public string ConcernedEmployeeName { get; set; }
         public List<AttachmentReadDto> Attachments { get; set; }
-        public long CreditNote { get; set; }
+        public long? CreditNote { get; set; }
         public string Amount { get; set; }
         public string CreatedBy { get; init; }
         public string ModifiedBy { get; init; }

@@ -317,7 +317,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <summary>
         /// Create Manlift Reservation Request
         /// </summary>
-        /// <param name="manliftReservationRequestCreateDto">Manlift Reservation request Informarion</param>
+        /// <param name="manliftReservationRequestCreateDto">Manlift Reservation request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -424,7 +424,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// Update Manlift Reservation Request
         /// </summary>
         /// <param name="id">Manlift Reservation request Id</param>
-        /// <param name="manliftReservationRequestUpdateDto">Manlift Reservation request Informarion</param>
+        /// <param name="manliftReservationRequestUpdateDto">Manlift Reservation request Information</param>
         /// <remarks>
         ///
         /// </remarks>

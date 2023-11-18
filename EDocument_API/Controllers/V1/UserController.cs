@@ -284,7 +284,7 @@ namespace EDocument_API.Controllers.V1
         /// <summary>
         /// Create new user
         /// </summary>
-        /// <param name="createUserDto">User Informarion</param>
+        /// <param name="createUserDto">User Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -317,7 +317,7 @@ namespace EDocument_API.Controllers.V1
         /// Edit user information
         /// </summary>
         ///<param name="id">User id</param>
-        /// <param name="userWriteDto">User Informarion</param>
+        /// <param name="userWriteDto">User Information</param>
         /// <remarks>
         ///
         /// </remarks>

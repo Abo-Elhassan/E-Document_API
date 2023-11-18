@@ -424,7 +424,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// Update New Item Request
         /// </summary>
         /// <param name="id">New Item request Id</param>
-        /// <param name="newItemRequestUpdateDto">New Item request Informarion</param>
+        /// <param name="newItemRequestUpdateDto">New Item request Information</param>
         /// <remarks>
         ///
         /// </remarks>

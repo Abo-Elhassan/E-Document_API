@@ -10,8 +10,9 @@ namespace EDocument_Data.Consts.Enums
     {
         Basic,
         SysAdmin,
-        HR,
-        Finance,
+        HR_Operations,
+        Finance_Po,
+        Finance_FuelOil,
         Procurement,
         IT,
         Store,

@@ -15,7 +15,7 @@ using EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest;
 using EDocument_Data.DTOs.Requests.ManliftReservationRequest;
 using EDocument_Data.DTOs.Requests.NewItemRequest;
 using EDocument_Data.DTOs.Requests.PoRequest;
-using EDocument_Data.DTOs.Requests.PRRequest;
+using EDocument_Data.DTOs.Requests.PrRequest;
 using EDocument_Data.DTOs.Requests.RefundRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.DTOs.Requests.TravelDeskRequest;
@@ -489,10 +489,10 @@ namespace EDocument_Services.AutoMapper_Service
 
             #endregion 
 
-            #region PR Request
-            CreateMap<ApprovePRRequestDto, ApproveRequestReviewerDto>();
+            #region Pr Request
+            CreateMap<ApprovePrRequestDto, ApproveRequestReviewerDto>();
 
-            CreateMap<User, PRRequest>()
+            CreateMap<User, PrRequest>()
                 .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
                 .ForMember(dest => dest.BeneficiaryName, src => src.MapFrom(opts => opts.FullName))
                 .ForMember(dest => dest.BeneficiaryEmail, src => src.MapFrom(opts => opts.Email))
@@ -505,7 +505,7 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.CreatedBy, src => src.Ignore())
                 .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
-            CreateMap<PRRequest, PRRequestReadDto>()
+            CreateMap<PrRequest, PrRequestReadDto>()
                 .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
                 .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
                 .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
@@ -513,28 +513,28 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
                 .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments))
-                .ForMember(dest => dest.RequestedPRs, src => src.MapFrom(opts => opts.Request.RequestedPRs));
+                .ForMember(dest => dest.RequestedPrs, src => src.MapFrom(opts => opts.Request.RequestedPrs));
 
-            CreateMap<PRRequest, PRRequestReviewerReadDto>()
+            CreateMap<PrRequest, PrRequestReviewerReadDto>()
                 .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
                 .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
                 .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
                 .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
-                .ForMember(dest => dest.RequestedPRs, src => src.MapFrom(opts => opts.Request.RequestedPRs))
+                .ForMember(dest => dest.RequestedPrs, src => src.MapFrom(opts => opts.Request.RequestedPrs))
                 .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
 
-            CreateMap<PRRequestCreateDto, PRRequest>();
+            CreateMap<PrRequestCreateDto, PrRequest>();
 
-            CreateMap<PRRequestUpdateDto, PRRequest>()
+            CreateMap<PrRequestUpdateDto, PrRequest>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
-            CreateMap<RequestedPR, RequestedPRReadDto>();
-            CreateMap<RequestedPRSubmitDto, RequestedPR>();
+            CreateMap<RequestedPr, RequestedPrReadDto>();
+            CreateMap<RequestedPrSubmitDto, RequestedPr>();
 
 
-            #endregion PR Request Request
+            #endregion Pr Request Request
 
             #region Manlift Reservation Request
 
