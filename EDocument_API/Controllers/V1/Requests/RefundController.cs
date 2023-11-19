@@ -502,7 +502,7 @@ namespace EDocument_API.Controllers.V1.Requests
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == approveRefundRequestDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "RefundRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
 
-            if (request != null && request?.CurrentStage == 2)
+            if (request != null && request?.CurrentStage == 3)
             {
                 request.RefundRequest.CreditNote = approveRefundRequestDto.CreditNote;
                 request.RefundRequest.Amount = approveRefundRequestDto.Amount;

@@ -4,6 +4,7 @@ using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Attachments;
 using EDocument_Data.DTOs.Filter;
 using EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest;
+using EDocument_Data.DTOs.Requests.RefundRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
@@ -511,6 +512,19 @@ namespace EDocument_API.Controllers.V1.Requests
         {
             _logger.LogInformation($"Start ApproveFuelOilInvoiceRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
+            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "FuelOilInvoiceRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
+
+            if (request != null)
+            {
+                request.FuelOilInvoiceRequest.SwiftNumber = requestReviewerWriteDto.SwiftNumber;
+                request.FuelOilInvoiceRequest.ModifiedBy = user?.FullName;
+            }
+            else
+            {
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request Not Found" });
+
+            }
 
             var result = await _requestReviewerRepository.ApproveRequestAsync(_mapper.Map<ApproveRequestReviewerDto>(requestReviewerWriteDto), user);
 
@@ -519,8 +533,6 @@ namespace EDocument_API.Controllers.V1.Requests
 
             #region Send Emails
 
-            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
-            var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "FuelOilInvoiceRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
             var requestCreator = request.Creator;
             if (request?.Status == RequestStatus.Approved.ToString())
             {
