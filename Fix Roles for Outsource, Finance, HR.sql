@@ -141,7 +141,7 @@ UPDATE [security].[Role] SET Name='Finance_Po',NormalizedName='FINANCE_PO' WHERE
 ---------------------------* Remove Finance Role From Members Not included in PO Cycle*---------------------
 UPDATE [security].[User] SET Roles = 'Basic' WHERE DepartmentId=9;
 UPDATE [security].[User] SET Roles = 'Basic,Finance_Po' WHERE Id IN('51510','51653','51682','51640');
-UPDATE [security].[User] SET Roles = 'Basic,Finance_Po,Finance_FuelOil' WHERE Id ='51510';
+UPDATE [security].[User] SET Roles = 'Basic,Finance_Po,Finance_FuelOil' WHERE Id in ('51510','51605');
 GO
 Delete [security].[UserRoles] where UserId NOT IN (
 '51510',

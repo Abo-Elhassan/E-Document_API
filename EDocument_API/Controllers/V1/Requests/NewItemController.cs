@@ -446,6 +446,16 @@ namespace EDocument_API.Controllers.V1.Requests
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
 
+
+            if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update this request as it has been already {request.Status}" });
+            }
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot update the request after one of the reviewers took his action" });
+            }
+
             var oldAttachments = request.Attachments;
             request.Notes = newItemRequestUpdateDto.Notes;
             _mapper.Map(newItemRequestUpdateDto, request.NewItemRequest);

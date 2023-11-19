@@ -401,15 +401,26 @@ namespace EDocument_API.Controllers.V1.Requests
         public async Task<ActionResult> UpdateFuelOilInvoiceRequest(long id, [FromForm] FuelOilInvoiceRequestUpdateDto fuelOilInvoiceRequestUpdateDto)
         {
             _logger.LogInformation($"Start UpdateFuelOilInvoiceRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(fuelOilInvoiceRequestUpdateDto)} ");
-
-            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
             var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "FuelOilInvoiceRequest", "Attachments" });
 
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
+
+            if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update this request as it has been already {request.Status}" });
+            }
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot update the request after one of the reviewers took his action" });
+            }
+
+            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+
+
 
             var oldAttachments = request.Attachments;
             request.Notes = fuelOilInvoiceRequestUpdateDto.Notes;

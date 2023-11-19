@@ -436,6 +436,24 @@ namespace EDocument_API.Controllers.V1.Requests
         {
             _logger.LogInformation($"Start UpdateManliftReservationRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(manliftReservationRequestUpdateDto)} ");
 
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
+
+            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "ManliftReservationRequest", "Attachments" });
+
+
+            if (request == null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
+
+            if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update this request as it has been already {request.Status}" });
+            }
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot update the request after one of the reviewers took his action" });
+            }
+
+
             var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var assignedSupervisor = await _unitOfWork.Repository<User>().GetByIdAsync(manliftReservationRequestUpdateDto.SupervisorId);
 
@@ -453,12 +471,6 @@ namespace EDocument_API.Controllers.V1.Requests
             if (reservedDates.Any())
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Manlift number '{manliftReservationRequestUpdateDto.ManliftNumber}' is already reserved at the requested time" });
 
-            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
-
-            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "ManliftReservationRequest", "Attachments" });
-
-            if (request == null)
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
 
             request.Notes = manliftReservationRequestUpdateDto.Notes;
             _mapper.Map(manliftReservationRequestUpdateDto, request);
