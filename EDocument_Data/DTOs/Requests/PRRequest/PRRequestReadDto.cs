@@ -42,7 +42,7 @@ namespace EDocument_Data.DTOs.Requests.PrRequest
     }
     public class RequestedPrReadDto
     {
-        public long RequestedPRId { get; init; }
+        public long RequestedPrId { get; init; }
         public string PrNumber { get; init; }
         public string RequestId { get; init; }
         public string RequestType { get; init; }
