@@ -132,7 +132,13 @@ ALTER COLUMN [CreatedBy] [nvarchar](max) NULL;
 ALTER TABLE [audit].[AuditRole]
 ALTER COLUMN [ModifiedBy] [nvarchar](max) NULL;
 
--------------------------------* Remove Finance Role From Members Not included in PO Cycle*---------------------------------------------
+
+------------------------------------------------- * Separeate Finance Role for Po Request and HR Role For Access Control Request* ---------------------------------------------------
+
+UPDATE [security].[Role] SET Name='HR_Operations',NormalizedName='HR_OPERATIONS' WHERE Name='HR' AND Id = 'adc08f03-130c-4cf2-9cb2-a923d2ba1597'
+UPDATE [security].[Role] SET Name='Finance_Po',NormalizedName='FINANCE_PO' WHERE Name='Finance' AND Id = 'c3f87f77-415a-45da-8587-50221963b560'
+
+---------------------------* Remove Finance Role From Members Not included in PO Cycle*---------------------
 UPDATE [security].[User] SET Roles = 'Basic' WHERE DepartmentId=9;
 UPDATE [security].[User] SET Roles = 'Basic,Finance_Po' WHERE Id IN('51510','51653','51682','51640');
 UPDATE [security].[User] SET Roles = 'Basic,Finance_Po,Finance_FuelOil' WHERE Id ='51510';
@@ -142,3 +148,37 @@ Delete [security].[UserRoles] where UserId NOT IN (
 '51653',
 '51682',
 '51640') and RoleId ='c3f87f77-415a-45da-8587-50221963b560';
+
+/********************* Make HR Operations Only have HR Role  Script Date: 11/6/2023 3:37:20 PM **************/
+GO
+update [security].[User] set roles= 'Basic' where id in (
+'50239',
+'50279',
+'51092',
+'51371',
+'51399',
+'51400',
+'51490',
+'51619',
+'51680',
+'80099');
+GO
+Delete [security].[UserRoles] where UserId in (
+'50239',
+'50279',
+'51092',
+'51371',
+'51399',
+'51400',
+'51490',
+'51619',
+'51680',
+'80099') and  RoleId ='adc08f03-130c-4cf2-9cb2-a923d2ba1597';
+Go
+
+UPDATE [security].[User] set Roles = 'Basic,HR_Operations' where Id in ('51181',
+'51271',
+'51618',
+'51675');
+
+GO

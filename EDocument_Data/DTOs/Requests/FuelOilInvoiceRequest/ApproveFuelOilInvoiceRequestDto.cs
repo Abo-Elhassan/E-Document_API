@@ -9,7 +9,7 @@ namespace EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest
         [Required]
         public long RequestId { get; set; }
         [Required]
-        public long SwiftNumber { get; set; }
+        public int SwiftNumber { get; set; }
         public string? ReviewedNotes { get; set; }
     }
 }
