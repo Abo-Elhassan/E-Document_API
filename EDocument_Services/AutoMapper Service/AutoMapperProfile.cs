@@ -404,6 +404,8 @@ namespace EDocument_Services.AutoMapper_Service
 
             #region Fuel Oil Invoice Request
 
+            CreateMap<ApproveFuelOilInvoiceRequestDto, ApproveRequestReviewerDto>();
+
             CreateMap<User, FuelOilInvoiceRequest>()
                 .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
                 .ForMember(dest => dest.BeneficiaryName, src => src.MapFrom(opts => opts.FullName))

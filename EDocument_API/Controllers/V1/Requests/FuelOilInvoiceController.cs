@@ -299,10 +299,10 @@ namespace EDocument_API.Controllers.V1.Requests
             _logger.LogInformation($"Start CreateFuelOilInvoiceRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(fuelOilInvoiceRequestCreateDto)} ");
             Expression<Func<FuelOilInvoiceRequest, bool>> criteria = (r => r.InvoiceNumber == fuelOilInvoiceRequestCreateDto.InvoiceNumber);
 
-            var checkDuplicateInvoiceResult = _unitOfWork.Repository<FuelOilInvoiceRequest>().FindAsync(criteria);
+            var checkDuplicateInvoiceResult = await _unitOfWork.Repository<FuelOilInvoiceRequest>().FindAsync(criteria);
 
             if (checkDuplicateInvoiceResult != null)
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"There is request already created for invoice no. {checkDuplicateInvoiceResult}" });
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"There is request already created for invoice no. {checkDuplicateInvoiceResult.InvoiceNumber}" });
 
 
 
