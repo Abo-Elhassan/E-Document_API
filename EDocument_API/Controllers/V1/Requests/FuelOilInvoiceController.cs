@@ -73,7 +73,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns>Fuel Oil Invoice Request</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FuelOilInvoiceRequestReadDto>))]
         [HttpGet("{id}")]
-        [Authorize(Roles = "Basic")]
+        [Authorize(Roles = "Store,Finance_FuelOil")]
         public async Task<ActionResult> GetFuelOilInvoiceRequestById(long id)
         {
             _logger.LogInformation($"Start GetFuelOilInvoiceRequestById from {nameof(RequestController)} for request id = {id}");
@@ -103,7 +103,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns>message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Basic")]
+        [Authorize(Roles = "Store")]
         public async Task<ActionResult> DeleteFuelOilInvoiceRequest(long id)
         {
             _logger.LogInformation($"Start DeleteFuelOilInvoiceRequest from {nameof(RequestController)} for request id = {id}");
@@ -150,7 +150,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns>List of All Created Fuel Oil Invoice Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<FuelOilInvoiceRequestReadDto>>))]
         [HttpPost("Inbox")]
-        [Authorize(Roles = "Basic")]
+        [Authorize(Roles = "Store")]
         public async Task<ActionResult> GetCreatorFuelOilInvoiceRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetCreatorFuelOilInvoiceRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -217,7 +217,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns>List of All Reviewer Fuel Oil Invoice Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<FuelOilInvoiceRequestReviewerReadDto>>))]
         [HttpPost("AssignedToMe")]
-        [Authorize(Roles = "Store,Finance")]
+        [Authorize(Roles = "Finance_FuelOil")]
         public async Task<ActionResult> GetReviewerFuelOilInvoiceRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetReviewerFuelOilInvoiceRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -285,7 +285,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <summary>
         /// Create Fuel Oil Invoice Request
         /// </summary>
-        /// <param name="fuelOilInvoiceRequestCreateDto">Fuel Oil Invoice request Informarion</param>
+        /// <param name="fuelOilInvoiceRequestCreateDto">Fuel Oil Invoice request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -293,10 +293,19 @@ namespace EDocument_API.Controllers.V1.Requests
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Create")]
-        [Authorize(Roles = "Basic")]
+        [Authorize(Roles = "Store")]
         public async Task<ActionResult> CreateFuelOilInvoiceRequest([FromForm] FuelOilInvoiceRequestCreateDto fuelOilInvoiceRequestCreateDto)
         {
             _logger.LogInformation($"Start CreateFuelOilInvoiceRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(fuelOilInvoiceRequestCreateDto)} ");
+            Expression<Func<FuelOilInvoiceRequest, bool>> criteria = (r => r.InvoiceNumber == fuelOilInvoiceRequestCreateDto.InvoiceNumber);
+
+            var checkDuplicateInvoiceResult = await _unitOfWork.Repository<FuelOilInvoiceRequest>().FindAsync(criteria);
+
+            if (checkDuplicateInvoiceResult != null)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"There is request already created for invoice no. {checkDuplicateInvoiceResult.InvoiceNumber}" });
+
+
+
             var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
@@ -324,8 +333,6 @@ namespace EDocument_API.Controllers.V1.Requests
 
             await _requestReviewerRepository.BeginRequestCycle(fuelOilInvoiceRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
 
-            if (result < 1)
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
             #region Send Emails
 
@@ -381,7 +388,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// Update Fuel Oil Invoice Request
         /// </summary>
         /// <param name="id">Fuel Oil Invoice request Id</param>
-        /// <param name="fuelOilInvoiceRequestUpdateDto">Fuel Oil Invoice request Informarion</param>
+        /// <param name="fuelOilInvoiceRequestUpdateDto">Fuel Oil Invoice request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -389,7 +396,7 @@ namespace EDocument_API.Controllers.V1.Requests
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Update/{id}")]
-        [Authorize(Roles = "Basic")]
+        [Authorize(Roles = "Store")]
         public async Task<ActionResult> UpdateFuelOilInvoiceRequest(long id, [FromForm] FuelOilInvoiceRequestUpdateDto fuelOilInvoiceRequestUpdateDto)
         {
             _logger.LogInformation($"Start UpdateFuelOilInvoiceRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(fuelOilInvoiceRequestUpdateDto)} ");
@@ -499,13 +506,13 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns> message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Approve")]
-        [Authorize(Roles = "Store,Finance")]
-        public async Task<ActionResult> ApproveFuelOilInvoiceRequest(ApproveRequestReviewerDto requestReviewerWriteDto)
+        [Authorize(Roles = "Finance_FuelOil")]
+        public async Task<ActionResult> ApproveFuelOilInvoiceRequest(ApproveFuelOilInvoiceRequestDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start ApproveFuelOilInvoiceRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            var result = await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user);
+            var result = await _requestReviewerRepository.ApproveRequestAsync(_mapper.Map<ApproveRequestReviewerDto>(requestReviewerWriteDto), user);
 
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
@@ -580,7 +587,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns> message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Decline")]
-        [Authorize(Roles = "Store,Finance")]
+        [Authorize(Roles = "Finance_FuelOil")]
         public async Task<ActionResult> DeclineFuelOilInvoiceRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start DeclineFuelOilInvoiceRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");

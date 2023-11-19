@@ -284,7 +284,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <summary>
         /// Create TravelDesk Request
         /// </summary>
-        /// <param name="travelDeskRequestCreateDto">TravelDesk request Informarion</param>
+        /// <param name="travelDeskRequestCreateDto">TravelDesk request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -389,7 +389,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// Update TravelDesk Request
         /// </summary>
         /// <param name="id">Travel Desk request Id</param>
-        /// <param name="travelDeskRequestUpdateDto">TravelDesk request Informarion</param>
+        /// <param name="travelDeskRequestUpdateDto">TravelDesk request Information</param>
         /// <remarks>
         ///
         /// </remarks>

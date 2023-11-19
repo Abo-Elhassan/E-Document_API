@@ -78,7 +78,7 @@ namespace EDocument_API.Controllers.V1
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Role '{name}' already exists" });
 
 
-            var createResult = await _roleManager.CreateAsync(new Role { Id = Guid.NewGuid().ToString(), Name = name.ToLower(), ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = _userManager.FindByNameAsync(User?.Identity?.Name)?.Result?.FullName});
+            var createResult = await _roleManager.CreateAsync(new Role { Id = Guid.NewGuid().ToString(), Name = name, ConcurrencyStamp = Guid.NewGuid().ToString(), CreatedAt = DateTime.Now, CreatedBy = _userManager.FindByNameAsync(User?.Identity?.Name)?.Result?.FullName});
             if (!createResult.Succeeded)
                 return BadRequest(new ApiResponse<IEnumerable<dynamic>> { StatusCode = (int)HttpStatusCode.BadRequest, Details = createResult.Errors });
 

@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EDocument_EF.Configurations
 {
-    public partial class PRRequestConfiguration : IEntityTypeConfiguration<PRRequest>
+    public partial class PrRequestConfiguration : IEntityTypeConfiguration<PrRequest>
     {
-        public void Configure(EntityTypeBuilder<PRRequest> entity)
+        public void Configure(EntityTypeBuilder<PrRequest> entity)
         {
             entity.HasKey(e => e.RequestNumber);
 
           
-            entity.ToTable(nameof(PRRequest), tb => tb.HasTrigger($"TR_{nameof(PRRequest)}"));
+            entity.ToTable(nameof(PrRequest), tb => tb.HasTrigger($"TR_{nameof(PrRequest)}"));
 
             entity.Property(e => e.RequestNumber)
             .HasMaxLength(50)
@@ -45,8 +45,7 @@ namespace EDocument_EF.Configurations
             .IsRequired()
             .HasMaxLength(200);
 
-            entity.Property(e => e.ItemNumber)
-            .HasMaxLength(50);
+
 
             entity.Property(e => e.AfeNumber)
             .HasMaxLength(50);
@@ -66,15 +65,15 @@ namespace EDocument_EF.Configurations
             .IsUnicode(false);
 
 
-            entity.HasOne(d => d.Request).WithOne(p => p.PRRequest)
-            .HasForeignKey<PRRequest>(d => d.RequestId)
+            entity.HasOne(d => d.Request).WithOne(p => p.PrRequest)
+            .HasForeignKey<PrRequest>(d => d.RequestId)
             .OnDelete(DeleteBehavior.Cascade)
-            .HasConstraintName("FK_PRRequest_Request");
+            .HasConstraintName("FK_PrRequest_Request");
 
 
             OnConfigurePartial(entity);
         }
 
-        partial void OnConfigurePartial(EntityTypeBuilder<PRRequest> entity);
+        partial void OnConfigurePartial(EntityTypeBuilder<PrRequest> entity);
     }
 }

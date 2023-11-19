@@ -274,7 +274,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <summary>
         /// Create Discount Request
         /// </summary>
-        /// <param name="discountRequestCreateDto">Discount request Informarion</param>
+        /// <param name="discountRequestCreateDto">Discount request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -385,7 +385,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// Update Discount Request
         /// </summary>
         /// <param name="id">Discount request Id</param>
-        /// <param name="discountRequestUpdateDto">Discount request Informarion</param>
+        /// <param name="discountRequestUpdateDto">Discount request Information</param>
         /// <remarks>
         ///
         /// </remarks>

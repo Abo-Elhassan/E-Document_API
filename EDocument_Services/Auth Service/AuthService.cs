@@ -232,12 +232,12 @@ namespace EDocument_Services.Auth_Service
                                 {
                                     new RequestDdlContent
                                     {
-                                        DisplayName = "Inbox",
+                                        DisplayName = "Request",
                                         RouteName = $"{request.RouteName}Inbox",
                                     },
                                      new RequestDdlContent
                                     {
-                                        DisplayName = "Assigned To Me",
+                                        DisplayName = "Review",
                                         RouteName = $"{request.RouteName}AssignedToMe",
                                     }
                                 };
@@ -249,7 +249,7 @@ namespace EDocument_Services.Auth_Service
                                 {
                                     new RequestDdlContent
                                     {
-                                        DisplayName = "Inbox",
+                                        DisplayName = "Request",
                                         RouteName = $"{request.RouteName}Inbox",
                                     }
                                 };
@@ -260,7 +260,7 @@ namespace EDocument_Services.Auth_Service
                                 {
                                      new RequestDdlContent
                                     {
-                                        DisplayName = "Assigned To Me",
+                                        DisplayName = "Review",
                                         RouteName = $"{request.RouteName}AssignedToMe",
                                     }
                                 };
@@ -273,7 +273,7 @@ namespace EDocument_Services.Auth_Service
                             {
                                 commondisplayedRequest.RequestDdl.Add(new RequestDdlContent
                                 {
-                                    DisplayName = "Inbox",
+                                    DisplayName = "Request",
                                     RouteName = $"{request.RouteName}Inbox",
                                 });
                               
@@ -283,13 +283,13 @@ namespace EDocument_Services.Auth_Service
 
                                 commondisplayedRequest.RequestDdl.Add(new RequestDdlContent
                                 {
-                                    DisplayName = "Assigned To Me",
+                                    DisplayName = "Review",
                                     RouteName = $"{request.RouteName}AssignedToMe",
                                 });
                                
                             }
 
-                            commondisplayedRequest.RequestDdl = commondisplayedRequest.RequestDdl.DistinctBy(r=>r.DisplayName).OrderByDescending(r => r.DisplayName).ToList();
+                            commondisplayedRequest.RequestDdl = commondisplayedRequest.RequestDdl.DistinctBy(r=>r.DisplayName).OrderBy(r => r.DisplayName).ToList();
                         }
 
 

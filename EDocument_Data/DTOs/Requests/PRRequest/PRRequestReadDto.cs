@@ -4,9 +4,9 @@ using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.Models;
 
 
-namespace EDocument_Data.DTOs.Requests.PRRequest
+namespace EDocument_Data.DTOs.Requests.PrRequest
 {
-    public class PRRequestReadDto
+    public class PrRequestReadDto
     {
         public long Id { get; init; }
         public long DefinedRequestId { get; init; }
@@ -23,9 +23,8 @@ namespace EDocument_Data.DTOs.Requests.PRRequest
         public string BeneficiaryPhoneNumber { get; init; }
         public string BeneficiaryCompany { get; init; }
         public string PrSubject { get; init; }
-        public string ItemNumber { get; init; }
         public string AfeNumber { get; init; }
-        public List<RequestedPRReadDto> RequestedPRs { get; set; }
+        public List<RequestedPrReadDto> RequestedPrs { get; set; }
         public List<AttachmentReadDto> Attachments { get; set; }
         public string? CreatedBy { get; init; }
         public DateTime? CreatedAt { get; init; }
@@ -34,22 +33,23 @@ namespace EDocument_Data.DTOs.Requests.PRRequest
     
     }
 
-    public class PRRequestReviewerReadDto : PRRequestReadDto
+    public class PrRequestReviewerReadDto : PrRequestReadDto
     {
         public int? ReviewerStage { get; set; }
         public RequestStatus? ReviewerStatus { get; set; }
         public List<RequestReviewerReadDto>? RequestReviewers { get; set; }
 
     }
-    public class RequestedPRReadDto
+    public class RequestedPrReadDto
     {
-        public long RequestedPRId { get; init; }
-        public string PRNumber { get; init; }
+        public long RequestedPrId { get; init; }
+        public string PrNumber { get; init; }
         public string RequestId { get; init; }
         public string RequestType { get; init; }
-        public string PRDescription { get; init; }
+        public string PrDescription { get; init; }
         public string BudgetType { get; init; }
         public int Quantity { get; init; }
+        public string ItemNumber { get; init; }
     }
 
 

@@ -71,7 +71,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns>PO Request</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<PoRequestReadDto>))]
         [HttpGet("{id}")]
-        [Authorize(Roles = "Finance,Procurement")]
+        [Authorize(Roles = "Finance_Po,Procurement")]
         public async Task<ActionResult> GetPoRequestById(long id)
         {
             _logger.LogInformation($"Start GetPoRequestById from {nameof(RequestController)} for request id = {id}");
@@ -217,7 +217,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns>List of All Reviewer PO Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<PoRequestReviewerReadDto>>))]
         [HttpPost("AssignedToMe")]
-        [Authorize(Roles = "Finance")]
+        [Authorize(Roles = "Finance_Po")]
         public async Task<ActionResult> GetReviewerPoRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetReviewerPoRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -285,7 +285,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <summary>
         /// Create PO Request
         /// </summary>
-        /// <param name="poRequestCreateDto">Po request Informarion</param>
+        /// <param name="poRequestCreateDto">Po request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -387,7 +387,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// Update PO Request
         /// </summary>
         /// <param name="id">Po request Id</param>
-        /// <param name="poRequestUpdateDto">Po request Informarion</param>
+        /// <param name="poRequestUpdateDto">Po request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -531,7 +531,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns> message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Approve")]
-        [Authorize(Roles = "Finance")]
+        [Authorize(Roles = "Finance_Po")]
         public async Task<ActionResult> ApprovePoRequest(ApproveRequestReviewerDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start ApprovePoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
@@ -586,7 +586,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns> message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Decline")]
-        [Authorize(Roles = "Finance")]
+        [Authorize(Roles = "Finance_Po")]
         public async Task<ActionResult> DeclinePoRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start DeclinePoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");

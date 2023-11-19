@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EDocument_Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+741b8f72e24ce1096225e407a7767d1b1bdcb488")]
 [assembly: System.Reflection.AssemblyProductAttribute("EDocument_Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EDocument_Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

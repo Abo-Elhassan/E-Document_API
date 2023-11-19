@@ -1125,6 +1125,9 @@ namespace EDocument_EF.Migrations
                     b.Property<DateTime>("RequestedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("SwiftNumber")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
 
@@ -1296,81 +1299,6 @@ namespace EDocument_EF.Migrations
                     b.ToTable("AuditNewItemRequest", "audit");
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditPRRequest", b =>
-                {
-                    b.Property<decimal>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(18,0)");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
-
-                    b.Property<string>("AfeNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BeneficiaryCompany")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BeneficiaryDepartment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BeneficiaryEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("BeneficiaryExtention")
-                        .HasColumnType("int");
-
-                    b.Property<string>("BeneficiaryId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BeneficiaryName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BeneficiaryPhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BeneficiaryPosition")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DataStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ItemNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PrSubject")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("RequestId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("RequestNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("TimeStamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TransactionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("AuditPRRequest", "audit");
-                });
-
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditPoRequest", b =>
                 {
                     b.Property<decimal>("AuditId")
@@ -1432,6 +1360,78 @@ namespace EDocument_EF.Migrations
                     b.HasKey("AuditId");
 
                     b.ToTable("AuditPoRequest", "audit");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditPrRequest", b =>
+                {
+                    b.Property<decimal>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(18,0)");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
+
+                    b.Property<string>("AfeNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryCompany")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryDepartment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BeneficiaryId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryPosition")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DataStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PrSubject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("RequestNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("AuditPrRequest", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditRefundRequest", b =>
@@ -1731,7 +1731,7 @@ namespace EDocument_EF.Migrations
                     b.ToTable("AuditRequestedItem", "audit");
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditRequestedPR", b =>
+            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditRequestedPr", b =>
                 {
                     b.Property<decimal>("AuditId")
                         .ValueGeneratedOnAdd()
@@ -1752,16 +1752,19 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ItemNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PRDescription")
+                    b.Property<string>("PrDescription")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PRNumber")
+                    b.Property<string>("PrNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
@@ -1773,7 +1776,7 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("RequestType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("RequestedPRId")
+                    b.Property<long>("RequestedPrId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("TimeStamp")
@@ -1785,7 +1788,7 @@ namespace EDocument_EF.Migrations
 
                     b.HasKey("AuditId");
 
-                    b.ToTable("AuditRequestedPR", "audit");
+                    b.ToTable("AuditRequestedPr", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditRole", b =>
@@ -1803,22 +1806,18 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DataStatus")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Id")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -1831,7 +1830,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("TransactionType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AuditId");
@@ -2971,7 +2969,13 @@ namespace EDocument_EF.Migrations
                     b.Property<DateTime>("RequestedDate")
                         .HasColumnType("smalldatetime");
 
+                    b.Property<int?>("SwiftNumber")
+                        .HasColumnType("int");
+
                     b.HasKey("RequestNumber");
+
+                    b.HasIndex("InvoiceNumber")
+                        .IsUnique();
 
                     b.HasIndex("RequestId")
                         .IsUnique();
@@ -3147,88 +3151,6 @@ namespace EDocument_EF.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.PRRequest", b =>
-                {
-                    b.Property<string>("RequestNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("AfeNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryCompany")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("BeneficiaryDepartment")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("BeneficiaryEmail")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int?>("BeneficiaryExtention")
-                        .HasColumnType("int");
-
-                    b.Property<string>("BeneficiaryId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("BeneficiaryPhoneNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryPosition")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("smalldatetime");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(200)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("ItemNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("smalldatetime");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(200)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("PrSubject")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<long>("RequestId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("RequestNumber");
-
-                    b.HasIndex("RequestId")
-                        .IsUnique();
-
-                    b.ToTable("PRRequest", null, t =>
-                        {
-                            t.HasTrigger("TR_PRRequest");
-                        });
-                });
-
             modelBuilder.Entity("EDocument_Data.Models.PoRequest", b =>
                 {
                     b.Property<string>("RequestNumber")
@@ -3295,6 +3217,84 @@ namespace EDocument_EF.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.PrRequest", b =>
+                {
+                    b.Property<string>("RequestNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("AfeNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("BeneficiaryCompany")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("BeneficiaryDepartment")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("BeneficiaryEmail")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BeneficiaryId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("BeneficiaryName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("BeneficiaryPhoneNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("BeneficiaryPosition")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(200)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(200)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("PrSubject")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("RequestNumber");
+
+                    b.HasIndex("RequestId")
+                        .IsUnique();
+
+                    b.ToTable("PrRequest", null, t =>
+                        {
+                            t.HasTrigger("TR_PrRequest");
+                        });
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.RefundRequest", b =>
                 {
                     b.Property<string>("RequestNumber")
@@ -3322,7 +3322,7 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<long>("CreditNote")
+                    b.Property<long?>("CreditNote")
                         .HasColumnType("bigint");
 
                     b.Property<string>("CustomerMobileNumber")
@@ -3598,13 +3598,13 @@ namespace EDocument_EF.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.RequestedPR", b =>
+            modelBuilder.Entity("EDocument_Data.Models.RequestedPr", b =>
                 {
-                    b.Property<long>("RequestedPRId")
+                    b.Property<long>("RequestedPrId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("RequestedPRId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("RequestedPrId"));
 
                     b.Property<string>("BudgetType")
                         .IsRequired()
@@ -3619,6 +3619,10 @@ namespace EDocument_EF.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)");
 
+                    b.Property<string>("ItemNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("smalldatetime");
 
@@ -3627,14 +3631,13 @@ namespace EDocument_EF.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)");
 
-                    b.Property<string>("PRDescription")
+                    b.Property<string>("PrDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PRNumber")
+                    b.Property<string>("PrNumber")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -3647,13 +3650,13 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("RequestedPRId");
+                    b.HasKey("RequestedPrId");
 
                     b.HasIndex("RequestId");
 
-                    b.ToTable("RequestedPR", null, t =>
+                    b.ToTable("RequestedPr", null, t =>
                         {
-                            t.HasTrigger("TR_RequestedPR");
+                            t.HasTrigger("TR_RequestedPr");
                         });
                 });
 
@@ -4515,18 +4518,6 @@ namespace EDocument_EF.Migrations
                     b.Navigation("Request");
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.PRRequest", b =>
-                {
-                    b.HasOne("EDocument_Data.Models.Request", "Request")
-                        .WithOne("PRRequest")
-                        .HasForeignKey("EDocument_Data.Models.PRRequest", "RequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_PRRequest_Request");
-
-                    b.Navigation("Request");
-                });
-
             modelBuilder.Entity("EDocument_Data.Models.PoRequest", b =>
                 {
                     b.HasOne("EDocument_Data.Models.Request", "Request")
@@ -4535,6 +4526,18 @@ namespace EDocument_EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_PoRequest_Request");
+
+                    b.Navigation("Request");
+                });
+
+            modelBuilder.Entity("EDocument_Data.Models.PrRequest", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.Request", "Request")
+                        .WithOne("PrRequest")
+                        .HasForeignKey("EDocument_Data.Models.PrRequest", "RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_PrRequest_Request");
 
                     b.Navigation("Request");
                 });
@@ -4624,7 +4627,6 @@ namespace EDocument_EF.Migrations
 
             modelBuilder.Entity("EDocument_Data.Models.RequestedItem", b =>
                 {
-
                     b.HasOne("EDocument_Data.Models.Request", "Request")
                         .WithMany("RequestedItems")
                         .HasForeignKey("RequestId")
@@ -4635,15 +4637,14 @@ namespace EDocument_EF.Migrations
                     b.Navigation("Request");
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.RequestedPR", b =>
+            modelBuilder.Entity("EDocument_Data.Models.RequestedPr", b =>
                 {
-
                     b.HasOne("EDocument_Data.Models.Request", "Request")
-                        .WithMany("RequestedPRs")
+                        .WithMany("RequestedPrs")
                         .HasForeignKey("RequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_RequestedPR_Request");
+                        .HasConstraintName("FK_RequestedPr_Request");
 
                     b.Navigation("Request");
                 });
@@ -4811,16 +4812,6 @@ namespace EDocument_EF.Migrations
                     b.Navigation("Sections");
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.NewItemRequest", b =>
-                {
-                    b.Navigation("RequestedItems");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.PRRequest", b =>
-                {
-                    b.Navigation("RequestedPRs");
-                });
-
             modelBuilder.Entity("EDocument_Data.Models.Request", b =>
                 {
                     b.Navigation("AccessControlRequest");
@@ -4845,9 +4836,9 @@ namespace EDocument_EF.Migrations
 
                     b.Navigation("NewItemRequest");
 
-                    b.Navigation("PRRequest");
-
                     b.Navigation("PoRequest");
+
+                    b.Navigation("PrRequest");
 
                     b.Navigation("RefundRequest");
 
@@ -4857,7 +4848,7 @@ namespace EDocument_EF.Migrations
 
                     b.Navigation("RequestedItems");
 
-                    b.Navigation("RequestedPRs");
+                    b.Navigation("RequestedPrs");
 
                     b.Navigation("TravelDeskRequest");
 

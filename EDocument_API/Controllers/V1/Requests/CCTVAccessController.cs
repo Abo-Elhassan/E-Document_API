@@ -285,7 +285,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <summary>
         /// Create CCTV Access Request
         /// </summary>
-        /// <param name="cctvAccessRequestCreateDto">CCTV Access request Informarion</param>
+        /// <param name="cctvAccessRequestCreateDto">CCTV Access request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -375,7 +375,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// Update CCTV Access Request
         /// </summary>
         /// <param name="id">CCTV Access request Id</param>
-        /// <param name="cctvAccessRequestUpdateDto">CCTV Access request Informarion</param>
+        /// <param name="cctvAccessRequestUpdateDto">CCTV Access request Information</param>
         /// <remarks>
         ///
         /// </remarks>

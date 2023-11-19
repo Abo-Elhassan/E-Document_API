@@ -106,7 +106,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns>message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpDelete("{id}")]
-        [Authorize(Roles = "HR")]
+        [Authorize(Roles = "HR_Operations")]
         public async Task<ActionResult> DeleteAccessControlRequest(long id)
         {
             _logger.LogInformation($"Start DeleteAccessControlRequest from {nameof(RequestController)} for request id = {id}");
@@ -153,7 +153,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns>List of All Created Access Control Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<AccessControlRequestDetailsReadDto>>))]
         [HttpPost("Inbox")]
-        [Authorize(Roles = "HR")]
+        [Authorize(Roles = "HR_Operations")]
         public async Task<ActionResult> GetCreatorAccessControlRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetCreatorAccessControlRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -288,7 +288,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <summary>
         /// Create Access Control Request
         /// </summary>
-        /// <param name="accessControlRequestCreateDto">Trave lDesk request Informarion</param>
+        /// <param name="accessControlRequestCreateDto">Trave lDesk request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -296,7 +296,7 @@ namespace EDocument_API.Controllers.V1.Requests
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Create")]
-        [Authorize(Roles = "HR")]
+        [Authorize(Roles = "HR_Operations")]
         public async Task<ActionResult> CreateAccessControlRequest([FromForm] AccessControlRequestCreateDto accessControlRequestCreateDto)
         {
             _logger.LogInformation($"Start CreateAccessControlRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(accessControlRequestCreateDto)} ");
@@ -386,7 +386,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// Update Access Control Request
         /// </summary>
         /// <param name="id">Travel Desk request Id</param>
-        /// <param name="accessControlRequestUpdateDto">AccessControl request Informarion</param>
+        /// <param name="accessControlRequestUpdateDto">AccessControl request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -394,7 +394,7 @@ namespace EDocument_API.Controllers.V1.Requests
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Update/{id}")]
-        [Authorize(Roles = "HR")]
+        [Authorize(Roles = "HR_Operations")]
         public async Task<ActionResult> UpdateAccessControlRequest(long id, [FromForm] AccessControlRequestUpdateDto accessControlRequestUpdateDto)
         {
             _logger.LogInformation($"Start UpdateAccessControlRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(accessControlRequestUpdateDto)} ");

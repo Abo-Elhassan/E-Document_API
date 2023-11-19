@@ -2,10 +2,9 @@
 
 namespace EDocument_Data.Models.Audit
 {
-    public class AuditPRRequest : AuditBaseRequest
+    public class AuditPrRequest : AuditBaseRequest
     {
         public string PrSubject { get; set; }
-        public string ItemNumber { get; set; }
         public string AfeNumber { get; set; }
 
     }
