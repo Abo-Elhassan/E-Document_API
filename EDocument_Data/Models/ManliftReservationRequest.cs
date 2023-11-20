@@ -9,7 +9,6 @@ namespace EDocument_Data.Models
         public string ManliftNumber { get; set; }
         public DateTime RequestedFrom { get; set; }
         public DateTime RequestedTo { get; set; }
-        public string SupervisorId { get; set; }
-        public string SupervisorName { get; set; }
+
     }
 }

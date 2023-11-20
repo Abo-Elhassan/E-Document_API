@@ -4,6 +4,7 @@ using EDocument_EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDocument_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231119175849_RemoveSupervisorInfoManliftReservation2")]
+    partial class RemoveSupervisorInfoManliftReservation2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1202,6 +1205,12 @@ namespace EDocument_EF.Migrations
 
                     b.Property<DateTime>("RequestedTo")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("SupervisorId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupervisorName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
@@ -2987,37 +2996,28 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("BeneficiaryCompany")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BeneficiaryDepartment")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BeneficiaryEmail")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("BeneficiaryExtention")
                         .HasColumnType("int");
 
                     b.Property<string>("BeneficiaryId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BeneficiaryName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BeneficiaryPhoneNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BeneficiaryPosition")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("smalldatetime");
@@ -3046,6 +3046,12 @@ namespace EDocument_EF.Migrations
 
                     b.Property<DateTime>("RequestedTo")
                         .HasColumnType("smalldatetime");
+
+                    b.Property<string>("SupervisorId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupervisorName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RequestNumber");
 

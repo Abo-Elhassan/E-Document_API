@@ -5,6 +5,7 @@ using EDocument_Data.DTOs.Attachments;
 using EDocument_Data.DTOs.Filter;
 using EDocument_Data.DTOs.Requests.ManliftReservationRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
+using EDocument_Data.DTOs.Requests.VehicleRequest;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
 using EDocument_Repositories.Application_Repositories.Request_Reviewer_Repository;
@@ -329,7 +330,14 @@ namespace EDocument_API.Controllers.V1.Requests
         {
             _logger.LogInformation($"Start CreateManliftReservationRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(manliftReservationRequestCreateDto)} ");
             var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            var assignedSupervisor = await _unitOfWork.Repository<User>().GetByIdAsync(manliftReservationRequestCreateDto.SupervisorId);
+
+            var beneficiaryUser = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == manliftReservationRequestCreateDto.BeneficiaryId);
+
+            if (beneficiaryUser is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Requester Id '{manliftReservationRequestCreateDto.BeneficiaryId}' not found" });
+
+            if (beneficiaryUser.Company != "DP World")
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Requester Id '{manliftReservationRequestCreateDto.BeneficiaryId}' is not related DP WORLD Employee" });
 
 
             Expression<Func<ManliftReservationRequest, bool>> criteria = (r =>
@@ -341,8 +349,6 @@ namespace EDocument_API.Controllers.V1.Requests
                 ));
             var reservedDates = await _unitOfWork.Repository<ManliftReservationRequest>().FindAllAsync(criteria, new string[] { "Request" });
 
-            if (assignedSupervisor is null)
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Supervisor Id '{manliftReservationRequestCreateDto.SupervisorId}' not found" });
 
 
             if (reservedDates.Any())
@@ -355,9 +361,8 @@ namespace EDocument_API.Controllers.V1.Requests
             var request = new Request { Id = requestId, DefinedRequestId = manliftReservationRequestCreateDto.DefinedRequestId };
             request.Notes = manliftReservationRequestCreateDto.Notes;
             request.ManliftReservationRequest = _mapper.Map<ManliftReservationRequest>(manliftReservationRequestCreateDto);
-            _mapper.Map(user, request.ManliftReservationRequest);
+            _mapper.Map(beneficiaryUser, request.ManliftReservationRequest);
             request.ManliftReservationRequest.RequestNumber = requestNo;
-            request.ManliftReservationRequest.SupervisorName = assignedSupervisor.FullName;
             request.CreatorId = user?.Id;
             request.ManliftReservationRequest.CreatedBy = user?.FullName;
             request.CreatedBy = user?.FullName;
@@ -436,6 +441,15 @@ namespace EDocument_API.Controllers.V1.Requests
         {
             _logger.LogInformation($"Start UpdateManliftReservationRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(manliftReservationRequestUpdateDto)} ");
 
+            var beneficiaryUser = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == manliftReservationRequestUpdateDto.BeneficiaryId);
+
+            if (beneficiaryUser is null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Requester Id '{manliftReservationRequestUpdateDto.BeneficiaryId}' not found" });
+
+            if (beneficiaryUser.Company != "DP World")
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Requester Id '{manliftReservationRequestUpdateDto.BeneficiaryId}' is not related DP WORLD Employee" });
+
+
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
             var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "ManliftReservationRequest", "Attachments" });
@@ -455,7 +469,6 @@ namespace EDocument_API.Controllers.V1.Requests
 
 
             var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            var assignedSupervisor = await _unitOfWork.Repository<User>().GetByIdAsync(manliftReservationRequestUpdateDto.SupervisorId);
 
             Expression<Func<ManliftReservationRequest, bool>> criteria = (r =>
                 r.Request.Status == RequestStatus.Approved.ToString() &&
@@ -464,8 +477,6 @@ namespace EDocument_API.Controllers.V1.Requests
                 manliftReservationRequestUpdateDto.RequestedFrom < r.RequestedTo);
             var reservedDates = await _unitOfWork.Repository<ManliftReservationRequest>().FindAllAsync(criteria, new string[] { "Request" });
 
-            if (assignedSupervisor is null)
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Supervisor Id '{manliftReservationRequestUpdateDto.SupervisorId}' not found" });
 
 
             if (reservedDates.Any())
@@ -475,6 +486,7 @@ namespace EDocument_API.Controllers.V1.Requests
             request.Notes = manliftReservationRequestUpdateDto.Notes;
             _mapper.Map(manliftReservationRequestUpdateDto, request);
             _mapper.Map(manliftReservationRequestUpdateDto, request.ManliftReservationRequest);
+            _mapper.Map(beneficiaryUser, request.ManliftReservationRequest);
             request.ManliftReservationRequest.RequestId = id;
             request.ManliftReservationRequest.ModifiedAt = DateTime.Now;
             request.ManliftReservationRequest.ModifiedBy = user?.FullName;
@@ -689,6 +701,6 @@ namespace EDocument_API.Controllers.V1.Requests
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
 
-      
+
     }
 }

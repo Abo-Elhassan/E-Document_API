@@ -28,14 +28,6 @@ namespace EDocument_EF.Configurations
             .IsRequired()
             .HasMaxLength(50);
 
-            entity.Property(e => e.SupervisorId)
-            .IsRequired()
-            .HasMaxLength(50);
-
-            entity.Property(e => e.SupervisorName)
-            .IsRequired()
-            .HasMaxLength(200);
-
             entity.Property(e => e.RequestedFrom)
             .HasColumnType("smalldatetime");
 
@@ -43,7 +35,30 @@ namespace EDocument_EF.Configurations
             .HasColumnType("smalldatetime");
 
 
-        
+            entity.Property(e => e.BeneficiaryId)
+            .IsRequired()
+            .HasMaxLength(50);
+
+            entity.Property(e => e.BeneficiaryDepartment)
+            .HasMaxLength(200);
+
+            entity.Property(e => e.BeneficiaryEmail)
+            .HasMaxLength(50);
+
+            entity.Property(e => e.BeneficiaryName)
+            .IsRequired()
+            .HasMaxLength(200);
+
+            entity.Property(e => e.BeneficiaryPosition)
+            .HasMaxLength(200);
+
+            entity.Property(e => e.BeneficiaryPhoneNumber)
+            .HasMaxLength(50);
+
+            entity.Property(e => e.BeneficiaryCompany)
+            .HasMaxLength(200);
+
+
             entity.Property(e => e.CreatedAt)
             .HasColumnType("smalldatetime");
 

@@ -4,6 +4,7 @@ using EDocument_EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDocument_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231120054811_removeManliftTable")]
+    partial class removeManliftTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1138,81 +1141,6 @@ namespace EDocument_EF.Migrations
                     b.HasKey("AuditId");
 
                     b.ToTable("AuditFuelOilInvoiceRequest", "audit");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditManliftReservationRequest", b =>
-                {
-                    b.Property<decimal>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(18,0)");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
-
-                    b.Property<string>("BeneficiaryCompany")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BeneficiaryDepartment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BeneficiaryEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("BeneficiaryExtention")
-                        .HasColumnType("int");
-
-                    b.Property<string>("BeneficiaryId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BeneficiaryName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BeneficiaryPhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BeneficiaryPosition")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DataStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ManliftNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("RequestId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("RequestNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("RequestedFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("RequestedTo")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("TimeStamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TransactionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AuditId");
-
-                    b.ToTable("AuditManliftReservationRequest", "audit");
                 });
 
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditNewItemRequest", b =>
@@ -2980,84 +2908,6 @@ namespace EDocument_EF.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.ManliftReservationRequest", b =>
-                {
-                    b.Property<string>("RequestNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryCompany")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("BeneficiaryDepartment")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("BeneficiaryEmail")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int?>("BeneficiaryExtention")
-                        .HasColumnType("int");
-
-                    b.Property<string>("BeneficiaryId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("BeneficiaryPhoneNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("BeneficiaryPosition")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("smalldatetime");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ManliftNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("smalldatetime");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<long>("RequestId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("RequestedFrom")
-                        .HasColumnType("smalldatetime");
-
-                    b.Property<DateTime>("RequestedTo")
-                        .HasColumnType("smalldatetime");
-
-                    b.HasKey("RequestNumber");
-
-                    b.HasIndex("RequestId")
-                        .IsUnique();
-
-                    b.ToTable("ManliftReservationRequest", null, t =>
-                        {
-                            t.HasTrigger("TR_AuditManliftReservationRequest");
-                        });
-                });
-
             modelBuilder.Entity("EDocument_Data.Models.NewItemRequest", b =>
                 {
                     b.Property<string>("RequestNumber")
@@ -4487,18 +4337,6 @@ namespace EDocument_EF.Migrations
                     b.Navigation("Request");
                 });
 
-            modelBuilder.Entity("EDocument_Data.Models.ManliftReservationRequest", b =>
-                {
-                    b.HasOne("EDocument_Data.Models.Request", "Request")
-                        .WithOne("ManliftReservationRequest")
-                        .HasForeignKey("EDocument_Data.Models.ManliftReservationRequest", "RequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_ManliftReservationRequest_Request");
-
-                    b.Navigation("Request");
-                });
-
             modelBuilder.Entity("EDocument_Data.Models.NewItemRequest", b =>
                 {
                     b.HasOne("EDocument_Data.Models.Request", "Request")
@@ -4824,8 +4662,6 @@ namespace EDocument_EF.Migrations
                     b.Navigation("EquipmentRequestOut");
 
                     b.Navigation("FuelOilInvoiceRequest");
-
-                    b.Navigation("ManliftReservationRequest");
 
                     b.Navigation("NewItemRequest");
 

@@ -27,8 +27,6 @@ namespace EDocument_Data.DTOs.Requests.ManliftReservationRequest
         public string ManliftNumber { get; init; }
         public DateTime RequestedFrom { get; init; }
         public DateTime RequestedTo { get; init; }
-        public string SupervisorId { get; init; }
-        public string SupervisorName { get; init; }
         public string? CreatedBy { get; init; }
         public DateTime? CreatedAt { get; init; }
         public DateTime? ModifiedAt { get; init; }
