@@ -36,7 +36,7 @@ namespace EDocument_Data.DTOs.Requests.RefundRequest
         public string ConcernedEmployeeName { get; set; }
 
 
-        [FileValidation(100 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".jpeg", ".zip", ".png", ".jpg")]
+        [FileValidation(100 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".jpeg", ".zip", ".png", ".jpg", ".msg")]
         public List<IFormFile>? Attachments { get; set; }
 
         public string? Notes { get; set; }

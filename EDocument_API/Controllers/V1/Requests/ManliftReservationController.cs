@@ -458,9 +458,9 @@ namespace EDocument_API.Controllers.V1.Requests
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
 
-            if (request.Status == RequestStatus.Approved.ToString() || request.Status == RequestStatus.Declined.ToString())
+            if (request.Status == RequestStatus.Approved.ToString())
             {
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update this request as it has been already {request.Status}" });
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update this request as it has been already approved" });
             }
             else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
             {
