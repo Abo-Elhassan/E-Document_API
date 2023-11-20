@@ -582,8 +582,19 @@ namespace EDocument_API.Controllers.V1.Requests
             _logger.LogInformation($"Start ApproveNewItemRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(approveNewItemRequest)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
+            if (approveNewItemRequest.ApprovedItems.DistinctBy(r=>r.ItemNumber).Count()!= approveNewItemRequest.ApprovedItems.Count)
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"The submitted list contains items with same item number" });
+
+
             foreach (var item in approveNewItemRequest.ApprovedItems)
             {
+                Expression<Func<RequestedItem, bool>> criteria = (r => r.ItemNumber == item.ItemNumber);
+                var exitingItem = await _unitOfWork.Repository<RequestedItem>().FindAsync(criteria);
+
+                if (exitingItem != null)
+                    return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Item Number '{item.ItemNumber}' is already linked to another item" });
+
+
                 var requestedItem = await _unitOfWork.Repository<RequestedItem>().GetByIdAsync(item.RequestedItemId);
                 if (requestedItem != null)
                 {
