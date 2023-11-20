@@ -30,7 +30,7 @@ namespace EDocument_Data.DTOs.Requests.VehicleRequest
         [Required]
         public string VehicleType { get; init; }
 
-        [FileValidation(100 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip",".png",".jpg",".jpeg")]
+        [FileValidation(100 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".zip",".png",".jpg",".jpeg")]
         public List<IFormFile>? Attachments { get; set; }
         [Required]
         public string Justification { get; set; }

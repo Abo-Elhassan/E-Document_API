@@ -10,13 +10,14 @@ namespace EDocument_Data.DTOs.Requests.PrRequest
         [Required]
         public string PrSubject { get; init; }
 
-       
+        [Required]
+        public string BudgetType { get; init; }
         public string? AfeNumber { get; init; }
 
         [Required]
         public List<RequestedPrSubmitDto> RequestedPrs { get; init; }
 
-        [FileValidation(100 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip", ".png", ".jpg",".jpeg")]
+        [FileValidation(100 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".zip", ".png", ".jpg",".jpeg")]
         public List<IFormFile>? Attachments { get; set; }
 
         public string? Notes { get; set; }
@@ -34,8 +35,6 @@ namespace EDocument_Data.DTOs.Requests.PrRequest
         public string RequestType { get; init; }
         [Required]
         public string PrDescription { get; init; }
-        [Required]
-        public string BudgetType { get; init; }
         [Required]
         public int Quantity { get; init; }
 

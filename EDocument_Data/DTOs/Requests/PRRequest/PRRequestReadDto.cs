@@ -23,6 +23,7 @@ namespace EDocument_Data.DTOs.Requests.PrRequest
         public string BeneficiaryPhoneNumber { get; init; }
         public string BeneficiaryCompany { get; init; }
         public string PrSubject { get; init; }
+        public string BudgetType { get; init; }
         public string AfeNumber { get; init; }
         public List<RequestedPrReadDto> RequestedPrs { get; set; }
         public List<AttachmentReadDto> Attachments { get; set; }
@@ -47,7 +48,6 @@ namespace EDocument_Data.DTOs.Requests.PrRequest
         public string RequestId { get; init; }
         public string RequestType { get; init; }
         public string PrDescription { get; init; }
-        public string BudgetType { get; init; }
         public int Quantity { get; init; }
         public string ItemNumber { get; init; }
     }

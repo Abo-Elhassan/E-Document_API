@@ -45,6 +45,10 @@ namespace EDocument_EF.Configurations
             .IsRequired()
             .HasMaxLength(200);
 
+            entity.Property(e => e.BudgetType)
+            .IsRequired()
+            .HasMaxLength(50);
+
 
 
             entity.Property(e => e.AfeNumber)

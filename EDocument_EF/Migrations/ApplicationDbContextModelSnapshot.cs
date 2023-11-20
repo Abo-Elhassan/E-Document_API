@@ -1391,6 +1391,9 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("BeneficiaryPosition")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("BudgetType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -1732,9 +1735,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("numeric(18,0)");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
-
-                    b.Property<string>("BudgetType")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -3253,6 +3253,11 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("BudgetType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("smalldatetime");
 
@@ -3598,11 +3603,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("RequestedPrId"));
-
-                    b.Property<string>("BudgetType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("smalldatetime");

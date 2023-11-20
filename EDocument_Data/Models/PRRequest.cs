@@ -6,8 +6,10 @@ namespace EDocument_Data.Models
 {
     public class PrRequest : BaseRequest
     {
-        public string PrSubject { get; set; }
-        public string AfeNumber { get; set; }
 
+        public string PrSubject { get; set; }
+        public string BudgetType { get; set; }
+        public string AfeNumber { get; set; }
+ 
     }
 }

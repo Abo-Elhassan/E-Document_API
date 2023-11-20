@@ -351,7 +351,7 @@ namespace EDocument_API.Controllers.V1.Requests
             }
             else
             {
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "RequestedItems field not found" });
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "RequestedPrs field not found" });
             }
 
             if (prRequestCreateDto.Attachments != null && prRequestCreateDto.Attachments.Count > 0)

@@ -22,7 +22,7 @@ namespace EDocument_Data.DTOs.Requests.NewItemRequest
         [Required]
         public List<RequestedItemSubmitDto> RequestedItems { get; init; }
 
-        [FileValidation(100 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv", ".rar", ".zip", ".png", ".jpg",".jpeg")]
+        [FileValidation(100 * 1024 * 1024, true, ".pdf", ".docx", ".xlsx", ".xls", ".csv",".zip", ".png", ".jpg",".jpeg")]
         public List<IFormFile>? Attachments { get; set; }
 
         public string? Notes { get; set; }
