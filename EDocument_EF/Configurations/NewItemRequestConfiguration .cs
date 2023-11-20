@@ -41,18 +41,7 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.BeneficiaryCompany)
             .HasMaxLength(200);
 
-            entity.Property(e => e.ItemDescription)
-            .IsRequired();
 
-            entity.Property(e => e.EquipmentType)
-            .IsRequired()
-            .HasMaxLength(50);
-
-            entity.Property(e => e.PartNumber)
-            .HasMaxLength(50);
-
-            entity.Property(e => e.Manufacturing)
-            .HasMaxLength(50);
 
             entity.Property(e => e.CreatedAt)
             .HasColumnType("smalldatetime");

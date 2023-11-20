@@ -7,17 +7,7 @@ namespace EDocument_Data.DTOs.Requests.NewItemRequest
 {
     public class NewItemRequestCreateDto
     {
-        [Required]
-        public string ItemDescription { get; init; }
 
-        [Required]
-        public string EquipmentType { get; init; }
-
-        
-        public string? PartNumber { get; init; }
-
-       
-        public string? Manufacturing { get; init; }
 
         [Required]
         public List<RequestedItemSubmitDto> RequestedItems { get; init; }
@@ -36,6 +26,10 @@ namespace EDocument_Data.DTOs.Requests.NewItemRequest
     public class RequestedItemSubmitDto
     {
         [Required]
+        public string ItemDescription { get; init; }
+        [Required]
+        public string EquipmentType { get; init; }
+        [Required]
         public string BudgetType { get; init; }
         [Required]
         public string CommodityCode { get; init; }
@@ -43,6 +37,8 @@ namespace EDocument_Data.DTOs.Requests.NewItemRequest
         public string StoreRoom { get; init; }
         [Required]
         public string Unit { get; init; }
+        public string? PartNumber { get; init; }
+        public string? Manufacturing { get; init; }
 
 
     }

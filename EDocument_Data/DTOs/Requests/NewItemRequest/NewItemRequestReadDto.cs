@@ -22,10 +22,7 @@ namespace EDocument_Data.DTOs.Requests.NewItemRequest
         public string BeneficiaryDepartment { get; init; }
         public string BeneficiaryPhoneNumber { get; init; }
         public string BeneficiaryCompany { get; init; }
-        public string ItemDescription { get; init; }
-        public string EquipmentType { get; init; }
-        public string PartNumber { get; init; }
-        public string Manufacturing { get; init; }
+
         public List<RequestedItemReadDto> RequestedItems { get; set; }
         public List<AttachmentReadDto> Attachments { get; set; }
         public string? CreatedBy { get; init; }
@@ -47,6 +44,10 @@ namespace EDocument_Data.DTOs.Requests.NewItemRequest
         public long RequestedItemId { get; init; }
         public string ItemNumber { get; init; }
         public string RequestId { get; init; }
+        public string ItemDescription { get; init; }
+        public string EquipmentType { get; init; }
+        public string PartNumber { get; init; }
+        public string Manufacturing { get; init; }
         public string BudgetType { get; init; }
         public string CommodityCode { get; init; }
         public string StoreRoom { get; init; }
