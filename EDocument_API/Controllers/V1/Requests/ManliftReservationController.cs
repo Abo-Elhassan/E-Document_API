@@ -336,8 +336,6 @@ namespace EDocument_API.Controllers.V1.Requests
             if (beneficiaryUser is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Requester Id '{manliftReservationRequestCreateDto.BeneficiaryId}' not found" });
 
-            if (beneficiaryUser.Company != "DP World")
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Requester Id '{manliftReservationRequestCreateDto.BeneficiaryId}' is not related DP WORLD Employee" });
 
 
             Expression<Func<ManliftReservationRequest, bool>> criteria = (r =>
@@ -446,8 +444,6 @@ namespace EDocument_API.Controllers.V1.Requests
             if (beneficiaryUser is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Requester Id '{manliftReservationRequestUpdateDto.BeneficiaryId}' not found" });
 
-            if (beneficiaryUser.Company != "DP World")
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Requester Id '{manliftReservationRequestUpdateDto.BeneficiaryId}' is not related DP WORLD Employee" });
 
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);

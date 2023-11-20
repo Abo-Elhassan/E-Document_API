@@ -12,11 +12,11 @@ namespace EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest
         [Required]
         public string ProductType { get; init; }
 
-        [Required]
-        public string InvoiceNumber { get; init; }
 
-        [Required]
-        public int ReceiptNumber { get; init; }
+        public string? InvoiceNumber { get; init; }
+
+
+        public int? ReceiptNumber { get; init; }
 
         [Required]
         public DateTime RequestedDate { get; init; }

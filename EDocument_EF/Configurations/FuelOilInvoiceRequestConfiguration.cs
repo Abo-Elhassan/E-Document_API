@@ -11,8 +11,6 @@ namespace EDocument_EF.Configurations
         {
             entity.HasKey(e => e.RequestNumber);
 
-            entity.HasIndex(e => e.InvoiceNumber)
-            .IsUnique();
 
 
             entity.ToTable(nameof(FuelOilInvoiceRequest), tb => tb.HasTrigger($"TR_{nameof(AuditFuelOilInvoiceRequest)}"));
@@ -49,7 +47,6 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50);
 
             entity.Property(e => e.InvoiceNumber)
-            .IsRequired()
             .HasMaxLength(200);
 
             entity.Property(e => e.RequestedDate)
