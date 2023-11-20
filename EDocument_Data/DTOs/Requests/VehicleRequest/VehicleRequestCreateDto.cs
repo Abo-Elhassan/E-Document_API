@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EDocument_Data.Custom_Attributes;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,8 +20,10 @@ namespace EDocument_Data.DTOs.Requests.VehicleRequest
         [Required]
         public string DestinationAddress { get; init; }
         [Required]
+        [OldDateValidator]
         public DateTime DepartureDate { get; init; }
         [Required]
+        [OldDateValidator]
         public DateTime ReturnDate { get; init; }
         [Required]
         public string LuggageDescription { get; init; }

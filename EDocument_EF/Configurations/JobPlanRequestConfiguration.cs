@@ -7,17 +7,13 @@ using System.Collections.Generic;
 
 namespace EDocument_EF.Configurations
 {
-    public partial class JobPlanRequestConfiguration : IEntityTypeConfiguration<JobPlanRequest>
+    public partial class JobPlanRequestConfiguration : IEntityTypeConfiguration<ReschedulePmWoRequest>
     {
-        public void Configure(EntityTypeBuilder<JobPlanRequest> entity)
+        public void Configure(EntityTypeBuilder<ReschedulePmWoRequest> entity)
         {
 
-            entity.ToTable(nameof(JobPlanRequest));
+            entity.ToTable(nameof(ReschedulePmWoRequest));
 
-
-            entity.Property(e => e.Action).HasConversion<string>()
-            .IsRequired()
-            .HasMaxLength(50);
 
             entity.Property(e => e.CreatedAt)
             .HasColumnType("smalldatetime");
@@ -34,6 +30,6 @@ namespace EDocument_EF.Configurations
             OnConfigurePartial(entity);
         }
 
-        partial void OnConfigurePartial(EntityTypeBuilder<JobPlanRequest> entity);
+        partial void OnConfigurePartial(EntityTypeBuilder<ReschedulePmWoRequest> entity);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EDocument_Data.Custom_Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace EDocument_Data.DTOs.User
         [MaxLength(50)]
         public string DelegatedUserId { get; init; }
         [Required]
+        [OldDateValidator]
         public DateTime DelegatedUntil { get; init; }
     }
 }

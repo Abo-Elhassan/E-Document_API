@@ -10,10 +10,14 @@ using System.Threading.Tasks;
 
 namespace EDocument_Data.Models
 {
-    public class JobPlanRequest : BaseEntity
+    public class ReschedulePmWoRequest : BaseEntity
     {
-        public string Description { get; set; }
-        public JobPlanAction Action { get; set; }
+        public string RequestNumber { get; set; }
+        public string DescriptionOfChange { get; set; }
+        public string ReasonForRescheduling { get; set; }
+        public DateTime RescheduleFrom { get; set; }
+        public DateTime RescheduleTo{ get; set; }
+        public string WoNumber { get; set; }
         public long RequestId { get; set; }
         public virtual Request Request { get; set; }
     }

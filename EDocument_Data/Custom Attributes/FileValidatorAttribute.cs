@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
-
+namespace EDocument_Data.Custom_Attributes;
 public class FileValidationAttribute : ValidationAttribute
 {
     private readonly long _maxFileSize;

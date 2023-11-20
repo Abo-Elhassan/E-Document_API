@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EDocument_Data.Custom_Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -20,9 +21,11 @@ namespace EDocument_Data.DTOs.Requests.EquipmentOutAreaRequest
         public string Equipment { get; set; }
 
         [Required]
+        [OldDateValidator]
         public DateTime RequestedDateFrom { get; set; }
 
         [Required]
+        [OldDateValidator]
         public DateTime RequestedDateTo { get; set; }
 
         public string? Additionaltools { get; set; }
