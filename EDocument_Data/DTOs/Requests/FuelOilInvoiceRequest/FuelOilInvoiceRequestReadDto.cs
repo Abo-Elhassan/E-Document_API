@@ -26,7 +26,7 @@ namespace EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest
         public string BeneficiaryCompany { get; init; }
         public string ProductType { get; init; }
         public string InvoiceNumber { get; init; }
-        public int ReceiptNumber { get; init; }
+        public int? ReceiptNumber { get; init; }
         public int? SwiftNumber { get; set; }
         public DateTime RequestedDate { get; init; }
 
