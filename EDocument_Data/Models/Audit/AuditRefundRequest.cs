@@ -22,6 +22,7 @@ namespace EDocument_Data.Models.Audit
         public string RelatedContainers { get; set; }
         public string ConcernedEmployeeId { get; set; }
         public string ConcernedEmployeeName { get; set; }
+        public string ConcernedDepartment { get; set; }      
         public string CreditNote { get; set; }
         public string Amount { get; set; }
 

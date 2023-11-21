@@ -397,7 +397,6 @@ namespace EDocument_API.Controllers.V1.Requests
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
 
             request.Notes = cctvAccessRequestUpdateDto.Notes;
-            _mapper.Map(cctvAccessRequestUpdateDto, request);
             _mapper.Map(cctvAccessRequestUpdateDto, request.CCTVAccessRequest);
             request.CCTVAccessRequest.RequestId = id;
             request.CCTVAccessRequest.ModifiedAt = DateTime.Now;

@@ -48,6 +48,8 @@ public partial class Request : BaseEntity
     public virtual ManliftReservationRequest ManliftReservationRequest { get; set; }
     public virtual EquipmentRequestIn EquipmentRequestIn { get; set; }
     public virtual EquipmentRequestOut EquipmentRequestOut { get; set; }
+    public virtual ReschedulePmWoRequest ReschedulePmWoRequest { get; set; }
+    
 
 
 }

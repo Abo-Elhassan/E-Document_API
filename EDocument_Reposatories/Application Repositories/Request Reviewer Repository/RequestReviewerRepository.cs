@@ -77,17 +77,14 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             return requestReviewersEmails.ToString();
         }
 
-        public async Task NominateReviewer(long requestId, string reviewerId, string naminatedBy)
-        {
-            var nominatedReviewer = await _context.RequestReviewers.FirstOrDefaultAsync(rr => rr.ReviewerType == ReviewerType.NominatedReviewer && rr.RequestId == requestId);
-            if (nominatedReviewer != null)
-            {
-                nominatedReviewer.AssignedReviewerId = reviewerId;
-                nominatedReviewer.ModifiedBy = naminatedBy;
-            }
-            _context.Update(nominatedReviewer);
-            _context.SaveChanges();
-        }
+        /// <summary>
+        /// Nominate request creator as last reviewer to close the request
+        /// </summary>
+        /// <param name="requestId">request id</param>
+        /// <param name="creatorId">creator id</param>
+        /// <remarks>
+        /// 
+        /// </remarks>
         public async Task NominateReviewer(long requestId, string creatorId)
         {
             var nominatedReviewer = await _context.RequestReviewers.Where(rr => rr.RequestId == requestId).OrderBy(rr => rr.StageNumber).LastOrDefaultAsync(rr => rr.RequestId == requestId);
@@ -98,6 +95,50 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 _context.SaveChanges();
             }
 
+        }
+
+        /// <summary>
+        /// Nominate reviewer which is defined as NominatedReviewer in DefinedRequestReviewer during request creation
+        /// </summary>
+        /// <param name="requestId">request id</param>
+        /// <param name="reviewerId">reviewer id</param>
+        /// <param name="nominatedBy">nominator name</param>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        public async Task NominateReviewer(long requestId, string reviewerId, string nominatedBy)
+        {
+            var nominatedReviewer = await _context.RequestReviewers.FirstOrDefaultAsync(rr => rr.ReviewerType == ReviewerType.NominatedReviewer && rr.RequestId == requestId);
+            if (nominatedReviewer != null)
+            {
+                nominatedReviewer.AssignedReviewerId = reviewerId;
+                nominatedReviewer.ModifiedBy = nominatedBy;
+                _context.Update(nominatedReviewer);
+                _context.SaveChanges();
+            }
+
+        }
+
+        /// <summary>
+        /// Nominate reviewer which is defined as NominatedReviewer in DefinedRequestReviewer during request creation
+        /// </summary>
+        /// <param name="requestId">request id</param>
+        /// <param name="oldReviewerId">old reviewer id</param>
+        /// <param name="newReviewerId">new reviewer id</param>
+        /// <param name="nominatedBy">nominator name</param>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        public async Task NominateReviewer(long requestId, string oldReviewerId, string newReviewerId, string nominatedBy)
+        {
+            var nominatedReviewer = await _context.RequestReviewers.FirstOrDefaultAsync(rr => rr.RequestId == requestId && rr.AssignedReviewerId == oldReviewerId);
+            if (nominatedReviewer != null)
+            {
+                nominatedReviewer.AssignedReviewerId = newReviewerId;
+                nominatedReviewer.ModifiedBy = nominatedBy;
+                _context.Update(nominatedReviewer);
+                _context.SaveChanges();
+            }
         }
         public async Task BeginRequestCycle(long definedRequestId, long requestId, string requesterId, bool isNew)
         {
@@ -331,6 +372,8 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             var assignedReviewer = await _context.Users.FindAsync(assignedReviewerId);
 
             return assignedReviewer?.DelegatedUntil>DateTime.Now ? assignedReviewer.DelegatedUserId: assignedReviewerId;
-        } 
+        }
+
+
     }
 }

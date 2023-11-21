@@ -18,6 +18,7 @@ using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.DTOs.Requests.PrRequest;
 using EDocument_Data.DTOs.Requests.RefundRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
+using EDocument_Data.DTOs.Requests.ReschedulePmWoRequest;
 using EDocument_Data.DTOs.Requests.TravelDeskRequest;
 using EDocument_Data.DTOs.Requests.VehicleRequest;
 using EDocument_Data.DTOs.Section;
@@ -638,6 +639,31 @@ namespace EDocument_Services.AutoMapper_Service
 
 
             CreateMap<EquipmentInAreaRequestUpdateDto, EquipmentRequestIn>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            #endregion            
+
+            #region Reschedule Pm/Wo Reuqest
+
+            CreateMap<ReschedulePmWoRequest, ReschedulePmWoRequestReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId));
+
+
+
+            CreateMap<ReschedulePmWoRequest, ReschedulePmWoRequestReviewerReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+           .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<ReschedulePmWoRequestCreateDto, ReschedulePmWoRequest>();
+
+            CreateMap<ReschedulePmWoRequestUpdateDto, ReschedulePmWoRequest>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             #endregion            
         }

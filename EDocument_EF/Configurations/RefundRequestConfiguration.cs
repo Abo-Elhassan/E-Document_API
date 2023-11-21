@@ -29,6 +29,10 @@ namespace EDocument_EF.Configurations
             .IsRequired()
             .HasMaxLength(200);
 
+            entity.Property(e => e.ConcernedDepartment)
+            .IsRequired()
+            .HasMaxLength(50);
+
             entity.Property(e => e.CustomerName)
             .IsRequired()
             .HasMaxLength(200);

@@ -19,8 +19,10 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
         Task<List<ReviewersDetails>> GetAllRequestReviewersAsync(long requestId);
 
         Task<string> GetAllRequestReviewersEmailsByStageNumberAsync(long requestId, int stageNumber);
-        Task NominateReviewer(long requestId, string reviewerId, string naminatedBy);
+              
         Task NominateReviewer(long requestId, string creatorId);
+        Task NominateReviewer(long requestId, string reviewerId, string nominatedBy);
+        Task NominateReviewer(long requestId, string oldReviewerId, string newReviewerId, string nominatedBy);
         Task BeginRequestCycle( long definedRequestId, long requestId,string requesterId,bool isNew);
         Task<(bool IsSucceded, string? Message)> ApproveRequestAsync(ApproveRequestReviewerDto reviewingInfo,User reviewer);
         Task<(bool IsSucceded, string? Message)> DeclineRequestAsync(DeclineRequestReviewerDto reviewingInfo,User reviewer);

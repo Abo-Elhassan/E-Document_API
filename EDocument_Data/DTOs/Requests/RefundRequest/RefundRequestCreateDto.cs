@@ -12,30 +12,32 @@ namespace EDocument_Data.DTOs.Requests.RefundRequest
     public class RefundRequestCreateDto
     {
         [Required]
-        public string CustomerName { get; set; }
+        public string CustomerName { get; init; }
         [Required]
-        public string CustomerMobileNumber { get; set; }
+        public string CustomerMobileNumber { get; init; }
         [Required]
-        public string RefundSubject { get; set; }
+        public string RefundSubject { get; init; }
         [Required]
-        public string RefundDescription { get; set; }
+        public string RefundDescription { get; init; }
         [Required]
-        public string RefundType { get; set; }
-        public string? ShipmentType { get; set; }
+        public string RefundType { get; init; }
+        public string? ShipmentType { get; init; }
         [Required]
-        public string DocumentNumber { get; set; }
+        public string DocumentNumber { get; init; }
 
-        public string? RelatedContainers { get; set; }
+        public string? RelatedContainers { get; init; }
         [Required]
-        public string ConcernedEmployeeId { get; set; }
+        public string ConcernedEmployeeId { get; init; }
         [Required]
-        public string ConcernedEmployeeName { get; set; }
+        public string ConcernedEmployeeName { get; init; }
+        [Required]
+        public string ConcernedDepartment { get; init; }
 
 
         [FileValidation(100 * 1024 * 1024,true, ".pdf", ".docx", ".xlsx", ".xls",".csv",".jpeg",".zip",".png",".jpg",".msg")]
         public List<IFormFile>? Attachments { get; set; }
 
-        public string? Notes { get; set; }
+        public string? Notes { get; init; }
 
         [Required]
         public long DefinedRequestId { get; init; }

@@ -1785,6 +1785,63 @@ namespace EDocument_EF.Migrations
                     b.ToTable("AuditRequestedPr", "audit");
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditReschedulePmWoRequest", b =>
+                {
+                    b.Property<decimal>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(18,0)");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DataStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionOfChange")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReasonForRescheduling")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("RequestNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RescheduleFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("RescheduleTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WoNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("AuditReschedulePmWoRequest", "audit");
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditRole", b =>
                 {
                     b.Property<decimal>("AuditId")
@@ -3649,6 +3706,56 @@ namespace EDocument_EF.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.ReschedulePmWoRequest", b =>
+                {
+                    b.Property<string>("RequestNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("DescriptionOfChange")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ReasonForRescheduling")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("RescheduleFrom")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<DateTime>("RescheduleTo")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("WoNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("RequestNumber");
+
+                    b.HasIndex("RequestId")
+                        .IsUnique();
+
+                    b.ToTable("ReschedulePmWoRequest", null, t =>
+                        {
+                            t.HasTrigger("TR_AuditReschedulePmWoRequest");
+                        });
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.Role", b =>
                 {
                     b.Property<string>("Id")
@@ -4638,6 +4745,18 @@ namespace EDocument_EF.Migrations
                     b.Navigation("Request");
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.ReschedulePmWoRequest", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.Request", "Request")
+                        .WithOne("ReschedulePmWoRequest")
+                        .HasForeignKey("EDocument_Data.Models.ReschedulePmWoRequest", "RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_ReschedulePmWoRequest_Request");
+
+                    b.Navigation("Request");
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.Section", b =>
                 {
                     b.HasOne("EDocument_Data.Models.Department", "Department")
@@ -4838,6 +4957,8 @@ namespace EDocument_EF.Migrations
                     b.Navigation("RequestedItems");
 
                     b.Navigation("RequestedPrs");
+
+                    b.Navigation("ReschedulePmWoRequest");
 
                     b.Navigation("TravelDeskRequest");
 

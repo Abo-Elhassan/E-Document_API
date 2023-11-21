@@ -51,8 +51,8 @@ namespace EDocument_EF
         public virtual DbSet<RequestedPr> RequestedPRs => Set<RequestedPr>();
         public virtual DbSet<EquipmentRequestIn> EquipmentRequestIns => Set<EquipmentRequestIn>();
         public virtual DbSet<EquipmentRequestOut> EquipmentRequestOuts => Set<EquipmentRequestOut>();
+        public virtual DbSet<ReschedulePmWoRequest> ReschedulePmWoRequests => Set<ReschedulePmWoRequest>();
         
-
         #region Audit Tables
         public virtual DbSet<AuditDefinedRequest> AuditDefinedRequests => Set<AuditDefinedRequest>();
 
@@ -88,6 +88,8 @@ namespace EDocument_EF
         public virtual DbSet<AuditPrRequest> AuditPRRequests => Set<AuditPrRequest>();
         public virtual DbSet<AuditRequestedPr> AuditRequestedPRs => Set<AuditRequestedPr>();
         public virtual DbSet<AuditManliftReservationRequest> AuditManliftReservationRequests => Set<AuditManliftReservationRequest>();
+        public virtual DbSet<AuditReschedulePmWoRequest> AuditReschedulePmWoRequests => Set<AuditReschedulePmWoRequest>();
+
 
         #endregion
 
@@ -126,6 +128,7 @@ namespace EDocument_EF
             builder.ApplyConfiguration(new ManliftReservationRequestConfiguration());
             builder.ApplyConfiguration(new EquipmentRequestInConfiguration());
             builder.ApplyConfiguration(new EquipmentRequestOutConfiguration());
+            builder.ApplyConfiguration(new ReschedulePmWoRequestConfiguration());  
         }
 
         public override int SaveChanges()
@@ -246,6 +249,7 @@ namespace EDocument_EF
             builder.Entity<AuditManliftReservationRequest>().ToTable(nameof(AuditManliftReservationRequest), "audit");
             builder.Entity<AuditEquipmentRequestIn>().ToTable(nameof(AuditEquipmentRequestIn), "audit");
             builder.Entity<AuditEquipmentRequestOut>().ToTable(nameof(AuditEquipmentRequestOut), "audit");
+            builder.Entity<AuditReschedulePmWoRequest>().ToTable(nameof(AuditReschedulePmWoRequest), "audit");
             #endregion
 
         }

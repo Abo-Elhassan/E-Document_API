@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing.Printing;
+using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Net.Mime;
 using System.Security.Claims;
@@ -215,6 +216,29 @@ namespace EDocument_API.Controllers.V1
             return Ok(new ApiResponse<FilterReadDto<UserReadDto>> { StatusCode = (int)HttpStatusCode.OK, Details = response });
         }
 
+
+        /// <summary>
+        /// Get user direct manager
+        /// </summary>
+        /// <param name="id"> user Id</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>Direct Manager Name</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpGet("DirectManager/{id}")]
+        [Authorize(Roles = "Basic")]
+        public async Task<ActionResult> GetDirectManagerName(string id)
+        {
+            _logger.LogInformation($"Start GetDirectManagerName from {nameof(UserController)} for user id = {id} ");
+
+            var user = await _userManager.Users.Include(t => t.Manager).FirstOrDefaultAsync(u=>u.Id == id);
+
+            if (user == null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"User '{id}' not found" });
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = user.Manager.FullName });
+        }
 
         /// <summary>
         /// Get All Filtered Users by Id/FullName

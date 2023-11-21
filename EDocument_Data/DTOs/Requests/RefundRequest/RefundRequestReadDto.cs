@@ -22,20 +22,21 @@ namespace EDocument_Data.DTOs.Requests.RefundRequest
         public RequestStatus Status { get; init; }
   
         public string CreatorId { get; init; }
-        public string CustomerName { get; set; }
-        public string CustomerMobileNumber { get; set; }
+        public string CustomerName { get; init; }
+        public string CustomerMobileNumber { get; init; }
         public string Notes { get; init; }
-        public string RefundSubject { get; set; }
-        public string RefundDescription { get; set; }
-        public string RefundType { get; set; }
-        public string ShipmentType { get; set; }
-        public string DocumentNumber { get; set; }
-        public string RelatedContainers { get; set; }
-        public string ConcernedEmployeeId { get; set; }
-        public string ConcernedEmployeeName { get; set; }
+        public string RefundSubject { get; init; }
+        public string RefundDescription { get; init; }
+        public string RefundType { get; init; }
+        public string ShipmentType { get; init; }
+        public string DocumentNumber { get; init; }
+        public string RelatedContainers { get; init; }
+        public string ConcernedEmployeeId { get; init; }
+        public string ConcernedEmployeeName { get; init; }
+        public string ConcernedDepartment { get; init; }
         public List<AttachmentReadDto> Attachments { get; set; }
-        public long? CreditNote { get; set; }
-        public string Amount { get; set; }
+        public long? CreditNote { get; init; }
+        public string Amount { get; init; }
         public string CreatedBy { get; init; }
         public string ModifiedBy { get; init; }
         public DateTime? CreatedAt { get; init; }

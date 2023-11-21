@@ -14,6 +14,7 @@ using EDocument_UnitOfWork;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Mime;
@@ -402,6 +403,7 @@ namespace EDocument_API.Controllers.V1.Requests
             request.Notes = refundRequestUpdateDto.Notes;
             _mapper.Map(refundRequestUpdateDto, request);
             _mapper.Map(refundRequestUpdateDto, request.RefundRequest);
+            request.RefundRequest.RequestId = id;
 
             if (refundRequestUpdateDto.Attachments == null || refundRequestUpdateDto.Attachments.Count == 0)
             {
@@ -629,7 +631,100 @@ namespace EDocument_API.Controllers.V1.Requests
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
 
-       
+        /// <summary>
+        /// Escalate Refund Request
+        /// </summary>
+        /// <param name="escalateRefundRequestDto">Escalated Refund Request Information</param>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns> message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPut("Escalate")]
+        [Authorize(Roles = "CustomerService")]
+        public async Task<ActionResult> EscalateRefundRequest(EscalateRefundRequestDto escalateRefundRequestDto)
+        {
+            _logger.LogInformation($"Start EscalateRefundRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(escalateRefundRequestDto)} ");
+            var currentReviewer = await _userManager.FindByIdAsync(escalateRefundRequestDto.CurrentReviewerId);
+
+            if (currentReviewer == null)
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Reviewer id '{escalateRefundRequestDto.CurrentReviewerId}' not found" } );
+
+
+
+            Expression<Func<Request, bool>> requestRxpression = (r => r.Id == escalateRefundRequestDto.RequestId);
+            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "RefundRequest", "RequestReviewers" });
+
+            if (request == null)
+            {
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
+
+            }
+            else if (!request.RequestReviewers.Any(rr=>rr.RequestId == escalateRefundRequestDto.RequestId && rr.AssignedReviewerId== escalateRefundRequestDto.CurrentReviewerId))
+            {
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Reviewer id '{escalateRefundRequestDto.CurrentReviewerId}' is not one of the reviewers for request no. '{escalateRefundRequestDto.RequestId}'" });
+
+            }
+
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            
+         
+            await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, user.Id, false);
+            await _requestReviewerRepository.NominateReviewer(request.Id, escalateRefundRequestDto.CurrentReviewerId, currentReviewer.ManagerId, user?.FullName);
+
+     
+            #region Send Emails
+
+            var creatorMailContent = new MailContent
+            {
+                Body = $"""
+                Dear {user.FullName.Split(" ")[0]},
+                    Kindly not that your Refund Request on eDocuement has been updated successfully and it's under reviewing now.
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) to be updated with your request Status.
+
+                    - eDocument Request Reference No.: {request.RefundRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+
+                """,
+                IsHTMLBody = false,
+                Subject = $"Refund Request No. {request.RefundRequest.RequestNumber} on eDocuement",
+                To = $"{user.Email};DPWSokhna.CustomerService@dpworld.com;"
+            };
+
+            _mailService.SendMailAsync(creatorMailContent);
+
+            var reviewersEmails = await _requestReviewerRepository.GetAllRequestReviewersEmailsByStageNumberAsync(escalateRefundRequestDto.RequestId, request.CurrentStage);
+            var reviewerMailContent = new MailContent
+            {
+                Body = $"""
+                Dears,
+                    Kindly note that {user.FullName} has updated Refund Request for on eDocuement and need to be reviewed from your side.
+
+                    Please check you inbox on eDocument ({ApplicationConsts.ClientOrigin}) for more details.
+
+                    - eDocument Request Reference No.: {request.RefundRequest.RequestNumber}
+
+                Thanks,
+
+                “This is an auto generated email from DP World Sokhna Technology system. Please do not reply to this email”
+                """,
+                IsHTMLBody = false,
+                Subject = $"Refund Request No. {request.RefundRequest.RequestNumber} on eDocuement",
+                To = reviewersEmails
+            };
+
+            _mailService.SendMailAsync(reviewerMailContent);
+
+            #endregion Send Emails
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Request has been escalated successfully" });
+        }
+
+
 
     }
 }
