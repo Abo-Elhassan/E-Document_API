@@ -399,6 +399,15 @@ namespace EDocument_API.Controllers.V1.Requests
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
 
+            if (request.Status != RequestStatus.Approved.ToString())
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update this request as it has been already approved" });
+            }
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot update the request after one of the reviewers took his action" });
+            }
+
             var oldAttachments = request.Attachments;
             request.Notes = refundRequestUpdateDto.Notes;
             _mapper.Map(refundRequestUpdateDto, request);
@@ -645,10 +654,11 @@ namespace EDocument_API.Controllers.V1.Requests
         public async Task<ActionResult> EscalateRefundRequest(EscalateRefundRequestDto escalateRefundRequestDto)
         {
             _logger.LogInformation($"Start EscalateRefundRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(escalateRefundRequestDto)} ");
-            var currentReviewer = await _userManager.FindByIdAsync(escalateRefundRequestDto.CurrentReviewerId);
+            var currentReviewer =  await _userManager.Users.Include(t => t.Manager).FirstOrDefaultAsync(u => u.Id == escalateRefundRequestDto.CurrentReviewerId);
 
             if (currentReviewer == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Reviewer id '{escalateRefundRequestDto.CurrentReviewerId}' not found" } );
+
 
 
 
@@ -664,12 +674,19 @@ namespace EDocument_API.Controllers.V1.Requests
             {
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Reviewer id '{escalateRefundRequestDto.CurrentReviewerId}' is not one of the reviewers for request no. '{escalateRefundRequestDto.RequestId}'" });
 
+            } 
+            else if(request.Status != RequestStatus.Declined.ToString())
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update this request as it's {request.Status}" });
             }
 
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            
-         
+
+            request.RefundRequest.ConcernedEmployeeId = currentReviewer.ManagerId;
+            request.RefundRequest.ConcernedEmployeeName = currentReviewer.Manager.FullName;
+            _unitOfWork.Complete();
+
             await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, user.Id, false);
             await _requestReviewerRepository.NominateReviewer(request.Id, escalateRefundRequestDto.CurrentReviewerId, currentReviewer.ManagerId, user?.FullName);
 
