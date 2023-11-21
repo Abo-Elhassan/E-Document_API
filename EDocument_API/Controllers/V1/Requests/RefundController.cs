@@ -316,7 +316,8 @@ namespace EDocument_API.Controllers.V1.Requests
 
             await _requestReviewerRepository.BeginRequestCycle(refundRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
 
-            await _requestReviewerRepository.NominateReviewer(requestId, refundRequestCreateDto.ConcernedEmployeeId, user?.FullName);
+            await _requestReviewerRepository.NominateReviewer(requestId, user.Id); //Nominate the creator to act as the last reviewer
+            await _requestReviewerRepository.NominateReviewer(requestId, refundRequestCreateDto.ConcernedEmployeeId, user?.FullName); //nominate the concerned employee to act as reviewer
 
             if (result < 1)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });

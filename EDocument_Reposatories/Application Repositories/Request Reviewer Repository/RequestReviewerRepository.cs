@@ -88,7 +88,17 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             _context.Update(nominatedReviewer);
             _context.SaveChanges();
         }
+        public async Task NominateReviewer(long requestId, string creatorId)
+        {
+            var nominatedReviewer = await _context.RequestReviewers.Where(rr => rr.RequestId == requestId).OrderBy(rr => rr.StageNumber).LastOrDefaultAsync(rr => rr.RequestId == requestId);
+            if (nominatedReviewer != null)
+            {
+                nominatedReviewer.AssignedReviewerId = creatorId;
+                _context.Update(nominatedReviewer);
+                _context.SaveChanges();
+            }
 
+        }
         public async Task BeginRequestCycle(long definedRequestId, long requestId, string requesterId, bool isNew)
         {
             var definedRequestReviewers = await GetAllDefinedRequestReviewersAsync(definedRequestId);
