@@ -28,6 +28,10 @@ namespace EDocument_EF.Configurations
             .IsRequired()
             .HasMaxLength(50);
 
+            entity.Property(e => e.WorkingArea)
+            .IsRequired()
+            .HasMaxLength(50);
+
             entity.Property(e => e.RequestedFrom)
             .HasColumnType("smalldatetime");
 

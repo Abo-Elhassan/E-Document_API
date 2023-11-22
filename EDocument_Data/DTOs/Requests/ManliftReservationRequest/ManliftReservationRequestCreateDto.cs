@@ -16,6 +16,8 @@ namespace EDocument_Data.DTOs.Requests.ManliftReservationRequest
         [Required]
         public string ManliftNumber { get; init; }
         [Required]
+        public string WorkingArea { get; init; }
+        [Required]
         [OldDateValidator]
         public DateTime RequestedFrom { get; init; }
         [Required]

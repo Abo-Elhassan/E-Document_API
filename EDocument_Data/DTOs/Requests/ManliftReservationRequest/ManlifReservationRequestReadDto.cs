@@ -25,6 +25,7 @@ namespace EDocument_Data.DTOs.Requests.ManliftReservationRequest
         public int? BeneficiaryExtention { get; init; }
         public string BeneficiaryCompany { get; init; }
         public string ManliftNumber { get; init; }
+        public string WorkingArea { get; init; }
         public DateTime RequestedFrom { get; init; }
         public DateTime RequestedTo { get; init; }
         public string? CreatedBy { get; init; }
