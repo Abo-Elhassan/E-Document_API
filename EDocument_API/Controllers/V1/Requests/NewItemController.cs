@@ -441,7 +441,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
-            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "NewItemRequest", "Attachments", "RequestedItems" });
+            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "NewItemRequest", "RequestReviewers", "Attachments", "RequestedItems" });
 
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });

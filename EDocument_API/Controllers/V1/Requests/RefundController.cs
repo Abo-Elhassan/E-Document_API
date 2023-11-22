@@ -394,7 +394,7 @@ namespace EDocument_API.Controllers.V1.Requests
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
-            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "RefundRequest", "Attachments" });
+            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "RefundRequest", "RequestReviewers", "Attachments" });
 
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });

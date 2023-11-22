@@ -448,7 +448,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
-            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "ManliftReservationRequest", "Attachments" });
+            var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "ManliftReservationRequest", "RequestReviewers", "Attachments" });
 
 
             if (request == null)
