@@ -405,7 +405,18 @@ namespace EDocument_API.Controllers.V1.Requests
             var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "PoRequest", "Attachments" });
 
             if (request == null)
+            {
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
+
+            }
+            else if (request.Status == RequestStatus.Approved.ToString())
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update this request as it has been already approved" });
+            }
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot update the request after one of the reviewers took his action" });
+            }
 
             var oldPoAttachmentPath = request.PoRequest.PoAttachmentPath;
             var oldInvoiceAtachmentPath = request.PoRequest.InvoiceAttachmentPath;
