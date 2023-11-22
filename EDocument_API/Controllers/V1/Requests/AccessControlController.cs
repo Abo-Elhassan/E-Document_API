@@ -126,7 +126,7 @@ namespace EDocument_API.Controllers.V1.Requests
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot delete this request as it has been already {request.Status}" });
             }
-            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()) && request.Status == RequestStatus.Pending.ToString())
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delete the request after one of the reviewers took his action" });
             }
@@ -418,7 +418,7 @@ namespace EDocument_API.Controllers.V1.Requests
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot update this request as it has been already approved" });
             }
-            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()))
+            else if (request.RequestReviewers.Any(rr => rr.Status == RequestStatus.Approved.ToString()) && request.Status == RequestStatus.Pending.ToString())
             {
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot update the request after one of the reviewers took his action" });
             }
