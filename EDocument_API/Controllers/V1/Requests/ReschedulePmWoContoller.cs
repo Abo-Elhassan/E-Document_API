@@ -76,16 +76,16 @@ namespace EDocument_API.Controllers.V1.Requests
             _logger.LogInformation($"Start GetReschedulePmWoRequestById from {nameof(RequestController)} for request id = {id}");
 
             var includes = new string[] { "Request", "Request.RequestReviewers", "Request.Attachments" };
-            var ReschedulePmWoRequest = await _unitOfWork.Repository<ReschedulePmWoRequest>().FindRequestAsync(
+            var reschedulePmWoRequest = await _unitOfWork.Repository<ReschedulePmWoRequest>().FindRequestAsync(
             requestId: id,
             expression: "Request.Id==@0",
             includes: includes
             );
 
-            if (ReschedulePmWoRequest is null)
+            if (reschedulePmWoRequest is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
-            var result = _mapper.Map<ReschedulePmWoRequestReadDto>(ReschedulePmWoRequest);
+            var result = _mapper.Map<ReschedulePmWoRequestReadDto>(reschedulePmWoRequest);
 
             return Ok(new ApiResponse<ReschedulePmWoRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
@@ -304,6 +304,11 @@ namespace EDocument_API.Controllers.V1.Requests
             request.ReschedulePmWoRequest = _mapper.Map<ReschedulePmWoRequest>(reschedulePmWoRequestCreateDto);
             request.ReschedulePmWoRequest.RequestNumber = requestNo;
 
+            if (reschedulePmWoRequestCreateDto.Attachments != null && reschedulePmWoRequestCreateDto.Attachments.Count > 0)
+            {
+                request.Attachments = _fileService.UploadAttachments(requestId, $@"ReschedulePmWoRequest\{requestId}", reschedulePmWoRequestCreateDto.Attachments, user.FullName);
+            }
+
             request.CreatorId = user?.Id;
             request.ReschedulePmWoRequest.CreatedBy = user?.FullName;
             request.CreatedBy = user?.FullName;
@@ -402,8 +407,29 @@ namespace EDocument_API.Controllers.V1.Requests
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot update the request after one of the reviewers took his action" });
             }
 
+            var oldAttachments = request.Attachments;
             request.Notes = reschedulePmWoRequestUpdateDto.Notes;
             _mapper.Map(reschedulePmWoRequestUpdateDto, request.ReschedulePmWoRequest);
+
+            if (reschedulePmWoRequestUpdateDto.Attachments == null || reschedulePmWoRequestUpdateDto.Attachments.Count == 0)
+            {
+                request.Attachments = oldAttachments;
+            }
+            else
+            {
+                foreach (var attachment in request.Attachments)
+                {
+                    attachment.ModifiedAt = DateTime.Now;
+                    attachment.ModifiedBy = user.FullName;
+                }
+
+                foreach (var oldAttachment in oldAttachments)
+                {
+                    _fileService.DeleteFile(oldAttachment.FilePath);
+                }
+
+                request.Attachments = _fileService.UploadAttachments(request.Id, $@"ReschedulePmWoRequestUpdateDto\{request.Id}", reschedulePmWoRequestUpdateDto.Attachments, createdBy: request.CreatedBy, modifiedBy: user.FullName, modifiedAt: DateTime.Now);
+            }
 
             request.ReschedulePmWoRequest.ModifiedAt = DateTime.Now;
             request.ReschedulePmWoRequest.ModifiedBy = user?.FullName;

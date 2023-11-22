@@ -1284,6 +1284,105 @@ namespace EDocument_EF.Migrations
                     b.ToTable("AuditNewItemRequest", "audit");
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditPmJpRequest", b =>
+                {
+                    b.Property<decimal>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(18,0)");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
+
+                    b.Property<string>("AddedLaborCraft")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AddedMaterials")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AddedMeter")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AddedTask")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AssetCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AssetType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChangeReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChangeType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CurrentInterval")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DataStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionOfChange")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NewInterval")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PmJpCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PmPriority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RemovedLaborCraft")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RemovedMaterials")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RemovedMeter")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RemovedTask")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("RequestNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AuditId");
+
+                    b.ToTable("AuditPmJpRequest", "audit");
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.Audit.AuditPoRequest", b =>
                 {
                     b.Property<decimal>("AuditId")
@@ -3191,6 +3290,110 @@ namespace EDocument_EF.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.PmJpRequest", b =>
+                {
+                    b.Property<string>("RequestNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("AddedLaborCraft")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("AddedMaterials")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("AddedMeter")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("AddedTask")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AssetCode")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("AssetType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ChangeReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChangeType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CurrentInterval")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("DescriptionOfChange")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("NewInterval")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PmJpCode")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("PmPriority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RemovedLaborCraft")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("RemovedMaterials")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("RemovedMeter")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("RemovedTask")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("RequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.HasKey("RequestNumber");
+
+                    b.HasIndex("RequestId")
+                        .IsUnique();
+
+                    b.ToTable("PmJpRequest", null, t =>
+                        {
+                            t.HasTrigger("TR_AuditPmJpRequest");
+                        });
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.PoRequest", b =>
                 {
                     b.Property<string>("RequestNumber")
@@ -4630,6 +4833,18 @@ namespace EDocument_EF.Migrations
                     b.Navigation("Request");
                 });
 
+            modelBuilder.Entity("EDocument_Data.Models.PmJpRequest", b =>
+                {
+                    b.HasOne("EDocument_Data.Models.Request", "Request")
+                        .WithOne("PmJpRequest")
+                        .HasForeignKey("EDocument_Data.Models.PmJpRequest", "RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_PmJpRequest_Request");
+
+                    b.Navigation("Request");
+                });
+
             modelBuilder.Entity("EDocument_Data.Models.PoRequest", b =>
                 {
                     b.HasOne("EDocument_Data.Models.Request", "Request")
@@ -4959,6 +5174,8 @@ namespace EDocument_EF.Migrations
                     b.Navigation("ManliftReservationRequest");
 
                     b.Navigation("NewItemRequest");
+
+                    b.Navigation("PmJpRequest");
 
                     b.Navigation("PoRequest");
 

@@ -14,6 +14,7 @@ using EDocument_Data.DTOs.Requests.EquipmentOutAreaRequest;
 using EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest;
 using EDocument_Data.DTOs.Requests.ManliftReservationRequest;
 using EDocument_Data.DTOs.Requests.NewItemRequest;
+using EDocument_Data.DTOs.Requests.PmJpRequest;
 using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.DTOs.Requests.PrRequest;
 using EDocument_Data.DTOs.Requests.RefundRequest;
@@ -648,8 +649,10 @@ namespace EDocument_Services.AutoMapper_Service
            .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
            .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
            .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
            .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
-           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId));
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+           .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
 
 
 
@@ -657,13 +660,44 @@ namespace EDocument_Services.AutoMapper_Service
            .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
            .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
            .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
            .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
            .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+           .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments))
            .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
 
             CreateMap<ReschedulePmWoRequestCreateDto, ReschedulePmWoRequest>();
 
             CreateMap<ReschedulePmWoRequestUpdateDto, ReschedulePmWoRequest>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            #endregion            
+
+            #region  Pm /Jp Request
+
+            CreateMap<PmJpRequest, PmJpRequestReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+           .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
+
+
+
+            CreateMap<PmJpRequest, PmJpRequestReviewerReadDto>()
+           .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+           .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+           .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+           .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+           .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+           .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+           .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments))
+           .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<PmJpRequestCreateDto, PmJpRequest>();
+
+            CreateMap<PmJpRequestUpdateDto, PmJpRequest>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             #endregion            
         }
