@@ -293,7 +293,7 @@ namespace EDocument_API.Controllers.V1.Requests
             _logger.LogInformation($"Start CreatePmJpRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(pmJpRequestCreateDto)} ");
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
-            var requestNo = $"ReschedulePmWo-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
+            var requestNo = $"PmJp-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var request = new Request { Id = requestId, DefinedRequestId = pmJpRequestCreateDto.DefinedRequestId };
