@@ -17,9 +17,5 @@ namespace EDocument_Data.DTOs.DefinedRequest
      
         public ReviewerType ReviewerType { get; init; }
 
-        public string? DelegatedReviewerId { get; init; }
-
-        public DateTime? DelegatedUntil { get; init; }
-
     }
 }

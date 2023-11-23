@@ -11,32 +11,32 @@ namespace EDocument_Data.DTOs.Requests.EquipmentInAreaRequest
     public class EquipmentInAreaRequestCreateDto
     {
         [Required]
-        public string CommunicationFacility { get; set; }
+        public string CommunicationFacility { get; init; }
 
 
         [Required]
-        public string InConcessionArea { get; set; }
+        public string Area { get; init; }
 
         [Required]
-        public string Equipment { get; set; }
+        public string EquipmentType { get; init; }
 
         [Required]
-        public DateTime RequestedDateFrom { get; set; }
+        public DateTime RequestedDateFrom { get; init; }
 
         [Required]
-        public DateTime RequestedDateTo { get; set; }
+        public DateTime RequestedDateTo { get; init; }
 
-        public string? Additionaltools { get; set; }
-
-
+        public string? Additionaltools { get; init; }
 
         [Required]
-        public string ConcernedEmployeeId { get; set; }
+        public string SupervisorId { get; init; }
         [Required]
-        public string ConcernedEmployeeName { get; set; }
+        public string SupervisorName { get; init; }
+
+        public string? SupervisorPhoneNumber { get; init; }
 
 
-       
+
 
         [Required]
         public long DefinedRequestId { get; init; }

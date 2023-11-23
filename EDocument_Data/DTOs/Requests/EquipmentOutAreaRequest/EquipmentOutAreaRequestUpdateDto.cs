@@ -11,36 +11,28 @@ namespace EDocument_Data.DTOs.Requests.EquipmentOutAreaRequest
     public class EquipmentOutAreaRequestUpdateDto
     {
         [Required]
-        public string CommunicationFacility { get; set; }
-
-
-        [Required]
-        public string OutConcessionArea { get; set; }
+        public string CommunicationFacility { get; init; }
 
         [Required]
-        public string Equipment { get; set; }
+        public string Area { get; init; }
 
         [Required]
-        [OldDateValidator]
-        public DateTime RequestedDateFrom { get; set; }
+        public string EquipmentType { get; init; }
 
         [Required]
-        [OldDateValidator]
-        public DateTime RequestedDateTo { get; set; }
-
-
-        public string? Additionaltools { get; set; }
-
-
+        public DateTime RequestedDateFrom { get; init; }
 
         [Required]
-        public string ConcernedEmployeeId { get; set; }
+        public DateTime RequestedDateTo { get; init; }
+
+        public string? Additionaltools { get; init; }
+
         [Required]
-        public string ConcernedEmployeeName { get; set; }
+        public string SupervisorId { get; init; }
+        [Required]
+        public string SupervisorName { get; init; }
 
-
-
-
+        public string? SupervisorPhoneNumber { get; init; }
 
     }
 }

@@ -934,13 +934,34 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("Additionaltools")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Area")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryCompany")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryDepartment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BeneficiaryId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryPosition")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CommunicationFacility")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConcernedEmployeeId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConcernedEmployeeName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -953,10 +974,7 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Equipment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InConcessionArea")
+                    b.Property<string>("EquipmentType")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedAt")
@@ -977,6 +995,15 @@ namespace EDocument_EF.Migrations
                     b.Property<DateTime>("RequestedDateTo")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("SupervisorId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupervisorName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupervisorPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
 
@@ -985,8 +1012,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AuditId");
-
-                    b.HasIndex("RequestId");
 
                     b.ToTable("AuditEquipmentRequestIn", "audit");
                 });
@@ -1002,13 +1027,34 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("Additionaltools")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Area")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryCompany")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryDepartment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BeneficiaryId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryPosition")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CommunicationFacility")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConcernedEmployeeId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConcernedEmployeeName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -1021,16 +1067,13 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Equipment")
+                    b.Property<string>("EquipmentType")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OutConcessionArea")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("RequestId")
@@ -1045,6 +1088,15 @@ namespace EDocument_EF.Migrations
                     b.Property<DateTime>("RequestedDateTo")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("SupervisorId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupervisorName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupervisorPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
 
@@ -1053,8 +1105,6 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AuditId");
-
-                    b.HasIndex("RequestId");
 
                     b.ToTable("AuditEquipmentRequestOut", "audit");
                 });
@@ -2923,20 +2973,48 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<string>("CommunicationFacility")
+                    b.Property<string>("Area")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<string>("ConcernedEmployeeId")
+                    b.Property<string>("BeneficiaryCompany")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("BeneficiaryDepartment")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("BeneficiaryEmail")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BeneficiaryId")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("ConcernedEmployeeName")
+                    b.Property<string>("BeneficiaryName")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("BeneficiaryPhoneNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("BeneficiaryPosition")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CommunicationFacility")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("smalldatetime");
@@ -2945,12 +3023,7 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Equipment")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("InConcessionArea")
+                    b.Property<string>("EquipmentType")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
@@ -2970,6 +3043,20 @@ namespace EDocument_EF.Migrations
 
                     b.Property<DateTime>("RequestedDateTo")
                         .HasColumnType("smalldatetime");
+
+                    b.Property<string>("SupervisorId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("SupervisorName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("SupervisorPhoneNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("RequestNumber");
 
@@ -2992,20 +3079,48 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<string>("CommunicationFacility")
+                    b.Property<string>("Area")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<string>("ConcernedEmployeeId")
+                    b.Property<string>("BeneficiaryCompany")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("BeneficiaryDepartment")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("BeneficiaryEmail")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("BeneficiaryExtention")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BeneficiaryId")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("ConcernedEmployeeName")
+                    b.Property<string>("BeneficiaryName")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("BeneficiaryPhoneNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("BeneficiaryPosition")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CommunicationFacility")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("smalldatetime");
@@ -3014,7 +3129,7 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Equipment")
+                    b.Property<string>("EquipmentType")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
@@ -3026,11 +3141,6 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("OutConcessionArea")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
                     b.Property<long>("RequestId")
                         .HasColumnType("bigint");
 
@@ -3039,6 +3149,20 @@ namespace EDocument_EF.Migrations
 
                     b.Property<DateTime>("RequestedDateTo")
                         .HasColumnType("smalldatetime");
+
+                    b.Property<string>("SupervisorId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("SupervisorName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("SupervisorPhoneNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("RequestNumber");
 
@@ -4623,28 +4747,6 @@ namespace EDocument_EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Attachment_Request");
-
-                    b.Navigation("Request");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditEquipmentRequestIn", b =>
-                {
-                    b.HasOne("EDocument_Data.Models.Request", "Request")
-                        .WithMany()
-                        .HasForeignKey("RequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Request");
-                });
-
-            modelBuilder.Entity("EDocument_Data.Models.Audit.AuditEquipmentRequestOut", b =>
-                {
-                    b.HasOne("EDocument_Data.Models.Request", "Request")
-                        .WithMany()
-                        .HasForeignKey("RequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Request");
                 });
