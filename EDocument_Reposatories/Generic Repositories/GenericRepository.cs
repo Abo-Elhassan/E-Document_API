@@ -876,6 +876,12 @@ namespace EDocument_Reposatories.Generic_Reposatories
                     {
                         if (ColumnName == "Status")
                         {
+                            ColumnValue = ColumnValue.ToUpper() switch
+                            {
+                                "N" or "N/" or "N/A" => RequestStatus.None.ToString(),                          
+                                _ => ColumnValue
+                            };
+
                             expression = isCreator ?? true ? "Request.Status.Contains(@0)" : "Request.RequestReviewers.Any(Status.Contains(@0)&& AssignedReviewerId == @1)";
                             query = query.Where(expression, ColumnValue, userId);
                         }
