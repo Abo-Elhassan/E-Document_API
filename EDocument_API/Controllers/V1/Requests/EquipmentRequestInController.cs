@@ -317,6 +317,7 @@ namespace EDocument_API.Controllers.V1.Requests
             var request = new Request { Id = requestId, DefinedRequestId = equipmentInAreaRequestCreateDto.DefinedRequestId };
 
             request.EquipmentRequestIn = _mapper.Map<EquipmentRequestIn>(equipmentInAreaRequestCreateDto);
+            _mapper.Map(user, request.EquipmentRequestIn);
             request.EquipmentRequestIn.RequestNumber = requestNo;
             request.CreatorId = user?.Id;
             request.EquipmentRequestIn.CreatedBy = user?.FullName;

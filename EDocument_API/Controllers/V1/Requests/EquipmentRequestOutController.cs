@@ -316,6 +316,7 @@ namespace EDocument_API.Controllers.V1.Requests
             var request = new Request { Id = requestId, DefinedRequestId = equipmentOutAreaRequestCreateDto.DefinedRequestId };
 
             request.EquipmentRequestOut = _mapper.Map<EquipmentRequestOut>(equipmentOutAreaRequestCreateDto);
+            _mapper.Map(user, request.EquipmentRequestOut);
             request.EquipmentRequestOut.RequestNumber = requestNo;
 
 

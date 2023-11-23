@@ -582,9 +582,22 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<ManliftReservationRequestUpdateDto, ManliftReservationRequest>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
-            #endregion 
+            #endregion
 
             #region EquipmentRequestOut Reuqest
+
+            CreateMap<User, EquipmentRequestOut>()
+            .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
+            .ForMember(dest => dest.BeneficiaryName, src => src.MapFrom(opts => opts.FullName))
+            .ForMember(dest => dest.BeneficiaryEmail, src => src.MapFrom(opts => opts.Email))
+            .ForMember(dest => dest.BeneficiaryPosition, src => src.MapFrom(opts => opts.Position))
+            .ForMember(dest => dest.BeneficiaryDepartment, src => src.MapFrom(opts => opts.Department.DepartmentName))
+            .ForMember(dest => dest.BeneficiaryPhoneNumber, src => src.MapFrom(opts => opts.PhoneNumber))
+            .ForMember(dest => dest.BeneficiaryCompany, src => src.MapFrom(opts => opts.Company))
+            .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+            .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+            .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+            .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             CreateMap<EquipmentRequestOut, EquipmentOutAreaRequestReadDto>()
            .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
@@ -615,6 +628,19 @@ namespace EDocument_Services.AutoMapper_Service
             #endregion
 
             #region EquipmentRequestIn Reuqest
+
+            CreateMap<User, EquipmentRequestIn>()
+            .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
+            .ForMember(dest => dest.BeneficiaryName, src => src.MapFrom(opts => opts.FullName))
+            .ForMember(dest => dest.BeneficiaryEmail, src => src.MapFrom(opts => opts.Email))
+            .ForMember(dest => dest.BeneficiaryPosition, src => src.MapFrom(opts => opts.Position))
+            .ForMember(dest => dest.BeneficiaryDepartment, src => src.MapFrom(opts => opts.Department.DepartmentName))
+            .ForMember(dest => dest.BeneficiaryPhoneNumber, src => src.MapFrom(opts => opts.PhoneNumber))
+            .ForMember(dest => dest.BeneficiaryCompany, src => src.MapFrom(opts => opts.Company))
+            .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+            .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+            .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+            .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             CreateMap<EquipmentRequestIn, EquipmentInAreaRequestReadDto>()
            .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
