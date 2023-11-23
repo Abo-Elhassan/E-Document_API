@@ -226,7 +226,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
             (int TotalCount, IEnumerable<PoRequest> PaginatedData) result;
 
-            userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
+            userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 )";
 
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
