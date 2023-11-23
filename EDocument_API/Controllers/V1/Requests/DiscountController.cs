@@ -254,7 +254,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
             foreach (var request in requests)
             {
-                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
+                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier));
 
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;

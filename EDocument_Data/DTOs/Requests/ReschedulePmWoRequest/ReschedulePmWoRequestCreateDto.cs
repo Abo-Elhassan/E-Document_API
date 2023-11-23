@@ -20,7 +20,7 @@ namespace EDocument_Data.DTOs.Requests.ReschedulePmWoRequest
         public DateTime RescheduleFrom { get; init; }
         [Required]
         [OldDateValidator]
-        [RescheduleToValidation]
+        [MocEndDateValidationAttribute]
         public DateTime RescheduleTo { get; init; }
         [Required]
         public string WoNumber { get; init; }

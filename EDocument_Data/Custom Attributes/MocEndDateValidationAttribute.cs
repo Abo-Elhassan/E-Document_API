@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 namespace EDocument_Data.Custom_Attributes;
-public class RescheduleToValidationAttribute : ValidationAttribute
+public class MocEndDateValidationAttribute : ValidationAttribute
 {
     protected override ValidationResult IsValid(object value, ValidationContext validationContext)
     {
