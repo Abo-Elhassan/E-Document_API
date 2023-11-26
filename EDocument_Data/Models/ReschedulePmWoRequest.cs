@@ -13,6 +13,7 @@ namespace EDocument_Data.Models
     public class ReschedulePmWoRequest : BaseEntity
     {
         public string RequestNumber { get; set; }
+        public string RequesterSection { get; set; }
         public string DescriptionOfChange { get; set; }
         public string ReasonForRescheduling { get; set; }
         public DateTime RescheduleFrom { get; set; }

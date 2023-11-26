@@ -5,6 +5,7 @@ namespace EDocument_Data.Models.Audit
     public class AuditPmJpRequest :AuditBaseEntity
     {
         public string RequestNumber { get; set; }
+        public string RequesterSection { get; set; }
         public string DescriptionOfChange { get; set; }
         public string ChangeReason { get; set; }
         public string ChangeType { get; set; }

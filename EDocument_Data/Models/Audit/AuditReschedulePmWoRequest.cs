@@ -9,6 +9,7 @@ namespace EDocument_Data.Models.Audit
     public class AuditReschedulePmWoRequest : AuditBaseEntity
     {
         public string RequestNumber { get; set; }
+        public string RequesterSection { get; set; }
         public string DescriptionOfChange { get; set; }
         public string ReasonForRescheduling { get; set; }
         public DateTime RescheduleFrom { get; set; }

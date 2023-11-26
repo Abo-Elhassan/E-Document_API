@@ -13,6 +13,7 @@ using EDocument_UnitOfWork;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Mime;
@@ -294,12 +295,13 @@ namespace EDocument_API.Controllers.V1.Requests
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
             var requestNo = $"PmJp-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
-            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var user = await _userManager.Users.Include(t => t.Section).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var request = new Request { Id = requestId, DefinedRequestId = pmJpRequestCreateDto.DefinedRequestId };
             request.Notes = pmJpRequestCreateDto.Notes;
             request.PmJpRequest = _mapper.Map<PmJpRequest>(pmJpRequestCreateDto);
             request.PmJpRequest.RequestNumber = requestNo;
+            request.PmJpRequest.RequesterSection = user.Section.SectionName;
 
             if (pmJpRequestCreateDto.Attachments != null && pmJpRequestCreateDto.Attachments.Count > 0)
             {
@@ -385,7 +387,7 @@ namespace EDocument_API.Controllers.V1.Requests
         {
             _logger.LogInformation($"Start UpdatePmJpRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(pmJpRequestUpdateDto)} ");
 
-            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var user = await _userManager.Users.Include(t => t.Section).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
             var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "PmJpRequest", "RequestReviewers", "Attachments" });
@@ -407,6 +409,7 @@ namespace EDocument_API.Controllers.V1.Requests
             var oldAttachments = request.Attachments;
             request.Notes = pmJpRequestUpdateDto.Notes;
             _mapper.Map(pmJpRequestUpdateDto, request.PmJpRequest);
+            request.PmJpRequest.RequesterSection = user.Section.SectionName;
 
             if (pmJpRequestUpdateDto.Attachments == null || pmJpRequestUpdateDto.Attachments.Count == 0)
             {

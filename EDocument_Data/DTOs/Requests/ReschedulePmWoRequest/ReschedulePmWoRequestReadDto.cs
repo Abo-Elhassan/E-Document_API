@@ -17,6 +17,7 @@ namespace EDocument_Data.DTOs.Requests.ReschedulePmWoRequest
         public RequestStatus Status { get; init; }
         public string Notes { get; init; }
         public string CreatorId { get; init; }
+        public string RequesterSection { get; init; }
         public string DescriptionOfChange { get; init; }
         public string ReasonForRescheduling { get; init; }
         public DateTime RescheduleFrom { get; init; }

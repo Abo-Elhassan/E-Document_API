@@ -17,6 +17,7 @@ namespace EDocument_Data.DTOs.Requests.PmJpRequest
         public RequestStatus Status { get; init; }
         public string Notes { get; init; }
         public string CreatorId { get; init; }
+        public string RequesterSection { get; init; }
         public string DescriptionOfChange { get; init; }
         public string ChangeReason { get; init; }
         public string ChangeType { get; init; }

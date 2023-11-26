@@ -119,7 +119,7 @@ namespace EDocument_Services.Auth_Service
                 if (userDetails.MenuContents.Count == 0) return new NotFoundObjectResult(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "There are no available requests" });
 
                 user.LastLogin = DateTime.Now;
-
+                user.ModifiedBy = user.ModifiedBy;
                 return new OkObjectResult(new ApiResponse<LoginReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = userDetails });
             }
             catch (COMException)
@@ -215,6 +215,7 @@ namespace EDocument_Services.Auth_Service
                 {
                     if (department.Id == request.DepartmentId)
                     {
+                        menuContent.DepartmentId = department.Id;
                         menuContent.Department = department.DepartmentName;
                         menuContent.Icon = department.DepartmentIcon;
 

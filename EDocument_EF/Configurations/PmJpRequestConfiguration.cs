@@ -21,6 +21,11 @@ namespace EDocument_EF.Configurations
             .HasMaxLength(50)
             .ValueGeneratedNever();
 
+            entity.Property(e => e.RequesterSection)
+            .IsRequired()
+            .HasMaxLength(50);
+
+
             entity.Property(e => e.ChangeType)
             .IsRequired()
             .HasMaxLength(50);

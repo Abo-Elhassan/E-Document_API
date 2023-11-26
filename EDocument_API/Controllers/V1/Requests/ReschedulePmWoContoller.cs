@@ -297,12 +297,13 @@ namespace EDocument_API.Controllers.V1.Requests
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
             var requestNo = $"ReschedulePmWo-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
-            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var user = await _userManager.Users.Include(t=>t.Section).FirstOrDefaultAsync(u=>u.Id==User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var request = new Request { Id = requestId, DefinedRequestId = reschedulePmWoRequestCreateDto.DefinedRequestId };
             request.Notes = reschedulePmWoRequestCreateDto.Notes;
             request.ReschedulePmWoRequest = _mapper.Map<ReschedulePmWoRequest>(reschedulePmWoRequestCreateDto);
             request.ReschedulePmWoRequest.RequestNumber = requestNo;
+            request.ReschedulePmWoRequest.RequesterSection = user.Section.SectionName;
 
             if (reschedulePmWoRequestCreateDto.Attachments != null && reschedulePmWoRequestCreateDto.Attachments.Count > 0)
             {
@@ -388,7 +389,7 @@ namespace EDocument_API.Controllers.V1.Requests
         {
             _logger.LogInformation($"Start UpdateReschedulePmWoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(reschedulePmWoRequestUpdateDto)} ");
 
-            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var user = await _userManager.Users.Include(t => t.Section).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
             var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "ReschedulePmWoRequest", "RequestReviewers", "Attachments" });
@@ -410,6 +411,7 @@ namespace EDocument_API.Controllers.V1.Requests
             var oldAttachments = request.Attachments;
             request.Notes = reschedulePmWoRequestUpdateDto.Notes;
             _mapper.Map(reschedulePmWoRequestUpdateDto, request.ReschedulePmWoRequest);
+            request.ReschedulePmWoRequest.RequesterSection = user.Section.SectionName;
 
             if (reschedulePmWoRequestUpdateDto.Attachments == null || reschedulePmWoRequestUpdateDto.Attachments.Count == 0)
             {

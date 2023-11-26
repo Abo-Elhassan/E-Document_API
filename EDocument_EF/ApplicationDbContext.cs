@@ -52,7 +52,8 @@ namespace EDocument_EF
         public virtual DbSet<EquipmentRequestIn> EquipmentRequestIns => Set<EquipmentRequestIn>();
         public virtual DbSet<EquipmentRequestOut> EquipmentRequestOuts => Set<EquipmentRequestOut>();
         public virtual DbSet<ReschedulePmWoRequest> ReschedulePmWoRequests => Set<ReschedulePmWoRequest>();
-        public virtual DbSet<PmJpRequest> PmJpRequests => Set<PmJpRequest>(); 
+        public virtual DbSet<PmJpRequest> PmJpRequests => Set<PmJpRequest>();
+        public virtual DbSet<MultimediaRequest> MultimediaRequests => Set<MultimediaRequest>();
 
         #region Audit Tables
         public virtual DbSet<AuditDefinedRequest> AuditDefinedRequests => Set<AuditDefinedRequest>();
@@ -91,7 +92,8 @@ namespace EDocument_EF
         public virtual DbSet<AuditManliftReservationRequest> AuditManliftReservationRequests => Set<AuditManliftReservationRequest>();
         public virtual DbSet<AuditReschedulePmWoRequest> AuditReschedulePmWoRequests => Set<AuditReschedulePmWoRequest>();
         public virtual DbSet<AuditPmJpRequest> AuditPmJpRequests => Set<AuditPmJpRequest>();
-        
+        public virtual DbSet<AuditMultimediaRequest> AuditMultimediaRequests => Set<AuditMultimediaRequest>();
+
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -130,7 +132,8 @@ namespace EDocument_EF
             builder.ApplyConfiguration(new EquipmentRequestInConfiguration());
             builder.ApplyConfiguration(new EquipmentRequestOutConfiguration());
             builder.ApplyConfiguration(new ReschedulePmWoRequestConfiguration());
-            builder.ApplyConfiguration(new PmJpRequestConfiguration()); 
+            builder.ApplyConfiguration(new PmJpRequestConfiguration());
+            builder.ApplyConfiguration(new MultimediaRequestConfiguration());
         }
 
         public override int SaveChanges()
@@ -252,7 +255,8 @@ namespace EDocument_EF
             builder.Entity<AuditEquipmentRequestIn>().ToTable(nameof(AuditEquipmentRequestIn), "audit");
             builder.Entity<AuditEquipmentRequestOut>().ToTable(nameof(AuditEquipmentRequestOut), "audit");
             builder.Entity<AuditReschedulePmWoRequest>().ToTable(nameof(AuditReschedulePmWoRequest), "audit");
-            builder.Entity<AuditPmJpRequest>().ToTable(nameof(AuditPmJpRequest), "audit"); 
+            builder.Entity<AuditPmJpRequest>().ToTable(nameof(AuditPmJpRequest), "audit");
+            builder.Entity<AuditMultimediaRequest>().ToTable(nameof(AuditMultimediaRequest), "audit");
             #endregion
 
         }
