@@ -302,15 +302,15 @@ namespace EDocument_API.Controllers.V1.Requests
         {
 
             _logger.LogInformation($"Start CreateEquipmentOutRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(equipmentOutAreaRequestCreateDto)} ");
-            var ConcernedEmployee = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == equipmentOutAreaRequestCreateDto.SupervisorId);
+            var Supervisor = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == equipmentOutAreaRequestCreateDto.SupervisorId);
 
-            if (ConcernedEmployee is null)
+            if (Supervisor is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $" user '{equipmentOutAreaRequestCreateDto.SupervisorId}' not found" });
 
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
-            var requestNo = $"EquipmentRequestOut-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
-            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var requestNo = $"EquipmentOut-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
+            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
 
             var request = new Request { Id = requestId, DefinedRequestId = equipmentOutAreaRequestCreateDto.DefinedRequestId };
@@ -402,9 +402,9 @@ namespace EDocument_API.Controllers.V1.Requests
         {
             _logger.LogInformation($"Start UpdateEquipmentOutRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(equipmentOutAreaRequestUpdateDto)} ");
 
-            var ConcernedEmployee = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == equipmentOutAreaRequestUpdateDto.SupervisorId);
+            var Supervisor = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == equipmentOutAreaRequestUpdateDto.SupervisorId);
 
-            if (ConcernedEmployee is null)
+            if (Supervisor is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $" user '{equipmentOutAreaRequestUpdateDto.SupervisorId}' not found" });
 
             var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);

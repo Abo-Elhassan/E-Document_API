@@ -296,7 +296,7 @@ namespace EDocument_API.Controllers.V1.Requests
             _logger.LogInformation($"Start CreateReschedulePmWoRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(reschedulePmWoRequestCreateDto)} ");
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
-            var requestNo = $"ReschedulePmWo-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
+            var requestNo = $"PmWo-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
             var user = await _userManager.Users.Include(t=>t.Section).FirstOrDefaultAsync(u=>u.Id==User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var request = new Request { Id = requestId, DefinedRequestId = reschedulePmWoRequestCreateDto.DefinedRequestId };
