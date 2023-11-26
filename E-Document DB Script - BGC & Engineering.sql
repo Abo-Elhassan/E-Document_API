@@ -1,6 +1,6 @@
 USE [E-Document]
 GO
-/****** Object:  Table [audit].[AuditEquipmentRequestIn]    Script Date: 11/23/2023 9:18:18 AM ******/
+/****** Object:  Table [audit].[AuditEquipmentRequestIn]    Script Date: 11/26/2023 1:07:39 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -39,7 +39,7 @@ CREATE TABLE [audit].[AuditEquipmentRequestIn](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [audit].[AuditEquipmentRequestOut]    Script Date: 11/23/2023 9:18:19 AM ******/
+/****** Object:  Table [audit].[AuditEquipmentRequestOut]    Script Date: 11/26/2023 1:07:39 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -78,7 +78,7 @@ CREATE TABLE [audit].[AuditEquipmentRequestOut](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [audit].[AuditPmJpRequest]    Script Date: 11/23/2023 9:18:19 AM ******/
+/****** Object:  Table [audit].[AuditPmJpRequest]    Script Date: 11/26/2023 1:07:39 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -113,13 +113,14 @@ CREATE TABLE [audit].[AuditPmJpRequest](
 	[DataStatus] [nvarchar](max) NOT NULL,
 	[TimeStamp] [datetime2](7) NOT NULL,
 	[ChangeReason] [nvarchar](max) NULL,
+	[RequesterSection] [nvarchar](max) NULL,
  CONSTRAINT [PK_AuditPmJpRequest] PRIMARY KEY CLUSTERED 
 (
 	[AuditId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [audit].[AuditReschedulePmWoRequest]    Script Date: 11/23/2023 9:18:19 AM ******/
+/****** Object:  Table [audit].[AuditReschedulePmWoRequest]    Script Date: 11/26/2023 1:07:39 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -140,6 +141,7 @@ CREATE TABLE [audit].[AuditReschedulePmWoRequest](
 	[TransactionType] [nvarchar](max) NOT NULL,
 	[DataStatus] [nvarchar](max) NOT NULL,
 	[TimeStamp] [datetime2](7) NOT NULL,
+	[RequesterSection] [nvarchar](max) NULL,
  CONSTRAINT [PK_AuditReschedulePmWoRequest] PRIMARY KEY CLUSTERED 
 (
 	[AuditId] ASC
@@ -147,7 +149,7 @@ CREATE TABLE [audit].[AuditReschedulePmWoRequest](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[EquipmentRequestIn]    Script Date: 11/23/2023 9:18:19 AM ******/
+/****** Object:  Table [dbo].[EquipmentRequestIn]    Script Date: 11/26/2023 1:07:39 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -182,7 +184,7 @@ CREATE TABLE [dbo].[EquipmentRequestIn](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EquipmentRequestOut]    Script Date: 11/23/2023 9:18:19 AM ******/
+/****** Object:  Table [dbo].[EquipmentRequestOut]    Script Date: 11/26/2023 1:07:39 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -217,7 +219,7 @@ CREATE TABLE [dbo].[EquipmentRequestOut](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PmJpRequest]    Script Date: 11/23/2023 9:18:19 AM ******/
+/****** Object:  Table [dbo].[PmJpRequest]    Script Date: 11/26/2023 1:07:39 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -248,13 +250,14 @@ CREATE TABLE [dbo].[PmJpRequest](
 	[CreatedBy] [nvarchar](200) NULL,
 	[ModifiedBy] [nvarchar](200) NULL,
 	[ChangeReason] [nvarchar](max) NULL,
+	[RequesterSection] [nvarchar](50) NOT NULL,
  CONSTRAINT [PK_PmJpRequest] PRIMARY KEY CLUSTERED 
 (
 	[RequestNumber] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ReschedulePmWoRequest]    Script Date: 11/23/2023 9:18:19 AM ******/
+/****** Object:  Table [dbo].[ReschedulePmWoRequest]    Script Date: 11/26/2023 1:07:39 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -265,19 +268,18 @@ CREATE TABLE [dbo].[ReschedulePmWoRequest](
 	[ReasonForRescheduling] [nvarchar](max) NULL,
 	[RescheduleFrom] [smalldatetime] NOT NULL,
 	[RescheduleTo] [smalldatetime] NOT NULL,
-	[WoNumber] [nvarchar](50) NULL,
+	[WoNumber] [nvarchar](50) NOT NULL,
 	[RequestId] [bigint] NOT NULL,
 	[CreatedAt] [smalldatetime] NULL,
 	[ModifiedAt] [smalldatetime] NULL,
 	[CreatedBy] [nvarchar](200) NULL,
 	[ModifiedBy] [nvarchar](200) NULL,
+	[RequesterSection] [nvarchar](50) NOT NULL,
  CONSTRAINT [PK_ReschedulePmWoRequest] PRIMARY KEY CLUSTERED 
 (
 	[RequestNumber] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
 GO
 INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20231121092055_addReschedulePmWoRequest', N'7.0.10')
 GO
@@ -293,20 +295,21 @@ INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N
 GO
 INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20231123064016_AddAuditTablesEquipmentRequests-BGC', N'7.0.10')
 GO
+INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20231123130729_addMultimediaRequest', N'7.0.10')
+GO
+INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20231126062558_addRequesterSectionForMOCRequests', N'7.0.10')
+GO
 INSERT [dbo].[DefinedRequest] ([Id], [RequestName], [RouteName], [ReviewersNumber], [DepartmentId], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (2023111310582624, N'Equipment Request - (In Concession Area)', N'/OPS-BGC/InConcessionArea/', 2, 26, CAST(N'2023-11-13T10:58:00' AS SmallDateTime), NULL, N'E-Document', NULL)
 GO
 INSERT [dbo].[DefinedRequest] ([Id], [RequestName], [RouteName], [ReviewersNumber], [DepartmentId], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (2023111311113090, N'Equipment Request - (Out Concession Area)', N'/OPS-BGC/OutConcessionArea/', 3, 26, CAST(N'2023-11-13T11:12:00' AS SmallDateTime), NULL, N'E-Document', NULL)
 GO
-INSERT [dbo].[DefinedRequest] ([Id], [RequestName], [RouteName], [ReviewersNumber], [DepartmentId], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (2023112111535000, N'Reschedule PM/WO', N'/Engineering/ReschedulePmWo/', 2, 21, CAST(N'2023-11-21T11:54:00' AS SmallDateTime), NULL, N'E-Document', NULL)
+INSERT [dbo].[DefinedRequest] ([Id], [RequestName], [RouteName], [ReviewersNumber], [DepartmentId], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (2023112111535000, N'Reschedule PM/WO', N'/Engineering/ReschedulePmWo/', 3, 21, CAST(N'2023-11-21T11:54:00' AS SmallDateTime), NULL, N'E-Document', NULL)
 GO
-INSERT [dbo].[DefinedRequest] ([Id], [RequestName], [RouteName], [ReviewersNumber], [DepartmentId], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (2023112307532308, N'PM/JP', N'/Engineering/PmJp/', 2, 21, CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
+INSERT [dbo].[DefinedRequest] ([Id], [RequestName], [RouteName], [ReviewersNumber], [DepartmentId], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (2023112307532308, N'PM/JP', N'/Engineering/PmJp/', 3, 21, CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
 GO
 SET IDENTITY_INSERT [dbo].[DefinedRequestReviewer] ON 
 GO
-
-
-GO
-INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (30163, 2023111310582624, NULL, N'Requester Direct Manager', 1, N'Basic', CAST(N'2023-11-13T10:58:00' AS SmallDateTime), NULL, N'E-Documnet', NULL)
+INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (30163, 2023111310582624, NULL, N'Requester Direct Manager', 1, N'DirectManager', CAST(N'2023-11-13T10:58:00' AS SmallDateTime), NULL, N'E-Documnet', NULL)
 GO
 INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (30164, 2023111310582624, N'51450', N'BGC Supervisor', 2, N'Basic', CAST(N'2023-11-13T10:58:00' AS SmallDateTime), NULL, N'E-Documnet', NULL)
 GO
@@ -326,7 +329,7 @@ INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedRevie
 GO
 INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (30172, 2023111310582624, N'51452', N'BGC Supervisor', 2, N'Basic', CAST(N'2023-11-13T10:58:00' AS SmallDateTime), NULL, N'E-Documnet', NULL)
 GO
-INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (30173, 2023111311113090, NULL, N'Requester Direct Manager', 1, N'Basic', CAST(N'2023-11-13T11:12:00' AS SmallDateTime), NULL, N'E-Documnet', NULL)
+INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (30173, 2023111311113090, NULL, N'Requester Direct Manager', 1, N'DirectManager', CAST(N'2023-11-13T11:12:00' AS SmallDateTime), NULL, N'E-Documnet', NULL)
 GO
 INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (30174, 2023111311113090, N'50354', N'BGC-OPS Head', 2, N'DepartmentManager', CAST(N'2023-11-13T11:12:00' AS SmallDateTime), NULL, N'E-Documnet', NULL)
 GO
@@ -344,23 +347,28 @@ INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedRevie
 GO
 INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (40179, 2023112307532308, N'50136', N'Engineering Head', 2, N'DepartmentManager', CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
 GO
+INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (40180, 2023112111535000, N'51250', N'Technical Planning Team', 3, N'Basic', CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
+GO
+INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (40182, 2023112111535000, N'51258', N'Technical Planning Team', 3, N'Basic', CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
+GO
+INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (40183, 2023112111535000, N'51277', N'Technical Planning Team', 3, N'Basic', CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
+GO
+INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (40184, 2023112111535000, N'51459', N'Technical Planning Team', 3, N'Basic', CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
+GO
+INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (40185, 2023112111535000, N'51545', N'Technical Planning Team', 3, N'Basic', CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
+GO
+INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (40186, 2023112307532308, N'51250', N'Technical Planning Team', 3, N'Basic', CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
+GO
+INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (40187, 2023112307532308, N'51258', N'Technical Planning Team', 3, N'Basic', CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
+GO
+INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (40188, 2023112307532308, N'51277', N'Technical Planning Team', 3, N'Basic', CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
+GO
+INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (40189, 2023112307532308, N'51459', N'Technical Planning Team', 3, N'Basic', CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
+GO
+INSERT [dbo].[DefinedRequestReviewer] ([Key], [DefinedRequestId], [AssignedReviewerId], [StageName], [StageNumber], [ReviewerType], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (40190, 2023112307532308, N'51545', N'Technical Planning Team', 3, N'Basic', CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
+GO
 SET IDENTITY_INSERT [dbo].[DefinedRequestReviewer] OFF
 GO
-
-
-
-GO
-INSERT [dbo].[DefinedRequestRole] ([RoleId], [DefinedRequestId], [Permission], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (N'5b9564db-c7ee-4482-9828-faec7cd659b9', 2023112111535000, N'All', CAST(N'2023-11-21T11:54:00' AS SmallDateTime), NULL, N'E-Documnet', NULL)
-GO
-INSERT [dbo].[DefinedRequestRole] ([RoleId], [DefinedRequestId], [Permission], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (N'5b9564db-c7ee-4482-9828-faec7cd659b9', 2023112307532308, N'All', CAST(N'2023-11-23T07:53:00' AS SmallDateTime), NULL, N'E-Document', NULL)
-GO
-INSERT [dbo].[DefinedRequestRole] ([RoleId], [DefinedRequestId], [Permission], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (N'7ef3ba68-78e3-457a-9419-aed440b0253b', 2023111310582624, N'All', CAST(N'2023-11-13T10:58:00' AS SmallDateTime), NULL, N'E-Documnet', NULL)
-GO
-INSERT [dbo].[DefinedRequestRole] ([RoleId], [DefinedRequestId], [Permission], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (N'7ef3ba68-78e3-457a-9419-aed440b0253b', 2023111311113090, N'All', CAST(N'2023-11-13T11:12:00' AS SmallDateTime), NULL, N'E-Documnet', NULL)
-GO
-
-
-
 ALTER TABLE [dbo].[EquipmentRequestIn]  WITH CHECK ADD  CONSTRAINT [FK_EquipmentRequestIn_Request] FOREIGN KEY([RequestId])
 REFERENCES [dbo].[Request] ([Id])
 ON DELETE CASCADE
@@ -385,8 +393,7 @@ ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[ReschedulePmWoRequest] CHECK CONSTRAINT [FK_ReschedulePmWoRequest_Request]
 GO
-
-/****** Object:  Trigger [dbo].[TR_AuditEquipmentRequestIn]    Script Date: 11/23/2023 9:18:19 AM ******/
+/****** Object:  Trigger [dbo].[TR_AuditEquipmentRequestIn]    Script Date: 11/26/2023 1:07:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -506,7 +513,7 @@ END;
 GO
 ALTER TABLE [dbo].[EquipmentRequestIn] ENABLE TRIGGER [TR_AuditEquipmentRequestIn]
 GO
-/****** Object:  Trigger [dbo].[TR_AuditEquipmentRequestOut]    Script Date: 11/23/2023 9:18:19 AM ******/
+/****** Object:  Trigger [dbo].[TR_AuditEquipmentRequestOut]    Script Date: 11/26/2023 1:07:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -626,7 +633,7 @@ END;
 GO
 ALTER TABLE [dbo].[EquipmentRequestOut] ENABLE TRIGGER [TR_AuditEquipmentRequestOut]
 GO
-/****** Object:  Trigger [dbo].[TR_AuditPmJpRequest]    Script Date: 11/23/2023 9:18:19 AM ******/
+/****** Object:  Trigger [dbo].[TR_AuditPmJpRequest]    Script Date: 11/26/2023 1:07:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -645,9 +652,10 @@ BEGIN
         SET @TransactionType = 'UPDATE';
 
         -- Insert the old record with status 'Old'
-        INSERT INTO audit.AuditPmJpRequest (RequestNumber, DescriptionOfChange, ChangeType, StartDate, EndDate, PmJpCode, AssetType, AssetCode, CurrentInterval, NewInterval, AddedMaterials, RemovedMaterials, AddedLaborCraft, RemovedLaborCraft, AddedTask, RemovedTask, AddedMeter, RemovedMeter, PmPriority, RequestId, CreatedAt, ModifiedAt, CreatedBy, ModifiedBy, TransactionType, DataStatus, TimeStamp, ChangeReason)
+        INSERT INTO audit.AuditPmJpRequest (RequestNumber,RequesterSection, DescriptionOfChange, ChangeType, StartDate, EndDate, PmJpCode, AssetType, AssetCode, CurrentInterval, NewInterval, AddedMaterials, RemovedMaterials, AddedLaborCraft, RemovedLaborCraft, AddedTask, RemovedTask, AddedMeter, RemovedMeter, PmPriority, RequestId, CreatedAt, ModifiedAt, CreatedBy, ModifiedBy, TransactionType, DataStatus, TimeStamp, ChangeReason)
         SELECT
             RequestNumber,
+			RequesterSection,
             DescriptionOfChange,
             ChangeType,
             StartDate,
@@ -678,9 +686,10 @@ BEGIN
         FROM DELETED;
 
         -- Insert the new record with status 'New'
-        INSERT INTO audit.AuditPmJpRequest (RequestNumber, DescriptionOfChange, ChangeType, StartDate, EndDate, PmJpCode, AssetType, AssetCode, CurrentInterval, NewInterval, AddedMaterials, RemovedMaterials, AddedLaborCraft, RemovedLaborCraft, AddedTask, RemovedTask, AddedMeter, RemovedMeter, PmPriority, RequestId, CreatedAt, ModifiedAt, CreatedBy, ModifiedBy, TransactionType, DataStatus, TimeStamp, ChangeReason)
+        INSERT INTO audit.AuditPmJpRequest (RequestNumber,RequesterSection, DescriptionOfChange, ChangeType, StartDate, EndDate, PmJpCode, AssetType, AssetCode, CurrentInterval, NewInterval, AddedMaterials, RemovedMaterials, AddedLaborCraft, RemovedLaborCraft, AddedTask, RemovedTask, AddedMeter, RemovedMeter, PmPriority, RequestId, CreatedAt, ModifiedAt, CreatedBy, ModifiedBy, TransactionType, DataStatus, TimeStamp, ChangeReason)
         SELECT
             RequestNumber,
+			RequesterSection,
             DescriptionOfChange,
             ChangeType,
             StartDate,
@@ -716,9 +725,10 @@ BEGIN
         SET @TransactionType = 'DELETE';
 
         -- Insert the old record with status 'Old'
-        INSERT INTO audit.AuditPmJpRequest (RequestNumber, DescriptionOfChange, ChangeType, StartDate, EndDate, PmJpCode, AssetType, AssetCode, CurrentInterval, NewInterval, AddedMaterials, RemovedMaterials, AddedLaborCraft, RemovedLaborCraft, AddedTask, RemovedTask, AddedMeter, RemovedMeter, PmPriority, RequestId, CreatedAt, ModifiedAt, CreatedBy, ModifiedBy, TransactionType, DataStatus, TimeStamp, ChangeReason)
+        INSERT INTO audit.AuditPmJpRequest (RequestNumber,RequesterSection, DescriptionOfChange, ChangeType, StartDate, EndDate, PmJpCode, AssetType, AssetCode, CurrentInterval, NewInterval, AddedMaterials, RemovedMaterials, AddedLaborCraft, RemovedLaborCraft, AddedTask, RemovedTask, AddedMeter, RemovedMeter, PmPriority, RequestId, CreatedAt, ModifiedAt, CreatedBy, ModifiedBy, TransactionType, DataStatus, TimeStamp, ChangeReason)
         SELECT
             RequestNumber,
+			RequesterSection,
             DescriptionOfChange,
             ChangeType,
             StartDate,
@@ -752,7 +762,7 @@ END;
 GO
 ALTER TABLE [dbo].[PmJpRequest] ENABLE TRIGGER [TR_AuditPmJpRequest]
 GO
-/****** Object:  Trigger [dbo].[TR_AuditReschedulePmWoRequest]    Script Date: 11/23/2023 9:18:19 AM ******/
+/****** Object:  Trigger [dbo].[TR_AuditReschedulePmWoRequest]    Script Date: 11/26/2023 1:07:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -771,9 +781,10 @@ BEGIN
         SET @TransactionType = 'UPDATE';
 
         -- Insert the old record with status 'Old'
-        INSERT INTO audit.AuditReschedulePmWoRequest (RequestNumber, DescriptionOfChange, ReasonForRescheduling, RescheduleFrom, RescheduleTo, WoNumber, RequestId, CreatedAt, ModifiedAt, CreatedBy, ModifiedBy, TransactionType, DataStatus, TimeStamp)
+        INSERT INTO audit.AuditReschedulePmWoRequest (RequestNumber,RequesterSection, DescriptionOfChange, ReasonForRescheduling, RescheduleFrom, RescheduleTo, WoNumber, RequestId, CreatedAt, ModifiedAt, CreatedBy, ModifiedBy, TransactionType, DataStatus, TimeStamp)
         SELECT
             RequestNumber,
+			RequesterSection,
             DescriptionOfChange,
             ReasonForRescheduling,
             RescheduleFrom,
@@ -790,9 +801,10 @@ BEGIN
         FROM DELETED;
 
         -- Insert the new record with status 'New'
-        INSERT INTO audit.AuditReschedulePmWoRequest (RequestNumber, DescriptionOfChange, ReasonForRescheduling, RescheduleFrom, RescheduleTo, WoNumber, RequestId, CreatedAt, ModifiedAt, CreatedBy, ModifiedBy, TransactionType, DataStatus, TimeStamp)
+        INSERT INTO audit.AuditReschedulePmWoRequest (RequestNumber,RequesterSection, DescriptionOfChange, ReasonForRescheduling, RescheduleFrom, RescheduleTo, WoNumber, RequestId, CreatedAt, ModifiedAt, CreatedBy, ModifiedBy, TransactionType, DataStatus, TimeStamp)
         SELECT
             RequestNumber,
+			RequesterSection,
             DescriptionOfChange,
             ReasonForRescheduling,
             RescheduleFrom,
@@ -814,9 +826,10 @@ BEGIN
         SET @TransactionType = 'DELETE';
 
         -- Insert the old record with status 'Old'
-        INSERT INTO audit.AuditReschedulePmWoRequest (RequestNumber, DescriptionOfChange, ReasonForRescheduling, RescheduleFrom, RescheduleTo, WoNumber, RequestId, CreatedAt, ModifiedAt, CreatedBy, ModifiedBy, TransactionType, DataStatus, TimeStamp)
+        INSERT INTO audit.AuditReschedulePmWoRequest (RequestNumber,RequesterSection, DescriptionOfChange, ReasonForRescheduling, RescheduleFrom, RescheduleTo, WoNumber, RequestId, CreatedAt, ModifiedAt, CreatedBy, ModifiedBy, TransactionType, DataStatus, TimeStamp)
         SELECT
             RequestNumber,
+			RequesterSection,
             DescriptionOfChange,
             ReasonForRescheduling,
             RescheduleFrom,
