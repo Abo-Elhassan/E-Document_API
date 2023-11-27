@@ -4,6 +4,7 @@ using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Attachments;
 using EDocument_Data.DTOs.Filter;
 using EDocument_Data.DTOs.Requests.MultimediaRequest;
+using EDocument_Data.DTOs.Requests.PoRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
@@ -78,16 +79,18 @@ namespace EDocument_API.Controllers.V1.Requests
             _logger.LogInformation($"Start GetMultimediaRequestById from {nameof(RequestController)} for request id = {id}");
 
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
-            var MultimediaRequest = await _unitOfWork.Repository<MultimediaRequest>().FindRequestAsync(
+            var multimediaRequest = await _unitOfWork.Repository<MultimediaRequest>().FindRequestAsync(
             requestId: id,
             expression: "Request.Id==@0",
             includes: includes
             );
 
-            if (MultimediaRequest is null)
+            if (multimediaRequest is null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
-            var result = _mapper.Map<MultimediaRequestReadDto>(MultimediaRequest);
+            var result = _mapper.Map<MultimediaRequestReadDto>(multimediaRequest);
+                result.PrTeamAttachment = _mapper.Map<AttachmentReadDto>(multimediaRequest.PrTeamAttachmentPath);
+            
 
             return Ok(new ApiResponse<MultimediaRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
@@ -284,7 +287,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <summary>
         /// Create Multimedia Request
         /// </summary>
-        /// <param name="MultimediaRequestCreateDto">Multimedia request Information</param>
+        /// <param name="multimediaRequestCreateDto">Multimedia request Information</param>
         /// <remarks>
         ///
         /// </remarks>
@@ -293,28 +296,24 @@ namespace EDocument_API.Controllers.V1.Requests
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Create")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> CreateMultimediaRequest([FromForm] MultimediaRequestCreateDto MultimediaRequestCreateDto)
+        public async Task<ActionResult> CreateMultimediaRequest([FromForm] MultimediaRequestCreateDto multimediaRequestCreateDto)
         {
-            _logger.LogInformation($"Start CreateMultimediaRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(MultimediaRequestCreateDto)} ");
-
-
-
-
+            _logger.LogInformation($"Start CreateMultimediaRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(multimediaRequestCreateDto)} ");
 
             var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
-            var requestNo = $"FuelInvoice-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
+            var requestNo = $"Multimedia-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
 
-            var request = new Request { Id = requestId, DefinedRequestId = MultimediaRequestCreateDto.DefinedRequestId };
-            request.Notes = MultimediaRequestCreateDto.Notes;
-            request.MultimediaRequest = _mapper.Map<MultimediaRequest>(MultimediaRequestCreateDto);
+            var request = new Request { Id = requestId, DefinedRequestId = multimediaRequestCreateDto.DefinedRequestId };
+            request.Notes = multimediaRequestCreateDto.Notes;
+            request.MultimediaRequest = _mapper.Map<MultimediaRequest>(multimediaRequestCreateDto);
             _mapper.Map(user, request.MultimediaRequest);
             request.MultimediaRequest.RequestNumber = requestNo;
 
-            if (MultimediaRequestCreateDto.Attachments != null && MultimediaRequestCreateDto.Attachments.Count > 0)
+            if (multimediaRequestCreateDto.Attachments != null && multimediaRequestCreateDto.Attachments.Count > 0)
             {
-                request.Attachments = _fileService.UploadAttachments(requestId, $@"MultimediaRequest\{requestId}", MultimediaRequestCreateDto.Attachments, user.FullName);
+                request.Attachments = _fileService.UploadAttachments(requestId, $@"MultimediaRequest\{requestId}", multimediaRequestCreateDto.Attachments, user.FullName);
             }
 
             request.CreatorId = user?.Id;
@@ -326,7 +325,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
             var result = _unitOfWork.Complete();
 
-            await _requestReviewerRepository.BeginRequestCycle(MultimediaRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
+            await _requestReviewerRepository.BeginRequestCycle(multimediaRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
 
 
             #region Send Emails
@@ -514,7 +513,7 @@ namespace EDocument_API.Controllers.V1.Requests
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Approve")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> ApproveMultimediaRequest(ApproveMultimediaRequestDto requestReviewerWriteDto)
+        public async Task<ActionResult> ApproveMultimediaRequest([FromForm] ApproveMultimediaRequestDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start ApproveMultimediaRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -523,7 +522,14 @@ namespace EDocument_API.Controllers.V1.Requests
 
             if (request != null)
             {
-                //request.MultimediaRequest.SwiftNumber = requestReviewerWriteDto.SwiftNumber;
+                if (request.CurrentStage == 3) //Check if the current reviewer is Communications Team
+                {
+                    request.MultimediaRequest.EstimatedDeliveryDate = requestReviewerWriteDto.EstimatedDeliveryDate;
+
+                    if (requestReviewerWriteDto.PrTeamAttachment != null)
+                        request.MultimediaRequest.PrTeamAttachmentPath = _fileService.UploadAttachment($@"MultimediaRequest\{requestReviewerWriteDto.RequestId}", requestReviewerWriteDto.PrTeamAttachment);
+                }
+
                 request.MultimediaRequest.ModifiedBy = user?.FullName;
             }
             else
@@ -542,8 +548,6 @@ namespace EDocument_API.Controllers.V1.Requests
             var requestCreator = request.Creator;
             if (request?.Status == RequestStatus.Approved.ToString())
             {
-                var requestCreatorDirectManager = request.Creator.Manager;
-                var requestCreatorDepartmentManager = request.Creator.Department.Manager;
                 var creatorMailContent = new MailContent
                 {
                     Body = $"""

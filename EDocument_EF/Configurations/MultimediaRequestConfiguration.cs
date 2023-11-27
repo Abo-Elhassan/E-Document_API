@@ -2,6 +2,7 @@
 using EDocument_Data.Models.Audit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.ComponentModel;
 
 namespace EDocument_EF.Configurations
 {
