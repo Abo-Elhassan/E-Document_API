@@ -30,7 +30,7 @@ namespace EDocument_Services.Mail_Service
             var email = new MailMessage();
 
             // email.From = new MailAddress(_mailSettings.Value.Email, _mailSettings.Value.DisplayName);
-            email.From = new MailAddress("eDocument.eservice@dpworld.com", "eDocument");
+            email.From = new MailAddress("eDocument.DPWS_eservice@dpworld.com", "eDocument");
             foreach (var address in mailContent.To.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
             {
                 email.To.Add(address);

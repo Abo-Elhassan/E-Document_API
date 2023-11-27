@@ -52,9 +52,6 @@ namespace EDocument_EF.Configurations
             entity.Property(e => e.AnnouncementType)
             .HasMaxLength(50);
 
-            entity.Property(e => e.ApprovalItem)
-            .HasMaxLength(50);
-
             entity.Property(e => e.DeliveryDate)
             .HasColumnType("smalldatetime");
 

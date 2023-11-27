@@ -13,6 +13,7 @@ using EDocument_Data.DTOs.Requests.EquipmentInAreaRequest;
 using EDocument_Data.DTOs.Requests.EquipmentOutAreaRequest;
 using EDocument_Data.DTOs.Requests.FuelOilInvoiceRequest;
 using EDocument_Data.DTOs.Requests.ManliftReservationRequest;
+using EDocument_Data.DTOs.Requests.MultimediaRequest;
 using EDocument_Data.DTOs.Requests.NewItemRequest;
 using EDocument_Data.DTOs.Requests.PmJpRequest;
 using EDocument_Data.DTOs.Requests.PoRequest;
@@ -726,6 +727,49 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<PmJpRequestUpdateDto, PmJpRequest>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             #endregion            
+
+            #region Multimedia Request
+
+            CreateMap<ApproveMultimediaRequestDto, ApproveRequestReviewerDto>();
+
+            CreateMap<User, MultimediaRequest>()
+                .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
+                .ForMember(dest => dest.BeneficiaryName, src => src.MapFrom(opts => opts.FullName))
+                .ForMember(dest => dest.BeneficiaryEmail, src => src.MapFrom(opts => opts.Email))
+                .ForMember(dest => dest.BeneficiaryPosition, src => src.MapFrom(opts => opts.Position))
+                .ForMember(dest => dest.BeneficiaryDepartment, src => src.MapFrom(opts => opts.Department.DepartmentName))
+                .ForMember(dest => dest.BeneficiaryPhoneNumber, src => src.MapFrom(opts => opts.PhoneNumber))
+                .ForMember(dest => dest.BeneficiaryCompany, src => src.MapFrom(opts => opts.Company))
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
+
+            CreateMap<MultimediaRequest, MultimediaRequestReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.PrTeamAttachment, src => src.MapFrom(opts => new AttachmentReadDto { FileName = Path.GetFileName(opts.PrTeamAttachmentPath) }))
+                .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
+
+            CreateMap<MultimediaRequest, MultimediaRequestReviewerReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<MultimediaRequestCreateDto, MultimediaRequest>();
+
+            CreateMap<MultimediaRequestUpdateDto, MultimediaRequest>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            #endregion
         }
 
         private string ConvertListToString(List<string> list)

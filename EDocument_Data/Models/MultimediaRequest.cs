@@ -11,8 +11,8 @@ namespace EDocument_Data.Models
         public DateTime DeliveryDate { get; set; }
         public TimeSpan? VideoDuration { get; set; }
         public string AnnouncementType { get; set; }
-        public string ApprovalItem { get; set; }
         public DateTime? EstimatedDeliveryDate { get; set; }
+        public string PrTeamAttachmentPath { get; set; }
 
     }
 }

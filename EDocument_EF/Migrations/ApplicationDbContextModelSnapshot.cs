@@ -1279,9 +1279,6 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("AnnouncementType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ApprovalItem")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("BeneficiaryCompany")
                         .HasColumnType("nvarchar(max)");
 
@@ -1326,6 +1323,9 @@ namespace EDocument_EF.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PrTeamAttachmentPath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProjectDetails")
@@ -3448,10 +3448,6 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("ApprovalItem")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("BeneficiaryCompany")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -3506,6 +3502,9 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(200)
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)");
+
+                    b.Property<string>("PrTeamAttachmentPath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProjectDetails")
                         .IsRequired()
