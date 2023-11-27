@@ -18,7 +18,6 @@ namespace EDocument_Data.DTOs.Requests.PmJpRequest
         public DateTime StartDate { get; init; }
 
         [OldDateValidator]
-        [MocEndDateValidationAttribute]
         public DateTime? EndDate { get; init; }
         public string? PmJpCode { get; init; }
         public string? AssetType { get; init; }
