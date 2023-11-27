@@ -7,6 +7,7 @@ namespace EDocument_Data.Models.Audit
         public string RequestType { get; set; }
         public string ProjectDetails { get; set; }
         public DateTime DeliveryDate { get; set; }
+
         public TimeSpan? VideoDuration { get; set; }
         public string AnnouncementType { get; set; }
         public DateTime? EstimatedDeliveryDate { get; set; }

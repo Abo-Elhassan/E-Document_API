@@ -17,7 +17,8 @@ namespace EDocument_Data.DTOs.Requests.MultimediaRequest
         [Required]
         public DateTime DeliveryDate { get; init; }
 
-        public TimeSpan? VideoDuration { get; init; }
+        [RegularExpression("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$", ErrorMessage = "Invalid time format. Use hh:mm:ss")]
+        public string? VideoDuration { get; init; }
         public string? AnnouncementType { get; init; }
 
 

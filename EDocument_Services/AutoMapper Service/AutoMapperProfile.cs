@@ -81,6 +81,7 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<RequestReviewer, RequestReviewerReadDto>()
                 .ForMember(dest => dest.AssignedReviewerFullName, src => src.MapFrom(opts => opts.Reviewer.FullName))
+                .ForMember(dest => dest.ReviewedAt, src => src.MapFrom(opts => opts.ModifiedAt))
                 .ForMember(dest => dest.AssignedReviewerId, src => src.MapFrom(opts => opts.AssignedReviewerId));
 
             CreateMap<Attachment, AttachmentReadDto>()
@@ -762,6 +763,7 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.PrTeamAttachment, src => src.MapFrom(opts => new AttachmentReadDto { FileName = Path.GetFileName(opts.PrTeamAttachmentPath) }))
                 .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
 
             CreateMap<MultimediaRequestCreateDto, MultimediaRequest>();
