@@ -23,6 +23,7 @@ using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.DTOs.Requests.ReschedulePmWoRequest;
 using EDocument_Data.DTOs.Requests.TravelDeskRequest;
 using EDocument_Data.DTOs.Requests.VehicleRequest;
+using EDocument_Data.DTOs.Requests.VoucherRequest;
 using EDocument_Data.DTOs.Section;
 using EDocument_Data.DTOs.User;
 using EDocument_Data.Models;
@@ -773,6 +774,48 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<MultimediaRequestCreateDto, MultimediaRequest>();
 
             CreateMap<MultimediaRequestUpdateDto, MultimediaRequest>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            #endregion
+
+            #region Voucher Request
+
+         
+
+            CreateMap<User, VoucherRequest>()
+                .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
+                .ForMember(dest => dest.BeneficiaryName, src => src.MapFrom(opts => opts.FullName))
+                .ForMember(dest => dest.BeneficiaryEmail, src => src.MapFrom(opts => opts.Email))
+                .ForMember(dest => dest.BeneficiaryPosition, src => src.MapFrom(opts => opts.Position))
+                .ForMember(dest => dest.BeneficiaryDepartment, src => src.MapFrom(opts => opts.Department.DepartmentName))
+                .ForMember(dest => dest.BeneficiaryPhoneNumber, src => src.MapFrom(opts => opts.PhoneNumber))
+                .ForMember(dest => dest.BeneficiaryCompany, src => src.MapFrom(opts => opts.Company))
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
+
+            CreateMap<VoucherRequest, VoucherRequestReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
+
+            CreateMap<VoucherRequest, VoucherRequestReviewerReadDto>()
+                .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
+                .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
+                .ForMember(dest => dest.Status, src => src.MapFrom(opts => opts.Request.Status))
+                .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
+                .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
+                .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
+
+            CreateMap<VoucherRequestCreateDto, VoucherRequest>();
+
+            CreateMap<VoucherRequestUpdateDto, VoucherRequest>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             #endregion

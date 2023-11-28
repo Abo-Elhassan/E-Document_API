@@ -182,23 +182,37 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
             if (firstReviewer != null)
             {
-                switch (firstReviewer.ReviewerType)
+
+
+                // Seed Reviewer Ids for Dynamic Reviewers
+                foreach (var reviewer in request?.RequestReviewers)
                 {
-                    case ReviewerType.DirectManager:
-                        firstReviewer.AssignedReviewerId = await CheckReviewerDelegation(_userRepository.FindDirectManagerByIdAsync(requesterId)?.Result.Value.Id);
-                        break;
+                    if (reviewer.AssignedReviewerId is null)
+                    {
+                        switch (reviewer.ReviewerType)
+                        {
+                            case ReviewerType.DirectManager:
+                                reviewer.AssignedReviewerId = await CheckReviewerDelegation(_userRepository.FindDirectManagerByIdAsync(requesterId)?.Result.Value.Id);
+                                break;
 
-                    case ReviewerType.SectionHead:
-                        firstReviewer.AssignedReviewerId = await CheckReviewerDelegation(_userRepository.FindSectionHeadByIdAsync(requesterId)?.Result.Value.Id);
-                        break;
+                            case ReviewerType.SectionHead:
+                                reviewer.AssignedReviewerId = await CheckReviewerDelegation(_userRepository.FindSectionHeadByIdAsync(requesterId)?.Result.Value.Id);
+                                break;
 
-                    case ReviewerType.DepartmentManager:
-                        firstReviewer.AssignedReviewerId = await CheckReviewerDelegation(_userRepository.FindDepartmentManagerByIdAsync(requesterId)?.Result.Value.Id);
-                        break;
+                            case ReviewerType.DepartmentManager:
+                                reviewer.AssignedReviewerId = await CheckReviewerDelegation(_userRepository.FindDepartmentManagerByIdAsync(requesterId)?.Result.Value.Id);
+                                break;
 
-                    default:
-                        break;
+                            default:
+                                break;
+                        }
+
+                    }
                 }
+
+               
+
+
 
                 // Skip All Approval steps for the creator if he is one of the reviewers
                 if (request.RequestReviewers.Any(r => r.AssignedReviewerId == request.CreatorId) && definedRequestId!= 2023110902543453 && definedRequestId!= 2023110902550379 && definedRequestId != 2023101010522512 && definedRequestId != 2023112709173645 && definedRequestId != 2023112111535000 && definedRequestId != 2023112307532308) //Automatic approve for the creator should be prevented for Refund and  New Item and Pr Requests  and Multimedia request and Engineering requests as Some reviewers need to insert data in approve

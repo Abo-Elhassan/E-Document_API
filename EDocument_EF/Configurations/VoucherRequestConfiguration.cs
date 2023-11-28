@@ -12,16 +12,50 @@ namespace EDocument_EF.Configurations
     {
         public void Configure(EntityTypeBuilder<VoucherRequest> entity)
         {
-            entity.HasKey(e => new { e.BeneficiaryName, e.RequestId });
 
-         
             entity.ToTable(nameof(VoucherRequest), tb => tb.HasTrigger($"TR_{nameof(AuditVoucherRequest)}"));
 
-            entity.Property(e => e.VoucherCurrency)
-            .HasConversion<string>();
+            entity.HasKey(e => e.RequestNumber);
 
-            entity.Property(e => e.InvoiceDate)
-            .HasColumnType("date");
+            entity.Property(e => e.RequestNumber)
+            .HasMaxLength(50)
+            .ValueGeneratedNever();
+
+
+            entity.Property(e => e.BeneficiaryId)
+           .IsRequired()
+           .HasMaxLength(50);
+
+            entity.Property(e => e.BeneficiaryDepartment)
+            .HasMaxLength(200);
+
+            entity.Property(e => e.BeneficiaryEmail)
+            .HasMaxLength(50);
+
+            entity.Property(e => e.BeneficiaryName)
+            .IsRequired()
+            .HasMaxLength(200);
+
+            entity.Property(e => e.BeneficiaryPosition)
+            .HasMaxLength(200);
+
+            entity.Property(e => e.BeneficiaryPhoneNumber)
+            .HasMaxLength(50);
+
+            entity.Property(e => e.BeneficiaryCompany)
+            .HasMaxLength(200);
+
+            entity.Property(e => e.VendorName)
+            .HasMaxLength(200);
+
+            entity.Property(e => e.InvoiceNumber)
+            .HasMaxLength(50);
+
+            entity.Property(e => e.AmountInWords)
+            .HasMaxLength(500);
+
+            entity.Property(e => e.Currency)
+            .HasMaxLength(50);
 
             entity.Property(e => e.CreatedAt)
             .HasColumnType("smalldatetime");

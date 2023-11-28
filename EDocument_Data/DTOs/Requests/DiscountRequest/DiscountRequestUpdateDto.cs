@@ -12,8 +12,6 @@ namespace EDocument_Data.DTOs.Requests.DiscountRequest
 {
     public class DiscountRequestUpdateDto
     {
-        [Required]
-        public  long requestId { get; init; }
 
         [Required]
         public required string CustomerType { get; set; }

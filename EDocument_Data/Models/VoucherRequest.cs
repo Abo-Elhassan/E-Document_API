@@ -9,17 +9,15 @@ using EDocument_Data.Models.Shared;
 
 namespace EDocument_Data.Models
 {
-    public class VoucherRequest : BaseEntity
+    public class VoucherRequest : BaseRequest
     {
-        public string VendorNumber { get; set; }
+        public int VendorNumber { get; set; }
         public string VendorName { get; set; }
-        public DateTime InvoiceDate { get; set; }
-        public string BeneficiaryName { get; set; }
+        public string InvoiceNumber { get; set; }
         public string Description { get; set; }
-        public float VoucherAmount { get; set; }
-        public Currency VoucherCurrency{ get; set; }
-        public string VoucherType{ get; set; }
-        public  long RequestId { get; set; }
-        public virtual Request Request { get; set; }
+        public float Amount { get; set; }
+        public string AmountInWords { get; set; }
+        public string Currency { get; set; }
+
     }
 }
