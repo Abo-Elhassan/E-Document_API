@@ -201,7 +201,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 }
 
                 // Skip All Approval steps for the creator if he is one of the reviewers
-                if (request.RequestReviewers.Any(r => r.AssignedReviewerId == request.CreatorId) && definedRequestId!= 2023110902543453 && definedRequestId!= 2023110902550379 && definedRequestId != 2023101010522512 && definedRequestId != 2023112709173645) //Automatic approve for the creator should be prevented for Refund and  New Item and Pr Requests  and Multimedia request as Some reviewers need to insert data in approve
+                if (request.RequestReviewers.Any(r => r.AssignedReviewerId == request.CreatorId) && definedRequestId!= 2023110902543453 && definedRequestId!= 2023110902550379 && definedRequestId != 2023101010522512 && definedRequestId != 2023112709173645 && definedRequestId != 2023112111535000 && definedRequestId != 2023112307532308) //Automatic approve for the creator should be prevented for Refund and  New Item and Pr Requests  and Multimedia request and Engineering requests as Some reviewers need to insert data in approve
                 {
                     var reviewerStageNumber = request.RequestReviewers.FirstOrDefault(rr=>rr.AssignedReviewerId == request.CreatorId).StageNumber;
                     foreach (var reviewer in request.RequestReviewers.Where(r => r.StageNumber == reviewerStageNumber))

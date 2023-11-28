@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,8 +43,9 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
 
             if (user is null || GetUserEmailByIdAsync(user.ManagerId).Result is null) return null;
 
-            string managerId = user.ManagerId;
-            string managerEmail = await GetUserEmailByIdAsync(user.ManagerId) ?? "";
+            
+            string managerId = await IsDepartmentManagerAsync(user.Id) ? user.Id : user.ManagerId;
+            string managerEmail = await GetUserEmailByIdAsync(managerId) ?? "";
 
             return (managerId, managerEmail);
         }
@@ -81,6 +83,10 @@ namespace EDocument_Repositories.Application_Repositories.UserRepository
            return email;
         }
 
+        private async Task<bool> IsDepartmentManagerAsync(string userId)
+        {
+            return await _context.Departments.AnyAsync(d=>d.ManagerId==userId);
+        }
 
     }
 }
