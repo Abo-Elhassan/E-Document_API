@@ -69,7 +69,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns>Discount Request</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<DiscountRequestReadDto>))]
         [HttpGet("{id}")]
-        [Authorize(Roles = "Basic")]
+        [Authorize(Roles = "Discount_Request,Discount_Review,Discount_All")]
         public async Task<ActionResult> GetDiscountRequestById(long id)
         {
             _logger.LogInformation($"Start GetDiscountRequestById from {nameof(RequestController)} for request id = {id}");
@@ -100,7 +100,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns>message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpDelete("{id}")]
-        [Authorize(Roles = "CustomerService,Commercial")]
+        [Authorize(Roles = "Discount_Request,Discount_All")]
         public async Task<ActionResult> DeleteDiscountRequest(long id)
         {
             _logger.LogInformation($"Start DeleteDiscountRequest from {nameof(RequestController)} for request id = {id}");
@@ -147,7 +147,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns>List of All Created Discount Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<DiscountRequestReadDto>>))]
         [HttpPost("Inbox")]
-        [Authorize(Roles = "CustomerService,Commercial")]
+        [Authorize(Roles = "Discount_Request,Discount_All")]
         public async Task<ActionResult> GetCreatorDiscountRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetCreatorDiscountRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -207,7 +207,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns>List of All Reviewer Discount Requests</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<FilterReadDto<DiscountRequestReviewerReadDto>>))]
         [HttpPost("AssignedToMe")]
-        [Authorize(Roles = "Basic")]
+        [Authorize(Roles = "Discount_Review,Discount_All")]
         public async Task<ActionResult> GetReviewerDiscountRequestsFiltered(FilterWriteDto? filterDto)
         {
             _logger.LogInformation($"Start GetReviewerDiscountRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
@@ -283,7 +283,7 @@ namespace EDocument_API.Controllers.V1.Requests
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPost("Create")]
-        [Authorize(Roles = "CustomerService,Commercial")]
+        [Authorize(Roles = "Discount_Request,Discount_All")]
         public async Task<ActionResult> CreateDiscountRequest([FromForm] DiscountRequestCreateDto discountRequestCreateDto)
         {
             _logger.LogInformation($"Start CreateDiscountRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(discountRequestCreateDto)} ");
@@ -394,7 +394,7 @@ namespace EDocument_API.Controllers.V1.Requests
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Update/{id}")]
-        [Authorize(Roles = "CustomerService,Commercial")]
+        [Authorize(Roles = "Discount_Request,Discount_All")]
         public async Task<ActionResult> UpdateDiscountRequest(long id, [FromForm] DiscountRequestUpdateDto discountRequestUpdateDto)
         {
             _logger.LogInformation($"Start UpdateDiscountRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(discountRequestUpdateDto)} ");
@@ -513,7 +513,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns> message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Approve")]
-        [Authorize(Roles = "Basic")]
+        [Authorize(Roles = "Discount_Review,Discount_All")]
         public async Task<ActionResult> ApproveDiscountRequest(ApproveDiscountRequestDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start ApproveDiscountRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
@@ -526,16 +526,23 @@ namespace EDocument_API.Controllers.V1.Requests
             {
                if(request.CurrentStage == 2)
                 {
-                    if (request.DiscountRequest.DiscountAmount >= 3000 && requestReviewerWriteDto.HoSupportedDocument == null)
+                    if (requestReviewerWriteDto.DiscountAmount is null)
+                    {
+                        return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Discount amount is required" });
+
+                    }
+                    else if (requestReviewerWriteDto.DiscountAmount >= 3000 && requestReviewerWriteDto.HoSupportedDocument == null)
                     {
                         return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Ho Supported Document Should Be Uploaded If Discount Amount >=3000" });
 
                     }
                     else if ( requestReviewerWriteDto.HoSupportedDocument != null) //Check if the current reviewer is Finance Team
                     {
-                        request.DiscountRequest.HoSupportedDocumentPath = _fileService.UploadAttachment($@"DiscountRequest\{requestReviewerWriteDto.RequestId}", requestReviewerWriteDto.HoSupportedDocument);
-                        request.DiscountRequest.ModifiedBy = user?.FullName;
+                        request.DiscountRequest.HoSupportedDocumentPath = _fileService.UploadAttachment($@"DiscountRequest\{requestReviewerWriteDto.RequestId}", requestReviewerWriteDto.HoSupportedDocument);                       
                     }
+
+                    request.DiscountRequest.DiscountAmount = (float)requestReviewerWriteDto.DiscountAmount;
+                    request.DiscountRequest.ModifiedBy = user?.FullName;
 
                 }
             }
@@ -616,7 +623,7 @@ namespace EDocument_API.Controllers.V1.Requests
         /// <returns> message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Decline")]
-        [Authorize(Roles = "Basic")]
+        [Authorize(Roles = "Discount_Review,Discount_All")]
         public async Task<ActionResult> DeclineDiscountRequest(DeclineRequestReviewerDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start DeclineDiscountRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");

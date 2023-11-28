@@ -9,6 +9,7 @@ namespace EDocument_Data.DTOs.Requests.DiscountRequest
     {
         [Required]
         public long RequestId { get; init; }
+        public float? DiscountAmount { get; init; }
         public IFormFile? HoSupportedDocument { get; init; }
         public string? ReviewedNotes { get; init; }
     }
