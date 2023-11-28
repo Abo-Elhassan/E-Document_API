@@ -270,6 +270,8 @@ namespace EDocument_Services.AutoMapper_Service
 
             #region Discount Request
 
+            CreateMap<ApproveDiscountRequestDto, ApproveRequestReviewerDto>();
+
             CreateMap<DiscountRequest, DiscountRequestReadDto>()
               .ForMember(dest => dest.Id, src => src.MapFrom(opts => opts.Request.Id))
               .ForMember(dest => dest.CurrentStage, src => src.MapFrom(opts => opts.Request.CurrentStage))
@@ -277,6 +279,7 @@ namespace EDocument_Services.AutoMapper_Service
               .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
               .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
               .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+              .ForMember(dest => dest.HoSupportedDocument, src => src.MapFrom(opts => new AttachmentReadDto { FileName = Path.GetFileName(opts.HoSupportedDocumentPath) }))
               .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments));
 
             CreateMap<DiscountRequest, DiscountRequestReviewerReadDto>()
@@ -286,6 +289,7 @@ namespace EDocument_Services.AutoMapper_Service
                 .ForMember(dest => dest.Notes, src => src.MapFrom(opts => opts.Request.Notes))
                 .ForMember(dest => dest.CreatorId, src => src.MapFrom(opts => opts.Request.CreatorId))
                 .ForMember(dest => dest.DefinedRequestId, src => src.MapFrom(opts => opts.Request.DefinedRequestId))
+                .ForMember(dest => dest.HoSupportedDocument, src => src.MapFrom(opts => new AttachmentReadDto { FileName = Path.GetFileName(opts.HoSupportedDocumentPath) }))
                 .ForMember(dest => dest.Attachments, src => src.MapFrom(opts => opts.Request.Attachments))
                 .ForMember(dest => dest.RequestReviewers, src => src.MapFrom(opts => opts.Request.RequestReviewers));
 

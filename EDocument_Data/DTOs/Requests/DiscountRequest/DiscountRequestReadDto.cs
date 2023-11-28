@@ -36,6 +36,8 @@ namespace EDocument_Data.DTOs.Requests.DiscountRequest
         public string DiscountType { get; set; }
         public string DiscountReason { get; set; }
         public float DiscountAmount { get; set; }
+
+        public AttachmentReadDto HoSupportedDocument { get; set; }
         public List<AttachmentReadDto> Attachments { get; set; }
 
         public string CreatedBy { get; init; }

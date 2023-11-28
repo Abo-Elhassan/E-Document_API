@@ -85,6 +85,7 @@ namespace EDocument_API.Controllers.V1.Requests
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request not found" });
 
             var result = _mapper.Map<DiscountRequestReadDto>(discountRequest);
+            result.HoSupportedDocument =  _mapper.Map<AttachmentReadDto>(discountRequest.HoSupportedDocumentPath);
 
             return Ok(new ApiResponse<DiscountRequestReadDto> { StatusCode = (int)HttpStatusCode.OK, Details = result });
         }
@@ -513,7 +514,7 @@ namespace EDocument_API.Controllers.V1.Requests
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Approve")]
         [Authorize(Roles = "Basic")]
-        public async Task<ActionResult> ApproveDiscountRequest(ApproveRequestReviewerDto requestReviewerWriteDto)
+        public async Task<ActionResult> ApproveDiscountRequest(ApproveDiscountRequestDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start ApproveDiscountRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -521,7 +522,30 @@ namespace EDocument_API.Controllers.V1.Requests
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == requestReviewerWriteDto.RequestId);
             var request = _unitOfWork.Repository<Request>().Find(requestRxpression, new string[] { "DiscountRequest", "Creator", "Creator.Department", "Creator.Department.Manager" });
 
-            var result = await _requestReviewerRepository.ApproveRequestAsync(requestReviewerWriteDto, user);
+            if (request != null)
+            {
+               if(request.CurrentStage == 2)
+                {
+                    if (request.DiscountRequest.DiscountAmount >= 3000 && requestReviewerWriteDto.HoSupportedDocument == null)
+                    {
+                        return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Ho Supported Document Should Be Uploaded If Discount Amount >=3000" });
+
+                    }
+                    else if ( requestReviewerWriteDto.HoSupportedDocument != null) //Check if the current reviewer is Finance Team
+                    {
+                        request.DiscountRequest.HoSupportedDocumentPath = _fileService.UploadAttachment($@"DiscountRequest\{requestReviewerWriteDto.RequestId}", requestReviewerWriteDto.HoSupportedDocument);
+                        request.DiscountRequest.ModifiedBy = user?.FullName;
+                    }
+
+                }
+            }
+            else
+            {
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = "Request Not Found" });
+
+            }
+
+            var result = await _requestReviewerRepository.ApproveRequestAsync(_mapper.Map<ApproveRequestReviewerDto>(requestReviewerWriteDto), user);
             if (!result.IsSucceded)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = result.Message });
 
