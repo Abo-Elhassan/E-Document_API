@@ -313,7 +313,7 @@ namespace EDocument_API.Controllers.V1.Requests
             var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
-            var requestNo = $"FuelInvoice-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
+            var requestNo = $"Voucher-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
 
             var request = new Request { Id = requestId, DefinedRequestId = voucherRequestCreateDto.DefinedRequestId };
             request.Notes = voucherRequestCreateDto.Notes;
