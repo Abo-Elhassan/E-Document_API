@@ -521,7 +521,7 @@ namespace EDocument_API.Controllers.V1.Requests
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
         [HttpPut("Approve")]
         [Authorize(Roles = "Discount_Review,Discount_All")]
-        public async Task<ActionResult> ApproveDiscountRequest(ApproveDiscountRequestDto requestReviewerWriteDto)
+        public async Task<ActionResult> ApproveDiscountRequest([FromForm] ApproveDiscountRequestDto requestReviewerWriteDto)
         {
             _logger.LogInformation($"Start ApproveDiscountRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(requestReviewerWriteDto)} ");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
