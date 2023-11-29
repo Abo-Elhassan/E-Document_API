@@ -536,6 +536,37 @@ namespace EDocument_API.Controllers.V1
 
 
         /// <summary>
+        /// Get Delegated User
+        /// </summary>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>Delegated User Info</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<UserReadSearchDto>))]
+        [HttpGet("Delegate")]
+        [Authorize]
+        public async Task<ActionResult> GetDelegatedUser()
+        {
+            _logger.LogInformation($"Start DelegateUser from {nameof(UserController)} for '{User.FindFirstValue(ClaimTypes.NameIdentifier)}'");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var delegatedUser = await _userManager.Users.Include(t => t.Department).Include(t => t.Section).Select(u => new UserReadSearchDto
+            {
+                Id = u.Id,
+                FullName = u.FullName,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber,
+                Postion = u.Position,
+                Department = u.Department.DepartmentName,
+                Section = u.Section.SectionName,
+                Company = u.Company
+            }).FirstOrDefaultAsync(u => u.Id == user.DelegatedUserId);
+
+
+            return Ok(new ApiResponse<UserReadSearchDto> { StatusCode = (int)HttpStatusCode.OK, Details = delegatedUser });
+        }
+
+        /// <summary>
         /// Delegate User 
         /// </summary>
         /// <param name="delegatationInfo">Delegated User Information</param>
@@ -544,7 +575,7 @@ namespace EDocument_API.Controllers.V1
         /// </remarks>
         /// <returns>message</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
-        [HttpPut("Delegate")]
+        [HttpPost("Delegate")]
         [Authorize]
         public async Task<ActionResult> DelegateUser(DelegateUserDto delegatationInfo)
         {
@@ -558,6 +589,30 @@ namespace EDocument_API.Controllers.V1
             _unitOfWork.Complete();
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your delegation has been done successfully" });
+        }
+
+        /// <summary>
+        /// Remove Delegation
+        /// </summary>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <returns>message</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [HttpPost("Delegate/Remove")]
+        [Authorize]
+        public async Task<ActionResult> RemoveDelegation()
+        {
+            _logger.LogInformation($"Start CancelDelegation from {nameof(UserController)} for user id '{User.FindFirstValue(ClaimTypes.NameIdentifier)}'");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            user.DelegatedUserId = null;
+            user.DelegatedUntil = null;
+            user.ModifiedBy = user.FullName;
+            _unitOfWork.Repository<User>().Update(user);
+            _unitOfWork.Complete();
+
+            return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your delegation has been removed successfully" });
         }
 
     }
