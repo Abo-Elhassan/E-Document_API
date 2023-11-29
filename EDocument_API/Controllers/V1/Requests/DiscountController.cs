@@ -292,14 +292,21 @@ namespace EDocument_API.Controllers.V1.Requests
             var discountRequest = await _unitOfWork.Repository<DiscountRequest>().FindAsync(documenteNumberCriteria);
             if (discountRequest != null)
             {
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Submitted document number has beed already used in another request no. {discountRequest.RequestNumber}" });
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Submitted document number has been already used in another request no. {discountRequest.RequestNumber}" });
             }
             else if (discountRequestCreateDto.InvoiceNumber != null)
             {
                 Expression<Func<DiscountRequest, bool>> invoiceNumberCriteria = (r => r.InvoiceNumber == discountRequestCreateDto.InvoiceNumber);
                 discountRequest = await _unitOfWork.Repository<DiscountRequest>().FindAsync(invoiceNumberCriteria);
                 if (discountRequest != null)
-                    return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Submitted invoice number has beed already used in another request no. {discountRequest.RequestNumber}" });
+                    return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Submitted invoice number has been already used in another request no. {discountRequest.RequestNumber}" });
+            }
+            else if (discountRequestCreateDto.DocumentNumber != null)
+            {
+                Expression<Func<DiscountRequest, bool>> documentNumberCriteria = (r => r.DocumentNumber == discountRequestCreateDto.DocumentNumber);
+                discountRequest = await _unitOfWork.Repository<DiscountRequest>().FindAsync(documentNumberCriteria);
+                if (discountRequest != null)
+                    return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Submitted document number has been already used in another request no. {discountRequest.RequestNumber}" });
             }
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
@@ -327,9 +334,8 @@ namespace EDocument_API.Controllers.V1.Requests
             var result = _unitOfWork.Complete();
 
             await _requestReviewerRepository.BeginRequestCycle(discountRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
+            await _requestReviewerRepository.NominateReviewer(requestId, user.Id); //Nominate the creator to act as the last reviewer
 
-            if (result < 1)
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Adding new request has been failed" });
 
             #region Send Emails
 
@@ -532,9 +538,9 @@ namespace EDocument_API.Controllers.V1.Requests
                         return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Discount amount is required" });
 
                     }
-                    else if (requestReviewerWriteDto.DiscountAmount >= 3000 && requestReviewerWriteDto.HoSupportedDocument == null)
+                    else if (requestReviewerWriteDto.DiscountAmount > 3000 && requestReviewerWriteDto.HoSupportedDocument == null)
                     {
-                        return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Ho Supported Document Should Be Uploaded If Discount Amount >=3000" });
+                        return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "Ho Supported Document Should Be Uploaded If Discount Amount is greater than 3000$" });
 
                     }
                     else if ( requestReviewerWriteDto.HoSupportedDocument != null) //Check if the current reviewer is Finance Team
