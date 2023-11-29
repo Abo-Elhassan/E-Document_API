@@ -180,7 +180,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
             SkipCreatorStagesAsReviewer(request);
            
-            ProceedWorkflow(request, remainingReviewers);
+            ProceedWorkflow(request, remainingReviewers, isApproval:false);
 
             _context.Update(request);
             _context.SaveChanges();
@@ -214,7 +214,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 requestReviewer.ModifiedAt = DateTime.Now;
             }
 
-            ProceedWorkflow(request, remainingRequestReviewers);
+            ProceedWorkflow(request, remainingRequestReviewers, isApproval: true);
 
 
             _context.Update(request);
@@ -268,7 +268,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             return assignedReviewer?.DelegatedUntil > DateTime.Now ? assignedReviewer.DelegatedUserId : assignedReviewerId;
         }
 
-        private void ProceedWorkflow(Request request, List<RequestReviewer> remainingRequestReviewers)
+        private void ProceedWorkflow(Request request, List<RequestReviewer> remainingRequestReviewers,bool isApproval)
         {
             //Check if the current stage is the last stage
             if (request.CurrentStage == request.DefinedRequest.ReviewersNumber)
@@ -298,7 +298,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                             }
                         }
                     }
-                    else  //Change next reviewer status to pending
+                    else if(isApproval)  //Change next reviewer status to pending
                     {
                         request.CurrentStage++;
                         var nextReviewer = remainingRequestReviewers.FirstOrDefault(rr => rr.StageNumber == request.CurrentStage);

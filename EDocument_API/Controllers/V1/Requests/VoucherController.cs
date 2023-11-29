@@ -299,12 +299,12 @@ namespace EDocument_API.Controllers.V1.Requests
 
             if (!string.IsNullOrEmpty(voucherRequestCreateDto.InvoiceNumber))
             {
-                Expression<Func<VoucherRequest, bool>> criteria = (r => r.InvoiceNumber == voucherRequestCreateDto.InvoiceNumber);
+                Expression<Func<VoucherRequest, bool>> criteria = (r => r.InvoiceNumber == voucherRequestCreateDto.InvoiceNumber && r.VendorNumber==voucherRequestCreateDto.VendorNumber);
 
-                var checkDuplicateInvoiceResult = await _unitOfWork.Repository<VoucherRequest>().FindAsync(criteria);
+                var duplicateRequest = await _unitOfWork.Repository<VoucherRequest>().FindAsync(criteria);
 
-                if (checkDuplicateInvoiceResult != null)
-                    return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"There is request already created for invoice no. {checkDuplicateInvoiceResult.InvoiceNumber}" });
+                if (duplicateRequest != null)
+                    return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"There is request already created for invoice no. {duplicateRequest.InvoiceNumber} for vendor number'{duplicateRequest.VendorName}'" });
 
             }
 
