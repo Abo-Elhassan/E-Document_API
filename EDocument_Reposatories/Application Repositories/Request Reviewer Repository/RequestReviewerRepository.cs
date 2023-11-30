@@ -271,7 +271,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
         private void ProceedWorkflow(Request request, List<RequestReviewer> remainingRequestReviewers,bool isApproval)
         {
             //Check if the current stage is the last stage
-            if (request.CurrentStage == request.DefinedRequest.ReviewersNumber)
+            if (request.CurrentStage == request.DefinedRequest.ReviewersNumber && isApproval)
             {
                 request.Status = RequestStatus.Approved.ToString();
             }
