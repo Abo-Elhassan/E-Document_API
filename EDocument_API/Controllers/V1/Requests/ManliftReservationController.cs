@@ -3,6 +3,7 @@ using EDocument_Data.Consts;
 using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Attachments;
 using EDocument_Data.DTOs.Filter;
+using EDocument_Data.DTOs.Requests.EquipmentInAreaRequest;
 using EDocument_Data.DTOs.Requests.ManliftReservationRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.DTOs.Requests.VehicleRequest;
@@ -26,7 +27,6 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace EDocument_API.Controllers.V1.Requests
 {
-
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [ApiController]
@@ -63,7 +63,6 @@ namespace EDocument_API.Controllers.V1.Requests
             _fileService = fileService;
         }
 
-
         /// <summary>
         /// Get All Manlift Reservations By Manlift Number
         /// </summary>
@@ -84,7 +83,6 @@ namespace EDocument_API.Controllers.V1.Requests
                 r.ManliftNumber == manliftNumber &&
                 r.RequestedTo > DateTime.Now
                 );
-
 
             var manliftReservationRequests = await _unitOfWork.Repository<ManliftReservationRequest>().FindAllAsync(
                 criteria: criteria,
@@ -333,10 +331,14 @@ namespace EDocument_API.Controllers.V1.Requests
 
             var beneficiaryUser = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == manliftReservationRequestCreateDto.BeneficiaryId);
 
-            if (beneficiaryUser is null)
+            if (beneficiaryUser == null)
+            {
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Requester Id '{manliftReservationRequestCreateDto.BeneficiaryId}' not found" });
-
-
+            }
+            else if (user.DepartmentId != beneficiaryUser.DepartmentId)
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot assign requester from another department" });
+            }
 
             Expression<Func<ManliftReservationRequest, bool>> criteria = (r =>
                 r.Request.Status == RequestStatus.Approved.ToString() &&
@@ -347,11 +349,8 @@ namespace EDocument_API.Controllers.V1.Requests
                 ));
             var reservedDates = await _unitOfWork.Repository<ManliftReservationRequest>().FindAllAsync(criteria, new string[] { "Request" });
 
-
-
             if (reservedDates.Any())
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Manlift number '{manliftReservationRequestCreateDto.ManliftNumber}' is already reserved at the requested time" });
-
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
             var requestNo = $"Manlift-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
@@ -371,7 +370,6 @@ namespace EDocument_API.Controllers.V1.Requests
             _unitOfWork.Complete();
 
             await _requestReviewerRepository.BeginRequestCycle(manliftReservationRequestCreateDto.DefinedRequestId, requestId, user.Id, true);
-
 
             #region Send Emails
 
@@ -438,18 +436,21 @@ namespace EDocument_API.Controllers.V1.Requests
         public async Task<ActionResult> UpdateManliftReservationRequest(long id, ManliftReservationRequestUpdateDto manliftReservationRequestUpdateDto)
         {
             _logger.LogInformation($"Start UpdateManliftReservationRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(manliftReservationRequestUpdateDto)} ");
-
+            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var beneficiaryUser = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == manliftReservationRequestUpdateDto.BeneficiaryId);
 
-            if (beneficiaryUser is null)
+            if (beneficiaryUser == null)
+            {
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Requester Id '{manliftReservationRequestUpdateDto.BeneficiaryId}' not found" });
-
-
+            }
+            else if (user.DepartmentId != beneficiaryUser.DepartmentId)
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot assign requester from another department" });
+            }
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
             var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "ManliftReservationRequest", "RequestReviewers", "Attachments" });
-
 
             if (request == null)
                 return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Request not found" });
@@ -464,8 +465,6 @@ namespace EDocument_API.Controllers.V1.Requests
             }
 
 
-            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
             Expression<Func<ManliftReservationRequest, bool>> criteria = (r =>
                 r.Request.Status == RequestStatus.Approved.ToString() &&
                 r.ManliftNumber == manliftReservationRequestUpdateDto.ManliftNumber &&
@@ -473,11 +472,8 @@ namespace EDocument_API.Controllers.V1.Requests
                 manliftReservationRequestUpdateDto.RequestedFrom < r.RequestedTo);
             var reservedDates = await _unitOfWork.Repository<ManliftReservationRequest>().FindAllAsync(criteria, new string[] { "Request" });
 
-
-
             if (reservedDates.Any())
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Manlift number '{manliftReservationRequestUpdateDto.ManliftNumber}' is already reserved at the requested time" });
-
 
             request.Notes = manliftReservationRequestUpdateDto.Notes;
             _mapper.Map(manliftReservationRequestUpdateDto, request.ManliftReservationRequest);
@@ -490,7 +486,6 @@ namespace EDocument_API.Controllers.V1.Requests
             _unitOfWork.Complete();
 
             await _requestReviewerRepository.BeginRequestCycle(request.DefinedRequestId, request.Id, user.Id, false);
-
 
             #region Send Emails
 
@@ -565,7 +560,6 @@ namespace EDocument_API.Controllers.V1.Requests
 
             if (manliftReservationRequest.RequestedFrom < DateTime.Now)
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"You cannot approve this request as the requested date is in the past" });
-
 
             Expression<Func<ManliftReservationRequest, bool>> criteria = (r =>
                 r.Request.Status == RequestStatus.Approved.ToString() &&
@@ -695,7 +689,5 @@ namespace EDocument_API.Controllers.V1.Requests
 
             return Ok(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.OK, Details = $"Your action has been recorded successfully" });
         }
-
-
     }
 }

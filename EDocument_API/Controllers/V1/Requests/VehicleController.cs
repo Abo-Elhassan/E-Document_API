@@ -4,6 +4,7 @@ using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Attachments;
 using EDocument_Data.DTOs.Filter;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
+using EDocument_Data.DTOs.Requests.TravelDeskRequest;
 using EDocument_Data.DTOs.Requests.VehicleRequest;
 using EDocument_Data.Models;
 using EDocument_Data.Models.Shared;
@@ -296,19 +297,27 @@ namespace EDocument_API.Controllers.V1.Requests
         public async Task<ActionResult> CreateVehicleRequest([FromForm] VehicleRequestCreateDto vehicleRequestCreateDto)
         {
             _logger.LogInformation($"Start CreateVehicleRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(vehicleRequestCreateDto)} ");
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var beneficiaryUser = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == vehicleRequestCreateDto.BeneficiaryId);
 
-            if (beneficiaryUser is null)
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Beneficiary user '{vehicleRequestCreateDto.BeneficiaryId}' not found" });
+            if (beneficiaryUser == null)
+            {
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Requester Id '{vehicleRequestCreateDto.BeneficiaryId}' not found" });
+            }
+            else if (user.DepartmentId != beneficiaryUser.DepartmentId)
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot assign requester from another department" });
+            }
+            else if (beneficiaryUser.Company != "DP World")
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Requester '{vehicleRequestCreateDto.BeneficiaryId}' is not DP WORLD Employee" });
 
-            if (beneficiaryUser.Company != "DP World")
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Beneficiary user '{vehicleRequestCreateDto.BeneficiaryId}' is not DP WORLD Employee" });
+            }
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
             var requestNo = $"Vehicle-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
-            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var request = new Request { Id = requestId, DefinedRequestId = vehicleRequestCreateDto.DefinedRequestId };
             request.Notes = vehicleRequestCreateDto.Justification;
@@ -402,11 +411,22 @@ namespace EDocument_API.Controllers.V1.Requests
             _logger.LogInformation($"Start UpdateVehicleRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(vehicleRequestUpdateDto)} ");
 
             var beneficiaryUser = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == vehicleRequestUpdateDto.BeneficiaryId);
-
-            if (beneficiaryUser is null)
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Beneficiary user '{vehicleRequestUpdateDto.BeneficiaryId}' not found" });
-
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            if (beneficiaryUser == null)
+            {
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Requester Id '{vehicleRequestUpdateDto.BeneficiaryId}' not found" });
+            }
+            else if (user.DepartmentId != beneficiaryUser.DepartmentId)
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot assign requester from another department" });
+            }
+            else if (beneficiaryUser.Company != "DP World")
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Requester '{vehicleRequestUpdateDto.BeneficiaryId}' is not DP WORLD Employee" });
+
+            }
+
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
             var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "VehicleRequest", "RequestReviewers", "Attachments" });
@@ -425,8 +445,7 @@ namespace EDocument_API.Controllers.V1.Requests
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot update the request after one of the reviewers took his action" });
             }
 
-            if (beneficiaryUser.Company != "DP World")
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Beneficiary user '{vehicleRequestUpdateDto.BeneficiaryId}' is not DP WORLD Employee" });
+           
 
             var oldAttachments = request.Attachments;
 

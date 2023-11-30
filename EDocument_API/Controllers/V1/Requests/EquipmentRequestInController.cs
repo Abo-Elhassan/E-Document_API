@@ -303,15 +303,22 @@ namespace EDocument_API.Controllers.V1.Requests
         {
 
             _logger.LogInformation($"Start CreateEquipmentInRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(equipmentInAreaRequestCreateDto)} ");
-            var Supervisor = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == equipmentInAreaRequestCreateDto.SupervisorId);
+            var supervisor = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == equipmentInAreaRequestCreateDto.SupervisorId);
+            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            if (Supervisor is null)
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $" user '{equipmentInAreaRequestCreateDto.SupervisorId}' not found" });
+
+            if (supervisor == null)
+            {
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Assigned supervisor id '{equipmentInAreaRequestCreateDto.SupervisorId}' not found" });
+            }
+            else if (user.DepartmentId != supervisor.DepartmentId)
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot assign supervisor from another department" });
+            }
 
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
             var requestNo = $"EquipmentIn-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
-            var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
 
             var request = new Request { Id = requestId, DefinedRequestId = equipmentInAreaRequestCreateDto.DefinedRequestId };
@@ -400,11 +407,17 @@ namespace EDocument_API.Controllers.V1.Requests
             _logger.LogInformation($"Start UpdateEquipmentInRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(equipmentInAreaRequestUpdateDto)} ");
 
             var Supervisor = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == equipmentInAreaRequestUpdateDto.SupervisorId);
-
-            if (Supervisor is null)
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $" user '{equipmentInAreaRequestUpdateDto.SupervisorId}' not found" });
-
             var user = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            if (Supervisor == null)
+            {
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Assigned supervisor id '{equipmentInAreaRequestUpdateDto.SupervisorId}' not found" });
+            }
+            else if (user.DepartmentId != Supervisor.DepartmentId)
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot assign supervisor from another department" });
+            }
+
 
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 

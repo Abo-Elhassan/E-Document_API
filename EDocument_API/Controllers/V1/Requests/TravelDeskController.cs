@@ -3,6 +3,7 @@ using EDocument_Data.Consts;
 using EDocument_Data.Consts.Enums;
 using EDocument_Data.DTOs.Attachments;
 using EDocument_Data.DTOs.Filter;
+using EDocument_Data.DTOs.Requests.ManliftReservationRequest;
 using EDocument_Data.DTOs.Requests.RequestReviewer;
 using EDocument_Data.DTOs.Requests.TravelDeskRequest;
 using EDocument_Data.Models;
@@ -298,17 +299,26 @@ namespace EDocument_API.Controllers.V1.Requests
             _logger.LogInformation($"Start CreateTravelDeskRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(travelDeskRequestCreateDto)} ");
 
             var beneficiaryUser = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == travelDeskRequestCreateDto.BeneficiaryId);
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            if (beneficiaryUser is null)
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Beneficiary user '{travelDeskRequestCreateDto.BeneficiaryId}' not found" });
 
-            if (beneficiaryUser.Company != "DP World")
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Beneficiary user '{travelDeskRequestCreateDto.BeneficiaryId}' is not DP WORLD Employee" });
+            if (beneficiaryUser == null)
+            {
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Requester Id '{travelDeskRequestCreateDto.BeneficiaryId}' not found" });
+            }
+            else if (user.DepartmentId != beneficiaryUser.DepartmentId)
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot assign requester from another department" });
+            }
+            else if (beneficiaryUser.Company != "DP World")
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Requester '{travelDeskRequestCreateDto.BeneficiaryId}' is not DP WORLD Employee" });
+
+            }
 
             var requestId = long.Parse(DateTime.Now.ToString("yyyyMMddhhmmssff"));
 
             var requestNo = $"Travel-{DateTime.Now.ToString("yyyyMMddhhmmss")}";
-            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var request = new Request { Id = requestId, DefinedRequestId = travelDeskRequestCreateDto.DefinedRequestId };
             request.Notes = travelDeskRequestCreateDto.Justification;
@@ -403,14 +413,22 @@ namespace EDocument_API.Controllers.V1.Requests
             _logger.LogInformation($"Start UpdateTravelDeskRequest from {nameof(RequestController)} for {JsonSerializer.Serialize(travelDeskRequestUpdateDto)} ");
 
             var beneficiaryUser = await _userManager.Users.Include(t => t.Department).FirstOrDefaultAsync(u => u.Id == travelDeskRequestUpdateDto.BeneficiaryId);
-
-            if (beneficiaryUser is null)
-                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Beneficiary user '{travelDeskRequestUpdateDto.BeneficiaryId}' not found" });
-
-            if (beneficiaryUser.Company != "DP World")
-                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Beneficiary user '{travelDeskRequestUpdateDto.BeneficiaryId}' is not DP WORLD Employee" });
-
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            if (beneficiaryUser == null)
+            {
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Requester Id '{travelDeskRequestUpdateDto.BeneficiaryId}' not found" });
+            }
+            else if (user.DepartmentId != beneficiaryUser.DepartmentId)
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot assign requester from another department" });
+            }
+            else if (beneficiaryUser.Company != "DP World")
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = $"Requester '{travelDeskRequestUpdateDto.BeneficiaryId}' is not DP WORLD Employee" });
+
+            }
+
             Expression<Func<Request, bool>> requestRxpression = (r => r.Id == id);
 
             var request = await _unitOfWork.Repository<Request>().FindAsync(requestRxpression, new string[] { "TravelDeskRequest", "RequestReviewers", "Attachments" });

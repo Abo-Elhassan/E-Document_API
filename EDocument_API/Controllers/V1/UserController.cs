@@ -581,6 +581,17 @@ namespace EDocument_API.Controllers.V1
         {
             _logger.LogInformation($"Start DelegateUser from {nameof(UserController)} for '{JsonSerializer.Serialize(delegatationInfo)}'");
             var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var delegatedUser = await _userManager.FindByIdAsync(delegatationInfo.DelegatedUserId);
+
+            if (delegatedUser==null)
+            {
+                return NotFound(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.NotFound, Details = $"Delegated user '{delegatationInfo.DelegatedUserId}' not found" });
+            }
+            else if (user.DepartmentId != delegatedUser.DepartmentId)
+            {
+                return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot delegate user from another department" });
+            }
+               
 
             user.DelegatedUserId = delegatationInfo.DelegatedUserId;
             user.DelegatedUntil = delegatationInfo.DelegatedUntil;

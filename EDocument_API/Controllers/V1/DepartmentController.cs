@@ -46,7 +46,6 @@ namespace EDocument_API.Controllers.V1
         ///
         /// </remarks>
         /// <returns>List of Departmens</returns>
-
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<List<DepartmentReadDto>>))]
         [HttpGet]
         [Authorize(Roles = "Basic")]
