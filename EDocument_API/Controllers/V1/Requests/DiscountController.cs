@@ -152,12 +152,16 @@ namespace EDocument_API.Controllers.V1.Requests
         {
             _logger.LogInformation($"Start GetCreatorDiscountRequestsFiltered from {nameof(RequestController)} with filter: {JsonSerializer.Serialize(filterDto)}");
             var includes = new string[] { "Request", "Request.Creator", "Request.RequestReviewers", "Request.Attachments" };
-
+            string? userCondition = null;
             (int TotalCount, IEnumerable<DiscountRequest> PaginatedData) result;
+
+            userCondition = "Request.CreatorId ==@0";
 
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
                 result = await _unitOfWork.Repository<DiscountRequest>().FindAllRequestsAsync(
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
                 filterValue: filterDto?.FilterValue,
                 includes: includes,
                 skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),
@@ -171,6 +175,8 @@ namespace EDocument_API.Controllers.V1.Requests
             {
                 result = await _unitOfWork.Repository<DiscountRequest>().FindAllRequestsAsync(
                 isCreator: true,
+                userId: User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                userCondition: userCondition,
                 filters: filterDto?.Filters,
                 includes: includes,
                 skip: ((filterDto?.PageNo ?? 1) - 1) * (filterDto?.PageSize ?? 10),

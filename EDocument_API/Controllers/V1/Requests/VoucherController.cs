@@ -19,10 +19,11 @@ using System.Net;
 using System.Net.Mime;
 using System.Security.Claims;
 using System.Text.Json;
+using Humanizer;
 
 namespace EDocument_API.Controllers.V1.Requests
 {
-
+    
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [ApiController]
