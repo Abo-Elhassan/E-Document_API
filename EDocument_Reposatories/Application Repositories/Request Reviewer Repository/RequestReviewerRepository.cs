@@ -207,11 +207,17 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             //Record approving action for the current stage
             foreach (var requestReviewer in remainingRequestReviewers.Where(rr => rr.StageNumber == rr.Request.CurrentStage || rr.AssignedReviewerId == reviewer.Id))//Approve the current stage and the advanced stages for the same reviewer if exists
             {
-                requestReviewer.ReviewedBy = reviewer.FullName;
-                requestReviewer.Status = RequestStatus.Approved.ToString();
-                requestReviewer.ReviewerNotes = reviewingInfo.ReviewedNotes;
-                requestReviewer.ModifiedBy = reviewer.FullName;
-                requestReviewer.ModifiedAt = DateTime.Now;
+                var reviewerNumbers = remainingRequestReviewers.Count(rr => rr.StageNumber == requestReviewer.StageNumber && rr.StageNumber != request.CurrentStage); //Check if the advanced stages have multiple reviewers to prevent automatic approve for them
+
+                if (reviewerNumbers==1)
+                {
+                    requestReviewer.ReviewedBy = reviewer.FullName;
+                    requestReviewer.Status = RequestStatus.Approved.ToString();
+                    requestReviewer.ReviewerNotes = reviewingInfo.ReviewedNotes;
+                    requestReviewer.ModifiedBy = reviewer.FullName;
+                    requestReviewer.ModifiedAt = DateTime.Now;
+                }
+
             }
 
             ProceedWorkflow(request, remainingRequestReviewers, isApproval: true);
@@ -293,14 +299,18 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
 
                             if (nextReviewer.Status == RequestStatus.None.ToString())
                             {
-                                remainingRequestReviewers.Where(rr => rr.StageNumber == nextReviewer.Request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
+                                remainingRequestReviewers.Where(rr => rr.StageNumber == request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
                                 break;
                             }
                         }
                     }
-                    else if(isApproval)  //Change next reviewer status to pending
+                    else  //Change next reviewer status to pending
                     {
-                        request.CurrentStage++;
+                        if (isApproval)
+                        {
+                            request.CurrentStage++;
+                        }
+
                         var nextReviewer = remainingRequestReviewers.FirstOrDefault(rr => rr.StageNumber == request.CurrentStage);
                         if (nextReviewer.Status == RequestStatus.None.ToString())
                         {
