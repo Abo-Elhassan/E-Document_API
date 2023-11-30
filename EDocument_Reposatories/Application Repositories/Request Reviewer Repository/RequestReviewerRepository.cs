@@ -149,7 +149,6 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             if (isNew)
                 _mapper.Map(definedRequestReviewers, request?.RequestReviewers);
 
-
             var remainingReviewers = request.RequestReviewers.Where(rr => rr.StageNumber >= request.CurrentStage).ToList();
 
             foreach (var item in request?.RequestReviewers)
@@ -176,11 +175,10 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                     item.Status = RequestStatus.Pending.ToString();
             }
 
-            await AssignDynamicReviewers(request,requesterId);
+            await AssignDynamicReviewers(request, requesterId);
 
             SkipCreatorStagesAsReviewer(request);
-           
-            ProceedWorkflow(request, remainingReviewers, isApproval:false);
+            ProceedWorkflow(request, remainingReviewers, isApproval: false);
 
             _context.Update(request);
             _context.SaveChanges();
@@ -202,14 +200,13 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 result = (false, $"user '{reviewer.Id}' is not the current reviewer for this request");
                 return result;
             }
-           
 
             //Record approving action for the current stage
             foreach (var requestReviewer in remainingRequestReviewers.Where(rr => rr.StageNumber == rr.Request.CurrentStage || rr.AssignedReviewerId == reviewer.Id))//Approve the current stage and the advanced stages for the same reviewer if exists
             {
                 var reviewerNumbers = remainingRequestReviewers.Count(rr => rr.StageNumber == requestReviewer.StageNumber && rr.StageNumber != request.CurrentStage); //Check if the advanced stages have multiple reviewers to prevent automatic approve for them
 
-                if (reviewerNumbers==1)
+                if (reviewerNumbers <= 1)
                 {
                     requestReviewer.ReviewedBy = reviewer.FullName;
                     requestReviewer.Status = RequestStatus.Approved.ToString();
@@ -217,11 +214,9 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                     requestReviewer.ModifiedBy = reviewer.FullName;
                     requestReviewer.ModifiedAt = DateTime.Now;
                 }
-
             }
 
             ProceedWorkflow(request, remainingRequestReviewers, isApproval: true);
-
 
             _context.Update(request);
             _context.SaveChanges();
@@ -274,51 +269,35 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
             return assignedReviewer?.DelegatedUntil > DateTime.Now ? assignedReviewer.DelegatedUserId : assignedReviewerId;
         }
 
-        private void ProceedWorkflow(Request request, List<RequestReviewer> remainingRequestReviewers,bool isApproval)
+        private void ProceedWorkflow(Request request, List<RequestReviewer> remainingRequestReviewers, bool isApproval)
         {
-            //Check if the current stage is the last stage
-            if (request.CurrentStage == request.DefinedRequest.ReviewersNumber && isApproval)
+         
+           
+            if (request.CurrentStage == request.DefinedRequest.ReviewersNumber && isApproval) //Check if the current stage is the last stage
             {
                 request.Status = RequestStatus.Approved.ToString();
             }
             else
             {
-                foreach (var item in remainingRequestReviewers.Where(rr => rr.StageNumber >= request.CurrentStage).OrderBy(r => r.StageNumber).DistinctBy(r => r.StageNumber))
+                foreach (var reviewer in remainingRequestReviewers.Where(rr => rr.StageNumber >= request.CurrentStage).OrderBy(rr => rr.StageNumber).DistinctBy(rr => rr.StageNumber))
                 {
-                    if (item.Status == RequestStatus.Approved.ToString() && request.CurrentStage != item.StageNumber)  //Check the next stage if they are already approved automatically or not
+                    //Check the next stage if they are already approved automatically or not
+                    if (reviewer.Status == RequestStatus.Approved.ToString() && request.CurrentStage == request.DefinedRequest.ReviewersNumber) // Check if the approved stage is the last stage
                     {
-                        if (request.CurrentStage == request.DefinedRequest.ReviewersNumber) // Check if the approved stage is the last stage
-                        {
-                            item.Request.Status = RequestStatus.Approved.ToString();
-                            break;
-                        }
-                        else //Skip the approved stage, proceed to the next stage and change reviewers status to pending
-                        {
-                            request.CurrentStage++;
-                            var nextReviewer = remainingRequestReviewers.FirstOrDefault(rr => rr.StageNumber == request.CurrentStage);
-
-                            if (nextReviewer.Status == RequestStatus.None.ToString())
-                            {
-                                remainingRequestReviewers.Where(rr => rr.StageNumber == request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
-                                break;
-                            }
-                        }
+                        request.Status = RequestStatus.Approved.ToString();
+                        break;
                     }
-                    else  //Change next reviewer status to pending
+                    else if (reviewer.Status == RequestStatus.Approved.ToString()) //Skip the approved stage, proceed to the next stage and change reviewers status to pending
                     {
-                        if (isApproval)
-                        {
-                            request.CurrentStage++;
-                        }
-
-                        var nextReviewer = remainingRequestReviewers.FirstOrDefault(rr => rr.StageNumber == request.CurrentStage);
-                        if (nextReviewer.Status == RequestStatus.None.ToString())
-                        {
-                            remainingRequestReviewers.Where(rr => rr.StageNumber == request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
-                            break;
-                        }
+                        request.CurrentStage++;
+                    }
+                    else
+                    {
+                        remainingRequestReviewers.Where(rr => rr.StageNumber == request.CurrentStage).ToList().ForEach(r => r.Status = RequestStatus.Pending.ToString());
+                        break;
                     }
                 }
+                
             }
         }
 
@@ -353,7 +332,7 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
         private void SkipCreatorStagesAsReviewer(Request request)
         {
             // Skip All Approval steps for the creator if he is one of the reviewers
-            if (request.RequestReviewers.Any(r => r.AssignedReviewerId == request.CreatorId) && request.DefinedRequestId != DefinedRequestId.Refund && request.DefinedRequestId != DefinedRequestId.CCTV_Access && request.DefinedRequestId != DefinedRequestId.Access_Control && request.DefinedRequestId != DefinedRequestId.New_Item && request.DefinedRequestId != DefinedRequestId.Pr && request.DefinedRequestId != DefinedRequestId.Reschedule_PM_WO && request.DefinedRequestId != DefinedRequestId.PM_JP && request.DefinedRequestId != DefinedRequestId.Voucher && request.DefinedRequestId != DefinedRequestId.Discount) //Automatic approve for the creator should be prevented for Refund and  New Item and Pr Requests  and Multimedia request and Engineering requests as Some reviewers need to insert data in approve
+            if (request.RequestReviewers.Any(r => r.AssignedReviewerId == request.CreatorId) && request.DefinedRequestId != DefinedRequestId.CCTV_Access && request.DefinedRequestId != DefinedRequestId.Access_Control && request.DefinedRequestId != DefinedRequestId.New_Item && request.DefinedRequestId != DefinedRequestId.Pr && request.DefinedRequestId != DefinedRequestId.Reschedule_PM_WO && request.DefinedRequestId != DefinedRequestId.PM_JP && request.DefinedRequestId != DefinedRequestId.Voucher) //Automatic approve for the creator should be prevented for Refund and  New Item and Pr Requests  and Multimedia request and Engineering requests as Some reviewers need to insert data in approve
             {
                 var creatorStageNumbers = request.RequestReviewers.Where(rr => rr.AssignedReviewerId == request.CreatorId).Select(r => r.StageNumber).ToList(); //Select all stage numbers for the creator
                 foreach (var reviewer in request.RequestReviewers.Where(rr => creatorStageNumbers.Any(s => rr.StageNumber == s)))
@@ -365,9 +344,5 @@ namespace EDocument_Repositories.Application_Repositories.Request_Reviewer_Repos
                 }
             }
         }
-
-
-
-
     }
 }
