@@ -226,7 +226,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
             (int TotalCount, IEnumerable<VehicleRequest> PaginatedData) result;
 
-            userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 )";
+            userCondition = "Request.RequestReviewers.Any(AssignedReviewerId == @0 && Request.CurrentStage >= StageNumber)";
 
             if (!string.IsNullOrEmpty(filterDto?.FilterValue))
             {
@@ -265,7 +265,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
             foreach (var request in requests)
             {
-                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).FirstOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var reviewer = request.RequestReviewers?.OrderBy(r => r.StageNumber).LastOrDefault(y => y.AssignedReviewerId == User.FindFirstValue(ClaimTypes.NameIdentifier) && y.Status != RequestStatus.None);
 
                 request.ReviewerStatus = reviewer?.Status;
                 request.ReviewerStage = reviewer?.StageNumber;
