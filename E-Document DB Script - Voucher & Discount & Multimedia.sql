@@ -1,5 +1,8 @@
 USE [E-Document]
 GO
+
+/************** Update Finance Icon **************/
+UPDATE [dbo].[Department] SET DepartmentIcon ='Finance.svg' WHERE Id=9;
 /****** Insert Discount Roles ******/
 
 INSERT [security].[Role] ([Id], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy], [Name], [NormalizedName], [ConcurrencyStamp]) VALUES (N'077ca99e-e9ca-4486-9e22-c5e842fe6c06', CAST(N'2023-11-28T08:10:35.8562334' AS DateTime2), NULL, N'E-Document', NULL, N'Discount_All', N'DISCOUNT_ALL', N'4f06b638-d807-4d56-93a0-7bb94d5f6891')
@@ -221,9 +224,9 @@ CREATE TABLE [dbo].[VoucherRequest](
 GO
 INSERT [dbo].[DefinedRequest] ([Id], [RequestName], [RouteName], [ReviewersNumber], [DepartmentId], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (2023112709173645, N'Multimedia', N'/PublicRelations/Multimedia/', 3, 6, CAST(N'2023-11-27T09:18:00' AS SmallDateTime), NULL, N'E-Document', NULL)
 GO
-INSERT [dbo].[DefinedRequest] ([Id], [RequestName], [RouteName], [ReviewersNumber], [DepartmentId], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (2023112802152106, N'Voucher', N'/Finance/Voucher/', 3, 9, CAST(N'2023-11-28T14:15:00' AS SmallDateTime), NULL, N'Khaled Mohamed Ali ElNagdy', NULL)
+INSERT [dbo].[DefinedRequest] ([Id], [RequestName], [RouteName], [ReviewersNumber], [DepartmentId], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (2023112802152106, N'Voucher', N'/Finance/Voucher/', 3, 9, CAST(N'2023-11-28T14:15:00' AS SmallDateTime), NULL, N'E-Document', NULL)
 GO
-INSERT [dbo].[DefinedRequest] ([Id], [RequestName], [RouteName], [ReviewersNumber], [DepartmentId], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (2023112811460600, N'Discount', N'/Commercial/Discount/', 5, 4, CAST(N'2023-11-28T11:46:00' AS SmallDateTime), NULL, N'E-Document', NULL)
+INSERT [dbo].[DefinedRequest] ([Id], [RequestName], [RouteName], [ReviewersNumber], [DepartmentId], [CreatedAt], [ModifiedAt], [CreatedBy], [ModifiedBy]) VALUES (2023112811460600, N'Discount', N'/Commercial/Discount/', 6, 4, CAST(N'2023-11-28T11:46:00' AS SmallDateTime), NULL, N'E-Document', NULL)
 GO
 SET IDENTITY_INSERT [dbo].[DefinedRequestReviewer] ON 
 GO
