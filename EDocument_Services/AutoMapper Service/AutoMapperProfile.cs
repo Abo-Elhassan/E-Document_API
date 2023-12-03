@@ -350,12 +350,15 @@ namespace EDocument_Services.AutoMapper_Service
                .ForMember(dest => dest.AccessedBlocks, opt => opt.MapFrom(src => ConvertListToString(src.AccessedBlocks)))
                .ForMember(dest => dest.AccessMethods, opt => opt.MapFrom(src => ConvertListToString(src.AccessMethods)));
 
-            CreateMap<AccessControlRequestUpdateDto, Request>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<AccessControlRequestUpdateDto, AccessControlRequest>()
                 .ForMember(dest => dest.AccessedBlocks, opt => opt.MapFrom(src => ConvertListToString(src.AccessedBlocks)))
                 .ForMember(dest => dest.AccessMethods, opt => opt.MapFrom(src => ConvertListToString(src.AccessMethods)))
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             #endregion Access Control Request
 
