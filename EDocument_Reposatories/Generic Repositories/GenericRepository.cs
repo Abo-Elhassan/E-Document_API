@@ -878,7 +878,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
                         {
                             ColumnValue = ColumnValue.ToUpper() switch
                             {
-                                "N" or "N/" or "N/A" => RequestStatus.None.ToString(),                          
+                                "N" or "NO" or "NO " or "NO A" or "NO AC" or "NO ACT" or "NO ACTI" or "NO ACTIO" or "NO ACTION" => RequestStatus.None.ToString(),                          
                                 _ => ColumnValue
                             };
 
