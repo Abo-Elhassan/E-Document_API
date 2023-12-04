@@ -410,9 +410,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
             var oldAttachments = request.Attachments;
             request.Notes = refundRequestUpdateDto.Notes;
-            _mapper.Map(refundRequestUpdateDto, request);
             _mapper.Map(refundRequestUpdateDto, request.RefundRequest);
-            request.RefundRequest.RequestId = id;
 
             if (refundRequestUpdateDto.Attachments == null || refundRequestUpdateDto.Attachments.Count == 0)
             {

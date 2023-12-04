@@ -449,7 +449,6 @@ namespace EDocument_API.Controllers.V1.Requests
 
             var oldAttachments = request.Attachments;
             request.Notes = travelDeskRequestUpdateDto.Justification;
-            _mapper.Map(travelDeskRequestUpdateDto, request);
             _mapper.Map(travelDeskRequestUpdateDto, request.TravelDeskRequest);
             _mapper.Map(beneficiaryUser, request.TravelDeskRequest);
 

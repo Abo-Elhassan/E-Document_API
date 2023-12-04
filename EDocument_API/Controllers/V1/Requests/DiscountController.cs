@@ -432,9 +432,7 @@ namespace EDocument_API.Controllers.V1.Requests
 
             var oldAttachments = request.Attachments;
             request.Notes = discountRequestUpdateDto.Notes;
-            _mapper.Map(discountRequestUpdateDto, request);
             _mapper.Map(discountRequestUpdateDto, request.DiscountRequest);
-            request.DiscountRequest.RequestId = id;
             if (discountRequestUpdateDto.Attachments == null || discountRequestUpdateDto.Attachments.Count == 0)
             {
                 request.Attachments = oldAttachments;

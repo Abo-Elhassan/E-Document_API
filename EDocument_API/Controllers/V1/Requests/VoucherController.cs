@@ -429,7 +429,7 @@ namespace EDocument_API.Controllers.V1.Requests
             var oldAttachments = request.Attachments;
             request.Notes = voucherRequestUpdateDto.Notes;
             _mapper.Map(voucherRequestUpdateDto, request.VoucherRequest);
-            request.VoucherRequest.RequestId = id;
+          
 
             if (voucherRequestUpdateDto.Attachments == null || voucherRequestUpdateDto.Attachments.Count == 0)
             {

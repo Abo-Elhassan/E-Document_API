@@ -429,7 +429,6 @@ namespace EDocument_API.Controllers.V1.Requests
             var oldAttachments = request.Attachments;
             request.Notes = fuelOilInvoiceRequestUpdateDto.Notes;
             _mapper.Map(fuelOilInvoiceRequestUpdateDto, request.FuelOilInvoiceRequest);
-            request.FuelOilInvoiceRequest.RequestId = id;
 
             if (fuelOilInvoiceRequestUpdateDto.Attachments == null || fuelOilInvoiceRequestUpdateDto.Attachments.Count == 0)
             {

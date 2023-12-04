@@ -418,7 +418,7 @@ namespace EDocument_API.Controllers.V1.Requests
             var oldAttachments = request.Attachments;
             request.Notes = MultimediaRequestUpdateDto.Notes;
             _mapper.Map(MultimediaRequestUpdateDto, request.MultimediaRequest);
-            request.MultimediaRequest.RequestId = id;
+
 
             if (MultimediaRequestUpdateDto.Attachments == null || MultimediaRequestUpdateDto.Attachments.Count == 0)
             {

@@ -450,7 +450,6 @@ namespace EDocument_API.Controllers.V1.Requests
             var oldAttachments = request.Attachments;
 
             request.Notes = vehicleRequestUpdateDto.Justification;
-            _mapper.Map(vehicleRequestUpdateDto, request);
             _mapper.Map(vehicleRequestUpdateDto, request.VehicleRequest);
             _mapper.Map(beneficiaryUser, request.VehicleRequest);
 

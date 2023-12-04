@@ -459,8 +459,6 @@ namespace EDocument_API.Controllers.V1.Requests
             var oldAttachments = request.Attachments;
             request.Notes = newItemRequestUpdateDto.Notes;
             _mapper.Map(newItemRequestUpdateDto, request.NewItemRequest);
-
-            request.NewItemRequest.RequestId = id;
             var sentItems = Request.Form["RequestedItems"].ToList();
 
 

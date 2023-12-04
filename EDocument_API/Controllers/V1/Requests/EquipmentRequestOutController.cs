@@ -442,9 +442,7 @@ namespace EDocument_API.Controllers.V1.Requests
             }
 
 
-            _mapper.Map(equipmentOutAreaRequestUpdateDto, request);
             _mapper.Map(equipmentOutAreaRequestUpdateDto, request.EquipmentRequestOut);
-            request.EquipmentRequestOut.RequestId = id;
             request.EquipmentRequestOut.ModifiedAt = DateTime.Now;
             request.EquipmentRequestOut.ModifiedBy = user?.FullName;
             request.ModifiedBy = user?.FullName;

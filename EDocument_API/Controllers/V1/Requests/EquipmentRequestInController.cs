@@ -438,10 +438,7 @@ namespace EDocument_API.Controllers.V1.Requests
                 return BadRequest(new ApiResponse<string> { StatusCode = (int)HttpStatusCode.BadRequest, Details = "You cannot update the request after one of the reviewers took his action" });
             }
 
-
-            _mapper.Map(equipmentInAreaRequestUpdateDto, request);
             _mapper.Map(equipmentInAreaRequestUpdateDto, request.EquipmentRequestIn);
-            request.EquipmentRequestIn.RequestId = id;
             request.EquipmentRequestIn.ModifiedAt = DateTime.Now;
             request.EquipmentRequestIn.ModifiedBy = user?.FullName;
             request.ModifiedBy = user?.FullName;

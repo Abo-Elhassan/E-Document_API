@@ -123,11 +123,13 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<PoRequestCreateDto, PoRequest>();
 
-            CreateMap<PoRequestUpdateDto, Request>()
-                .ForMember(dest => dest.Attachments, src => src.Ignore())
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<PoRequestUpdateDto, PoRequest>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             #endregion Po Reuqest
 
@@ -154,11 +156,14 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<VehicleRequestCreateDto, VehicleRequest>();
 
-            CreateMap<VehicleRequestUpdateDto, Request>()
-                .ForMember(dest => dest.Attachments, src => src.Ignore())
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            
             CreateMap<VehicleRequestUpdateDto, VehicleRequest>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             CreateMap<User, VehicleRequest>()
                 .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
@@ -228,11 +233,14 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<TravelDeskRequestCreateDto, TravelDeskRequest>();
 
-            CreateMap<TravelDeskRequestUpdateDto, Request>()
-                .ForMember(dest => dest.Attachments, src => src.Ignore())
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            
             CreateMap<TravelDeskRequestUpdateDto, TravelDeskRequest>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             #endregion Travel Desk Request
 
@@ -261,11 +269,13 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<RefundRequestCreateDto, RefundRequest>();
 
-            CreateMap<RefundRequestUpdateDto, Request>()
-                .ForMember(dest => dest.Attachments, src => src.Ignore())
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<RefundRequestUpdateDto, RefundRequest>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             #endregion Refund Reuqest
 
@@ -296,11 +306,13 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<DiscountRequestCreateDto, DiscountRequest>();
 
-            CreateMap<DiscountRequestUpdateDto, Request>()
-                .ForMember(dest => dest.Attachments, src => src.Ignore())
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<DiscountRequestUpdateDto, DiscountRequest>()
-               .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             #endregion Discount Request
 
@@ -456,7 +468,12 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<FuelOilInvoiceRequestCreateDto, FuelOilInvoiceRequest>();
 
             CreateMap<FuelOilInvoiceRequestUpdateDto, FuelOilInvoiceRequest>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             #endregion
 
@@ -499,7 +516,12 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<NewItemRequestCreateDto, NewItemRequest>();
 
             CreateMap<NewItemRequestUpdateDto, NewItemRequest>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             CreateMap<RequestedItem, RequestedItemReadDto>();
             CreateMap<RequestedItemSubmitDto, RequestedItem>();
@@ -546,7 +568,12 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<PrRequestCreateDto, PrRequest>();
 
             CreateMap<PrRequestUpdateDto, PrRequest>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             CreateMap<RequestedPr, RequestedPrReadDto>();
             CreateMap<RequestedPrSubmitDto, RequestedPr>();
@@ -594,7 +621,12 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<ManliftReservationRequestCreateDto, ManliftReservationRequest>();
 
             CreateMap<ManliftReservationRequestUpdateDto, ManliftReservationRequest>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             #endregion
 
@@ -632,13 +664,15 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<EquipmentOutAreaRequestCreateDto, EquipmentRequestOut>();
 
-            CreateMap<EquipmentOutAreaRequestUpdateDto, Request>()
-
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
 
             CreateMap<EquipmentOutAreaRequestUpdateDto, EquipmentRequestOut>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
             #endregion
 
             #region EquipmentRequestIn Reuqest
@@ -675,12 +709,14 @@ namespace EDocument_Services.AutoMapper_Service
 
             CreateMap<EquipmentInAreaRequestCreateDto, EquipmentRequestIn>();
 
-            CreateMap<EquipmentInAreaRequestUpdateDto, Request>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-
 
             CreateMap<EquipmentInAreaRequestUpdateDto, EquipmentRequestIn>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
             #endregion            
 
             #region Reschedule Pm/Wo Reuqest
@@ -709,7 +745,12 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<ReschedulePmWoRequestCreateDto, ReschedulePmWoRequest>();
 
             CreateMap<ReschedulePmWoRequestUpdateDto, ReschedulePmWoRequest>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+               .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
             #endregion            
 
             #region  Pm /Jp Request
@@ -738,7 +779,12 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<PmJpRequestCreateDto, PmJpRequest>();
 
             CreateMap<PmJpRequestUpdateDto, PmJpRequest>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
             #endregion            
 
             #region Multimedia Request
@@ -781,13 +827,18 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<MultimediaRequestCreateDto, MultimediaRequest>();
 
             CreateMap<MultimediaRequestUpdateDto, MultimediaRequest>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             #endregion
 
             #region Voucher Request
 
-         
+
 
             CreateMap<User, VoucherRequest>()
                 .ForMember(dest => dest.BeneficiaryId, src => src.MapFrom(opts => opts.Id))
@@ -823,7 +874,12 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<VoucherRequestCreateDto, VoucherRequest>();
 
             CreateMap<VoucherRequestUpdateDto, VoucherRequest>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             #endregion
         }

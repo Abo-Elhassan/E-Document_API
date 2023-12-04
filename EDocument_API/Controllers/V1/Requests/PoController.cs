@@ -423,7 +423,6 @@ namespace EDocument_API.Controllers.V1.Requests
             var oldAttachments = request.Attachments;
 
             request.Notes = poRequestUpdateDto.Remarks;
-            _mapper.Map(poRequestUpdateDto, request);
             _mapper.Map(poRequestUpdateDto, request.PoRequest);
 
             if (poRequestUpdateDto.PoAttachment == null)

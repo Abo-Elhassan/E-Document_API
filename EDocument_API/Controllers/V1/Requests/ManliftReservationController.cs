@@ -478,7 +478,6 @@ namespace EDocument_API.Controllers.V1.Requests
             request.Notes = manliftReservationRequestUpdateDto.Notes;
             _mapper.Map(manliftReservationRequestUpdateDto, request.ManliftReservationRequest);
             _mapper.Map(beneficiaryUser, request.ManliftReservationRequest);
-            request.ManliftReservationRequest.RequestId = id;
             request.ManliftReservationRequest.ModifiedAt = DateTime.Now;
             request.ManliftReservationRequest.ModifiedBy = user?.FullName;
             request.ModifiedBy = user?.FullName;
