@@ -406,11 +406,15 @@ namespace EDocument_Services.AutoMapper_Service
             CreateMap<CCTVAccessRequestCreateDto, CCTVAccessRequest>()
                 .ForMember(dest => dest.RequestedRoles, opt => opt.MapFrom(src => ConvertListToString(src.RequestedRoles)));
 
-            CreateMap<CCTVAccessRequestUpdateDto, Request>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+  
             CreateMap<CCTVAccessRequestUpdateDto, CCTVAccessRequest>()
                 .ForMember(dest => dest.RequestedRoles, src => src.MapFrom(src => ConvertListToString(src.RequestedRoles)))
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForMember(dest => dest.RequestId, src => src.Ignore())
+                .ForMember(dest => dest.RequestNumber, src => src.Ignore())
+                .ForMember(dest => dest.CreatedAt, src => src.Ignore())
+                .ForMember(dest => dest.CreatedBy, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedAt, src => src.Ignore())
+                .ForMember(dest => dest.ModifiedBy, src => src.Ignore());
 
             #endregion CCTV Access Request
 
