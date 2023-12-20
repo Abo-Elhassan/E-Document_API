@@ -48,7 +48,7 @@ namespace EDocument_Data.DTOs.Requests.PrRequest
         public string RequestId { get; init; }
         public string RequestType { get; init; }
         public string PrDescription { get; init; }
-        public int Quantity { get; init; }
+        public double Quantity { get; init; }
         public string ItemNumber { get; init; }
     }
 

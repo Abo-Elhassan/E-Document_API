@@ -179,7 +179,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
                         var property = typeof(T).GetProperty(pascalCaseColumnName);
                         DateTime fromDate = DateTime.Parse(filter.From.ToString());
                         DateTime toDate = DateTime.Parse(filter.To.ToString());
-                        var x = _context.PoRequests.Where(p => p.CreatedAt >= fromDate && p.CreatedAt <= toDate);
+                      
                         if (property != null)
                         {
                             query = query.Where($"{pascalCaseColumnName} >= @0 && {pascalCaseColumnName} <= @1", fromDate, toDate);
@@ -286,7 +286,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
                         var property = typeof(T).GetProperty(pascalCaseColumnName);
                         DateTime fromDate = DateTime.Parse(filter.From.ToString());
                         DateTime toDate = DateTime.Parse(filter.To.ToString());
-                        var x = _context.PoRequests.Where(p => p.CreatedAt >= fromDate && p.CreatedAt <= toDate);
+                      
                         if (property != null)
                         {
                             query = query.Where($"{pascalCaseColumnName} >= @0 && {pascalCaseColumnName} <= @1", fromDate, toDate);
@@ -381,7 +381,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
                         var property = typeof(T).GetProperty(pascalCaseColumnName);
                         DateTime fromDate = DateTime.Parse(filter.From.ToString());
                         DateTime toDate = DateTime.Parse(filter.To.ToString());
-                        var x = _context.PoRequests.Where(p => p.CreatedAt >= fromDate && p.CreatedAt <= toDate);
+                     
                         if (property != null)
                         {
                             query = query.Where($"{pascalCaseColumnName} >= @0 && {pascalCaseColumnName} <= @1", fromDate, toDate);
@@ -487,7 +487,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
                         var property = typeof(T).GetProperty(pascalCaseColumnName);
                         DateTime fromDate = DateTime.Parse(filter.From.ToString());
                         DateTime toDate = DateTime.Parse(filter.To.ToString());
-                        var x = _context.PoRequests.Where(p => p.CreatedAt >= fromDate && p.CreatedAt <= toDate);
+       
                         if (property != null)
                         {
                             query = query.Where($"{pascalCaseColumnName} >= @0 && {pascalCaseColumnName} <= @1", fromDate, toDate);
@@ -595,7 +595,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
                         var property = typeof(T).GetProperty(pascalCaseColumnName);
                         DateTime fromDate = DateTime.Parse(filter.From.ToString());
                         DateTime toDate = DateTime.Parse(filter.To.ToString());
-                        var x = _context.PoRequests.Where(p => p.CreatedAt >= fromDate && p.CreatedAt <= toDate);
+                  
                         if (property != null)
                         {
                             query = query.Where($"{pascalCaseColumnName} >= @0 && {pascalCaseColumnName} <= @1", fromDate, toDate);
@@ -691,7 +691,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
                         var property = typeof(T).GetProperty(pascalCaseColumnName);
                         DateTime fromDate = DateTime.Parse(filter.From.ToString());
                         DateTime toDate = DateTime.Parse(filter.To.ToString());
-                        var x = _context.PoRequests.Where(p => p.CreatedAt >= fromDate && p.CreatedAt <= toDate);
+                 
                         if (property != null)
                         {
                             query = query.Where($"{pascalCaseColumnName} >= @0 && {pascalCaseColumnName} <= @1", fromDate, toDate);
@@ -916,7 +916,7 @@ namespace EDocument_Reposatories.Generic_Reposatories
                         var property = typeof(T).GetProperty(pascalCaseColumnName);
                         DateTime fromDate = DateTime.Parse(filter.From.ToString());
                         DateTime toDate = DateTime.Parse(filter.To.ToString());
-                        var x = _context.PoRequests.Where(p => p.CreatedAt >= fromDate && p.CreatedAt <= toDate);
+                  
                         if (property != null)
                         {
                             query = query.Where($"{pascalCaseColumnName} >= @0 && {pascalCaseColumnName} <= @1", fromDate, toDate);

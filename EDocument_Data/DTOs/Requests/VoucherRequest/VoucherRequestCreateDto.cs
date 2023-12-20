@@ -24,7 +24,7 @@ namespace EDocument_Data.DTOs.Requests.VoucherRequest
         public string Description {get; init; }
 
         [Required]
-        public float Amount { get; init; }
+        public double Amount { get; init; }
 
         [Required]
         public string AmountInWords { get; init; }

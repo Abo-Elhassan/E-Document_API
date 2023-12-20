@@ -4,6 +4,7 @@ using EDocument_EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDocument_EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231220122740_MakeQuantityFieldInRequestedPrFloat")]
+    partial class MakeQuantityFieldInRequestedPrFloat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -791,8 +794,8 @@ namespace EDocument_EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("DiscountAmount")
-                        .HasColumnType("float");
+                    b.Property<float>("DiscountAmount")
+                        .HasColumnType("real");
 
                     b.Property<string>("DiscountReason")
                         .HasColumnType("nvarchar(max)");
@@ -2009,8 +2012,8 @@ namespace EDocument_EF.Migrations
                     b.Property<string>("PrNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Quantity")
-                        .HasColumnType("float");
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
 
                     b.Property<long>("RequestId")
                         .HasColumnType("bigint");
@@ -2497,8 +2500,8 @@ namespace EDocument_EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("AuditId"));
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
+                    b.Property<float>("Amount")
+                        .HasColumnType("real");
 
                     b.Property<string>("AmountInWords")
                         .HasColumnType("nvarchar(max)");
@@ -2934,8 +2937,8 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<double>("DiscountAmount")
-                        .HasColumnType("float");
+                    b.Property<float>("DiscountAmount")
+                        .HasColumnType("real");
 
                     b.Property<string>("DiscountReason")
                         .IsRequired()
@@ -4251,8 +4254,8 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<double>("Quantity")
-                        .HasColumnType("float");
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
 
                     b.Property<long>("RequestId")
                         .HasColumnType("bigint");
@@ -4772,8 +4775,8 @@ namespace EDocument_EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
+                    b.Property<float>("Amount")
+                        .HasColumnType("real");
 
                     b.Property<string>("AmountInWords")
                         .HasMaxLength(500)

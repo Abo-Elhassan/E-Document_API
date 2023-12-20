@@ -15,7 +15,7 @@ namespace EDocument_Data.Models
         public string VendorName { get; set; }
         public string InvoiceNumber { get; set; }
         public string Description { get; set; }
-        public float Amount { get; set; }
+        public double Amount { get; set; }
         public string AmountInWords { get; set; }
         public string Currency { get; set; }
 

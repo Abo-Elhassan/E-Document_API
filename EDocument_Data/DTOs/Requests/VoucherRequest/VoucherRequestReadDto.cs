@@ -31,7 +31,7 @@ namespace EDocument_Data.DTOs.Requests.VoucherRequest
         public string VendorName { get; init; }
         public string InvoiceNumber { get; init; }
         public string Description { get; init; }
-        public float Amount { get; init; }
+        public double Amount { get; init; }
         public string AmountInWords { get; init; }
         public string Currency { get; init; }
         public List<AttachmentReadDto> Attachments { get; set; }

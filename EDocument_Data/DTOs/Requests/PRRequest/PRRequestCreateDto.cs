@@ -37,7 +37,7 @@ namespace EDocument_Data.DTOs.Requests.PrRequest
         [Required]
         public string PrDescription { get; init; }
         [Required]
-        public int Quantity { get; init; }
+        public double Quantity { get; init; }
 
         [RegularExpression(@"^(R|T)?\d{6}$|^(PMK-\d{4})$")]
         public string? ItemNumber { get; init; }

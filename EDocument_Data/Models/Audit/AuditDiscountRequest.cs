@@ -19,7 +19,7 @@ namespace EDocument_Data.Models.Audit
         public string RelatedContainers { get; set; }
         public string DiscountType { get; set; }
         public string DiscountReason { get; set; }
-        public float DiscountAmount { get; set; }
+        public double DiscountAmount { get; set; }
         public string HoSupportedDocumentPath { get; set; }
     }
 }
